@@ -18,5 +18,12 @@
   "dependencies": {
     "chai": "^4.0.2",
     "lodash": "^4.17.4"
+  },
+  "scripts": {
+    "fmt": "prettier --print-width 140 --tab-width=4 --single-quote --bracket-spacing --no-semi --color --write \"src/**/*.js\"",
+    "check-fmt": "prettier --print-width 140 --tab-width=4 --single-quote --bracket-spacing --no-semi --list-different \"src/**/*.js\""
+  },
+  "devDependencies": {
+    "prettier": "^1.5.2"
   }
 }

@@ -12,5 +12,4 @@ module.exports = ({ Given }) => {
     Given(/^I clear state/, function() {
         this.state = {}
     })
-
 }
