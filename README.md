@@ -11,6 +11,7 @@ Great for testing APIs built upon Express, Koa, HAPI, Loopback and others.
 - [Installation](#installation)
 - [Features](#features)
     - [API testing](#api-testing)
+- [Examples](#examples)    
     
 ## Installation
 
@@ -135,6 +136,14 @@ Scenario Outline: Fetching <key> API endpoint from root endpoint
     | emojis_url       |
     | feeds_url        |
     | public_gists_url |
+```
+
+## Examples
+
+This repository comes with few examples, in order to run them invoke the following script:
+
+```sh
+yarn run examples
 ```
 
 [npm-image]: https://img.shields.io/npm/v/@ekino/veggies.svg?style=flat-square
