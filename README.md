@@ -52,6 +52,9 @@ httpApi.install({
 
 ### API testing
 
+For an exhaustive list of all available step definitions you should have a look
+at the [definitions file](https://github.com/ekino-node-staging/veggies/blob/master/src/extensions/http_api/definitions.js).
+
 #### Making a simple request and testing its status code
 
 ``` gherkin
