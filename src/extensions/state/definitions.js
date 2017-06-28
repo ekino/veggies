@@ -4,12 +4,16 @@ const _ = require('lodash')
 
 const Cast = require('../../cast')
 
-module.exports = ({ Given }) => {
+module.exports = ({ Given, When }) => {
     Given(/^I set state key (.*) to (.*)$/, (key, value) => {
-        this.state[key] = _.template(Cast.value(value))()
+        this.state.set(key, Cast.value(value))
     })
 
-    Given(/^I clear state/, function() {
-        this.state = {}
+    Given(/^I clear state$/, function() {
+        this.state.clear()
+    })
+
+    When(/^I dump state$/, function() {
+        console.log(this.state.dump()) // eslint-disable-line no-console
     })
 }

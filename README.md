@@ -56,8 +56,9 @@ httpApi.install({
 
 ``` gherkin
 Scenario: Using GitHub API
-    When I GET https://api.github.com/
-    Then I should receive a 200 HTTP status code
+  Given I set User-Agent request header to veggies/1.0
+  When I GET https://api.github.com/
+  Then I should receive a 200 HTTP status code
 ```
 
 [npm-image]: https://img.shields.io/npm/v/@ekino/veggies.svg?style=flat-square

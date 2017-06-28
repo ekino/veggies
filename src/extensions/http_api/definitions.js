@@ -7,34 +7,73 @@ const Cast = require('../../cast')
 const Helper = require('../../helper')
 
 module.exports = ({ baseUrl = '' }) => ({ Given, When, Then }) => {
-    Given(/^I set headers to$/, function(step) {
-        this.httpApiClient.setHeaders(step.rowsHash())
+    /**
+     * Setting http headers
+     */
+    Given(/^I set request headers$/, function(step) {
+        this.httpApiClient.setHeaders(this.state.populateObject(step.rowsHash()))
     })
 
+    /**
+     * Setting a single http header
+     */
     Given(/^I set ([a-zA-Z0-9-]+) request header to (.*)$/, function(key, value) {
-        this.httpApiClient.setHeader(key, value)
+        this.httpApiClient.setHeader(key, this.state.populate(value))
     })
 
-    Given(/^I set request json body to$/, function(step) {
-        this.httpApiClient.setJsonBody(step.rowsHash())
+    /**
+     * Setting json payload
+     */
+    Given(/^I set request json body$/, function(step) {
+        this.httpApiClient.setJsonBody(this.state.populateObject(step.rowsHash()))
     })
 
-    Given(/^I set request form body to$/, function(step) {
-        this.httpApiClient.setFormBody(step.rowsHash())
+    /**
+     * Setting form data
+     */
+    Given(/^I set request form body$/, function(step) {
+        this.httpApiClient.setFormBody(this.state.populateObject(step.rowsHash()))
     })
 
-    Given(/^I set request query to$/, function(step) {
-        this.httpApiClient.setQuery(step.rowsHash())
+    /**
+     * Setting query parameters
+     */
+    Given(/^I set request query$/, function(step) {
+        this.httpApiClient.setQuery(this.state.populateObject(step.rowsHash()))
     })
 
-    When(/^I reset http parameters$/, function() {
+    Given(/^I pick response json (.*) as (.*)$/, function(path, key) {
+        const response = this.httpApiClient.getResponse()
+        const body = response.body
+
+        this.state.set(key, _.get(body, path))
+    })
+
+    /**
+     * Resetting the client's state
+     */
+    When(/^I reset http client/, function() {
         this.httpApiClient.reset()
     })
 
+    /**
+     * Performing a request
+     */
     When(/^I (GET|POST|PUT|DELETE) (.*)$/, function(method, path) {
-        return this.httpApiClient.makeRequest(method, path, baseUrl)
+        return this.httpApiClient.makeRequest(method, this.state.populate(path), baseUrl)
     })
 
+    /**
+     * Dumping response body
+     */
+    When(/^I dump response body$/, function() {
+        const httpResponse = this.httpApiClient.getResponse()
+        console.log(httpResponse.body) // eslint-disable-line no-console
+    })
+
+    /**
+     * Checking response status code
+     */
     Then(/^I should receive a ([1-5][0-9][0-9]) HTTP status code$/, function(statusCode) {
         const httpResponse = this.httpApiClient.getResponse()
         expect(httpResponse).to.not.be.empty

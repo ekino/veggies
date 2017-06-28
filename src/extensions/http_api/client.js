@@ -78,8 +78,6 @@ exports.makeRequest = (method, path, baseUrl) => {
                 reject()
             }
 
-            console.log(_body) // eslint-disable-line no-console
-
             response = _response
             resolve()
         })
