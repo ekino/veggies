@@ -39,6 +39,6 @@
     "check-fmt": "prettier --print-width 140 --tab-width=4 --single-quote --bracket-spacing --no-semi --list-different \"src/**/*.js\"",
     "version": "echo ${npm_package_version}",
     "lint": "eslint .",
-    "examples": "cucumberjs --require examples/support ${args} examples/features"
+    "examples": "cucumberjs --require examples/support examples/features"
   }
 }
