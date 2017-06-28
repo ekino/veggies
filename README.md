@@ -204,6 +204,8 @@ It's involved for example when [you want to collect values issued by a previous 
 when using the [http API extension](#http-api-extension).
 
 When installed, you can access it from the global cucumber context in your own step definitions.
+For available methods on the state, please refer to its own
+[documentation](https://ekino-node-staging.github.io/veggies/module-extensions_state_State.html).
 
 ```javascript
 defineSupportCode(({ When }) => {
@@ -219,7 +221,9 @@ defineSupportCode(({ When }) => {
 The http API extension relies on the [state extension](#state-extension),
 so make sure it's registered prior to installation.
 
-When installed, you can access it from the global cucumber context in your own step definitions.
+When installed, you can access its client from the global cucumber context in your own step definitions.
+For available methods on the client, please refer to its own
+[documentation](https://ekino-node-staging.github.io/veggies/module-extensions_httpApi_client.html).
 
 ```javascript
 defineSupportCode(({ When }) => {
