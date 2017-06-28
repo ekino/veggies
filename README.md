@@ -52,6 +52,14 @@ httpApi.install({
 
 ### API testing
 
+#### Making a simple request and testing its status code
+
+``` gherkin
+Scenario: Using GitHub API
+    When I GET https://api.github.com/
+    Then I should receive a 200 HTTP status code
+```
+
 [npm-image]: https://img.shields.io/npm/v/@ekino/veggies.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/@ekino/veggies
 [travis-image]: https://img.shields.io/travis/ekino-node-staging/veggies.svg?style=flat-square
