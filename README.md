@@ -11,6 +11,9 @@ Great for testing APIs built upon Express, Koa, HAPI, Loopback and others.
 - [Installation](#installation)
 - [Features](#features)
     - [API testing](#api-testing)
+        - [Making a simple request](#making-a-simple-request-and-testing-its-status-code)
+        - [Posting data](#posting-data)
+        - [Using values issued by a previous request](#using-values-issued-by-a-previous-request)
 - [Examples](#examples)    
     
 ## Installation
