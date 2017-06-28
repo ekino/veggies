@@ -1,0 +1,20 @@
+{
+  "name": "veggies",
+  "version": "0.1.0",
+  "tags": [
+    "bdd",
+    "cucumber",
+    "gherkin",
+    "testing"
+  ],
+  "main": "src/index.js",
+  "author": "plouc <https://github.com/plouc>",
+  "license": "MIT",
+  "peerDependencies": {
+    "cucumber": "^2.3.1"
+  },
+  "dependencies": {
+    "chai": "^4.0.2",
+    "lodash": "^4.17.4"
+  }
+}
