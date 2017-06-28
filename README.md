@@ -6,7 +6,7 @@
 [![styled with prettier][prettier-image]][prettier-url]
 
 Veggies is an awesome cucumberjs boilerplate for API testing.
-Great for testing APIs built upon Express, Koa, HAPI, Loopback, and others.
+Great for testing APIs built upon Express, Koa, HAPI, Loopback and others.
 
 - [Installation](#installation)
 - [Features](#features)

@@ -7,6 +7,6 @@ script:
   - yarn run lint
   - yarn run check-fmt
   - yarn run test-cover
-  - yarn run examples
+#  - yarn run examples
 after_success:
   - yarn run coverage
