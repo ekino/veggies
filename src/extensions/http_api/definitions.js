@@ -11,7 +11,7 @@ module.exports = ({ baseUrl = '' }) => ({ Given, When, Then }) => {
         this.httpApiClient.setHeaders(step.rowsHash())
     })
 
-    Given(/^I set ([a-zA-Z0-9\-]+) request header to (.*)$/, function(key, value) {
+    Given(/^I set ([a-zA-Z0-9-]+) request header to (.*)$/, function(key, value) {
         this.httpApiClient.setHeader(key, value)
     })
 
