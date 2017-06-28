@@ -119,7 +119,7 @@ Scenario: Using GitHub API
 It's even possible to mix this approach with scenario outline to have more concise tests
 (at the cost of clarity thought).
 
-For example the following example will generates 3 scenario at runtime
+The following example will generates 3 scenario at runtime
 using different response values for second request.
 
 ```gherkin
