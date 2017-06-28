@@ -61,6 +61,31 @@ Scenario: Using GitHub API
   Then I should receive a 200 HTTP status code
 ```
 
+#### Posting data
+
+You can easily issue a POST request using json payload
+
+```gherkin
+Scenario: Creating a resource using json payload
+  Given I set request json body
+    | username | plouc |
+    | gender   | male  |
+  When I POST https://my-api.io/users
+  Then I should receive a 201 HTTP status code
+```
+
+You can also use form encoded values, all you have to do is
+to change `json` for `form`
+
+```gherkin
+Scenario: Creating a resource using json payload
+  Given I set request form body
+    | username | plouc |
+    | gender   | male  |
+  When I POST https://my-api.io/users
+  Then I should receive a 201 HTTP status code
+```
+
 #### Using values issued by a previous request
 
 Imagine you want to test a resource creation and then that you're able
