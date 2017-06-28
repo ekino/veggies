@@ -5,7 +5,7 @@ const client = require('./client')
 
 module.exports = world => {
     if (!Helper.hasExtension(world, 'state')) {
-        throw new Error(`Unable to init "http_api" context as it requires "state" context which is not installed`)
+        throw new Error(`Unable to init "http_api" extension as it requires "state" extension which is not installed`)
     }
 
     world.httpApiClient = client

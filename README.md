@@ -15,6 +15,9 @@ Great for testing APIs built upon Express, Koa, HAPI, Loopback and others.
         - [Posting data](#posting-data)
         - [Using values issued by a previous request](#using-values-issued-by-a-previous-request)
         - [Type system](#type-system)
+- [Extensions](#extensions)
+    - [state](#state-extension)
+    - [http API](#http-api-extension)
 - [Examples](#examples)    
     
 ## Installation
@@ -188,9 +191,47 @@ which will generate the following payload:
 }
 ```
 
+## Extensions
+
+This module is composed of several extensions.
+
+### state extension
+
+The state extension is a simple helper used to persist state between steps & eventually scenarios
+(but you should try to avoid coupling scenarios).
+
+It's involved for example when [you want to collect values issued by a previous request](#using-values-issued-by-a-previous-request)
+when using the [http API extension](#http-api-extension).
+
+When installed, you can access it from the global cucumber context in your own step definitions.
+
+```javascript
+defineSupportCode(({ When }) => {
+    When(/^I do something useful$/, function() {
+        const stateValue = this.state.get('whatever')
+        // …
+    })
+})
+```
+
+### http API extension 
+
+The http API extension relies on the [state extension](#state-extension),
+so make sure it's registered prior to installation.
+
+When installed, you can access it from the global cucumber context in your own step definitions.
+
+```javascript
+defineSupportCode(({ When }) => {
+    When(/^I do something useful$/, function() {
+        return this.httpApi.makeRequest(/* … */)
+    })
+})
+```
+
 ## Examples
 
-This repository comes with few examples, in order to run them invoke the following script:
+This repository comes with few examples, in order to run them, invoke the following script:
 
 ```sh
 yarn run examples
