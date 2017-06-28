@@ -2,8 +2,6 @@
 
 const request = require('request').defaults({ json: true })
 
-const Cast = require('../../cast')
-
 const BODY_TYPE_JSON = 'json'
 const BODY_TYPE_FORM = 'form'
 
@@ -26,7 +24,7 @@ exports.reset = () => {
 
 exports.setJsonBody = payload => {
     bodyType = BODY_TYPE_JSON
-    body = Cast.object(payload)
+    body = payload
 }
 
 exports.setFormBody = payload => {
@@ -35,16 +33,16 @@ exports.setFormBody = payload => {
 }
 
 exports.setQuery = _query => {
-    query = Cast.object(_query)
+    query = _query
 }
 
 exports.setHeaders = _headers => {
-    headers = Cast.object(_headers)
+    headers = _headers
 }
 
 exports.setHeader = (key, value) => {
     headers = headers || {}
-    headers[key] = Cast.value(value)
+    headers[key] = value
 }
 
 exports.getResponse = () => response

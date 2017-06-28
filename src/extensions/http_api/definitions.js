@@ -11,35 +11,35 @@ module.exports = ({ baseUrl = '' }) => ({ Given, When, Then }) => {
      * Setting http headers
      */
     Given(/^I set request headers$/, function(step) {
-        this.httpApiClient.setHeaders(this.state.populateObject(step.rowsHash()))
+        this.httpApiClient.setHeaders(Cast.object(this.state.populateObject(step.rowsHash())))
     })
 
     /**
      * Setting a single http header
      */
     Given(/^I set ([a-zA-Z0-9-]+) request header to (.*)$/, function(key, value) {
-        this.httpApiClient.setHeader(key, this.state.populate(value))
+        this.httpApiClient.setHeader(key, Cast.value(this.state.populate(value)))
     })
 
     /**
      * Setting json payload
      */
     Given(/^I set request json body$/, function(step) {
-        this.httpApiClient.setJsonBody(this.state.populateObject(step.rowsHash()))
+        this.httpApiClient.setJsonBody(Cast.object(this.state.populateObject(step.rowsHash())))
     })
 
     /**
      * Setting form data
      */
     Given(/^I set request form body$/, function(step) {
-        this.httpApiClient.setFormBody(this.state.populateObject(step.rowsHash()))
+        this.httpApiClient.setFormBody(Cast.object(this.state.populateObject(step.rowsHash())))
     })
 
     /**
      * Setting query parameters
      */
     Given(/^I set request query$/, function(step) {
-        this.httpApiClient.setQuery(this.state.populateObject(step.rowsHash()))
+        this.httpApiClient.setQuery(Cast.object(this.state.populateObject(step.rowsHash())))
     })
 
     Given(/^I pick response json (.*) as (.*)$/, function(path, key) {

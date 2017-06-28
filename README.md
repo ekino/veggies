@@ -14,6 +14,7 @@ Great for testing APIs built upon Express, Koa, HAPI, Loopback and others.
         - [Making a simple request](#making-a-simple-request-and-testing-its-status-code)
         - [Posting data](#posting-data)
         - [Using values issued by a previous request](#using-values-issued-by-a-previous-request)
+        - [Type system](#type-system)
 - [Examples](#examples)    
     
 ## Installation
@@ -139,6 +140,52 @@ Scenario Outline: Fetching <key> API endpoint from root endpoint
     | emojis_url       |
     | feeds_url        |
     | public_gists_url |
+```
+
+#### Type system
+
+When testing json based APIs, which is a standard nowadays, you have to be aware of data types
+for sending payloads or making assertions on received responses, that's why veggies provides
+a lightweight type systems.
+
+The following directives are available:
+
+| directive            | type        | example                  | output                    |
+|--------------------- |------------ |------------------------- |-------------------------- |
+| `((undefined))`      | `undefined` | `((undefined))`          | `undefined`               |
+| `((null))`           | `null`      | `((null))`               | `null`                    |
+| `<value>((string))`  | `string`    | `hi((string))`           | `'hi'`                    |
+| `<value>((number))`  | `number`    | `1((number))`            | `1`                       |
+| `<value>((boolean))` | `boolean`   | `true((boolean))`        | `true`                    |
+| `<value>((array))`   | `Array`     | `one,two,three((array))` | `['one', 'two', 'three']` |     
+
+You can now use those directive for most of step definitions accepting data tables.
+
+For example you can use it to post typed json data:
+
+```gherkin
+Scenario: Creating a resource using typed json payload
+  Given I set request json body
+    | username  | plouc((string))          |
+    | team_id   | 1((number))              |
+    | is_active | true((boolean))          |
+    | hobbies   | drawing,hacking((array)) |
+  When I POST https://my-api.io/users
+  Then I should receive a 201 HTTP status code
+```
+
+which will generate the following payload:
+
+```json
+{
+  "username": "plouc",
+  "team_id": 1,
+  "is_active": true,
+  "hobbies": [
+    "drawing",
+    "hacking"
+  ]
+}
 ```
 
 ## Examples
