@@ -9,6 +9,10 @@
     "testing",
     "api"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ekino/veggies.git"
+  },
   "main": "src/index.js",
   "author": "plouc <https://github.com/plouc>",
   "maintainers": [

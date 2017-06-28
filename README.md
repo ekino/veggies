@@ -61,7 +61,7 @@ httpApi.install({
 ### API testing
 
 For an exhaustive list of all available step definitions you should have a look
-at the [definitions file](https://github.com/ekino-node-staging/veggies/blob/master/src/extensions/http_api/definitions.js).
+at the [definitions file](https://github.com/ekino/veggies/blob/master/src/extensions/http_api/definitions.js).
 
 #### Making a simple request and testing its status code
 
@@ -205,7 +205,7 @@ when using the [http API extension](#http-api-extension).
 
 When installed, you can access it from the global cucumber context in your own step definitions.
 For available methods on the state, please refer to its own
-[documentation](https://ekino-node-staging.github.io/veggies/module-extensions_state_State.html).
+[documentation](https://ekino.github.io/veggies/module-extensions_state_State.html).
 
 ```javascript
 defineSupportCode(({ When }) => {
@@ -223,7 +223,7 @@ so make sure it's registered prior to installation.
 
 When installed, you can access its client from the global cucumber context in your own step definitions.
 For available methods on the client, please refer to its own
-[documentation](https://ekino-node-staging.github.io/veggies/module-extensions_httpApi_client.html).
+[documentation](https://ekino.github.io/veggies/module-extensions_httpApi_client.html).
 
 ```javascript
 defineSupportCode(({ When }) => {
@@ -243,9 +243,9 @@ yarn run examples
 
 [npm-image]: https://img.shields.io/npm/v/@ekino/veggies.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/@ekino/veggies
-[travis-image]: https://img.shields.io/travis/ekino-node-staging/veggies.svg?style=flat-square
-[travis-url]: https://travis-ci.org/ekino-node-staging/veggies
+[travis-image]: https://img.shields.io/travis/ekino/veggies.svg?style=flat-square
+[travis-url]: https://travis-ci.org/ekino/veggies
 [prettier-image]: https://img.shields.io/badge/styled_with-prettier-ff69b4.svg?style=flat-square
 [prettier-url]: https://github.com/prettier/prettier
-[coverage-image]: https://img.shields.io/coveralls/ekino-node-staging/veggies/master.svg?style=flat-square
-[coverage-url]: https://coveralls.io/github/ekino-node-staging/veggies?branch=master
+[coverage-image]: https://img.shields.io/coveralls/ekino/veggies/master.svg?style=flat-square
+[coverage-url]: https://coveralls.io/github/ekino/veggies?branch=master
