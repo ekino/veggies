@@ -46,7 +46,6 @@ exports.value = value => {
 
             default:
                 throw new TypeError(`Invalid type provided: ${type} '${value}'`)
-                break
         }
     }
 
