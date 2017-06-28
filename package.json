@@ -25,7 +25,10 @@
     "coveralls": "^2.13.1",
     "cucumber": "^2.3.1",
     "eslint": "^4.1.1",
+    "gh-pages": "^1.0.0",
     "jest": "^20.0.4",
+    "jsdoc": "^3.4.3",
+    "minami": "^1.2.3",
     "prettier": "^1.5.2"
   },
   "peerDependencies": {
@@ -39,6 +42,8 @@
     "check-fmt": "prettier --print-width 140 --tab-width=4 --single-quote --bracket-spacing --no-semi --list-different \"src/**/*.js\"",
     "version": "echo ${npm_package_version}",
     "lint": "eslint .",
+    "doc": "jsdoc src -R README.md -r -d doc --verbose -t node_modules/minami",
+    "doc-pub": "yarn run doc && gh-pages -d doc",
     "examples": "cucumberjs --require examples/support examples/features"
   }
 }

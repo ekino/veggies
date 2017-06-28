@@ -1,7 +1,25 @@
 'use strict'
 
+/**
+ * @module Cast
+ */
+
 const _ = require('lodash')
 
+/**
+ * Casts a value according to type directives.
+ * Supports the following types:
+ * - undefined
+ * - null
+ * - number
+ * - boolean
+ * - array
+ * - date
+ * - string
+ *
+ * @param {string} value - The value to cast
+ * @return {*} The casted value or untouched value if no casting directive found
+ */
 exports.value = value => {
     const matchResult = value.match(/^(.*)\(\((\w+)\)\)$/)
     let casted = value
@@ -52,6 +70,12 @@ exports.value = value => {
     return casted
 }
 
+/**
+ * Casts object all properties.
+ *
+ * @param {Object} object - The object containing values to cast
+ * @return {Object} The object with casted values
+ */
 exports.object = object => {
     const castedObject = {}
     Object.keys(object).forEach(key => {
@@ -61,6 +85,27 @@ exports.object = object => {
     return castedObject
 }
 
+/**
+ * Casts an array of objects.
+ *
+ * @example
+ * Cast.objects([
+ *     { username: 'plouc((string))', is_active: 'true((boolean))', age: '25((number))' },
+ *     { username: 'john((string))', is_active: 'false((boolean))', age: '32((number))' },
+ * ])
+ * // output
+ * [
+ *     { username: 'plouc', is_active: true, age: 25 },
+ *     { username: 'john', is_active: false, age: 32 },
+ * ]
+ *
+ * @param {Array.<Object>} objects
+ */
 exports.objects = objects => objects.map(object => exports.object(object))
 
+/**
+ * Casts an array of values.
+ *
+ * @param {Array.<*>} array
+ */
 exports.array = array => array.map(value => exports.value(value))

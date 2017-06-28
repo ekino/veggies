@@ -224,7 +224,7 @@ When installed, you can access it from the global cucumber context in your own s
 ```javascript
 defineSupportCode(({ When }) => {
     When(/^I do something useful$/, function() {
-        return this.httpApi.makeRequest(/* … */)
+        return this.httpApiClient.makeRequest(/* … */)
     })
 })
 ```
