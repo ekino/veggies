@@ -1,11 +1,13 @@
 {
   "name": "veggies",
   "version": "0.1.0",
+  "description": "Veggies is an awesome cucumber-js boilerplate for API/CLI testing. Great for Express, HAPI, Loopback, and others. Unbelievable greatness for life improvement.",
   "tags": [
     "bdd",
     "cucumber",
     "gherkin",
-    "testing"
+    "testing",
+    "api"
   ],
   "main": "src/index.js",
   "author": "plouc <https://github.com/plouc>",
