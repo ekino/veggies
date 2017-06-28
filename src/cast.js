@@ -4,54 +4,53 @@ const _ = require('lodash')
 
 exports.value = value => {
     const matchResult = value.match(/^(.*)\(\((\w+)\)\)$/)
-    let response = value
+    let casted = value
 
     if (matchResult) {
-        switch (matchResult[2]) {
+        const type = matchResult[2]
+
+        switch (type) {
             case 'undefined':
-                response = undefined
+                casted = undefined
                 break
 
             case 'null':
-                response = null
+                casted = null
                 break
 
             case 'number':
-                response = Number(matchResult[1])
+                casted = Number(matchResult[1])
+                if (_.isNaN(casted)) {
+                    throw new TypeError(`Unable to cast value to number '${value}'`)
+                }
                 break
 
             case 'boolean':
-                response = matchResult[1] === 'true'
-                break
-
-            case 'object':
-                if (matchResult[1] === 'NULL' || matchResult[1] === 'null') {
-                    response = null
-                }
-                if (matchResult[1] === 'undefined' || matchResult[1] === 'UNDEFINED') {
-                    response = undefined
-                }
+                casted = matchResult[1] === 'true'
                 break
 
             case 'array':
-                response = matchResult[1] ? matchResult[1].replace(/\s/g, '').split(',') : null
+                casted = matchResult[1] ? matchResult[1].replace(/\s/g, '').split(',').map(exports.value) : []
                 break
 
             case 'date':
                 if (matchResult[1] === 'today') {
-                    response = new Date().toJSON().slice(0, 10)
+                    casted = new Date().toJSON().slice(0, 10)
                 } else {
-                    response = new Date(matchResult[1]).toJSON()
+                    casted = new Date(matchResult[1]).toJSON()
                 }
                 break
 
             case 'string':
+                break
+
             default:
+                throw new TypeError(`Invalid type provided: ${type} '${value}'`)
                 break
         }
     }
 
-    return response
+    return casted
 }
 
 exports.object = object => {
