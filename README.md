@@ -58,5 +58,5 @@ httpApi.install({
 [travis-url]: https://travis-ci.org/ekino-node-staging/veggies
 [prettier-image]: https://img.shields.io/badge/styled_with-prettier-ff69b4.svg?style=flat-square
 [prettier-url]: https://github.com/prettier/prettier
-[coverage-image]: https://img.shields.io/coveralls/ekino/veggies/master.svg?style=flat-square
-[coverage-url]: https://coveralls.io/github/ekino/veggies?branch=master
+[coverage-image]: https://img.shields.io/coveralls/ekino-node-staging/veggies/master.svg?style=flat-square
+[coverage-url]: https://coveralls.io/github/ekino-node-staging/veggies?branch=master
