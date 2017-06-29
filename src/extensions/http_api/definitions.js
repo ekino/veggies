@@ -69,6 +69,14 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
         this.state.set(key, _.get(body, path))
     })
 
+    Given(/^(?:I )?enable cookies$/, function() {
+        this.httpApiClient.enableCookieJar()
+    })
+
+    Given(/^(?:I )?disable cookies$/, function() {
+        this.httpApiClient.disableCookieJar()
+    })
+
     /**
      * Resetting the client's state
      */
@@ -96,8 +104,46 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
      */
     Then(/^(?:I )?should receive a ([1-5][0-9][0-9]) HTTP status code$/, function(statusCode) {
         const httpResponse = this.httpApiClient.getResponse()
-        expect(httpResponse).to.not.be.empty
-        expect(httpResponse.statusCode).to.equal(Number(statusCode))
+        expect(httpResponse, 'Response is empty').to.not.be.empty
+        expect(httpResponse.statusCode, `Expected status code to be: ${statusCode}, but found: ${httpResponse.statusCode}`).to.equal(
+            Number(statusCode)
+        )
+    })
+
+    /**
+     * Checking response cookie exists
+     */
+    Then(/^response should have a (.*) cookie$/, function(key) {
+        const cookie = this.httpApiClient.getCookie(key)
+        expect(cookie, `No cookie found for key ${key}`).to.not.be.null
+    })
+
+    /**
+     * Checking response cookie secure
+     */
+    Then(/^response (.*) cookie should (not )?be secure$/, function(key, flag) {
+        const cookie = this.httpApiClient.getCookie(key)
+        expect(cookie, `No cookie found for key ${key}`).to.not.be.null
+
+        if (flag === undefined) {
+            expect(cookie.secure, `Cookie ${key} is not secure`).to.be.true
+        } else {
+            expect(cookie.secure, `Cookie ${key} is secure`).to.be.false
+        }
+    })
+
+    /**
+     * Checking response cookie httpOnly
+     */
+    Then(/^response (.*) cookie should (not )?be http only/, function(key, flag) {
+        const cookie = this.httpApiClient.getCookie(key)
+        expect(cookie, `No cookie found for key ${key}`).to.not.be.null
+
+        if (flag === undefined) {
+            expect(cookie.httpOnly, `Cookie ${key} is not http only`).to.be.true
+        } else {
+            expect(cookie.httpOnly, `Cookie ${key} is http only`).to.be.false
+        }
     })
 
     /**
