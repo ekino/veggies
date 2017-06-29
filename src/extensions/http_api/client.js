@@ -17,8 +17,11 @@ let bodyType = null
 let headers = null
 let query = null
 
+let cookieJar = null
+
 // RESPONSE INFORMATION
 let response = null
+let responseCookies = null
 
 /**
  * Resets the client.
@@ -28,7 +31,11 @@ exports.reset = () => {
     bodyType = null
     headers = null
     query = null
+
+    cookieJar = null
+
     response = null
+    responseCookies = null
 }
 
 /**
@@ -80,6 +87,26 @@ exports.setHeader = (key, value) => {
     headers[key] = value
 }
 
+exports.enableCookieJar = () => {
+    cookieJar = request.jar()
+}
+
+exports.disableCookieJar = () => {
+    cookieJar = null
+}
+
+exports.setCookie = (key, value) => {
+    headers = headers || {}
+    headers[key] = value
+}
+
+exports.getCookie = key => {
+    if (responseCookies === null) return null
+    if (responseCookies[key] === undefined) return null
+
+    return responseCookies[key]
+}
+
 /**
  * Returns the latest collected response.
  */
@@ -102,7 +129,8 @@ exports.makeRequest = (method, path, baseUrl) => {
             uri: path,
             method,
             qs: query || {},
-            headers
+            headers,
+            jar: cookieJar
         }
 
         if (body !== null) {
@@ -125,6 +153,14 @@ exports.makeRequest = (method, path, baseUrl) => {
             }
 
             response = _response
+
+            if (cookieJar !== null) {
+                responseCookies = {}
+                cookieJar.getCookies(`${baseUrl}${path}`).forEach(cookie => {
+                    responseCookies[cookie.key] = cookie
+                })
+            }
+
             resolve()
         })
     })
