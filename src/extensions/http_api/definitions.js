@@ -92,20 +92,22 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
         const response = this.httpApiClient.getResponse()
         const body = response.body
 
-        const expectedProperties = Cast.objects(table.hashes())
+        const expectedProperties = table.hashes()
 
         // We check the response has json content-type
         expect(response.headers['content-type']).to.contain('application/json')
 
         // We check response properties correspond to the expected response
         expectedProperties.forEach(propertyMatcher => {
+            const expectedValue = Cast.value(this.state.populate(propertyMatcher.value))
+
             switch (propertyMatcher.matcher) {
                 case 'contains':
-                    expect(_.get(body, propertyMatcher.field)).to.contain(propertyMatcher.value)
+                    expect(_.get(body, propertyMatcher.field)).to.contain(expectedValue)
                     break
                 case 'equals':
                 default:
-                    expect(_.get(body, propertyMatcher.field)).to.be.equal(propertyMatcher.value)
+                    expect(_.get(body, propertyMatcher.field)).to.be.equal(expectedValue)
             }
         })
 
