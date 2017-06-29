@@ -5,8 +5,9 @@
 [![Coverage Status][coverage-image]][coverage-url]
 [![styled with prettier][prettier-image]][prettier-url]
 
-Veggies is an awesome cucumberjs boilerplate for API testing.
+Veggies is an awesome cucumberjs boilerplate for API/CLI testing.
 Great for testing APIs built upon Express, Koa, HAPI, Loopback and others.
+It's also the perfect companion for testing CLI applications built with commander, meow & Co. 
 
 - [Installation](#installation)
 - [Features](#features)
@@ -15,9 +16,13 @@ Great for testing APIs built upon Express, Koa, HAPI, Loopback and others.
         - [Posting data](#posting-data)
         - [Using values issued by a previous request](#using-values-issued-by-a-previous-request)
         - [Type system](#type-system)
+    - [CLI testing](#cli-testing) 
+       - [Running a simple command](#running-a-simple-command-and-checking-its-exit-code)
+       - [Testing a command error](#testing-a-command-error)
 - [Extensions](#extensions)
     - [state](#state-extension)
     - [http API](#http-api-extension)
+    - [CLI](#cli-extension)
 - [Examples](#examples)    
     
 ## Installation
@@ -40,12 +45,13 @@ Then all you have to do is installing the provided extensions:
 // /support/world.js
 
 const { defineSupportCode } = require('cucumber')
-const { state, httpApi } = require('@ekino/veggies')
+const { state, httpApi, cli } = require('@ekino/veggies')
 
 defineSupportCode(({ setWorldConstructor }) => {
     setWorldConstructor(function() {
         state.extendWorld(this)
         httpApi.extendWorld(this)
+        cli.extendWorld(this)
     })
 })
 
@@ -53,7 +59,7 @@ state.install(defineSupportCode)
 httpApi.install({
     baseUrl: 'http://localhost:3000',
 })(defineSupportCode)
-
+cli.install(defineSupportCode)
 ```
 
 ## Features
@@ -191,9 +197,33 @@ which will generate the following payload:
 }
 ```
 
+### CLI testing
+
+For an exhaustive list of all available step definitions you should have a look
+at the [definitions file](https://github.com/ekino/veggies/blob/master/src/extensions/cli/definitions.js).
+
+#### Running a simple command and checking its exit code
+
+```gherkin
+Scenario: Getting info about installed yarn version
+  When I run command yarn --version
+  Then exit code should be 0
+```
+
+#### Testing a command error
+
+```gherkin
+Scenario: Running an invalid command
+  When I run command yarn invalid
+  Then exit code should be 1
+  And stderr should contain error Command "invalid" not found.
+```
+
 ## Extensions
 
 This module is composed of several extensions.
+
+[state](#state-extension) | [http API](#http-api-extension) | [CLI](#cli-extension)
 
 ### state extension
 
@@ -202,6 +232,23 @@ The state extension is a simple helper used to persist state between steps & eve
 
 It's involved for example when [you want to collect values issued by a previous request](#using-values-issued-by-a-previous-request)
 when using the [http API extension](#http-api-extension).
+
+To install the extension, you should add the following snippet to your `world` file:
+
+```javascript
+// /support/world.js
+
+const { defineSupportCode } = require('cucumber')
+const { state } = require('@ekino/veggies')
+
+defineSupportCode(({ setWorldConstructor }) => {
+    setWorldConstructor(function() {
+        state.extendWorld(this)
+    })
+})
+
+state.install(defineSupportCode)
+```
 
 When installed, you can access it from the global cucumber context in your own step definitions.
 For available methods on the state, please refer to its own
@@ -221,6 +268,27 @@ defineSupportCode(({ When }) => {
 The http API extension relies on the [state extension](#state-extension),
 so make sure it's registered prior to installation.
 
+To install the extension, you should add the following snippet to your `world` file:
+
+```javascript
+// /support/world.js
+
+const { defineSupportCode } = require('cucumber')
+const { state, httpApi } = require('@ekino/veggies')
+
+defineSupportCode(({ setWorldConstructor }) => {
+    setWorldConstructor(function() {
+        state.extendWorld(this)
+        httpApi.extendWorld(this)
+    })
+})
+
+state.install(defineSupportCode)
+httpApi.install({
+    baseUrl: 'http://localhost:3000',
+})(defineSupportCode)
+```
+
 When installed, you can access its client from the global cucumber context in your own step definitions.
 For available methods on the client, please refer to its own
 [documentation](https://ekino.github.io/veggies/module-extensions_httpApi_client.html).
@@ -233,12 +301,55 @@ defineSupportCode(({ When }) => {
 })
 ```
 
+### CLI extension 
+
+The CLI extension relies on the [state extension](#state-extension),
+so make sure it's registered prior to installation.
+
+To install the extension, you should add the following snippet to your `world` file:
+
+```javascript
+// /support/world.js
+
+const { defineSupportCode } = require('cucumber')
+const { state, cli } = require('@ekino/veggies')
+
+defineSupportCode(({ setWorldConstructor }) => {
+    setWorldConstructor(function() {
+        state.extendWorld(this)
+        cli.extendWorld(this)
+    })
+})
+
+state.install(defineSupportCode)
+cli.install(defineSupportCode)
+```
+
+When installed, you can access it from the global cucumber context in your own step definitions.
+For available methods on the client, please refer to its own
+[documentation](https://ekino.github.io/veggies/module-extensions_httpApi_client.html).
+
+```javascript
+defineSupportCode(({ When }) => {
+    Then(/^I check something from the CLI output$/, function() {
+        const out = this.cli.getOutput()
+        // …
+    })
+})
+```
+
 ## Examples
 
 This repository comes with few examples, in order to run them, invoke the following script:
 
 ```sh
 yarn run examples
+```
+
+If you want to only run certain examples, you can use tags, for example to run cli extension examples:
+
+```sh
+yarn run examples -- --tags @cli
 ```
 
 [npm-image]: https://img.shields.io/npm/v/@ekino/veggies.svg?style=flat-square

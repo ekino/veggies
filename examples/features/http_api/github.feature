@@ -1,3 +1,4 @@
+@http_api
 Feature: GitHub API
 
   Scenario: Using GitHub API
