@@ -327,7 +327,7 @@ cli.install(defineSupportCode)
 
 When installed, you can access it from the global cucumber context in your own step definitions.
 For available methods on the client, please refer to its own
-[documentation](https://ekino.github.io/veggies/module-extensions_httpApi_client.html).
+[documentation](https://ekino.github.io/veggies/module-extensions_Cli_Cli.html).
 
 ```javascript
 defineSupportCode(({ When }) => {
