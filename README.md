@@ -16,7 +16,9 @@ It's also the perfect companion for testing CLI applications built with commande
         - [Posting data](#posting-data)
         - [Using values issued by a previous request](#using-values-issued-by-a-previous-request)
         - [Type system](#type-system)
-    - [CLI testing](#cli-testing)    
+    - [CLI testing](#cli-testing) 
+       - [Running a simple command](#running-a-simple-command-and-checking-its-exit-code)
+       - [Testing a command error](#testing-a-command-error)
 - [Extensions](#extensions)
     - [state](#state-extension)
     - [http API](#http-api-extension)
@@ -200,9 +202,28 @@ which will generate the following payload:
 For an exhaustive list of all available step definitions you should have a look
 at the [definitions file](https://github.com/ekino/veggies/blob/master/src/extensions/cli/definitions.js).
 
+#### Running a simple command and checking its exit code
+
+```gherkin
+Scenario: Getting info about installed yarn version
+  When I run command yarn --version
+  Then exit code should be 0
+```
+
+#### Testing a command error
+
+```gherkin
+Scenario: Running an invalid command
+  When I run command yarn invalid
+  Then exit code should be 1
+  And stderr should contain error Command "invalid" not found.
+``
+
 ## Extensions
 
 This module is composed of several extensions.
+
+[state](#state-extension) | [http API](#http-api-extension) | [CLI](#cli-extension)
 
 ### state extension
 

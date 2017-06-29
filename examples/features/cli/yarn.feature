@@ -6,7 +6,7 @@ Feature: yarn CLI
     Then exit code should be 1
     And stderr should contain error Command "invalid" not found.
 
-  Scenario: Getting yarn version
+  Scenario: Getting info about installed yarn version
     When I run command yarn --version
     Then exit code should be 0
     And stdout should match ^[0-9]{1}.[0-9]{1,3}.[0-9]{1,3}
