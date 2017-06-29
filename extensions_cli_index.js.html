@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>extensions/state/state.js - Documentation</title>
+    <title>extensions/cli/index.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">extensions/state/state.js</h1>
+    <h1 class="page-title">extensions/cli/index.js</h1>
     
 
     
@@ -42,42 +42,25 @@
             <pre class="prettyprint source linenums"><code>'use strict'
 
 /**
- * @module extensions/state/State
+ * @module extensions/Cli
  */
 
-const _ = require('lodash')
-
-let state = {}
+const definitions = require('./definitions')
+const hooks = require('./hooks')
 
 /**
- * Sets value for given key.
- *
- * @param {string} key   - The key you wish to set a value for
- * @param {*}      value - The value
+ * Extends cucumber world object.
+ * Must be used inside customWorldConstructor.
  */
-exports.set = (key, value) => _.set(state, key, value)
+exports.extendWorld = require('./extend_world')
 
 /**
- * Retrieves a value for given key.
- *
- * @param {string} key - The key you wish to retrieve a value for
- * @return {*}
+ * Installs the extension.
  */
-exports.get = key => _.get(state, key)
-
-exports.clear = () => {
-    state = {}
+exports.install = define => {
+    define(definitions)
+    define(hooks)
 }
-
-exports.dump = () => state
-
-exports.populate = value => _.template(value, { interpolate: /{{([\s\S]+?)}}/g })(state)
-
-exports.populateObject = object =>
-    _.mapValues(object, value => {
-        if (_.isPlainObject(value)) return exports.populateObject(value)
-        return exports.populate(value)
-    })
 </code></pre>
         </article>
     </section>
