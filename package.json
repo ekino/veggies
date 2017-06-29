@@ -22,6 +22,10 @@
     }
   ],
   "license": "MIT",
+  "engines": {
+    "node" : ">=6.0.0"
+  },
+  "engineStrict": true,
   "dependencies": {
     "chai": "^4.0.2",
     "lodash": "^4.17.4"

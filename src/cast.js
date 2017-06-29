@@ -17,6 +17,17 @@ const _ = require('lodash')
  * - date
  * - string
  *
+ * @example
+ * Cast.value('2((number))')
+ * Cast.value('true((boolean))')
+ * Cast.value('((null))')
+ * Cast.value('raw')
+ * // output
+ * // > 2
+ * // > true
+ * // > null
+ * // > 'raw'
+ *
  * @param {string} value - The value to cast
  * @return {*} The casted value or untouched value if no casting directive found
  */
@@ -94,10 +105,10 @@ exports.object = object => {
  *     { username: 'john((string))', is_active: 'false((boolean))', age: '32((number))' },
  * ])
  * // output
- * [
- *     { username: 'plouc', is_active: true, age: 25 },
- *     { username: 'john', is_active: false, age: 32 },
- * ]
+ * // > [
+ * // >    { username: 'plouc', is_active: true, age: 25 },
+ * // >    { username: 'john', is_active: false, age: 32 },
+ * // > ]
  *
  * @param {Array.<Object>} objects
  */
