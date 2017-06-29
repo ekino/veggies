@@ -24,6 +24,8 @@ module.exports = ({ Given, When, Then }) => {
         this.cli.scheduleKillProcess(delay, signal)
     })
 
+
+
     When(/^I run command (.+)$/, function(command, callback) {
         this.cli
             .run(command)
@@ -34,6 +36,13 @@ module.exports = ({ Given, When, Then }) => {
                 /* console.log(this.cli.getOutput('stdout'), this.cli.getOutput('stderr')); */ callback(...args)
             })
     })
+
+    When(/^(?:I )?dump (stderr|stdout)/, function(type) {
+        const output = this.cli.getOutput(type)
+        console.log(output) // eslint-disable-line no-console
+    })
+
+
 
     Then(/^(?:the )?(?:command )?exit code should be (\d+)$/, function(expectedExitCode) {
         const exitCode = this.cli.getExitCode()

@@ -10,39 +10,39 @@ module.exports = ({ baseUrl = '' }) => ({ Given, When, Then }) => {
     /**
      * Setting http headers
      */
-    Given(/^I set request headers$/, function(step) {
+    Given(/^(?:I )?set request headers$/, function(step) {
         this.httpApiClient.setHeaders(Cast.object(this.state.populateObject(step.rowsHash())))
     })
 
     /**
      * Setting a single http header
      */
-    Given(/^I set ([a-zA-Z0-9-]+) request header to (.*)$/, function(key, value) {
+    Given(/^(?:I )?set ([a-zA-Z0-9-]+) request header to (.*)$/, function(key, value) {
         this.httpApiClient.setHeader(key, Cast.value(this.state.populate(value)))
     })
 
     /**
      * Setting json payload
      */
-    Given(/^I set request json body$/, function(step) {
+    Given(/^(?:I )?set request json body$/, function(step) {
         this.httpApiClient.setJsonBody(Cast.object(this.state.populateObject(step.rowsHash())))
     })
 
     /**
      * Setting form data
      */
-    Given(/^I set request form body$/, function(step) {
+    Given(/^(?:I )?set request form body$/, function(step) {
         this.httpApiClient.setFormBody(Cast.object(this.state.populateObject(step.rowsHash())))
     })
 
     /**
      * Setting query parameters
      */
-    Given(/^I set request query$/, function(step) {
+    Given(/^(?:I )?set request query$/, function(step) {
         this.httpApiClient.setQuery(Cast.object(this.state.populateObject(step.rowsHash())))
     })
 
-    Given(/^I pick response json (.*) as (.*)$/, function(path, key) {
+    Given(/^(?:I )?pick response json (.*) as (.*)$/, function(path, key) {
         const response = this.httpApiClient.getResponse()
         const body = response.body
 
@@ -52,21 +52,21 @@ module.exports = ({ baseUrl = '' }) => ({ Given, When, Then }) => {
     /**
      * Resetting the client's state
      */
-    When(/^I reset http client/, function() {
+    When(/^(?:I )?reset http client/, function() {
         this.httpApiClient.reset()
     })
 
     /**
      * Performing a request
      */
-    When(/^I (GET|POST|PUT|DELETE) (.*)$/, function(method, path) {
+    When(/^(?:I )?(GET|POST|PUT|DELETE) (.*)$/, function(method, path) {
         return this.httpApiClient.makeRequest(method, this.state.populate(path), baseUrl)
     })
 
     /**
      * Dumping response body
      */
-    When(/^I dump response body$/, function() {
+    When(/^(?:I )?dump response body$/, function() {
         const httpResponse = this.httpApiClient.getResponse()
         console.log(httpResponse.body) // eslint-disable-line no-console
     })
@@ -74,7 +74,7 @@ module.exports = ({ baseUrl = '' }) => ({ Given, When, Then }) => {
     /**
      * Checking response status code
      */
-    Then(/^I should receive a ([1-5][0-9][0-9]) HTTP status code$/, function(statusCode) {
+    Then(/^(?:I )?should receive a ([1-5][0-9][0-9]) HTTP status code$/, function(statusCode) {
         const httpResponse = this.httpApiClient.getResponse()
         expect(httpResponse).to.not.be.empty
         expect(httpResponse.statusCode).to.equal(Number(statusCode))
@@ -88,7 +88,7 @@ module.exports = ({ baseUrl = '' }) => ({ Given, When, Then }) => {
      * - equals
      * - contains
      */
-    Then(/^I should receive a json response (fully )?matching/, function(fully, table) {
+    Then(/^(?:I )?should receive a json response (fully )?matching/, function(fully, table) {
         const response = this.httpApiClient.getResponse()
         const body = response.body
 
@@ -119,7 +119,7 @@ module.exports = ({ baseUrl = '' }) => ({ Given, When, Then }) => {
     /**
      * This definition verify that an array for a given path has the expected length
      */
-    Then(/^I should receive a collection of (\d+) items for path '(.*)'/, function(itemsNumber, path) {
+    Then(/^(?:I )?should receive a collection of (\d+) items for path '(.*)'/, function(itemsNumber, path) {
         const { body } = this.httpApiClient.getResponse()
         const array = _.get(body, path)
 

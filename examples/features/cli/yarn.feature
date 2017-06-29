@@ -10,3 +10,4 @@ Feature: yarn CLI
     When I run command yarn --version
     Then exit code should be 0
     And stdout should match ^[0-9]{1}.[0-9]{1,3}.[0-9]{1,3}
+    And stderr should be empty
