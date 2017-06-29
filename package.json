@@ -1,6 +1,6 @@
 {
   "name": "veggies",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Veggies is an awesome cucumberjs boilerplate for API/CLI testing. Great for testing APIs built upon Express, Koa, HAPI, Loopback and others. It's also the perfect companion for testing CLI applications built with commander, meow & Co.",
   "tags": [
     "bdd",

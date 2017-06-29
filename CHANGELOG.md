@@ -2,7 +2,7 @@
 
 _Veggies is an awesome cucumberjs boilerplate for API/CLI testing. Great for testing APIs built upon Express, Koa, HAPI, Loopback and others. It's also the perfect companion for testing CLI applications built with commander, meow & Co._
 
-## v0.1.0 false ( Thu Jun 29 2017 10:39:34 GMT+0900 (JST) )
+## v0.1.1 false ( Thu Jun 29 2017 10:42:54 GMT+0900 (JST) )
 
 
 ## Bug Fixes
@@ -132,6 +132,10 @@ _Veggies is an awesome cucumberjs boilerplate for API/CLI testing. Great for tes
   - **init**
     - init repo
   ([0957cc63](git@github.com:ekino/veggies/commit/0957cc6324f45de8b3d503b1b3f0f9fcf78211a4))
+
+  - **release**
+    - add commands to ease releasing
+  ([ecd7c438](git@github.com:ekino/veggies/commit/ecd7c43813d8b1100bfa5f1e2f300d2ca3a13d64))
 
 
 
