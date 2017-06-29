@@ -5,7 +5,7 @@
 [![Coverage Status][coverage-image]][coverage-url]
 [![styled with prettier][prettier-image]][prettier-url]
 
-Veggies is an awesome cucumberjs boilerplate for API/CLI testing.
+Veggies is an awesome cucumberjs library for API/CLI testing.
 Great for testing APIs built upon Express, Koa, HAPI, Loopback and others.
 It's also the perfect companion for testing CLI applications built with commander, meow & Co. 
 
