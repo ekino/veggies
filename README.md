@@ -1,4 +1,4 @@
-# veggies
+[![veggies](https://raw.githubusercontent.com/ekino/veggies/master/assets/veggies-banner.png)](https://ekino.github.io/veggies/)
 
 [![NPM version][npm-image]][npm-url]
 [![Travis CI][travis-image]][travis-url]
