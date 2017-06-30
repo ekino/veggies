@@ -71,6 +71,7 @@ exports.value = value => {
                 break
 
             case 'string':
+                casted = matchResult[1]
                 break
 
             default:
