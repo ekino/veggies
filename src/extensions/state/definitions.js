@@ -1,15 +1,13 @@
 'use strict'
 
-const _ = require('lodash')
-
 const Cast = require('../../cast')
 
 module.exports = ({ Given, When }) => {
-    Given(/^(?:I )?set state key (.*) to (.*)$/, (key, value) => {
+    Given(/^(?:I )?set state (.+) to (.+)$/, function(key, value) {
         this.state.set(key, Cast.value(value))
     })
 
-    Given(/^(?:I )?clear state$/, function() {
+    When(/^(?:I )?clear state$/, function() {
         this.state.clear()
     })
 
