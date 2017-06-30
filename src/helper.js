@@ -1,5 +1,7 @@
 'use strict'
 
+const _ = require('lodash')
+
 /**
  * Count object properties including nested objects ones.
  * If a property is an object, its key is ignored.

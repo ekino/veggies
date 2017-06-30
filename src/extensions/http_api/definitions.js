@@ -141,9 +141,9 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     /**
      * This definition verify that an array for a given path has the expected length
      */
-    Then(/^(?:I )?should receive a collection of ([0-9]+) items? for path (.+)$/, function(itemsNumber, path) {
+    Then(/^(?:I )?should receive a collection of ([0-9]+) items?(?: for path )?(.+)?$/, function(itemsNumber, path) {
         const { body } = this.httpApiClient.getResponse()
-        const array = _.get(body, path)
+        const array = path !== undefined ? _.get(body, path) : body
 
         expect(array.length).to.be.equal(Number(itemsNumber))
     })

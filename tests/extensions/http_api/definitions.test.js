@@ -221,11 +221,10 @@ test('check json collection size for a given path', () => {
     const def = context.getDefinitionByMatcher('should receive a collection of')
     def.shouldHaveType('Then')
     def.shouldNotMatch('I should receive a collection of x items for path whatever')
-    def.shouldNotMatch('I should receive a collection of 2 items for path ')
     def.shouldMatch('I should receive a collection of 1 item for path property', ['1', 'property'])
     def.shouldMatch('I should receive a collection of 2 items for path property', ['2', 'property'])
     def.shouldMatch('should receive a collection of 1 item for path property', ['1', 'property'])
-    def.shouldMatch('should receive a collection of 2 items for path property', ['2', 'property'])
+    def.shouldMatch('should receive a collection of 2 items', ['2', undefined])
 })
 
 test('match snapshot', () => {
