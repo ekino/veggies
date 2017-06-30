@@ -70,11 +70,11 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     })
 
     Given(/^(?:I )?enable cookies$/, function() {
-        this.httpApiClient.enableCookieJar()
+        this.httpApiClient.enableCookies()
     })
 
     Given(/^(?:I )?disable cookies$/, function() {
-        this.httpApiClient.disableCookieJar()
+        this.httpApiClient.disableCookies()
     })
 
     /**
@@ -187,11 +187,11 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     /**
      * This definition verify that an array for a given path has the expected length
      */
-    Then(/^(?:I )?should receive a collection of ([0-9]+) items?(?: for path )?(.+)?$/, function(itemsNumber, path) {
+    Then(/^(?:I )?should receive a collection of ([0-9]+) items?(?: for path )?(.+)?$/, function(size, path) {
         const { body } = this.httpApiClient.getResponse()
         const array = path !== undefined ? _.get(body, path) : body
 
-        expect(array.length).to.be.equal(Number(itemsNumber))
+        expect(array.length).to.be.equal(Number(size))
     })
 
     /**
