@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>extensions/httpApi/hooks - Documentation</title>
+    <title>helper.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,128 +29,83 @@
 
 <div id="main">
     
-    <h1 class="page-title">extensions/httpApi/hooks</h1>
+    <h1 class="page-title">helper.js</h1>
     
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-            
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict'
 
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">Registers hooks for the http API extension.</div>
-        
+/**
+ * Count object properties including nested objects ones.
+ * If a property is an object, its key is ignored.
+ *
+ * @example
+ * Helper.countNestedProperties({
+ *     a: true,
+ *     b: true,
+ *     c: true,
+ * })
+ * // => 3
+ * Helper.countNestedProperties({
+ *     a: true,
+ *     b: true,
+ *     c: {
+ *         a: true,
+ *         b: true,
+ *     },
+ * })
+ * // => 4 (c is ignored because it's a nested object)
+ *
+ * @param {Object} object
+ * @return {number}
+ */
+exports.countNestedProperties = object => {
+    let propertiesCount = 0
+    Object.keys(object).forEach(key => {
+        if (object[key] != null &amp;&amp; typeof object[key] === 'object') {
+            const count = exports.countNestedProperties(object[key])
+            propertiesCount += count
+        } else {
+            propertiesCount++
+        }
+    })
 
-        
-            
-<div class="section-method">
+    return propertiesCount
+}
 
+/**
+ * Registers an extension.
+ *
+ * @param {Object} world       - Cucumber world object
+ * @param {string} extensionId - Unique veggies extension identifier
+ */
+exports.registerExtension = (world, extensionId) => {
+    world._registredExtensions = world._registredExtensions || []
+    world._registredExtensions.push(extensionId)
+}
 
+/**
+ * Checks if an extension were registered.
+ *
+ * @param {Object} world       - Cucumber world object
+ * @param {string} extensionId - Unique veggies extension identifier
+ * @return {boolean}
+ */
+exports.hasExtension = (world, extensionId) => {
+    if (!world._registredExtensions) return false
+    if (!world._registredExtensions.includes(extensionId)) return false
 
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="extensions_http_api_hooks.js.html">extensions/http_api/hooks.js</a>, <a href="extensions_http_api_hooks.js.html#line3">line 3</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    return true
+}
+</code></pre>
+        </article>
+    </section>
 
 
 
