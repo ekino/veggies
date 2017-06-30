@@ -3,7 +3,7 @@
 const helper = require('../definitions_helper')
 const definitions = require('../../../src/extensions/state/definitions')
 
-test('should allow to set a state property', () => {
+test('set state property', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('set state (.+) to')
@@ -17,7 +17,7 @@ test('should allow to set a state property', () => {
     expect(stateMock.state.set).toHaveBeenCalledWith('property', 'value')
 })
 
-test('should allow to clear state', () => {
+test('clear state', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('clear state')
@@ -30,7 +30,7 @@ test('should allow to clear state', () => {
     expect(stateMock.state.clear).toHaveBeenCalled()
 })
 
-test('should allow to dump current state', () => {
+test('dump current state', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('dump state')

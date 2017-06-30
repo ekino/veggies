@@ -7,7 +7,7 @@ beforeEach(() => {
     require('chai').clear()
 })
 
-test('should allow to set current working directory', () => {
+test('set current working directory', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('set (?:working directory|cwd) to')
@@ -23,7 +23,7 @@ test('should allow to set current working directory', () => {
     expect(cliMock.cli.setCwd).toHaveBeenCalledWith('path')
 })
 
-test('should allow to set environment variables', () => {
+test('set environment variables', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('set (?:env|environment) (?:vars|variables)')
@@ -43,7 +43,7 @@ test('should allow to set environment variables', () => {
     expect(cliMock.cli.setEnvironmentVariables).toHaveBeenCalledWith(envVars)
 })
 
-test('should allow to set a single environment variable', () => {
+test('set a single environment variable', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('(?:env|environment) (?:var|variable)')
@@ -64,7 +64,7 @@ test('should allow to set a single environment variable', () => {
     expect(cliMock.cli.setEnvironmentVariable).toHaveBeenCalledWith('Accept', 'application/json')
 })
 
-test('should allow to schedule process killing', () => {
+test('schedule process killing', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('kill the process with')
@@ -84,7 +84,7 @@ test('should allow to schedule process killing', () => {
     expect(cliMock.cli.scheduleKillProcess).toHaveBeenCalledWith(10000, 'sig')
 })
 
-test('should allow to run a command', () => {
+test('run a command', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('run command')
@@ -92,9 +92,13 @@ test('should allow to run a command', () => {
     def.shouldNotMatch('I run command ')
     def.shouldMatch('I run command ls -al', ['ls -al'])
     def.shouldMatch('run command ls -al', ['ls -al'])
+
+    const cliMock = { cli: { run: jest.fn(() => Promise.resolve()) } }
+    def.exec(cliMock, 'ls -al')
+    expect(cliMock.cli.run).toHaveBeenCalledWith('ls -al')
 })
 
-test('should allow to dump stdout & stderr for debugging purpose', () => {
+test('dump stdout or stderr for debugging purpose', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('dump (stderr|stdout)')
@@ -110,7 +114,7 @@ test('should allow to dump stdout & stderr for debugging purpose', () => {
     expect(cliMock.cli.getOutput).toHaveBeenCalledWith('stdout')
 })
 
-test('should allow to check exit code', () => {
+test('check exit code', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('(?:command )?exit code should be')
@@ -128,7 +132,7 @@ test('should allow to check exit code', () => {
     expect(require('chai').equal).toHaveBeenCalledWith(0)
 })
 
-test('should allow to check if stdout or stderr is empty', () => {
+test('check if stdout or stderr is empty', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('(stderr|stdout) should be empty')
@@ -143,7 +147,7 @@ test('should allow to check if stdout or stderr is empty', () => {
     expect(require('chai').expect).toHaveBeenCalledWith('output')
 })
 
-test('should allow to check if stdout or stderr contains something', () => {
+test('check if stdout or stderr contains something', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('(stderr|stdout) should contain')
@@ -160,7 +164,7 @@ test('should allow to check if stdout or stderr contains something', () => {
     expect(require('chai').contain).toHaveBeenCalledWith('something')
 })
 
-test('should allow to check if stdout or stderr does not contain something', () => {
+test('check if stdout or stderr does not contain something', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('(stderr|stdout) should not contain')
@@ -177,7 +181,7 @@ test('should allow to check if stdout or stderr does not contain something', () 
     expect(require('chai').contain).toHaveBeenCalledWith('something')
 })
 
-test('should allow to check if stdout or stderr matches a regular expression', () => {
+test('check if stdout or stderr matches a regular expression', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('(stderr|stdout) should match')
@@ -194,7 +198,7 @@ test('should allow to check if stdout or stderr matches a regular expression', (
     expect(require('chai').match).toHaveBeenCalledWith(/something/gim)
 })
 
-test('should allow to check if stdout or stderr does not match a regular expression', () => {
+test('check if stdout or stderr does not match a regular expression', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('(stderr|stdout) should not match')

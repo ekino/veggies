@@ -144,6 +144,32 @@ test('pick response json property', () => {
     def.shouldMatch('pick response json key as value', ['key', 'value'])
 })
 
+test('enable cookies', () => {
+    const context = helper.define(definitions)
+
+    const def = context.getDefinitionByMatcher('enable cookies')
+    def.shouldHaveType('Given')
+    def.shouldMatch('I enable cookies')
+    def.shouldMatch('enable cookies')
+
+    const clientMock = { httpApiClient: { enableCookies: jest.fn() } }
+    def.exec(clientMock)
+    expect(clientMock.httpApiClient.enableCookies).toHaveBeenCalled()
+})
+
+test('disable cookies', () => {
+    const context = helper.define(definitions)
+
+    const def = context.getDefinitionByMatcher('disable cookies')
+    def.shouldHaveType('Given')
+    def.shouldMatch('I disable cookies')
+    def.shouldMatch('disable cookies')
+
+    const clientMock = { httpApiClient: { disableCookies: jest.fn() } }
+    def.exec(clientMock)
+    expect(clientMock.httpApiClient.disableCookies).toHaveBeenCalled()
+})
+
 test('reset http client', () => {
     const context = helper.define(definitions)
 
@@ -225,6 +251,12 @@ test('check json collection size for a given path', () => {
     def.shouldMatch('I should receive a collection of 2 items for path property', ['2', 'property'])
     def.shouldMatch('should receive a collection of 1 item for path property', ['1', 'property'])
     def.shouldMatch('should receive a collection of 2 items', ['2', undefined])
+
+    const clientMock = { httpApiClient: { getResponse: jest.fn(() => ({ body: { property: ['a', 'b', 'c'] } })) } }
+    def.exec(clientMock, '3', 'property')
+    expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
+    expect(require('chai').expect).toHaveBeenCalledWith(3)
+    expect(require('chai').equal).toHaveBeenCalledWith(3)
 })
 
 test('match snapshot', () => {

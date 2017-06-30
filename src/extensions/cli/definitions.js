@@ -24,15 +24,8 @@ module.exports = ({ Given, When, Then }) => {
         this.cli.scheduleKillProcess(delay, signal)
     })
 
-    When(/^(?:I )?run command (.+)$/, function(command, callback) {
-        this.cli
-            .run(command)
-            .then(() => {
-                /* console.log(this.cli.getOutput('stdout'), this.cli.getOutput('stderr')); */ callback()
-            })
-            .catch((...args) => {
-                /* console.log(this.cli.getOutput('stdout'), this.cli.getOutput('stderr')); */ callback(...args)
-            })
+    When(/^(?:I )?run command (.+)$/, function(command) {
+        return this.cli.run(command)
     })
 
     When(/^(?:I )?dump (stderr|stdout)$/, function(type) {

@@ -87,11 +87,11 @@ exports.setHeader = (key, value) => {
     headers[key] = value
 }
 
-exports.enableCookieJar = () => {
+exports.enableCookies = () => {
     cookieJar = request.jar()
 }
 
-exports.disableCookieJar = () => {
+exports.disableCookies = () => {
     cookieJar = null
 }
 
@@ -100,6 +100,12 @@ exports.setCookie = (key, value) => {
     headers[key] = value
 }
 
+/**
+ * Retrieves a cookie by its key.
+ *
+ * @param {string} key - Cookie key
+ * @return {Object|null} The cookie object if any, or null
+ */
 exports.getCookie = key => {
     if (responseCookies === null) return null
     if (responseCookies[key] === undefined) return null
