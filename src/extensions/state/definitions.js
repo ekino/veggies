@@ -3,7 +3,7 @@
 const Cast = require('../../cast')
 
 module.exports = ({ Given, When }) => {
-    Given(/^(?:I )?set state (.+) to (.+)$/, (key, value) => {
+    Given(/^(?:I )?set state (.+) to (.+)$/, function(key, value) {
         this.state.set(key, Cast.value(value))
     })
 

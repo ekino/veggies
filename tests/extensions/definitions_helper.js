@@ -47,6 +47,17 @@ const defShouldNotMatch = (regex, str) => {
     expect(str).not.toMatch(regex)
 }
 
+/**
+ * Executes step definition logic.
+ *
+ * @param {Function} execFn      - Step definition logic
+ * @param {Object}   thisContext - `this` context to emulate cucumber context
+ * @param args
+ */
+const execDef = (execFn, thisContext, ...args) => {
+    execFn.bind(thisContext)(...args)
+}
+
 exports.define = definitions => {
     const mocks = {
         Given: jest.fn(),
@@ -60,7 +71,7 @@ exports.define = definitions => {
         const typeDefs = mocks[type].mock.calls.map(def => ({
             type,
             matcher: def[0], // The step definition regex
-            exec: def[1], // The step definition logic
+            exec: _.partial(execDef, def[1]), // The step definition logic
             shouldHaveType: _.partial(defShouldHaveType, type),
             shouldMatch: _.partial(defShouldMatch, def[0]),
             shouldNotMatch: _.partial(defShouldNotMatch, def[0])

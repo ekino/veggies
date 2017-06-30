@@ -11,6 +11,10 @@ test('should allow to set a state property', () => {
     def.shouldNotMatch('I set state property to ')
     def.shouldMatch('I set state property to value', ['property', 'value'])
     def.shouldMatch('set state property to value', ['property', 'value'])
+
+    const stateMock = { state: { set: jest.fn() } }
+    def.exec(stateMock, 'property', 'value')
+    expect(stateMock.state.set).toHaveBeenCalledWith('property', 'value')
 })
 
 test('should allow to clear state', () => {
@@ -20,6 +24,10 @@ test('should allow to clear state', () => {
     def.shouldHaveType('When')
     def.shouldMatch('I clear state')
     def.shouldMatch('clear state')
+
+    const stateMock = { state: { clear: jest.fn() } }
+    def.exec(stateMock)
+    expect(stateMock.state.clear).toHaveBeenCalled()
 })
 
 test('should allow to dump current state', () => {
@@ -29,4 +37,8 @@ test('should allow to dump current state', () => {
     def.shouldHaveType('When')
     def.shouldMatch('I dump state')
     def.shouldMatch('dump state')
+
+    const stateMock = { state: { dump: jest.fn(() => 'state') } }
+    def.exec(stateMock)
+    expect(stateMock.state.dump).toHaveBeenCalled()
 })
