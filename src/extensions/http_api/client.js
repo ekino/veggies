@@ -59,6 +59,14 @@ exports.setFormBody = payload => {
 }
 
 /**
+ * Clears current request body
+ */
+exports.clearBody = () => {
+    body = null
+    bodyType = null
+}
+
+/**
  * Sets request query parameters.
  *
  * @param {Object} _query
@@ -87,14 +95,33 @@ exports.setHeader = (key, value) => {
     headers[key] = value
 }
 
+/**
+ * Clears current request headers.
+ */
+exports.clearHeaders = () => {
+    headers = null
+}
+
+/**
+ * Enables cookie jar.
+ */
 exports.enableCookies = () => {
     cookieJar = request.jar()
 }
 
+/**
+ * Disables cookie jar.
+ */
 exports.disableCookies = () => {
     cookieJar = null
 }
 
+/**
+ * Sets a cookie.
+ *
+ * @param {string} key   - Cookie key
+ * @param {string} value - Cookie value
+ */
 exports.setCookie = (key, value) => {
     headers = headers || {}
     headers[key] = value

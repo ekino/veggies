@@ -44,6 +44,19 @@ test('set a single request header', () => {
     expect(clientMock.httpApiClient.setHeader).toHaveBeenCalledWith('Accept', 'test')
 })
 
+test('clear request headers', () => {
+    const context = helper.define(definitions)
+
+    const def = context.getDefinitionByMatcher('clear request headers')
+    def.shouldHaveType('Given')
+    def.shouldMatch('I clear request headers')
+    def.shouldMatch('clear request headers')
+
+    const clientMock = { httpApiClient: { clearHeaders: jest.fn() } }
+    def.exec(clientMock)
+    expect(clientMock.httpApiClient.clearHeaders).toHaveBeenCalled()
+})
+
 test('set request json body', () => {
     const context = helper.define(definitions)
 
@@ -99,19 +112,32 @@ test('set request form body from fixture file', () => {
     def.shouldMatch('I set request form body from fixture')
     def.shouldMatch('set request form body from fixture')
 
-    const fixture = {
+    const fixture   = {
         is_active: 'true',
-        id: '2'
+        id:        '2'
     }
     const worldMock = {
-        httpApiClient: { setFormBody: jest.fn() },
-        fixtures: { load: jest.fn(() => Promise.resolve(fixture)) }
+        httpApiClient: {setFormBody: jest.fn()},
+        fixtures:      {load: jest.fn(() => Promise.resolve(fixture))}
     }
 
     return def.exec(worldMock, 'fixture').then(() => {
         expect(worldMock.fixtures.load).toHaveBeenCalledWith('fixture')
         expect(worldMock.httpApiClient.setFormBody).toHaveBeenCalledWith(fixture)
     })
+})
+
+test('clear request body', () => {
+    const context = helper.define(definitions)
+
+    const def = context.getDefinitionByMatcher('clear request body')
+    def.shouldHaveType('Given')
+    def.shouldMatch('I clear request body')
+    def.shouldMatch('clear request body')
+
+    const clientMock = { httpApiClient: { clearBody: jest.fn() } }
+    def.exec(clientMock)
+    expect(clientMock.httpApiClient.clearBody).toHaveBeenCalled()
 })
 
 test('set request query', () => {
