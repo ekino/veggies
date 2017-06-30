@@ -29,7 +29,7 @@ const _ = require('lodash')
 exports.countNestedProperties = object => {
     let propertiesCount = 0
     Object.keys(object).forEach(key => {
-        if (object[key] != null && typeof object[key] === 'object') {
+        if (!_.isEmpty(object[key]) && typeof object[key] === 'object') {
             const count = exports.countNestedProperties(object[key])
             propertiesCount += count
         } else {
