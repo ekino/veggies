@@ -127,7 +127,7 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
                     break
                 case 'equals':
                 default:
-                    expect(_.get(body, propertyMatcher.field)).to.be.equal(expectedValue)
+                    expect(_.get(body, propertyMatcher.field)).to.be.deep.equal(expectedValue)
             }
         })
 
