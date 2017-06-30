@@ -201,7 +201,7 @@ test('check response HTTP status code', () => {
     const clientMock = { httpApiClient: { getResponse: jest.fn(() => ({ statusCode: 200 })) } }
     def.exec(clientMock, '200')
     expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
-    expect(require('chai').expect).toHaveBeenCalledWith(200)
+    expect(require('chai').expect).toHaveBeenCalledWith(200, 'Expected status code to be: 200, but found: 200')
 })
 
 test('check json response', () => {
