@@ -121,7 +121,7 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     /**
      * This definition verify that an array for a given path has the expected length
      */
-    Then(/^(?:I )?should receive a collection of (\d+) items? for path (.+)$/, function(itemsNumber, path) {
+    Then(/^(?:I )?should receive a collection of ([0-9]+) items? for path (.+)$/, function(itemsNumber, path) {
         const { body } = this.httpApiClient.getResponse()
         const array = _.get(body, path)
 
