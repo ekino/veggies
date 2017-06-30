@@ -3,11 +3,11 @@
 const { expect } = require('chai')
 
 module.exports = ({ Given, When, Then }) => {
-    Given(/^I set (?:working directory|cwd) to (.+)$/, function(cwd) {
+    Given(/^(?:I )?set (?:working directory|cwd) to (.+)$/, function(cwd) {
         this.cli.setCwd(cwd)
     })
 
-    Given(/^(?:I )?set (?:env|environment) (?:var|variable) ([^ ]+): (.*)$/, function(name, value) {
+    Given(/^(?:I )?set ([^ ]+) (?:env|environment) (?:var|variable) to (.+)$/, function(name, value) {
         this.cli.setEnvironmentVariable(name, value)
     })
 
@@ -24,7 +24,7 @@ module.exports = ({ Given, When, Then }) => {
         this.cli.scheduleKillProcess(delay, signal)
     })
 
-    When(/^I run command (.+)$/, function(command, callback) {
+    When(/^(?:I )?run command (.+)$/, function(command, callback) {
         this.cli
             .run(command)
             .then(() => {
@@ -35,7 +35,7 @@ module.exports = ({ Given, When, Then }) => {
             })
     })
 
-    When(/^(?:I )?dump (stderr|stdout)/, function(type) {
+    When(/^(?:I )?dump (stderr|stdout)$/, function(type) {
         const output = this.cli.getOutput(type)
         console.log(output) // eslint-disable-line no-console
     })
@@ -48,31 +48,31 @@ module.exports = ({ Given, When, Then }) => {
         )
     })
 
-    Then(/^(?:the )?(?:command )?(stderr|stdout) should be empty$/, function(type) {
+    Then(/^(stderr|stdout) should be empty$/, function(type) {
         const output = this.cli.getOutput(type)
 
         expect(output).to.be.empty
     })
 
-    Then(/^(?:the )?(?:command )?(stderr|stdout) should contain (.+)$/, function(type, expected) {
+    Then(/^(stderr|stdout) should contain (.+)$/, function(type, expected) {
         const output = this.cli.getOutput(type)
 
         expect(output).to.contain(expected)
     })
 
-    Then(/^(?:the )?(?:command )?(stderr|stdout) should not contain (.+)$/, function(type, expected) {
+    Then(/^(stderr|stdout) should not contain (.+)$/, function(type, expected) {
         const output = this.cli.getOutput(type)
 
         expect(output).to.not.contain(expected)
     })
 
-    Then(/^(?:the )?(?:command )?(stderr|stdout) should match (.+)$/, function(type, regex) {
+    Then(/^(stderr|stdout) should match (.+)$/, function(type, regex) {
         const output = this.cli.getOutput(type)
 
         expect(output).to.match(new RegExp(regex, 'gim'))
     })
 
-    Then(/^(?:the )?(?:command )?(stderr|stdout) should not match (.+)$/, function(type, regex) {
+    Then(/^(stderr|stdout) should not match (.+)$/, function(type, regex) {
         const output = this.cli.getOutput(type)
 
         expect(output).to.not.match(new RegExp(regex, 'gim'))

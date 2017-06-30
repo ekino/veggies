@@ -12,7 +12,7 @@ test('should cast undefined', () => {
 
 test('should cast numbers', () => {
     expect(Cast.value('1((number))')).toBe(1)
-    expect(Cast.value('.2((number))')).toBe(.2)
+    expect(Cast.value('.2((number))')).toBe(0.2)
     expect(Cast.value('-3((number))')).toBe(-3)
 })
 

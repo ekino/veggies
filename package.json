@@ -8,6 +8,7 @@
     "gherkin",
     "testing",
     "api",
+    "http",
     "cli"
   ],
   "repository": {
@@ -23,7 +24,7 @@
   ],
   "license": "MIT",
   "engines": {
-    "node" : ">=6.0.0"
+    "node": ">=6.0.0"
   },
   "engineStrict": true,
   "dependencies": {
@@ -45,11 +46,11 @@
     "cucumber": "^2.3.1"
   },
   "scripts": {
-    "test": "jest",
-    "test-cover": "jest --coverage",
+    "test": "jest --verbose",
+    "test-cover": "jest --verbose --coverage",
     "coverage": "cat ./coverage/lcov.info | coveralls",
-    "fmt": "prettier --print-width 140 --tab-width=4 --single-quote --bracket-spacing --no-semi --color --write \"src/**/*.js\"",
-    "check-fmt": "prettier --print-width 140 --tab-width=4 --single-quote --bracket-spacing --no-semi --list-different \"src/**/*.js\"",
+    "fmt": "prettier --print-width 140 --tab-width=4 --single-quote --bracket-spacing --no-semi --color --write \"{src,tests}/**/*.js\"",
+    "check-fmt": "prettier --print-width 140 --tab-width=4 --single-quote --bracket-spacing --no-semi --list-different \"{src,tests}/**/*.js\"",
     "version": "echo ${npm_package_version}",
     "lint": "eslint .",
     "doc": "jsdoc src -R README.md -r -d doc --verbose -t node_modules/minami",
