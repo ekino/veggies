@@ -22,6 +22,13 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     })
 
     /**
+     * Clearing headers
+     */
+    Given(/^(?:I )?clear request headers/, function() {
+        this.httpApiClient.clearHeaders()
+    })
+
+    /**
      * Setting json payload
      */
     Given(/^(?:I )?set request json body$/, function(step) {
@@ -53,6 +60,13 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
             console.log(data) // eslint-disable-line no-console
             this.httpApiClient.setFormBody(data)
         })
+    })
+
+    /**
+     * Clearing body
+     */
+    Given(/^(?:I )?clear request body$/, function() {
+        this.httpApiClient.clearBody()
     })
 
     /**

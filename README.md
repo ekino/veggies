@@ -509,7 +509,7 @@ yarn run examples -- --tags @cli
 [npm-url]: https://www.npmjs.com/package/@ekino/veggies
 [travis-image]: https://img.shields.io/travis/ekino/veggies.svg?style=flat-square
 [travis-url]: https://travis-ci.org/ekino/veggies
-[prettier-image]: https://img.shields.io/badge/styled_with-prettier-ff69b4.svg?style=flat-square
+[prettier-image]: https://img.shields.io/badge/styled_with-prettier-44cc11.svg?style=flat-square
 [prettier-url]: https://github.com/prettier/prettier
 [coverage-image]: https://img.shields.io/coveralls/ekino/veggies/master.svg?style=flat-square
 [coverage-url]: https://coveralls.io/github/ekino/veggies?branch=master
