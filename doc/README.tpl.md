@@ -214,7 +214,7 @@ which will generate the following payload:
 ### CLI testing
 
 For full feature list, have a look at
-[available gherkin expressions](#clo-gherkin-expressions)
+[available gherkin expressions](#cli-gherkin-expressions)
 for the [dedicated extension](#cli-extension).
 
 #### Running a simple command and checking its exit code
