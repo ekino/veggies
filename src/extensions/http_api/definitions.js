@@ -45,6 +45,15 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     })
 
     /**
+     * Setting form data from fixture file
+     */
+    Given(/^(?:I )?set request form body from (.+)$/, function(fixture) {
+        return this.fixtures.load(fixture).then(data => {
+            console.log(data) // eslint-disable-line no-console
+        })
+    })
+
+    /**
      * Setting query parameters
      */
     Given(/^(?:I )?set request query$/, function(step) {
