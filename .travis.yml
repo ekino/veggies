@@ -10,5 +10,6 @@ script:
 # this step is disabled because of GitHub rate limit
 #  - yarn run examples -- --tags @http_api
   - yarn run examples -- --tags @cli
+  - yarn run examples -- --tags @http_api --tags @fixtures
 after_success:
   - yarn run coverage

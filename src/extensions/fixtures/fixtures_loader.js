@@ -4,9 +4,11 @@
  * @module extensions/fixtures/FixturesLoader
  */
 
+const fs = require('fs')
 const path = require('path')
 const glob = require('glob')
 const chalk = require('chalk')
+const yaml = require('js-yaml')
 const _ = require('lodash')
 
 let fixturesDir = 'fixtures'
@@ -19,6 +21,32 @@ exports.configure = ({ fixturesDir: _fixturesDir = 'fixtures' } = {}) => {
 exports.setFeatureUri = _featureUri => {
     featureUri = _featureUri
 }
+
+const loadText = file =>
+    new Promise((resolve, reject) => {
+        fs.readFile(file, (err, data) => {
+            if (err) return reject(err)
+            resolve(data.toString('utf8'))
+        })
+    })
+
+const loadYaml = file =>
+    loadText(file).then(content => {
+        try {
+            const data = yaml.safeLoad(content)
+            if (data === undefined) {
+                return Promise.reject(new Error(`yaml parsing resulted in undefined data (${file})`))
+            }
+
+            return data
+        } catch (err) {
+            return Promise.reject(err)
+        }
+    })
+
+const loadJson = file => Promise.resolve()
+
+const loadModule = file => Promise.resolve()
 
 /**
  * Tries to load a fixture from current feature directory.
@@ -51,6 +79,24 @@ exports.load = fixture => {
                         `- ${files.join('\n  - ')}`
                     ].join('')
                 )
+            }
+
+            const fixtureFile = files[0]
+            const ext = path.extname(fixtureFile).substr(1)
+
+            switch (ext) {
+                case 'yml':
+                case 'yaml':
+                    return resolve(loadYaml(fixtureFile))
+
+                case 'js':
+                    return resolve(loadModule(fixtureFile))
+
+                case 'json':
+                    return resolve(loadJson(fixtureFile))
+
+                default:
+                    return resolve(loadText(fixtureFile))
             }
         })
     })

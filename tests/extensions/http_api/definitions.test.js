@@ -47,7 +47,7 @@ test('should allow to set a single request header', () => {
 test('should allow to set request json body', () => {
     const context = helper.define(definitions)
 
-    const def = context.getDefinitionByMatcher('set request json body')
+    const def = context.getDefinitionByMatcher('set request json body$')
     def.shouldHaveType('Given')
     def.shouldMatch('I set request json body')
     def.shouldMatch('set request json body')
@@ -56,7 +56,7 @@ test('should allow to set request json body', () => {
 test('should allow to set request form body', () => {
     const context = helper.define(definitions)
 
-    const def = context.getDefinitionByMatcher('set request form body')
+    const def = context.getDefinitionByMatcher('set request form body$')
     def.shouldHaveType('Given')
     def.shouldMatch('I set request form body')
     def.shouldMatch('set request form body')
