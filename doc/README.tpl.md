@@ -121,6 +121,7 @@ extracts the `emojis_url` value from the json response and
 stores it in the current state under the `emojisUrl` key,
 then it uses this value to make its next request.
 
+{{=<% %>=}}
 ```gherkin
 Scenario: Using GitHub API
   Given I set User-Agent request header to veggies/1.0
@@ -129,6 +130,7 @@ Scenario: Using GitHub API
   And I GET {{emojisUrl}}
   Then I should receive a 200 HTTP status code
 ```
+<%={{ }}=%>
 
 It's even possible to mix this approach with scenario outline to have more concise tests
 (at the cost of clarity thought).
@@ -136,6 +138,7 @@ It's even possible to mix this approach with scenario outline to have more conci
 The following example will generates 3 scenario at runtime
 using different response values for second request.
 
+{{=<% %>=}}
 ```gherkin
 Scenario Outline: Fetching <key> API endpoint from root endpoint
   Given I set User-Agent request header to veggies/1.0
@@ -151,6 +154,7 @@ Scenario Outline: Fetching <key> API endpoint from root endpoint
     | feeds_url        |
     | public_gists_url |
 ```
+<%={{ }}=%>
 
 #### Type system
 
@@ -256,17 +260,10 @@ state.install(defineSupportCode)
 
 #### State gherkin expressions
 
-```yaml    
-Given:
-  - /^(?:I )?set state (.+) to (.+)$/
+{{#definitions.state}}
+{{> definitions}}
+{{/definitions.state}}
 
-When:
-  - /^(?:I )?clear state$/
-  - /^(?:I )?dump state$/
-
-Then:
-  # No definitions
-```
 
 #### State low level API
 
@@ -313,25 +310,10 @@ httpApi.install({
 
 #### http API gherkin expressions
 
-```yaml    
-Given:
-  - /^(?:I )?set request headers$/
-  - /^(?:I )?set ([a-zA-Z0-9-]+) request header to (.+)$/
-  - /^(?:I )?set request json body$/
-  - /^(?:I )?set request form body$/
-  - /^(?:I )?set request query$/
-  - /^(?:I )?pick response json (.+) as (.+)$/
+{{#definitions.httpApi}}
+{{> definitions}}
+{{/definitions.httpApi}}
 
-When:
-  - /^(?:I )?reset http client$/
-  - /^(?:I )?(GET|POST|PUT|DELETE) (.+)$/
-  - /^(?:I )?dump response body$/
-
-Then:
-  - /^(?:I )?should receive a ([1-5][0-9][0-9]) HTTP status code$/
-  - /^(?:I )?should receive a json response (fully )?matching$/
-  - /^(?:I )?should receive a collection of ([0-9]+) items? for path (.+)$/
-```
 
 #### http API low level API
 
@@ -375,25 +357,10 @@ cli.install(defineSupportCode)
 
 #### CLI gherkin expressions
 
-```yaml    
-Given:
-  - /^(?:I )?set (?:working directory|cwd) to (.+)$/
-  - /^(?:I )?set ([^ ]+) (?:env|environment) (?:var|variable) to (.+)$/
-  - /^(?:I )?set (?:env|environment) (?:vars|variables)$/
-  - /^(?:I )?kill the process with ([^ ]+) in (\d+)(ms|s)/
+{{#definitions.cli}}
+{{> definitions}}
+{{/definitions.cli}}
 
-When:
-  - /^(?:I )?run command (.+)$/
-  - /^(?:I )?dump (stderr|stdout)$/
-
-Then:
-  - /^(?:the )?(?:command )?exit code should be (\d+)$/
-  - /^(stderr|stdout) should be empty$/
-  - /^(stderr|stdout) should contain (.+)$/
-  - /^(stderr|stdout) should not contain (.+)$/
-  - /^(stderr|stdout) should match (.+)$/
-  - /^(stderr|stdout) should not match (.+)$/
-```
 
 #### CLI low level API
 

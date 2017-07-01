@@ -37,4 +37,4 @@ jspm_packages
 .DS_Store
 .idea
 bin
-doc
+_doc
