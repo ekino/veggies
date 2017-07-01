@@ -1,5 +1,11 @@
 @http_api @fixtures
 Feature: Using fixtures
 
-  Scenario: Whatever 1
-    Given I set request json body from user
+  Scenario: Loading .yaml fixture file
+    Given I set request json body from yaml_00
+
+  Scenario: Loading .yml fixture file
+    Given I set request json body from yaml_01
+
+  Scenario: Loading .txt fixture file
+    Given I set request json body from text_00
