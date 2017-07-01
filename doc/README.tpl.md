@@ -20,9 +20,10 @@ It's also the perfect companion for testing CLI applications built with commande
        - [Running a simple command](#running-a-simple-command-and-checking-its-exit-code)
        - [Testing a command error](#testing-a-command-error)
 - [Extensions](#extensions)
-    - [**state**](#state-extension) [Installation](#state-installation) | [gherkin expressions](#state-gherkin-expressions) | [low level API](#state-low-level-api)
-    - [**http API**](#http-api-extension) [Installation](#http-api-installation) | [gherkin expressions](#http-api-gherkin-expressions) | [low level API](#http-api-low-level-api)
-    - [**CLI**](#cli-extension) [Installation](#cli-installation) | [gherkin expressions](#cli-gherkin-expressions) | [low level API](#cli-low-level-api)
+    - [**state**](#state-extension) [install](#state-installation) | [gherkin expressions](#state-gherkin-expressions) | [low level API](#state-low-level-api)
+    - [**fixtures**](#fixtures-extension) [install](#fixtures-installation) | [low level API](#fixtures-low-level-api)
+    - [**http API**](#http-api-extension) [install](#http-api-installation) | [gherkin expressions](#http-api-gherkin-expressions) | [low level API](#http-api-low-level-api)
+    - [**CLI**](#cli-extension) [install](#cli-installation) | [gherkin expressions](#cli-gherkin-expressions) | [low level API](#cli-low-level-api)
 - [Examples](#examples)   
     
 ## Installation
@@ -276,6 +277,46 @@ defineSupportCode(({ When }) => {
     When(/^I do something useful$/, function() {
         const stateValue = this.state.get('whatever')
         // …
+    })
+})
+```
+
+### Fixtures extension
+
+The fixtures extension can be used to load data from files during testing.
+
+#### Fixtures installation
+
+To install the extension, you should add the following snippet to your `world` file:
+
+```javascript
+// /support/world.js
+
+const { defineSupportCode } = require('cucumber')
+const { fixtures } = require('@ekino/veggies')
+
+defineSupportCode(({ setWorldConstructor }) => {
+    setWorldConstructor(function() {
+        fixtures.extendWorld(this)
+    })
+})
+
+fixtures.install(defineSupportCode)
+```
+
+#### Fixtures low level API
+
+When installed, you can access it from the global cucumber context in your own step definitions.
+For available methods on the fixtures loader, please refer to its own
+[documentation](https://ekino.github.io/veggies/module-extensions_fixtures_FixturesLoader.html).
+
+```javascript
+defineSupportCode(({ When }) => {
+    When(/^I do something useful with fixtures$/, function() {
+        return this.fixtures.load('whatever')
+            .then(fixture => {
+                // …
+            })
     })
 })
 ```
