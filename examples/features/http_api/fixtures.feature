@@ -16,3 +16,6 @@ Feature: Using fixtures
 
   Scenario: Loading .js fixture file
     Given I set request json body from module_00
+
+  Scenario: Loading .json fixture file
+    Given I set request json body from json_00
