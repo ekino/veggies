@@ -54,9 +54,7 @@ const defShouldNotMatch = (regex, str) => {
  * @param {Object}   thisContext - `this` context to emulate cucumber context
  * @param args
  */
-const execDef = (execFn, thisContext, ...args) => {
-    execFn.bind(thisContext)(...args)
-}
+const execDef = (execFn, thisContext, ...args) => execFn.bind(thisContext)(...args)
 
 exports.define = definitions => {
     const mocks = {

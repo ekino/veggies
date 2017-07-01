@@ -53,6 +53,32 @@ test('should allow to set request json body', () => {
     def.shouldMatch('set request json body')
 })
 
+test('should allow to set request json body from fixture file', () => {
+    const context = helper.define(definitions)
+
+    expect.assertions(6)
+
+    const def = context.getDefinitionByMatcher('set request json body from')
+    def.shouldHaveType('Given')
+    def.shouldNotMatch('I set request json body from ')
+    def.shouldMatch('I set request json body from fixture')
+    def.shouldMatch('set request json body from fixture')
+
+    const fixture = {
+        is_active: 'true',
+        id: '2'
+    }
+    const worldMock = {
+        httpApiClient: { setJsonBody: jest.fn() },
+        fixtures: { load: jest.fn(() => Promise.resolve(fixture)) }
+    }
+
+    return def.exec(worldMock, 'fixture').then(() => {
+        expect(worldMock.fixtures.load).toHaveBeenCalledWith('fixture')
+        expect(worldMock.httpApiClient.setJsonBody).toHaveBeenCalledWith(fixture)
+    })
+})
+
 test('should allow to set request form body', () => {
     const context = helper.define(definitions)
 
@@ -60,6 +86,32 @@ test('should allow to set request form body', () => {
     def.shouldHaveType('Given')
     def.shouldMatch('I set request form body')
     def.shouldMatch('set request form body')
+})
+
+test('should allow to set request form body from fixture file', () => {
+    const context = helper.define(definitions)
+
+    expect.assertions(6)
+
+    const def = context.getDefinitionByMatcher('set request form body from')
+    def.shouldHaveType('Given')
+    def.shouldNotMatch('I set request form body from ')
+    def.shouldMatch('I set request form body from fixture')
+    def.shouldMatch('set request form body from fixture')
+
+    const fixture = {
+        is_active: 'true',
+        id: '2'
+    }
+    const worldMock = {
+        httpApiClient: { setFormBody: jest.fn() },
+        fixtures: { load: jest.fn(() => Promise.resolve(fixture)) }
+    }
+
+    return def.exec(worldMock, 'fixture').then(() => {
+        expect(worldMock.fixtures.load).toHaveBeenCalledWith('fixture')
+        expect(worldMock.httpApiClient.setFormBody).toHaveBeenCalledWith(fixture)
+    })
 })
 
 test('should allow to set request query', () => {
