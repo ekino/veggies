@@ -29,9 +29,12 @@
   "engineStrict": true,
   "dependencies": {
     "chai": "^4.0.2",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "request": "^2.81.0"
   },
   "devDependencies": {
+    "babylon": "^6.17.4",
+    "chalk": "^2.0.1",
     "coveralls": "^2.13.1",
     "cucumber": "^2.3.1",
     "eslint": "^4.1.1",
@@ -40,6 +43,7 @@
     "jest": "^20.0.4",
     "jsdoc": "^3.4.3",
     "minami": "^1.2.3",
+    "mustache": "^2.3.0",
     "prettier": "^1.5.2"
   },
   "peerDependencies": {
@@ -49,12 +53,13 @@
     "test": "jest --verbose",
     "test-cover": "jest --verbose --coverage",
     "coverage": "cat ./coverage/lcov.info | coveralls",
-    "fmt": "prettier --print-width 140 --tab-width=4 --single-quote --bracket-spacing --no-semi --color --write \"{src,tests}/**/*.js\"",
-    "check-fmt": "prettier --print-width 140 --tab-width=4 --single-quote --bracket-spacing --no-semi --list-different \"{src,tests}/**/*.js\"",
+    "fmt": "prettier --print-width 140 --tab-width=4 --single-quote --bracket-spacing --no-semi --color --write \"{src,tests,scripts}/**/*.js\"",
+    "check-fmt": "prettier --print-width 140 --tab-width=4 --single-quote --bracket-spacing --no-semi --list-different \"{src,tests,scripts}/**/*.js\"",
     "version": "echo ${npm_package_version}",
     "lint": "eslint .",
-    "doc": "jsdoc src -R README.md -r -d doc --verbose -t node_modules/minami",
-    "doc-pub": "yarn run doc && gh-pages -d doc",
+    "readme": "node scripts/generate_readme",
+    "doc": "jsdoc src -R README.md -r -d _doc --verbose -t node_modules/minami",
+    "doc-pub": "yarn run readme && yarn run doc && gh-pages -d _doc",
     "examples": "cucumberjs --require examples/support examples/features",
     "changelog": "git-changelog -t false -n v${npm_package_version}"
   }
