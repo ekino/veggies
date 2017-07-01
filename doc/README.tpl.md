@@ -130,14 +130,16 @@ extracts the `emojis_url` value from the json response and
 stores it in the current state under the `emojisUrl` key,
 then it uses this value to make its next request.
 
+{{=<% %>=}}
 ```gherkin
 Scenario: Using GitHub API
   Given I set User-Agent request header to veggies/1.0
   When I GET https://api.github.com/
   And I pick response json emojis_url as emojisUrl
-  And I GET 
+  And I GET {{emojisUrl}}
   Then I should receive a 200 HTTP status code
 ```
+<%={{ }}=%>
 
 It's even possible to mix this approach with scenario outline to have more concise tests
 (at the cost of clarity thought).
@@ -145,13 +147,14 @@ It's even possible to mix this approach with scenario outline to have more conci
 The following example will generates 3 scenario at runtime
 using different response values for second request.
 
+{{=<% %>=}}
 ```gherkin
 Scenario Outline: Fetching <key> API endpoint from root endpoint
   Given I set User-Agent request header to veggies/1.0
   When I GET https://api.github.com/
   Then I should receive a 200 HTTP status code
   When I pick response json <key> as <key>
-  And I GET 
+  And I GET {{<key>}}
   Then I should receive a 200 HTTP status code
 
   Examples:
@@ -160,6 +163,7 @@ Scenario Outline: Fetching <key> API endpoint from root endpoint
     | feeds_url        |
     | public_gists_url |
 ```
+<%={{ }}=%>
 
 #### Type system
 
