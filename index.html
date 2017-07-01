@@ -74,12 +74,27 @@ It's also the perfect companion for testing CLI applications built with commande
 </ul>
 </li>
 <li><a href="#extensions">Extensions</a><ul>
-<li><a href="#state-extension">state</a></li>
-<li><a href="#http-api-extension">http API</a></li>
-<li><a href="#cli-extension">CLI</a></li>
+<li><a href="#state-extension">state</a><ul>
+<li><a href="#state-installation">Installation</a></li>
+<li><a href="#state-gherkin-expressions">gherkin expressions</a></li>
+<li><a href="#state-low-level-api">low level API</a></li>
 </ul>
 </li>
-<li><a href="#examples">Examples</a>    </li>
+<li><a href="#http-api-extension">http API</a><ul>
+<li><a href="#http-api-installation">Installation</a></li>
+<li><a href="#http-api-gherkin-expressions">gherkin expressions</a></li>
+<li><a href="#http-api-low-level-api">low level API</a></li>
+</ul>
+</li>
+<li><a href="#cli-extension">CLI</a><ul>
+<li><a href="#cli-installation">Installation</a></li>
+<li><a href="#cli-gherkin-expressions">gherkin expressions</a></li>
+<li><a href="#cli-low-level-api">low level API</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#examples">Examples</a>   </li>
 </ul>
 <h2>Installation</h2><p>Using npm:</p>
 <pre class="prettyprint source lang-sh"><code>npm install @ekino/veggies</code></pre><p>Or yarn:</p>
@@ -101,8 +116,9 @@ state.install(defineSupportCode)
 httpApi.install({
     baseUrl: 'http://localhost:3000',
 })(defineSupportCode)
-cli.install(defineSupportCode)</code></pre><h2>Features</h2><h3>API testing</h3><p>For an exhaustive list of all available step definitions you should have a look
-at the <a href="https://github.com/ekino/veggies/blob/master/src/extensions/http_api/definitions.js">definitions file</a>.</p>
+cli.install(defineSupportCode)</code></pre><h2>Features</h2><h3>API testing</h3><p>For full feature list, have a look at
+<a href="#http-api-gherkin-expressions">available gherkin expressions</a>
+for the <a href="#http-api-extension">dedicated extension</a>.</p>
 <h4>Making a simple request and testing its status code</h4><pre class="prettyprint source lang-gherkin"><code>Scenario: Using GitHub API
   Given I set User-Agent request header to veggies/1.0
   When I GET https://api.github.com/
@@ -134,7 +150,7 @@ then it uses this value to make its next request.</p>
   Given I set User-Agent request header to veggies/1.0
   When I GET https://api.github.com/
   And I pick response json emojis_url as emojisUrl
-  And I GET {{emojisUrl}}
+  And I GET 
   Then I should receive a 200 HTTP status code</code></pre><p>It's even possible to mix this approach with scenario outline to have more concise tests
 (at the cost of clarity thought).</p>
 <p>The following example will generates 3 scenario at runtime
@@ -144,7 +160,7 @@ using different response values for second request.</p>
   When I GET https://api.github.com/
   Then I should receive a 200 HTTP status code
   When I pick response json &lt;key> as &lt;key>
-  And I GET {{&lt;key>}}
+  And I GET 
   Then I should receive a 200 HTTP status code
 
   Examples:
@@ -221,8 +237,9 @@ a lightweight type systems.</p>
     &quot;drawing&quot;,
     &quot;hacking&quot;
   ]
-}</code></pre><h3>CLI testing</h3><p>For an exhaustive list of all available step definitions you should have a look
-at the <a href="https://github.com/ekino/veggies/blob/master/src/extensions/cli/definitions.js">definitions file</a>.</p>
+}</code></pre><h3>CLI testing</h3><p>For full feature list, have a look at
+<a href="#clo-gherkin-expressions">available gherkin expressions</a>
+for the <a href="#cli-extension">dedicated extension</a>.</p>
 <h4>Running a simple command and checking its exit code</h4><pre class="prettyprint source lang-gherkin"><code>Scenario: Getting info about installed yarn version
   When I run command yarn --version
   Then exit code should be 0</code></pre><h4>Testing a command error</h4><pre class="prettyprint source lang-gherkin"><code>Scenario: Running an invalid command
@@ -234,7 +251,7 @@ at the <a href="https://github.com/ekino/veggies/blob/master/src/extensions/cli/
 (but you should try to avoid coupling scenarios).</p>
 <p>It's involved for example when <a href="#using-values-issued-by-a-previous-request">you want to collect values issued by a previous request</a>
 when using the <a href="#http-api-extension">http API extension</a>.</p>
-<p>To install the extension, you should add the following snippet to your <code>world</code> file:</p>
+<h4>state installation</h4><p>To install the extension, you should add the following snippet to your <code>world</code> file:</p>
 <pre class="prettyprint source lang-javascript"><code>// /support/world.js
 
 const { defineSupportCode } = require('cucumber')
@@ -246,7 +263,15 @@ defineSupportCode(({ setWorldConstructor }) => {
     })
 })
 
-state.install(defineSupportCode)</code></pre><p>When installed, you can access it from the global cucumber context in your own step definitions.
+state.install(defineSupportCode)</code></pre><h4>State gherkin expressions</h4><pre class="prettyprint source lang-yaml"><code>Given:
+  - /^(?:I )?set state (.+) to (.+)$/
+
+When:
+  - /^(?:I )?clear state$/
+  - /^(?:I )?dump state$/
+
+Then:
+  # No definitions</code></pre><h4>State low level API</h4><p>When installed, you can access it from the global cucumber context in your own step definitions.
 For available methods on the state, please refer to its own
 <a href="https://ekino.github.io/veggies/module-extensions_state_State.html">documentation</a>.</p>
 <pre class="prettyprint source lang-javascript"><code>defineSupportCode(({ When }) => {
@@ -254,7 +279,7 @@ For available methods on the state, please refer to its own
         const stateValue = this.state.get('whatever')
         // …
     })
-})</code></pre><h3>http API extension</h3><p>The http API extension relies on the <a href="#state-extension">state extension</a>,
+})</code></pre><h3>http API extension</h3><h4>http API installation</h4><p>The http API extension relies on the <a href="#state-extension">state extension</a>,
 so make sure it's registered prior to installation.</p>
 <p>To install the extension, you should add the following snippet to your <code>world</code> file:</p>
 <pre class="prettyprint source lang-javascript"><code>// /support/world.js
@@ -272,14 +297,30 @@ defineSupportCode(({ setWorldConstructor }) => {
 state.install(defineSupportCode)
 httpApi.install({
     baseUrl: 'http://localhost:3000',
-})(defineSupportCode)</code></pre><p>When installed, you can access its client from the global cucumber context in your own step definitions.
+})(defineSupportCode)</code></pre><h4>http API gherkin expressions</h4><pre class="prettyprint source lang-yaml"><code>Given:
+  - /^(?:I )?set request headers$/
+  - /^(?:I )?set ([a-zA-Z0-9-]+) request header to (.+)$/
+  - /^(?:I )?set request json body$/
+  - /^(?:I )?set request form body$/
+  - /^(?:I )?set request query$/
+  - /^(?:I )?pick response json (.+) as (.+)$/
+
+When:
+  - /^(?:I )?reset http client$/
+  - /^(?:I )?(GET|POST|PUT|DELETE) (.+)$/
+  - /^(?:I )?dump response body$/
+
+Then:
+  - /^(?:I )?should receive a ([1-5][0-9][0-9]) HTTP status code$/
+  - /^(?:I )?should receive a json response (fully )?matching$/
+  - /^(?:I )?should receive a collection of ([0-9]+) items? for path (.+)$/</code></pre><h4>http API low level API</h4><p>When installed, you can access its client from the global cucumber context in your own step definitions.
 For available methods on the client, please refer to its own
 <a href="https://ekino.github.io/veggies/module-extensions_httpApi_client.html">documentation</a>.</p>
 <pre class="prettyprint source lang-javascript"><code>defineSupportCode(({ When }) => {
     When(/^I do something useful$/, function() {
         return this.httpApiClient.makeRequest(/* … */)
     })
-})</code></pre><h3>CLI extension</h3><p>The CLI extension relies on the <a href="#state-extension">state extension</a>,
+})</code></pre><h3>CLI extension</h3><h4>CLI installation</h4><p>The CLI extension relies on the <a href="#state-extension">state extension</a>,
 so make sure it's registered prior to installation.</p>
 <p>To install the extension, you should add the following snippet to your <code>world</code> file:</p>
 <pre class="prettyprint source lang-javascript"><code>// /support/world.js
@@ -295,7 +336,23 @@ defineSupportCode(({ setWorldConstructor }) => {
 })
 
 state.install(defineSupportCode)
-cli.install(defineSupportCode)</code></pre><p>When installed, you can access it from the global cucumber context in your own step definitions.
+cli.install(defineSupportCode)</code></pre><h4>CLI gherkin expressions</h4><pre class="prettyprint source lang-yaml"><code>Given:
+  - /^(?:I )?set (?:working directory|cwd) to (.+)$/
+  - /^(?:I )?set ([^ ]+) (?:env|environment) (?:var|variable) to (.+)$/
+  - /^(?:I )?set (?:env|environment) (?:vars|variables)$/
+  - /^(?:I )?kill the process with ([^ ]+) in (\d+)(ms|s)/
+
+When:
+  - /^(?:I )?run command (.+)$/
+  - /^(?:I )?dump (stderr|stdout)$/
+
+Then:
+  - /^(?:the )?(?:command )?exit code should be (\d+)$/
+  - /^(stderr|stdout) should be empty$/
+  - /^(stderr|stdout) should contain (.+)$/
+  - /^(stderr|stdout) should not contain (.+)$/
+  - /^(stderr|stdout) should match (.+)$/
+  - /^(stderr|stdout) should not match (.+)$/</code></pre><h4>CLI low level API</h4><p>When installed, you can access it from the global cucumber context in your own step definitions.
 For available methods on the client, please refer to its own
 <a href="https://ekino.github.io/veggies/module-extensions_Cli_Cli.html">documentation</a>.</p>
 <pre class="prettyprint source lang-javascript"><code>defineSupportCode(({ When }) => {
@@ -318,7 +375,7 @@ For available methods on the client, please refer to its own
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Jul 01 2017 10:28:06 GMT+0900 (JST) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Sat Jul 01 2017 10:30:20 GMT+0900 (JST) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
