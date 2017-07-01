@@ -46,6 +46,7 @@
     "jsdoc": "^3.4.3",
     "minami": "^1.2.3",
     "mustache": "^2.3.0",
+    "nock": "^9.0.13",
     "prettier": "^1.5.2"
   },
   "peerDependencies": {

@@ -14,6 +14,7 @@ It's also the perfect companion for testing CLI applications built with commande
     - [API testing](#api-testing)
         - [Making a simple request](#making-a-simple-request-and-testing-its-status-code)
         - [Posting data](#posting-data)
+        - [Posting data using fixture file](#posting-data-using-fixture-file)
         - [Using values issued by a previous request](#using-values-issued-by-a-previous-request)
         - [Type system](#type-system)
     - [CLI testing](#cli-testing) 
@@ -101,6 +102,27 @@ Scenario: Creating a resource using json payload
   Given I set request form body
     | username | plouc |
     | gender   | male  |
+  When I POST https://my-api.io/users
+  Then I should receive a 201 HTTP status code
+```
+
+#### Posting data using fixture file
+
+Putting large data payloads inside your scenarios can reduce legibility,
+to improve this, you can use the [fixtures](#fixtures-extension) to define it.
+
+```yaml
+# /features/user/fixtures/user.yml
+
+username: plouc
+gender:   male
+```
+
+```gherkin
+# /features/user/create_user.feature
+
+Scenario: Creating a resource using json payload
+  Given I set request form body from user
   When I POST https://my-api.io/users
   Then I should receive a 201 HTTP status code
 ```
@@ -285,6 +307,14 @@ defineSupportCode(({ When }) => {
 
 The fixtures extension can be used to load data from files during testing.
 
+It supports the following file extensions:
+
+- **.yaml**, **.yml** - loads and parses a yaml file, result can be `Object` or `Array`
+- **.txt** - loads text content, result is a `string`
+- **.json** - loads json, result is and `Object`
+- **.js** - loads a javascript module, the module must exports load function via `module.exports`,
+  result can be whatever type the function returns 
+
 #### Fixtures installation
 
 To install the extension, you should add the following snippet to your `world` file:
@@ -325,20 +355,23 @@ defineSupportCode(({ When }) => {
 
 #### http API installation 
 
-The http API extension relies on the [state extension](#state-extension),
-so make sure it's registered prior to installation.
+The http API extension relies on the [state](#state-extension) &
+[fixtures](#fixtures-extension) extensions, so make sure they're
+registered prior to installation.
 
-To install the extension, you should add the following snippet to your `world` file:
+To install the extension, you should add the following snippet
+to your `world` file:
 
 ```javascript
 // /support/world.js
 
 const { defineSupportCode } = require('cucumber')
-const { state, httpApi } = require('@ekino/veggies')
+const { state, fixtures, httpApi } = require('@ekino/veggies')
 
 defineSupportCode(({ setWorldConstructor }) => {
     setWorldConstructor(function() {
         state.extendWorld(this)
+        fixtures.extendWorld(this)
         httpApi.extendWorld(this)
     })
 })
@@ -374,25 +407,29 @@ defineSupportCode(({ When }) => {
 
 #### CLI installation
 
-The CLI extension relies on the [state extension](#state-extension),
-so make sure it's registered prior to installation.
+The CLI extension relies on the [state](#state-extension) &
+[fixtures](#fixtures-extension) extensions, so make sure they're
+registered prior to installation.
 
-To install the extension, you should add the following snippet to your `world` file:
+To install the extension, you should add the following snippet
+to your `world` file:
 
 ```javascript
 // /support/world.js
 
 const { defineSupportCode } = require('cucumber')
-const { state, cli } = require('@ekino/veggies')
+const { state, fixtures, cli } = require('@ekino/veggies')
 
 defineSupportCode(({ setWorldConstructor }) => {
     setWorldConstructor(function() {
         state.extendWorld(this)
+        fixtures.extendWorld(this)
         cli.extendWorld(this)
     })
 })
 
 state.install(defineSupportCode)
+fixtures.install(defineSupportCode)
 cli.install(defineSupportCode)
 ```
 

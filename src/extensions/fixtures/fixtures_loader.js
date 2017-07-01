@@ -46,7 +46,27 @@ const loadYaml = file =>
 
 const loadJson = file => Promise.resolve()
 
-const loadModule = file => Promise.resolve()
+const loadModule = file => {
+    try {
+        const relativePath = path.relative(__dirname, file)
+        const mod = require(relativePath)
+
+        if (!_.isFunction(mod)) {
+            return Promise.reject(
+                new Error(
+                    [
+                        `javascript fixture file should export default function.\n`,
+                        `Make sure you declared 'module.exports = <function>' in ${file}`
+                    ].join('')
+                )
+            )
+        }
+
+        return Promise.resolve(mod())
+    } catch (err) {
+        return Promise.reject(new Error(`An error occurred while loading fixture file: ${file}\nerror: ${err.message}`))
+    }
+}
 
 /**
  * Tries to load a fixture from current feature directory.
