@@ -14,14 +14,34 @@ const _ = require('lodash')
 let fixturesDir = 'fixtures'
 let featureUri = null
 
+/**
+ * Configures the loader
+ *
+ * @param {string} _fixturesDir - The name of the fixtures directory relative to feature
+ */
 exports.configure = ({ fixturesDir: _fixturesDir = 'fixtures' } = {}) => {
     fixturesDir = _fixturesDir
 }
 
+/**
+ * Sets feature uri, used to resolve fixtures files.
+ * When trying to load a fixture file the path will be comprised of:
+ * - feature uri
+ * - fixturesDir
+ * - fixture name
+ *
+ * @param {string} _featureUri - Feature uri
+ */
 exports.setFeatureUri = _featureUri => {
     featureUri = _featureUri
 }
 
+/**
+ * Loads content from file.
+ *
+ * @param {string} file - File path
+ * @return {Promise.<string>} File content
+ */
 const loadText = file =>
     new Promise((resolve, reject) => {
         fs.readFile(file, (err, data) => {
@@ -30,6 +50,12 @@ const loadText = file =>
         })
     })
 
+/**
+ * Loads content from yaml file.
+ *
+ * @param {string} file - File path
+ * @return {Promise.<Object|Array>} Parsed yaml data
+ */
 const loadYaml = file =>
     loadText(file).then(content => {
         try {
@@ -44,8 +70,29 @@ const loadYaml = file =>
         }
     })
 
-const loadJson = file => Promise.resolve()
+/**
+ * Loads content from json file.
+ *
+ * @param {string} file - File path
+ * @return {Promise.<Object>} Json data
+ */
+const loadJson = file =>
+    loadText(file).then(content => {
+        try {
+            const data = JSON.parse(content)
 
+            return data
+        } catch (err) {
+            return Promise.reject(new Error(`Unable to parse json fixture file: ${file}.\nerror: ${err.message}`))
+        }
+    })
+
+/**
+ * Loads content from javascript module.
+ *
+ * @param {string} file - File path
+ * @return {Promise.<*>} Data generated from the module
+ */
 const loadModule = file => {
     try {
         const relativePath = path.relative(__dirname, file)

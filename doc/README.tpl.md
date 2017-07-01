@@ -252,7 +252,7 @@ Scenario: Running an invalid command
 
 This module is composed of several extensions.
 
-[state](#state-extension) | [http API](#http-api-extension) | [CLI](#cli-extension)
+[state](#state-extension) | [fixtures](#fixtures-extension) | [http API](#http-api-extension) | [CLI](#cli-extension)
 
 ### state extension
 
