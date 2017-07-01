@@ -29,6 +29,13 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     })
 
     /**
+     * Setting json payload from fixture file
+     */
+    Given(/^(?:I )?set request json body from (.+)$/, function(fixture) {
+        return this.fixtures.load(fixture)
+    })
+
+    /**
      * Setting form data
      */
     Given(/^(?:I )?set request form body$/, function(step) {
