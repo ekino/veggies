@@ -2,53 +2,45 @@
 
 _Veggies is an awesome cucumberjs boilerplate for API/CLI testing. Great for testing APIs built upon Express, Koa, HAPI, Loopback and others. It's also the perfect companion for testing CLI applications built with commander, meow & Co._
 
-## v0.1.2 false ( Thu Jun 29 2017 10:49:47 GMT+0900 (JST) )
+## v2.0.0 v0.1.2 ( Sun Jul 02 2017 12:55:59 GMT+0900 (JST) )
 
 
 ## Bug Fixes
-  - fix
-  ([262fdde8](git@github.com:ekino/veggies/commit/262fdde82df9c46189b94019d054f9a2e15f7b62))
 
   - **format**
     - add missing formatting
-  ([1868ed27](git@github.com:ekino/veggies/commit/1868ed27673b30cd15d664df41e67cb7da36fcf1))
-
-  - **lint**
-    - fix linting
-  ([3ee554a0](git@github.com:ekino/veggies/commit/3ee554a0977fa6802cead1ba551c67c6a99ee1d3))
-
-  - **pkg-name**
-    - add ekino scope to package name
-  ([05cc5d0d](git@github.com:ekino/veggies/commit/05cc5d0d620f2ec8a1ef2812da686c0bccb3eb2a))
-
-  - **readme**
-    - fix coverage badge
-  ([79fd0ddd](git@github.com:ekino/veggies/commit/79fd0ddd9fc00435d0248afd1298c0152ab8487c))
-    - fix travis badge
-  ([6c478d6e](git@github.com:ekino/veggies/commit/6c478d6ea641c2ac6a724d17e5de01657190cbe7))
+  ([c367e272](git@github.com:ekino/veggies/commit/c367e2722ed86d22f22e0f6fecdf6cdaabd73972))
 
 
 
 
 ## Features
 
-  - **cli**
-    - add ability to dump stdout|stderr
-  ([6a2708cb](git@github.com:ekino/veggies/commit/6a2708cb911834aa77775ed9ae249a5b77c4dedb))
-    - init CLI extension
-  ([42430f26](git@github.com:ekino/veggies/commit/42430f26230519babd791aa8c82af30c3205e1ce))
-
-  - **collect**
-    - add ability to inject previously collected values
-  ([b72de098](git@github.com:ekino/veggies/commit/b72de098ed351564f15d699d1fcffe3608750fff))
-
   - **examples**
-    - add example with data collection/injection and scenario outline
-  ([f895b733](git@github.com:ekino/veggies/commit/f895b733401a1879303adcc25b64db6d2ea4b58a))
-    - add example with data collection/injection and scenario outline
-  ([ac43aa14](git@github.com:ekino/veggies/commit/ac43aa14f2799720cc9a29a52b937a454bfcd7d1))
-    - run example on CI
-  ([e793280f](git@github.com:ekino/veggies/commit/e793280ff9cca2e76d0aaf87b5410bc8dba4038d))
+    - only run offline examples on CI
+  ([e5835a92](git@github.com:ekino/veggies/commit/e5835a92dba93366df3455292b42442e873d5618))
+
+  - **fixtures**
+    - add support for JSON fixtures
+  ([aa9b9f55](git@github.com:ekino/veggies/commit/aa9b9f5566b6fae3a6d0ac0cdf27f22a1bec05b9))
+    - add support for javascript fixtures
+  ([403e377d](git@github.com:ekino/veggies/commit/403e377dd5ff161c9059da8a57d84b77950ed4fb))
+    - add support for text & yaml fixtures
+  ([1965e37d](git@github.com:ekino/veggies/commit/1965e37dbd1f837f3c2e0aa3aaabd72dbfc32439))
+    - init fixtures support
+  ([db0c4603](git@github.com:ekino/veggies/commit/db0c46038589ad40498bf1cc3f09a690d2fe3b6b))
+
+  - **http-api**
+    - improve fixtures examples
+  ([f84ca4b2](git@github.com:ekino/veggies/commit/f84ca4b296f30769742dc38880e8614a2a2b3c4e))
+    - add ability to set body from fixtures
+  ([b4760cc2](git@github.com:ekino/veggies/commit/b4760cc273f53c203a3062054196b10d3d83ac8f))
+    - fix http API step definition
+  ([27ee9828](git@github.com:ekino/veggies/commit/27ee98284954936b3625020ba8c01ac282d2ce4a))
+
+  - **state**
+    - use state for check response step definition
+  ([a3b734b7](git@github.com:ekino/veggies/commit/a3b734b7186358692b449e13ba5413eef25e8799))
 
 
 
@@ -56,101 +48,53 @@ _Veggies is an awesome cucumberjs boilerplate for API/CLI testing. Great for tes
 ## Documentation
 
   - **cli**
-    - improve CLI extension documentation
-  ([6257454e](git@github.com:ekino/veggies/commit/6257454e4197e2f3789d391ecce094271f54e7f9))
-
-  - **collect**
-    - document data collection & reuse
-  ([0adbd664](git@github.com:ekino/veggies/commit/0adbd664f5f6e94e6c8de8186413ebd19fca4de8))
-
-  - **definitions**
-    - add link to http_api definitions file
-  ([5201736d](git@github.com:ekino/veggies/commit/5201736ddb81a222a43ccac45c8d3c6c4a08f11d))
-
-  - **example**
-    - add simple example
-  ([23c490e8](git@github.com:ekino/veggies/commit/23c490e8d81d437e0f4bca2af4cb797b59249ced))
-
-  - **examples**
-    - update documentation about provided examples
-  ([c25f4d70](git@github.com:ekino/veggies/commit/c25f4d7093df8e18793f9c1b1afe588821968b10))
-    - add documentation about provided examples
-  ([74f47d09](git@github.com:ekino/veggies/commit/74f47d09fcc76b6986a44613f8b8f1a580f6d3c0))
+    - fix wrong link for CLI extension jsdoc
+  ([c4571c76](git@github.com:ekino/veggies/commit/c4571c76ee08bfad82a1d121e28e17ace9a94d06))
 
   - **extensions**
-    - init documentation on extensions internals
-  ([9bfba8e2](git@github.com:ekino/veggies/commit/9bfba8e22c5f1899411064873f734216ae9807a9))
-
-  - **index**
-    - update links according to repository transfer
-  ([843d072e](git@github.com:ekino/veggies/commit/843d072ed5cab047c1717c9d2a9ef3c61429932f))
-    - add links to technical documentation
-  ([0e7c5c5c](git@github.com:ekino/veggies/commit/0e7c5c5c32cc09d0a549b09531d7809ad6bd5655))
-
-  - **init**
-    - init documentation
-  ([15e0d304](git@github.com:ekino/veggies/commit/15e0d3047e8615a754068fd0e6c017108c1ead3c))
-
-  - **post**
-    - add documentation about posting data
-  ([fe2625e7](git@github.com:ekino/veggies/commit/fe2625e788ad3ae1c393f4c5d53adfc067e8b0f7))
-
-  - **toc**
-    - improve README TOC
-  ([b8c11c92](git@github.com:ekino/veggies/commit/b8c11c92329a94f026c56ded1ca96381290a1514))
-
-  - **type system**
-    - add documentation about type system
-  ([e854a254](git@github.com:ekino/veggies/commit/e854a254db60bfc2579b21468857aa72087b87a6))
+    - improve extensions installation documentation
+  ([5f5ea082](git@github.com:ekino/veggies/commit/5f5ea082e2734b324ded148918e1f898e945ca2d))
 
 
 
 
 ## Test
 
-  - **cast**
-    - add unit tests on cast helper
-  ([a2c3f8f5](git@github.com:ekino/veggies/commit/a2c3f8f5870f68b6433c008e0401ec536b37ae51))
+  - **definitions**
+    - improve unit tests on extensions definitions
+  ([e998cfce](git@github.com:ekino/veggies/commit/e998cfce4d956fe1a532f80b35bf02b33ae89c8d))
+    - add unit tests on extensions definitions
+  ([e33ca136](git@github.com:ekino/veggies/commit/e33ca136c79d2332b35b575d7ecdb0242d3c9aef))
 
-  - **cli**
-    - test cli examples on CI
-  ([0445a0e5](git@github.com:ekino/veggies/commit/0445a0e5a0934c1143740e6383ba675e8a170ba6))
-
-  - **init**
-    - init tests
-  ([493342b6](git@github.com:ekino/veggies/commit/493342b69dd89c69d1f6b1c0c9a0935f41088f4c))
+  - **fixtures**
+    - add tests for FixturesLoader
+  ([56b5d32d](git@github.com:ekino/veggies/commit/56b5d32d3faad0035782b2aa9071d3f56bf54181))
 
 
 
 
 ## Chore
 
-  - **doc**
-    - add ability to generate & publish jsdoc
-  ([1b27522e](git@github.com:ekino/veggies/commit/1b27522e05afa8b064c3b7504f8afb41bf2b97a8))
+  - **editorconfig**
+    - add .editorconfig
+  ([caa3acc3](git@github.com:ekino/veggies/commit/caa3acc380b1e83cbda86331802734e8cb8ef753))
 
-  - **format**
-    - add prettier formatting
-  ([d837fe29](git@github.com:ekino/veggies/commit/d837fe296645cec60b05d1a5ab777b8bec406240))
-
-  - **init**
-    - init repo
-  ([0957cc63](git@github.com:ekino/veggies/commit/0957cc6324f45de8b3d503b1b3f0f9fcf78211a4))
-
-  - **release**
-    - add commands to ease releasing
-  ([ecd7c438](git@github.com:ekino/veggies/commit/ecd7c43813d8b1100bfa5f1e2f300d2ca3a13d64))
-
-  - **v0.1.1**
-    - bump version to 0.1.1
-  ([dbd4fd84](git@github.com:ekino/veggies/commit/dbd4fd84a7d65564d2a395aba65324e29db5ea1a))
+  - **identity**
+    - update banner
+  ([df3ffee6](git@github.com:ekino/veggies/commit/df3ffee66dbf49b0e07593e6233017552b5b386d))
+    - update banner
+  ([11d270b1](git@github.com:ekino/veggies/commit/11d270b1ed72b184497b26f0f0cba03bb541e54f))
+    - add custom banner
+  ([fc9d89e4](git@github.com:ekino/veggies/commit/fc9d89e432941a7539f32b396377e6c9fbe6728a))
+    - add custom banner
+  ([d275fb2d](git@github.com:ekino/veggies/commit/d275fb2dfd31d8d47122188b45cfc79382936dfb))
 
 
 
 
 ## Pull requests merged
-  - Merge pull request #1 from ekino/feat-cli-extension
-  ([7fdd7038](git@github.com:ekino/veggies/commit/7fdd70386e8ea29269f8db7dc9dc3486ad84b9bd))
+  - Merge pull request #4 from ekino/test-definitions
+  ([d68d7fae](git@github.com:ekino/veggies/commit/d68d7fae14f9bb7ab56a88d4b2e99cc153f54f0b))
 
 
 
