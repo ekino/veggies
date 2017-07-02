@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>extensions/Cli - Documentation</title>
+    <title>extensions/fixtures/FixturesLoader - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">extensions/Cli</h1>
+    <h1 class="page-title">extensions/fixtures/FixturesLoader</h1>
     
 
     
@@ -75,15 +75,14 @@
 
     
 
-    <h4 class="name" id=".extendWorld"><span class="type-signature">(static) </span>extendWorld<span class="signature">(world)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".configure"><span class="type-signature">(static) </span>configure<span class="signature">(_fixturesDir)</span><span class="type-signature"></span></h4>
 
     
 
 
 
 <div class="description">
-    Extends cucumber world object.
-Must be used inside customWorldConstructor.
+    Configures the loader
 </div>
 
 
@@ -119,7 +118,7 @@ Must be used inside customWorldConstructor.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="extensions_cli_index.js.html">extensions/cli/index.js</a>, <a href="extensions_cli_index.js.html#line30">line 30</a>
+        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line22">line 22</a>
     </li></ul></dd>
     
 
@@ -163,13 +162,13 @@ Must be used inside customWorldConstructor.
 
         <tr>
             
-                <td class="name"><code>world</code></td>
+                <td class="name"><code>_fixturesDir</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>Object</code></span>
+<span class="param-type"><code>string</code></span>
 
 
             
@@ -180,7 +179,7 @@ Must be used inside customWorldConstructor.
             
 
             <td class="description last">
-                The cucumber world object
+                The name of the fixtures directory relative to feature
                 
             </td>
         </tr>
@@ -203,23 +202,6 @@ Must be used inside customWorldConstructor.
 
 
 
-
-<div class="section-examples">
-<h5>Example</h5>
-
-    <pre class="prettyprint"><code>// /support/world.js
-
-const { defineSupportCode } = require('cucumber')
-const { state, cli } = require('@ekino/veggies')
-
-defineSupportCode(({ setWorldConstructor }) => {
-    setWorldConstructor(function() {
-        state.extendWorld(this) // cli extension requires state extension
-        cli.extendWorld(this)
-    })
-})</code></pre>
-
-</div>
 
 </div>
         
@@ -228,14 +210,20 @@ defineSupportCode(({ setWorldConstructor }) => {
 
     
 
-    <h4 class="name" id=".install"><span class="type-signature">(static) </span>install<span class="signature">(define)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id=".load"><span class="type-signature">(static) </span>load<span class="signature">(fixture)</span><span class="type-signature"> &rarr; {Promise.&lt;(Object|string)>}</span></h4>
 
     
 
 
 
 <div class="description">
-    Installs the extension.
+    Tries to load a fixture from current feature directory.
+Will search for the following file extensions:
+- yaml
+- yml
+- js
+- json
+- txt
 </div>
 
 
@@ -271,7 +259,7 @@ defineSupportCode(({ setWorldConstructor }) => {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="extensions_cli_index.js.html">extensions/cli/index.js</a>, <a href="extensions_cli_index.js.html#line53">line 53</a>
+        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line130">line 130</a>
     </li></ul></dd>
     
 
@@ -315,13 +303,13 @@ defineSupportCode(({ setWorldConstructor }) => {
 
         <tr>
             
-                <td class="name"><code>define</code></td>
+                <td class="name"><code>fixture</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><code>function</code></span>
+<span class="param-type"><code>string</code></span>
 
 
             
@@ -332,7 +320,894 @@ defineSupportCode(({ setWorldConstructor }) => {
             
 
             <td class="description last">
-                The `defineSupportCode` helper from cucumber
+                Fixture file name without extension
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;(Object|string)></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Fixture content
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".loadJson"><span class="type-signature">(static) </span>loadJson<span class="signature">(file)</span><span class="type-signature"> &rarr; {Promise.&lt;Object>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Loads content from json file.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line79">line 79</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>file</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                File path
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;Object></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Json data
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".loadModule"><span class="type-signature">(static) </span>loadModule<span class="signature">(file)</span><span class="type-signature"> &rarr; {Promise.&lt;*>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Loads content from javascript module.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line96">line 96</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>file</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                File path
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;*></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Data generated from the module
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".loadText"><span class="type-signature">(static) </span>loadText<span class="signature">(file)</span><span class="type-signature"> &rarr; {Promise.&lt;string>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Loads content from file.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line45">line 45</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>file</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                File path
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;string></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    File content
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".loadYaml"><span class="type-signature">(static) </span>loadYaml<span class="signature">(file)</span><span class="type-signature"> &rarr; {Promise.&lt;(Object|Array)>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Loads content from yaml file.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line59">line 59</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>file</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                File path
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;(Object|Array)></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    Parsed yaml data
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".reset"><span class="type-signature">(static) </span>reset<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Resets fixtures loader.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line177">line 177</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".setFeatureUri"><span class="type-signature">(static) </span>setFeatureUri<span class="signature">(_featureUri)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Sets feature uri, used to resolve fixtures files.
+When trying to load a fixture file the path will be comprised of:
+- feature uri
+- fixturesDir
+- fixture name
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line35">line 35</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>_featureUri</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Feature uri
                 
             </td>
         </tr>
@@ -355,26 +1230,6 @@ defineSupportCode(({ setWorldConstructor }) => {
 
 
 
-
-<div class="section-examples">
-<h5>Example</h5>
-
-    <pre class="prettyprint"><code>// /support/world.js
-
-const { defineSupportCode } = require('cucumber')
-const { state, cli } = require('@ekino/veggies')
-
-defineSupportCode(({ setWorldConstructor }) => {
-    setWorldConstructor(function() {
-        state.extendWorld(this) // cli extension requires state extension
-        cli.extendWorld(this)
-    })
-})
-
-state.install(defineSupportCode)
-cli.install(defineSupportCode)</code></pre>
-
-</div>
 
 </div>
         

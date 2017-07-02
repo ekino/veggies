@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>extensions/http_api/index.js - Documentation</title>
+    <title>extensions/fixtures - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,85 +29,360 @@
 
 <div id="main">
     
-    <h1 class="page-title">extensions/http_api/index.js</h1>
+    <h1 class="page-title">extensions/fixtures</h1>
     
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>'use strict'
+        
+    
+</header>
 
-/**
- * @module extensions/httpApi
- */
+<article>
+    <div class="container-overview">
+    
+        
 
-const definitions = require('./definitions')
-const hooks = require('./hooks')
+        
+    
+    </div>
 
-/**
- * Extends cucumber world object.
- * Must be used inside customWorldConstructor.
- *
- * @example
- * // /support/world.js
- *
- * const { defineSupportCode } = require('cucumber')
- * const { state, httpApi } = require('@ekino/veggies')
- *
- * defineSupportCode(({ setWorldConstructor }) => {
- *     setWorldConstructor(function() {
- *         state.extendWorld(this) // httpApi extension requires state extension
- *         httpApi.extendWorld(this)
- *     })
- * })
- *
- * @function
- * @param {Object} world - The cucumber world object
- */
-exports.extendWorld = require('./extend_world')
+    
 
-/**
- * The http API configuration object.
- *
- * @typedef {Object} HttpApiConfig
- * @property {string} [baseUrl=''] - The base url used for all http calls
- */
+    
 
-/**
- * Installs the extension.
- *
- * @example
- * // /support/world.js
- *
- * const { defineSupportCode } = require('cucumber')
- * const { state, httpApi } = require('@ekino/veggies')
- *
- * defineSupportCode(({ setWorldConstructor }) => {
- *     setWorldConstructor(function() {
- *         state.extendWorld(this) // httpApi extension requires state extension
- *         httpApi.extendWorld(this)
- *     })
- * })
- *
- * state.install(defineSupportCode)
- * httpApi.install({
- *     baseUrl: 'http://localhost:3000',
- * })(defineSupportCode)
- *
- * @param {HttpApiConfig} config - The `defineSupportCode` helper from cucumber
- * @return {Function} The installation function
- */
-exports.install = ({ baseUrl = '' } = {}) => define => {
-    define(definitions({ baseUrl }))
-    define(hooks)
-}
-</code></pre>
-        </article>
-    </section>
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".extendWorld"><span class="type-signature">(static) </span>extendWorld<span class="signature">(world)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Extends cucumber world object.
+Must be used inside customWorldConstructor.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extensions_fixtures_index.js.html">extensions/fixtures/index.js</a>, <a href="extensions_fixtures_index.js.html#line28">line 28</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>world</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                The cucumber world object
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>// /support/world.js
+
+const { defineSupportCode } = require('cucumber')
+const { fixtures } = require('@ekino/veggies')
+
+defineSupportCode(({ setWorldConstructor }) => {
+    setWorldConstructor(function() {
+        fixtures.extendWorld(this)
+    })
+})</code></pre>
+
+</div>
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".install"><span class="type-signature">(static) </span>install<span class="signature">(define)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Installs the extension.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extensions_fixtures_index.js.html">extensions/fixtures/index.js</a>, <a href="extensions_fixtures_index.js.html#line49">line 49</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>define</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                The `defineSupportCode` helper from cucumber
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>// /support/world.js
+
+const { defineSupportCode } = require('cucumber')
+const { fixtures } = require('@ekino/veggies')
+
+defineSupportCode(({ setWorldConstructor }) => {
+    setWorldConstructor(function() {
+        fixtures.extendWorld(this)
+    })
+})
+
+fixtures.install(defineSupportCode)</code></pre>
+
+</div>
+
+</div>
+        
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

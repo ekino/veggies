@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>extensions/http_api/index.js - Documentation</title>
+    <title>extensions/fixtures/index.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">extensions/http_api/index.js</h1>
+    <h1 class="page-title">extensions/fixtures/index.js</h1>
     
 
     
@@ -42,10 +42,9 @@
             <pre class="prettyprint source linenums"><code>'use strict'
 
 /**
- * @module extensions/httpApi
+ * @module extensions/fixtures
  */
 
-const definitions = require('./definitions')
 const hooks = require('./hooks')
 
 /**
@@ -56,12 +55,11 @@ const hooks = require('./hooks')
  * // /support/world.js
  *
  * const { defineSupportCode } = require('cucumber')
- * const { state, httpApi } = require('@ekino/veggies')
+ * const { fixtures } = require('@ekino/veggies')
  *
  * defineSupportCode(({ setWorldConstructor }) => {
  *     setWorldConstructor(function() {
- *         state.extendWorld(this) // httpApi extension requires state extension
- *         httpApi.extendWorld(this)
+ *         fixtures.extendWorld(this)
  *     })
  * })
  *
@@ -71,38 +69,25 @@ const hooks = require('./hooks')
 exports.extendWorld = require('./extend_world')
 
 /**
- * The http API configuration object.
- *
- * @typedef {Object} HttpApiConfig
- * @property {string} [baseUrl=''] - The base url used for all http calls
- */
-
-/**
  * Installs the extension.
  *
  * @example
  * // /support/world.js
  *
  * const { defineSupportCode } = require('cucumber')
- * const { state, httpApi } = require('@ekino/veggies')
+ * const { fixtures } = require('@ekino/veggies')
  *
  * defineSupportCode(({ setWorldConstructor }) => {
  *     setWorldConstructor(function() {
- *         state.extendWorld(this) // httpApi extension requires state extension
- *         httpApi.extendWorld(this)
+ *         fixtures.extendWorld(this)
  *     })
  * })
  *
- * state.install(defineSupportCode)
- * httpApi.install({
- *     baseUrl: 'http://localhost:3000',
- * })(defineSupportCode)
+ * fixtures.install(defineSupportCode)
  *
- * @param {HttpApiConfig} config - The `defineSupportCode` helper from cucumber
- * @return {Function} The installation function
+ * @param {Function} define - The `defineSupportCode` helper from cucumber
  */
-exports.install = ({ baseUrl = '' } = {}) => define => {
-    define(definitions({ baseUrl }))
+exports.install = define => {
     define(hooks)
 }
 </code></pre>
