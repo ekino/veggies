@@ -12,7 +12,7 @@ const yaml = require('js-yaml')
 const _ = require('lodash')
 
 let fixturesDir = 'fixtures'
-let featureUri = null
+let featureUri
 
 /**
  * Configures the loader
@@ -42,7 +42,7 @@ exports.setFeatureUri = _featureUri => {
  * @param {string} file - File path
  * @return {Promise.<string>} File content
  */
-const loadText = file =>
+exports.loadText = file =>
     new Promise((resolve, reject) => {
         fs.readFile(file, (err, data) => {
             if (err) return reject(err)
@@ -56,17 +56,17 @@ const loadText = file =>
  * @param {string} file - File path
  * @return {Promise.<Object|Array>} Parsed yaml data
  */
-const loadYaml = file =>
-    loadText(file).then(content => {
+exports.loadYaml = file =>
+    exports.loadText(file).then(content => {
         try {
             const data = yaml.safeLoad(content)
             if (data === undefined) {
-                return Promise.reject(new Error(`yaml parsing resulted in undefined data (${file})`))
+                return Promise.reject(new Error(`Fixture file is invalid, yaml parsing resulted in undefined data for file: ${file}`))
             }
 
             return data
         } catch (err) {
-            return Promise.reject(err)
+            return Promise.reject(new Error(`Unable to parse yaml fixture file: ${file}.\nerror: ${err.message}`))
         }
     })
 
@@ -76,8 +76,8 @@ const loadYaml = file =>
  * @param {string} file - File path
  * @return {Promise.<Object>} Json data
  */
-const loadJson = file =>
-    loadText(file).then(content => {
+exports.loadJson = file =>
+    exports.loadText(file).then(content => {
         try {
             const data = JSON.parse(content)
 
@@ -93,7 +93,7 @@ const loadJson = file =>
  * @param {string} file - File path
  * @return {Promise.<*>} Data generated from the module
  */
-const loadModule = file => {
+exports.loadModule = file => {
     try {
         const relativePath = path.relative(__dirname, file)
         const mod = require(relativePath)
@@ -128,7 +128,7 @@ const loadModule = file => {
  * @return {Promise.<Object|string>} Fixture content
  */
 exports.load = fixture => {
-    if (featureUri === null) return Promise.reject()
+    if (featureUri === undefined) return Promise.reject(new Error(`Cannot load fixture: ${fixture}, no feature uri defined`))
 
     const relativePath = path.relative(process.cwd(), path.dirname(featureUri))
     const pattern = `${relativePath}/${fixturesDir}/${fixture}.@(yaml|yml|js|json|txt)`
@@ -137,14 +137,16 @@ exports.load = fixture => {
         glob(pattern, (err, files) => {
             const fixturesCount = files.length
 
-            if (fixturesCount === 0) return reject(`No fixtures found for: ${fixture} (${pattern})`)
+            if (fixturesCount === 0) return reject(new Error(`No fixture found for: ${fixture} (${pattern})`))
             if (fixturesCount > 1) {
                 return reject(
-                    [
-                        `Found ${fixturesCount} matching fixture files, `,
-                        `you should have only one matching '${fixture}':\n  `,
-                        `- ${files.join('\n  - ')}`
-                    ].join('')
+                    new Error(
+                        [
+                            `Found ${fixturesCount} matching fixture files, `,
+                            `you should have only one matching '${fixture}':\n  `,
+                            `- ${files.join('\n  - ')}`
+                        ].join('')
+                    )
                 )
             }
 
@@ -154,16 +156,16 @@ exports.load = fixture => {
             switch (ext) {
                 case 'yml':
                 case 'yaml':
-                    return resolve(loadYaml(fixtureFile))
+                    return resolve(exports.loadYaml(fixtureFile))
 
                 case 'js':
-                    return resolve(loadModule(fixtureFile))
+                    return resolve(exports.loadModule(fixtureFile))
 
                 case 'json':
-                    return resolve(loadJson(fixtureFile))
+                    return resolve(exports.loadJson(fixtureFile))
 
                 default:
-                    return resolve(loadText(fixtureFile))
+                    return resolve(exports.loadText(fixtureFile))
             }
         })
     })
@@ -173,5 +175,5 @@ exports.load = fixture => {
  * Resets fixtures loader.
  */
 exports.reset = () => {
-    featureUri = null
+    featureUri = undefined
 }
