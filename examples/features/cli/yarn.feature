@@ -1,4 +1,4 @@
-@cli
+@cli @offline
 Feature: yarn CLI
 
   Scenario: Running an invalid command

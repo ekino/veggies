@@ -1,4 +1,4 @@
-@http_api @fixtures
+@http_api @fixtures @offline
 Feature: Using fixtures with http API extension
 
   @yaml

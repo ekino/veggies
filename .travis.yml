@@ -7,9 +7,6 @@ script:
   - yarn run lint
   - yarn run check-fmt
   - yarn run test-cover
-# this step is disabled because of GitHub rate limit
-#  - yarn run examples -- --tags @http_api
-  - yarn run examples -- --tags @cli
-  - yarn run examples -- --tags @http_api --tags @fixtures
+  - yarn run examples -- --tags @offline
 after_success:
   - yarn run coverage
