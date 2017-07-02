@@ -147,4 +147,16 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
 
         expect(array.length).to.be.equal(Number(itemsNumber))
     })
+
+    /**
+     * Verifies that response matches snapshot.
+     */
+    Then(/^response should match snapshot (.+)$/, function(snapshotId) {
+        const httpResponse = this.httpApiClient.getResponse()
+        expect(httpResponse).to.not.be.empty
+
+        return this.fixtures.load(snapshotId).then(snapshot => {
+            expect(httpResponse.body).to.deep.equal(snapshot)
+        })
+    })
 }
