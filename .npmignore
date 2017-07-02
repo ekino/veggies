@@ -10,8 +10,8 @@ coverage
 
 # Documentation
 doc
+_doc
 examples
-assets
 
 # Tests
 tests
@@ -27,9 +27,12 @@ node_modules
 
 # IDE
 .idea
+.editorconfig
 
 # misc
+scripts
 Makefile
 .eslintrc.yml
+.eslintignore
 .gitignore
 .changelogrc
