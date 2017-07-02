@@ -407,6 +407,7 @@ Then:
   - /^(?:I )?should receive a ([1-5][0-9][0-9]) HTTP status code$/
   - /^(?:I )?should receive a json response (fully )?matching$/
   - /^(?:I )?should receive a collection of ([0-9]+) items? for path (.+)$/
+  - /^response should match snapshot (.+)$/
 ```
 
 #### http API low level API

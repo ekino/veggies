@@ -20,6 +20,7 @@ chainable.to = chainable
 chainable.be = chainable
 chainable.not = chainable
 chainable.empty = chainable
+chainable.deep = chainable
 
 const expect = jest.fn(() => chainable)
 

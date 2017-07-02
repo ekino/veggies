@@ -7,7 +7,7 @@ beforeEach(() => {
     require('chai').clear()
 })
 
-test('should allow to set request headers', () => {
+test('set request headers', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('set request headers')
@@ -27,7 +27,7 @@ test('should allow to set request headers', () => {
     expect(clientMock.httpApiClient.setHeaders).toHaveBeenCalledWith(headers)
 })
 
-test('should allow to set a single request header', () => {
+test('set a single request header', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('request header to')
@@ -44,7 +44,7 @@ test('should allow to set a single request header', () => {
     expect(clientMock.httpApiClient.setHeader).toHaveBeenCalledWith('Accept', 'test')
 })
 
-test('should allow to set request json body', () => {
+test('set request json body', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('set request json body$')
@@ -53,7 +53,7 @@ test('should allow to set request json body', () => {
     def.shouldMatch('set request json body')
 })
 
-test('should allow to set request json body from fixture file', () => {
+test('set request json body from fixture file', () => {
     const context = helper.define(definitions)
 
     expect.assertions(6)
@@ -79,7 +79,7 @@ test('should allow to set request json body from fixture file', () => {
     })
 })
 
-test('should allow to set request form body', () => {
+test('set request form body', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('set request form body$')
@@ -88,7 +88,7 @@ test('should allow to set request form body', () => {
     def.shouldMatch('set request form body')
 })
 
-test('should allow to set request form body from fixture file', () => {
+test('set request form body from fixture file', () => {
     const context = helper.define(definitions)
 
     expect.assertions(6)
@@ -114,7 +114,7 @@ test('should allow to set request form body from fixture file', () => {
     })
 })
 
-test('should allow to set request query', () => {
+test('set request query', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('set request query')
@@ -134,7 +134,7 @@ test('should allow to set request query', () => {
     expect(clientMock.httpApiClient.setQuery).toHaveBeenCalledWith(query)
 })
 
-test('should allow to pick response json property', () => {
+test('pick response json property', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('pick response json')
@@ -144,7 +144,7 @@ test('should allow to pick response json property', () => {
     def.shouldMatch('pick response json key as value', ['key', 'value'])
 })
 
-test('should allow to reset http client', () => {
+test('reset http client', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('reset http client')
@@ -157,7 +157,7 @@ test('should allow to reset http client', () => {
     expect(clientMock.httpApiClient.reset).toHaveBeenCalled()
 })
 
-test('should allow to perform a request', () => {
+test('perform a request', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('GET|POST|PUT|DELETE')
@@ -173,7 +173,7 @@ test('should allow to perform a request', () => {
     def.shouldMatch('DELETE /delete', ['DELETE', '/delete'])
 })
 
-test('should allow to dump response body', () => {
+test('dump response body', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('dump response body')
@@ -186,7 +186,7 @@ test('should allow to dump response body', () => {
     expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
 })
 
-test('should allow to check response HTTP status code', () => {
+test('check response HTTP status code', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('HTTP status code')
@@ -204,7 +204,7 @@ test('should allow to check response HTTP status code', () => {
     expect(require('chai').expect).toHaveBeenCalledWith(200)
 })
 
-test('should allow to check json response', () => {
+test('check json response', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('should receive a json response')
@@ -215,7 +215,7 @@ test('should allow to check json response', () => {
     def.shouldMatch('should receive a json response fully matching', ['fully '])
 })
 
-test('should allow to check json collection size for a given path', () => {
+test('check json collection size for a given path', () => {
     const context = helper.define(definitions)
 
     const def = context.getDefinitionByMatcher('should receive a collection of')
@@ -226,4 +226,25 @@ test('should allow to check json collection size for a given path', () => {
     def.shouldMatch('I should receive a collection of 2 items for path property', ['2', 'property'])
     def.shouldMatch('should receive a collection of 1 item for path property', ['1', 'property'])
     def.shouldMatch('should receive a collection of 2 items for path property', ['2', 'property'])
+})
+
+test('match snapshot', () => {
+    const context = helper.define(definitions)
+
+    expect.assertions(5)
+
+    const def = context.getDefinitionByMatcher('should match snapshot')
+    def.shouldHaveType('Then')
+    def.shouldNotMatch('response should match snapshot ')
+    def.shouldMatch('response should match snapshot snapshot', ['snapshot'])
+
+    const snapshot = { testing: true }
+    const worldMock = {
+        httpApiClient: { getResponse: jest.fn(() => ({ statusCode: 200, body: snapshot })) },
+        fixtures: { load: jest.fn(() => Promise.resolve(snapshot)) }
+    }
+
+    return def.exec(worldMock, 'snapshot').then(() => {
+        expect(require('chai').expect).toHaveBeenCalledWith(snapshot)
+    })
 })
