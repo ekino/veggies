@@ -112,13 +112,13 @@ test('set request form body from fixture file', () => {
     def.shouldMatch('I set request form body from fixture')
     def.shouldMatch('set request form body from fixture')
 
-    const fixture   = {
+    const fixture = {
         is_active: 'true',
-        id:        '2'
+        id: '2'
     }
     const worldMock = {
-        httpApiClient: {setFormBody: jest.fn()},
-        fixtures:      {load: jest.fn(() => Promise.resolve(fixture))}
+        httpApiClient: { setFormBody: jest.fn() },
+        fixtures: { load: jest.fn(() => Promise.resolve(fixture)) }
     }
 
     return def.exec(worldMock, 'fixture').then(() => {

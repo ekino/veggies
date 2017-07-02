@@ -391,12 +391,16 @@ httpApi.install({
 Given:
   - /^(?:I )?set request headers$/
   - /^(?:I )?set ([a-zA-Z0-9-]+) request header to (.+)$/
+  - /^(?:I )?clear request headers/
   - /^(?:I )?set request json body$/
   - /^(?:I )?set request json body from (.+)$/
   - /^(?:I )?set request form body$/
   - /^(?:I )?set request form body from (.+)$/
+  - /^(?:I )?clear request body$/
   - /^(?:I )?set request query$/
   - /^(?:I )?pick response json (.+) as (.+)$/
+  - /^(?:I )?enable cookies$/
+  - /^(?:I )?disable cookies$/
 
 When:
   - /^(?:I )?reset http client$/
@@ -405,6 +409,9 @@ When:
 
 Then:
   - /^(?:I )?should receive a ([1-5][0-9][0-9]) HTTP status code$/
+  - /^response should have a (.*) cookie$/
+  - /^response (.*) cookie should (not )?be secure$/
+  - /^response (.*) cookie should (not )?be http only/
   - /^(?:I )?should receive a json response (fully )?matching$/
   - /^(?:I )?should receive a collection of ([0-9]+) items?(?: for path )?(.+)?$/
   - /^response should match snapshot (.+)$/
@@ -509,7 +516,7 @@ yarn run examples -- --tags @cli
 [npm-url]: https://www.npmjs.com/package/@ekino/veggies
 [travis-image]: https://img.shields.io/travis/ekino/veggies.svg?style=flat-square
 [travis-url]: https://travis-ci.org/ekino/veggies
-[prettier-image]: https://img.shields.io/badge/styled_with-prettier-44cc11.svg?style=flat-square
+[prettier-image]: https://img.shields.io/badge/styled_with-prettier-ff69b4.svg?style=flat-square
 [prettier-url]: https://github.com/prettier/prettier
 [coverage-image]: https://img.shields.io/coveralls/ekino/veggies/master.svg?style=flat-square
 [coverage-url]: https://coveralls.io/github/ekino/veggies?branch=master
