@@ -6,6 +6,9 @@ const _ = require('lodash')
 const Cast = require('../../cast')
 const Helper = require('../../helper')
 
+const { STATUS_CODES } = require('http')
+const STATUS_MESSAGES = _.values(STATUS_CODES).map(_.lowerCase)
+
 module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     /**
      * Setting http headers
@@ -116,12 +119,32 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     /**
      * Checking response status code
      */
-    Then(/^(?:I )?should receive a ([1-5][0-9][0-9]) HTTP status code$/, function(statusCode) {
+    Then(/^response status code should be ([1-5][0-9][0-9])$/, function(statusCode) {
         const httpResponse = this.httpApiClient.getResponse()
         expect(httpResponse, 'Response is empty').to.not.be.empty
         expect(httpResponse.statusCode, `Expected status code to be: ${statusCode}, but found: ${httpResponse.statusCode}`).to.equal(
             Number(statusCode)
         )
+    })
+
+    /**
+     * Checking response status by message
+     */
+    Then(/^response status should be (.+)$/, function(statusMessage) {
+        if (!STATUS_MESSAGES.includes(_.lowerCase(statusMessage))) {
+            throw new TypeError(`'${statusMessage}' is not a valid status message`)
+        }
+
+        const httpResponse = this.httpApiClient.getResponse()
+        expect(httpResponse, 'Response is empty').to.not.be.empty
+
+        const statusCode = _.findKey(STATUS_CODES, msg => _.lowerCase(msg) === statusMessage)
+        const currentStatusMessage = STATUS_CODES[`${httpResponse.statusCode}`] || httpResponse.statusCode
+
+        expect(
+            httpResponse.statusCode,
+            `Expected status to be: '${statusMessage}', but found: '${_.lowerCase(currentStatusMessage)}'`
+        ).to.equal(Number(statusCode))
     })
 
     /**

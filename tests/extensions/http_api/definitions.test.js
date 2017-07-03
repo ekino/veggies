@@ -241,19 +241,37 @@ test('dump response body', () => {
 test('check response HTTP status code', () => {
     const context = helper.define(definitions)
 
-    const def = context.getDefinitionByMatcher('HTTP status code')
+    const def = context.getDefinitionByMatcher('response status code should be')
     def.shouldHaveType('Then')
-    def.shouldNotMatch('I should receive a crap HTTP status code')
-    def.shouldNotMatch('I should receive a 600 HTTP status code')
-    def.shouldMatch('I should receive a 200 HTTP status code', ['200'])
-    def.shouldMatch('I should receive a 404 HTTP status code', ['404'])
-    def.shouldMatch('should receive a 200 HTTP status code', ['200'])
-    def.shouldMatch('should receive a 404 HTTP status code', ['404'])
+    def.shouldNotMatch('response status code should be ')
+    def.shouldNotMatch('response status code should be string')
+    def.shouldNotMatch('response status code should be 600')
+    def.shouldMatch('response status code should be 200', ['200'])
+    def.shouldMatch('response status code should be 404', ['404'])
 
     const clientMock = { httpApiClient: { getResponse: jest.fn(() => ({ statusCode: 200 })) } }
     def.exec(clientMock, '200')
     expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
     expect(require('chai').expect).toHaveBeenCalledWith(200, 'Expected status code to be: 200, but found: 200')
+})
+
+test('check response HTTP status by message', () => {
+    const context = helper.define(definitions)
+
+    const def = context.getDefinitionByMatcher('response status should be')
+    def.shouldHaveType('Then')
+    def.shouldNotMatch('response status should be ')
+    def.shouldMatch('response status should be ok', ['ok'])
+    def.shouldMatch('response status should be forbidden', ['forbidden'])
+
+    const clientMock = { httpApiClient: { getResponse: jest.fn(() => ({ statusCode: 200 })) } }
+    def.exec(clientMock, 'ok')
+    expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
+    expect(require('chai').expect).toHaveBeenCalledWith(200, `Expected status to be: 'ok', but found: 'ok'`)
+
+    expect(() => {
+        def.exec(clientMock, 'invalid')
+    }).toThrow(new TypeError(`'invalid' is not a valid status message`))
 })
 
 test('check json response', () => {
