@@ -107,6 +107,7 @@ exports.clearHeaders = () => {
  */
 exports.enableCookies = () => {
     cookieJar = request.jar()
+    cookieJar._jar.rejectPublicSuffixes = false
 }
 
 /**
