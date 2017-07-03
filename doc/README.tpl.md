@@ -16,6 +16,7 @@ It's also the perfect companion for testing CLI applications built with commande
         - [Posting data](#posting-data)
         - [Posting data using fixture file](#posting-data-using-fixture-file)
         - [Using values issued by a previous request](#using-values-issued-by-a-previous-request)
+        - [Using cookies](#using-cookies)
         - [Type system](#type-system)
     - [CLI testing](#cli-testing) 
        - [Running a simple command](#running-a-simple-command-and-checking-its-exit-code)
@@ -109,7 +110,7 @@ Scenario: Creating a resource using json payload
 #### Posting data using fixture file
 
 Putting large data payloads inside your scenarios can reduce legibility,
-to improve this, you can use the [fixtures](#fixtures-extension) to define it.
+to improve this, you can use the [fixtures extension](#fixtures-extension) to define it.
 
 ```yaml
 # /features/user/fixtures/user.yml
@@ -178,6 +179,25 @@ Scenario Outline: Fetching <key> API endpoint from root endpoint
     | public_gists_url |
 ```
 <%={{ }}=%>
+
+#### Using cookies
+
+Cookies are disabled by default, but you've got the ability to enable/disable the feature using a gherkin `Given` expression.
+Be warned that cookies do not persist across scenarios in order to ensure they're autonomous.
+If you really need to keep a cookie for multiple scenarios, you should consider using a custom step definition
+and/or using the [state extention](#state-extension) to store it.
+
+```gherkin
+Scenario: Enabling cookies
+  Given I enable cookies
+  # …
+  
+Scenario: Disabling cookies
+  Given I disable cookies
+  # …  
+```
+
+See [definitions](#http-api-gherkin-expressions) for all available cookies related gherkin expressions.
 
 #### Type system
 
