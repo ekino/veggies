@@ -408,7 +408,8 @@ When:
   - /^(?:I )?dump response body$/
 
 Then:
-  - /^(?:I )?should receive a ([1-5][0-9][0-9]) HTTP status code$/
+  - /^response status code should be ([1-5][0-9][0-9])$/
+  - /^response status should be (.+)$/
   - /^response should have a (.*) cookie$/
   - /^response (.*) cookie should (not )?be secure$/
   - /^response (.*) cookie should (not )?be http only/

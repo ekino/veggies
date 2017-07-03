@@ -21,7 +21,7 @@ Feature: GitHub API
     When I POST http://localhost:8070/api/v1/proxy/auth
     And I dump response body
     Given I clear request body
-    #Then I should receive a 200 HTTP status code
+    Then response status should be ok
     When I GET http://localhost:8070/api/v1/proxy/verify
     And I dump response body
-    Then I should receive a 200 HTTP status code
+    Then response status should be ok
