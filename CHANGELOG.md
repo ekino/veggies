@@ -2,7 +2,7 @@
 
 _Veggies is an awesome cucumberjs boilerplate for API/CLI testing. Great for testing APIs built upon Express, Koa, HAPI, Loopback and others. It's also the perfect companion for testing CLI applications built with commander, meow & Co._
 
-## v2.0.0 v0.1.2 ( Sun Jul 02 2017 12:55:59 GMT+0900 (JST) )
+## v0.2.0 v0.1.2 ( Mon Jul 03 2017 12:51:55 GMT+0900 (JST) )
 
 
 ## Bug Fixes
@@ -79,6 +79,10 @@ _Veggies is an awesome cucumberjs boilerplate for API/CLI testing. Great for tes
     - add .editorconfig
   ([caa3acc3](git@github.com:ekino/veggies/commit/caa3acc380b1e83cbda86331802734e8cb8ef753))
 
+  - **github**
+    - add GitHub issue PR templates
+  ([c247c234](git@github.com:ekino/veggies/commit/c247c2343b6cebf033c3f7eb3d111dc6a59d6420))
+
   - **identity**
     - update banner
   ([df3ffee6](git@github.com:ekino/veggies/commit/df3ffee66dbf49b0e07593e6233017552b5b386d))
@@ -88,6 +92,14 @@ _Veggies is an awesome cucumberjs boilerplate for API/CLI testing. Great for tes
   ([fc9d89e4](git@github.com:ekino/veggies/commit/fc9d89e432941a7539f32b396377e6c9fbe6728a))
     - add custom banner
   ([d275fb2d](git@github.com:ekino/veggies/commit/d275fb2dfd31d8d47122188b45cfc79382936dfb))
+
+  - **package**
+    - update .npmignore
+  ([e0c116c9](git@github.com:ekino/veggies/commit/e0c116c944fdd9a0945ff278905eec2eee6e0681))
+
+  - **v2.0.0**
+    - bump version to 2.0.0
+  ([5575b2f2](git@github.com:ekino/veggies/commit/5575b2f2bfb03e8562901d671fa491c776cca977))
 
 
 
