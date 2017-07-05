@@ -196,6 +196,40 @@ test('disable cookies', () => {
     expect(clientMock.httpApiClient.disableCookies).toHaveBeenCalled()
 })
 
+test('test cookie is present', () => {
+    const context = helper.define(definitions)
+
+    const def = context.getDefinitionByMatcher('response should (not )?have an? (.+) cookie')
+    def.shouldHaveType('Then')
+    def.shouldNotMatch('response should have a  cookie')
+    def.shouldNotMatch('response should have an  cookie')
+    def.shouldMatch('response should have a test cookie', [undefined, 'test'])
+    def.shouldMatch('response should have an test cookie', [undefined, 'test'])
+
+    const clientMock = { httpApiClient: { getCookie: jest.fn() } }
+    def.exec(clientMock, undefined, 'test')
+    expect(clientMock.httpApiClient.getCookie).toHaveBeenCalledWith('test')
+    expect(require('chai').expect).toHaveBeenCalledWith(undefined, `No cookie found for key 'test'`)
+})
+
+test('test cookie is absent', () => {
+    const context = helper.define(definitions)
+
+    const def = context.getDefinitionByMatcher('response should (not )?have an? (.+) cookie')
+    def.shouldHaveType('Then')
+    def.shouldNotMatch('response should crap have a  cookie')
+    def.shouldNotMatch('response should crap have an  cookie')
+    def.shouldNotMatch('response should not have a  cookie')
+    def.shouldNotMatch('response should not have an  cookie')
+    def.shouldMatch('response should not have a test cookie', ['not ', 'test'])
+    def.shouldMatch('response should not have an test cookie', ['not ', 'test'])
+
+    const clientMock = { httpApiClient: { getCookie: jest.fn() } }
+    def.exec(clientMock, 'not ', 'test')
+    expect(clientMock.httpApiClient.getCookie).toHaveBeenCalledWith('test')
+    expect(require('chai').expect).toHaveBeenCalledWith(undefined, `A cookie exists for key 'test'`)
+})
+
 test('reset http client', () => {
     const context = helper.define(definitions)
 

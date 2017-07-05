@@ -15,9 +15,9 @@ Feature: GitHub API
       | Content-Type | application/x-www-form-urlencoded; charset=utf-8 |
       | Accept       | application/json                                 |
     And I set request form body
-      | grant_type                | ekino                                         |
-      | google_authorization_code | 4/nXXR1hDzzqi7qjOE5qF5YFmibifiQ_IzULvUovajtrY |
-      | client_id                 | 4be37f59-0143-470d-a0fb-514f63da5d70          |
+      | grant_type                | whatever |
+      | google_authorization_code | whatever |
+      | client_id                 | whatever |
     When I POST http://localhost:8070/api/v1/proxy/auth
     And I dump response body
     Given I clear request body

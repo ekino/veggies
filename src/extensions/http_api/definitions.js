@@ -150,36 +150,41 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     /**
      * Checking response cookie exists
      */
-    Then(/^response should have a (.*) cookie$/, function(key) {
+    Then(/^response should (not )?have an? (.+) cookie$/, function(flag, key) {
         const cookie = this.httpApiClient.getCookie(key)
-        expect(cookie, `No cookie found for key ${key}`).to.not.be.null
+
+        if (flag === undefined) {
+            expect(cookie, `No cookie found for key '${key}'`).to.not.be.null
+        } else {
+            expect(cookie, `A cookie exists for key '${key}'`).to.be.null
+        }
     })
 
     /**
      * Checking response cookie secure
      */
-    Then(/^response (.*) cookie should (not )?be secure$/, function(key, flag) {
+    Then(/^response (.+) cookie should (not )?be secure$/, function(key, flag) {
         const cookie = this.httpApiClient.getCookie(key)
-        expect(cookie, `No cookie found for key ${key}`).to.not.be.null
+        expect(cookie, `No cookie found for key '${key}'`).to.not.be.null
 
         if (flag === undefined) {
-            expect(cookie.secure, `Cookie ${key} is not secure`).to.be.true
+            expect(cookie.secure, `Cookie '${key}' is not secure`).to.be.true
         } else {
-            expect(cookie.secure, `Cookie ${key} is secure`).to.be.false
+            expect(cookie.secure, `Cookie '${key}' is secure`).to.be.false
         }
     })
 
     /**
      * Checking response cookie httpOnly
      */
-    Then(/^response (.*) cookie should (not )?be http only/, function(key, flag) {
+    Then(/^response (.+) cookie should (not )?be http only/, function(key, flag) {
         const cookie = this.httpApiClient.getCookie(key)
-        expect(cookie, `No cookie found for key ${key}`).to.not.be.null
+        expect(cookie, `No cookie found for key '${key}'`).to.not.be.null
 
         if (flag === undefined) {
-            expect(cookie.httpOnly, `Cookie ${key} is not http only`).to.be.true
+            expect(cookie.httpOnly, `Cookie '${key}' is not http only`).to.be.true
         } else {
-            expect(cookie.httpOnly, `Cookie ${key} is http only`).to.be.false
+            expect(cookie.httpOnly, `Cookie '${key}' is http only`).to.be.false
         }
     })
 
