@@ -429,7 +429,8 @@ When:
   - /^(?:I )?reset http client$/
   - /^(?:I )?(GET|POST|PUT|DELETE) (.+)$/
   - /^(?:I )?dump response body$/
-  - /^(?:I )?dump response headers/
+  - /^(?:I )?dump response headers$/
+  - /^(?:I )?dump response cookies$/
 
 Then:
   - /^response status code should be ([1-5][0-9][0-9])$/

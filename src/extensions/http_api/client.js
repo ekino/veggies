@@ -24,7 +24,7 @@ let cookieJar = null
 
 // RESPONSE INFORMATION
 let response = null
-let responseCookies = null
+let responseCookies = {}
 
 /**
  * Resets the client.
@@ -39,7 +39,7 @@ exports.reset = () => {
     cookieJar = null
 
     response = null
-    responseCookies = null
+    responseCookies = {}
 }
 
 /**
@@ -152,6 +152,13 @@ exports.getCookie = key => {
 
     return responseCookies[key]
 }
+
+/**
+ * Returns current response cookies.
+ *
+ * @return {Object} current response cookies
+ */
+exports.getCookies = () => responseCookies
 
 /**
  * Returns the latest collected response.
