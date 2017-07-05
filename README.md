@@ -423,11 +423,13 @@ Given:
   - /^(?:I )?pick response json (.+) as (.+)$/
   - /^(?:I )?enable cookies$/
   - /^(?:I )?disable cookies$/
+  - /^(?:I )?set cookie from (.+)$/
 
 When:
   - /^(?:I )?reset http client$/
   - /^(?:I )?(GET|POST|PUT|DELETE) (.+)$/
   - /^(?:I )?dump response body$/
+  - /^(?:I )?dump response headers/
 
 Then:
   - /^response status code should be ([1-5][0-9][0-9])$/
@@ -439,6 +441,7 @@ Then:
   - /^(?:I )?should receive a json response (fully )?matching$/
   - /^(?:I )?should receive a collection of ([0-9]+) items?(?: for path )?(.+)?$/
   - /^response should match snapshot (.+)$/
+  - /^response header (.+) should (not )?(equal|contain|match) (.+)$/
 ```
 
 #### http API low level API
