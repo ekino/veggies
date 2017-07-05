@@ -43,7 +43,6 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
      */
     Given(/^(?:I )?set request json body from (.+)$/, function(fixture) {
         return this.fixtures.load(fixture).then(data => {
-            console.log(data) // eslint-disable-line no-console
             this.httpApiClient.setJsonBody(data)
         })
     })
@@ -60,7 +59,6 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
      */
     Given(/^(?:I )?set request form body from (.+)$/, function(fixture) {
         return this.fixtures.load(fixture).then(data => {
-            console.log(data) // eslint-disable-line no-console
             this.httpApiClient.setFormBody(data)
         })
     })
