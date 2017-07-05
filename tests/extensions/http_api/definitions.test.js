@@ -230,6 +230,34 @@ test('test cookie is absent', () => {
     expect(require('chai').expect).toHaveBeenCalledWith(undefined, `A cookie exists for key 'test'`)
 })
 
+test('test cookie is secure', () => {
+    const context = helper.define(definitions)
+
+    const def = context.getDefinitionByMatcher('response (.+) cookie should (not )?be secure')
+    def.shouldHaveType('Then')
+    def.shouldNotMatch('response  cookie should be secure')
+    def.shouldMatch('response test cookie should be secure', ['test', undefined])
+
+    const clientMock = { httpApiClient: { getCookie: jest.fn(() => ({ secure: true })) } }
+    def.exec(clientMock, 'test', undefined)
+    expect(clientMock.httpApiClient.getCookie).toHaveBeenCalledWith('test')
+    expect(require('chai').expect).toHaveBeenCalledWith(true, `Cookie 'test' is not secure`)
+})
+
+test('test cookie is not secure', () => {
+    const context = helper.define(definitions)
+
+    const def = context.getDefinitionByMatcher('response (.+) cookie should (not )?be secure')
+    def.shouldHaveType('Then')
+    def.shouldNotMatch('response  cookie should not be secure')
+    def.shouldMatch('response test cookie should not be secure', ['test', 'not '])
+
+    const clientMock = { httpApiClient: { getCookie: jest.fn(() => ({ secure: false })) } }
+    def.exec(clientMock, 'test', 'not ')
+    expect(clientMock.httpApiClient.getCookie).toHaveBeenCalledWith('test')
+    expect(require('chai').expect).toHaveBeenCalledWith(false, `Cookie 'test' is secure`)
+})
+
 test('reset http client', () => {
     const context = helper.define(definitions)
 
@@ -337,7 +365,7 @@ test('check json collection size for a given path', () => {
     expect(require('chai').equal).toHaveBeenCalledWith(3)
 })
 
-test('match snapshot', () => {
+test('response match snapshot', () => {
     const context = helper.define(definitions)
 
     expect.assertions(5)
