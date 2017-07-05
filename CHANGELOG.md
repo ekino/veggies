@@ -2,111 +2,100 @@
 
 _Veggies is an awesome cucumberjs boilerplate for API/CLI testing. Great for testing APIs built upon Express, Koa, HAPI, Loopback and others. It's also the perfect companion for testing CLI applications built with commander, meow & Co._
 
-## v0.2.0 v0.1.2 ( Mon Jul 03 2017 12:51:55 GMT+0900 (JST) )
+## v0.3.0 v0.2.0 ( Wed Jul 05 2017 14:28:07 GMT+0900 (JST) )
 
 
 ## Bug Fixes
 
-  - **format**
-    - add missing formatting
-  ([c367e272](git@github.com:ekino/veggies/commit/c367e2722ed86d22f22e0f6fecdf6cdaabd73972))
+  - **examples**
+    - update stale http API step definition
+  ([e04cb19c](git@github.com:ekino/veggies/commit/e04cb19c57824c24dfa7a59009fe1851e84f6a81))
+
+  - **http_api**
+    - fix http API definitions test
+  ([33db40e7](git@github.com:ekino/veggies/commit/33db40e76778b19c458fd54cd676ceba46b03375))
 
 
 
 
 ## Features
 
-  - **examples**
-    - only run offline examples on CI
-  ([e5835a92](git@github.com:ekino/veggies/commit/e5835a92dba93366df3455292b42442e873d5618))
+  - **checkresponse**
+    - add 'deepEqual' comparison for array when checking response
+  ([6986f914](git@github.com:ekino/veggies/commit/6986f9146dbd36a1f3f4fb426e736d8ffd1fbdcc))
 
-  - **fixtures**
-    - add support for JSON fixtures
-  ([aa9b9f55](git@github.com:ekino/veggies/commit/aa9b9f5566b6fae3a6d0ac0cdf27f22a1bec05b9))
-    - add support for javascript fixtures
-  ([403e377d](git@github.com:ekino/veggies/commit/403e377dd5ff161c9059da8a57d84b77950ed4fb))
-    - add support for text & yaml fixtures
-  ([1965e37d](git@github.com:ekino/veggies/commit/1965e37dbd1f837f3c2e0aa3aaabd72dbfc32439))
-    - init fixtures support
-  ([db0c4603](git@github.com:ekino/veggies/commit/db0c46038589ad40498bf1cc3f09a690d2fe3b6b))
+  - **cookies**
+    - update http API extension cookies example
+  ([f4162859](git@github.com:ekino/veggies/commit/f416285983b95299786001e2148e7d0495a20bd0))
+    - assert cookie domain equals/doesn't equal value
+  ([32744e66](git@github.com:ekino/veggies/commit/32744e668cdf13499934f8a4028843e863888bac))
+    - assert cookie is/isn't http only
+  ([c36c637d](git@github.com:ekino/veggies/commit/c36c637dd9026d290552ff0bf98da246709b21f7))
+    - assert cookie is/isn't secure
+  ([22ace59c](git@github.com:ekino/veggies/commit/22ace59cb514a24d2c7af104125ceddd15de989e))
+    - assert cookie is present/absent
+  ([e02510b3](git@github.com:ekino/veggies/commit/e02510b35da6786a12386fb8d043fea354fc9c1f))
+    - disable tough-cookie rejectPublicSuffixes
+  ([484c8566](git@github.com:ekino/veggies/commit/484c8566459b8e3efc48b918cd72b66a96a70203))
+    - improve cookies support for http API extension
+  ([2bd5bcae](git@github.com:ekino/veggies/commit/2bd5bcae5d43bf6332c9d24bee1b3734a977287b))
+    - init cookies support for http API extension
+  ([f7f8caf8](git@github.com:ekino/veggies/commit/f7f8caf835c20ce2a484dbdd80c82ee71b7a5fd5))
+
+  - **countnestedproperties**
+    - Handle null array when counting object properties
+  ([706011f2](git@github.com:ekino/veggies/commit/706011f28edb89ec52f909887391a07d6c2af75c))
 
   - **http-api**
-    - improve fixtures examples
-  ([f84ca4b2](git@github.com:ekino/veggies/commit/f84ca4b296f30769742dc38880e8614a2a2b3c4e))
-    - add ability to set body from fixtures
-  ([b4760cc2](git@github.com:ekino/veggies/commit/b4760cc273f53c203a3062054196b10d3d83ac8f))
-    - fix http API step definition
-  ([27ee9828](git@github.com:ekino/veggies/commit/27ee98284954936b3625020ba8c01ac282d2ce4a))
+    - add ability to check status code by message
+  ([e89aac65](git@github.com:ekino/veggies/commit/e89aac65e481c4eacccf8628dd317a25bf482aee))
 
-  - **state**
-    - use state for check response step definition
-  ([a3b734b7](git@github.com:ekino/veggies/commit/a3b734b7186358692b449e13ba5413eef25e8799))
+  - **stepdef**
+    - improve step for getting root object
+  ([91b894b0](git@github.com:ekino/veggies/commit/91b894b0f033b00503c2f57b5728a475b6fdd0e5))
 
 
 
 
 ## Documentation
 
-  - **cli**
-    - fix wrong link for CLI extension jsdoc
-  ([c4571c76](git@github.com:ekino/veggies/commit/c4571c76ee08bfad82a1d121e28e17ace9a94d06))
+  - **cookies**
+    - add documentation on how to enable cookies support
+  ([c0f23f35](git@github.com:ekino/veggies/commit/c0f23f358d096c2724771c7e630fe7e01bb00eb6))
 
-  - **extensions**
-    - improve extensions installation documentation
-  ([5f5ea082](git@github.com:ekino/veggies/commit/5f5ea082e2734b324ded148918e1f898e945ca2d))
+  - **fixtures**
+    - add missing fixtures extension installation code
+  ([2be57171](git@github.com:ekino/veggies/commit/2be57171701d0ec0e90d17224b13f8404cde58b5))
+
+  - **http-api**
+    - update README for http API updated step definition
+  ([38615d4b](git@github.com:ekino/veggies/commit/38615d4b91f54b1a5ca8028990db87a11ad27735))
+
+  - **readme**
+    - update README
+  ([496b7010](git@github.com:ekino/veggies/commit/496b7010f1003882f3f8c2f0f84fb383f8cc68a5))
 
 
 
 
 ## Test
 
-  - **definitions**
-    - improve unit tests on extensions definitions
-  ([e998cfce](git@github.com:ekino/veggies/commit/e998cfce4d956fe1a532f80b35bf02b33ae89c8d))
-    - add unit tests on extensions definitions
-  ([e33ca136](git@github.com:ekino/veggies/commit/e33ca136c79d2332b35b575d7ecdb0242d3c9aef))
+  - **cast**
+    - add missing tests on Cast helper
+  ([8956e0db](git@github.com:ekino/veggies/commit/8956e0db23b188d8af3c0c01d64d6073f37ba94b))
 
-  - **fixtures**
-    - add tests for FixturesLoader
-  ([56b5d32d](git@github.com:ekino/veggies/commit/56b5d32d3faad0035782b2aa9071d3f56bf54181))
+  - **definitions**
+    - improve extensions' definitions tests
+  ([8cab585d](git@github.com:ekino/veggies/commit/8cab585d8f0a80ae6cec3e14a38a08ee9273bc76))
 
 
 
 
 ## Chore
 
-  - **editorconfig**
-    - add .editorconfig
-  ([caa3acc3](git@github.com:ekino/veggies/commit/caa3acc380b1e83cbda86331802734e8cb8ef753))
-
-  - **github**
-    - add GitHub issue PR templates
-  ([c247c234](git@github.com:ekino/veggies/commit/c247c2343b6cebf033c3f7eb3d111dc6a59d6420))
-
-  - **identity**
-    - update banner
-  ([df3ffee6](git@github.com:ekino/veggies/commit/df3ffee66dbf49b0e07593e6233017552b5b386d))
-    - update banner
-  ([11d270b1](git@github.com:ekino/veggies/commit/11d270b1ed72b184497b26f0f0cba03bb541e54f))
-    - add custom banner
-  ([fc9d89e4](git@github.com:ekino/veggies/commit/fc9d89e432941a7539f32b396377e6c9fbe6728a))
-    - add custom banner
-  ([d275fb2d](git@github.com:ekino/veggies/commit/d275fb2dfd31d8d47122188b45cfc79382936dfb))
-
-  - **package**
-    - update .npmignore
-  ([e0c116c9](git@github.com:ekino/veggies/commit/e0c116c944fdd9a0945ff278905eec2eee6e0681))
-
-  - **v2.0.0**
-    - bump version to 2.0.0
-  ([5575b2f2](git@github.com:ekino/veggies/commit/5575b2f2bfb03e8562901d671fa491c776cca977))
-
-
-
-
-## Pull requests merged
-  - Merge pull request #4 from ekino/test-definitions
-  ([d68d7fae](git@github.com:ekino/veggies/commit/d68d7fae14f9bb7ab56a88d4b2e99cc153f54f0b))
+  - **v0.2.0**
+    - bump version to 0.2.0
+  ([f079775b](git@github.com:ekino/veggies/commit/f079775bb761abfa85f3b7323bf86bb158485f42))
 
 
 
