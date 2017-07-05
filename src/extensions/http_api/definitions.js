@@ -9,6 +9,18 @@ const Helper = require('../../helper')
 const { STATUS_CODES } = require('http')
 const STATUS_MESSAGES = _.values(STATUS_CODES).map(_.lowerCase)
 
+/**
+ * Ensures there's a response available and returns it.
+ *
+ * @param {Object} client
+ */
+const mustGetResponse = client => {
+    const response = client.getResponse()
+    expect(response, 'No response available').to.not.be.empty
+
+    return response
+}
+
 module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     /**
      * Setting http headers
@@ -84,12 +96,27 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
         this.state.set(key, _.get(body, path))
     })
 
+    /**
+     * Enabling cookies
+     */
     Given(/^(?:I )?enable cookies$/, function() {
         this.httpApiClient.enableCookies()
     })
 
+    /**
+     * Disabling cookies
+     */
     Given(/^(?:I )?disable cookies$/, function() {
         this.httpApiClient.disableCookies()
+    })
+
+    /**
+     * Setting a cookie from fixture file
+     */
+    Given(/^(?:I )?set cookie from (.+)$/, function(fixture) {
+        return this.fixtures.load(fixture).then(cookie => {
+            this.httpApiClient.setCookie(cookie)
+        })
     })
 
     /**
@@ -110,17 +137,24 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
      * Dumping response body
      */
     When(/^(?:I )?dump response body$/, function() {
-        const httpResponse = this.httpApiClient.getResponse()
-        console.log(httpResponse.body) // eslint-disable-line no-console
+        const response = mustGetResponse(this.httpApiClient)
+        console.log(response.body) // eslint-disable-line no-console
+    })
+
+    /**
+     * Dumping response headers
+     */
+    When(/^(?:I )?dump response headers/, function() {
+        const response = mustGetResponse(this.httpApiClient)
+        console.log(response.headers) // eslint-disable-line no-console
     })
 
     /**
      * Checking response status code
      */
     Then(/^response status code should be ([1-5][0-9][0-9])$/, function(statusCode) {
-        const httpResponse = this.httpApiClient.getResponse()
-        expect(httpResponse, 'Response is empty').to.not.be.empty
-        expect(httpResponse.statusCode, `Expected status code to be: ${statusCode}, but found: ${httpResponse.statusCode}`).to.equal(
+        const response = mustGetResponse(this.httpApiClient)
+        expect(response.statusCode, `Expected status code to be: ${statusCode}, but found: ${response.statusCode}`).to.equal(
             Number(statusCode)
         )
     })
@@ -133,14 +167,12 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
             throw new TypeError(`'${statusMessage}' is not a valid status message`)
         }
 
-        const httpResponse = this.httpApiClient.getResponse()
-        expect(httpResponse, 'Response is empty').to.not.be.empty
-
+        const response = mustGetResponse(this.httpApiClient)
         const statusCode = _.findKey(STATUS_CODES, msg => _.lowerCase(msg) === statusMessage)
-        const currentStatusMessage = STATUS_CODES[`${httpResponse.statusCode}`] || httpResponse.statusCode
+        const currentStatusMessage = STATUS_CODES[`${response.statusCode}`] || response.statusCode
 
         expect(
-            httpResponse.statusCode,
+            response.statusCode,
             `Expected status to be: '${statusMessage}', but found: '${_.lowerCase(currentStatusMessage)}'`
         ).to.equal(Number(statusCode))
     })
@@ -209,8 +241,8 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
      * - contains
      */
     Then(/^(?:I )?should receive a json response (fully )?matching$/, function(fully, table) {
-        const response = this.httpApiClient.getResponse()
-        const body = response.body
+        const response = mustGetResponse(this.httpApiClient)
+        const { body } = response
 
         const expectedProperties = table.hashes()
 
@@ -242,7 +274,9 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
      * This definition verify that an array for a given path has the expected length
      */
     Then(/^(?:I )?should receive a collection of ([0-9]+) items?(?: for path )?(.+)?$/, function(size, path) {
-        const { body } = this.httpApiClient.getResponse()
+        const response = mustGetResponse(this.httpApiClient)
+        const { body } = response
+
         const array = path !== undefined ? _.get(body, path) : body
 
         expect(array.length).to.be.equal(Number(size))
@@ -252,11 +286,23 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
      * Verifies that response matches snapshot.
      */
     Then(/^response should match snapshot (.+)$/, function(snapshotId) {
-        const httpResponse = this.httpApiClient.getResponse()
-        expect(httpResponse).to.not.be.empty
+        const response = mustGetResponse(this.httpApiClient)
 
         return this.fixtures.load(snapshotId).then(snapshot => {
-            expect(httpResponse.body).to.deep.equal(snapshot)
+            expect(response.body).to.deep.equal(snapshot)
         })
+    })
+
+    Then(/^response header (.+) should (not )?(equal|contain|match) (.+)$/, function(key, flag, comparator, expected) {
+        const response = mustGetResponse(this.httpApiClient)
+        const header = response.headers[key.toLowerCase()]
+
+        expect(header, `Header '${key}' does not exist`).to.not.be.undefined
+
+        let expectFn = expect(header).to
+        if (flag !== undefined) {
+            expectFn = expectFn.not
+        }
+        expectFn[comparator](expected)
     })
 }

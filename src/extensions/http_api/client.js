@@ -6,7 +6,9 @@
  * @module extensions/httpApi/client
  */
 
+const _ = require('lodash')
 const request = require('request').defaults({ json: true })
+const { Cookie } = require('tough-cookie')
 
 const BODY_TYPE_JSON = 'json'
 const BODY_TYPE_FORM = 'form'
@@ -17,6 +19,7 @@ let bodyType = null
 let headers = null
 let query = null
 
+let cookies = []
 let cookieJar = null
 
 // RESPONSE INFORMATION
@@ -32,6 +35,7 @@ exports.reset = () => {
     headers = null
     query = null
 
+    cookies = []
     cookieJar = null
 
     response = null
@@ -106,6 +110,8 @@ exports.clearHeaders = () => {
  * Enables cookie jar.
  */
 exports.enableCookies = () => {
+    if (cookieJar !== null) return
+
     cookieJar = request.jar()
     cookieJar._jar.rejectPublicSuffixes = false
 }
@@ -119,13 +125,19 @@ exports.disableCookies = () => {
 
 /**
  * Sets a cookie.
+ * It does not actually add the cookie to the cookie jar
+ * because setting the cookie requires the request url,
+ * which we only have when making the request.
  *
- * @param {string} key   - Cookie key
- * @param {string} value - Cookie value
+ * @param {string|Object} cookie - Cookie string or Object
  */
-exports.setCookie = (key, value) => {
-    headers = headers || {}
-    headers[key] = value
+exports.setCookie = cookie => {
+    if (!_.isPlainObject(cookie) && !_.isString(cookie)) {
+        throw new TypeError(`"cookie" must be a string or a cookie object`)
+    }
+
+    exports.enableCookies()
+    cookies.push(cookie)
 }
 
 /**
@@ -167,6 +179,8 @@ exports.makeRequest = (method, path, baseUrl) => {
             jar: cookieJar
         }
 
+        const fullUri = `${baseUrl}${path}`
+
         if (body !== null) {
             if (!['POST', 'PUT'].includes(method)) {
                 throw new Error(`You can only provides a body for POST and PUT HTTP methods, found: ${method}`)
@@ -180,6 +194,16 @@ exports.makeRequest = (method, path, baseUrl) => {
             }
         }
 
+        if (cookieJar !== null) {
+            cookies.forEach(cookie => {
+                if (_.isPlainObject(cookie)) {
+                    cookieJar.setCookie(new Cookie(cookie), fullUri)
+                } else if (_.isString(cookie)) {
+                    cookieJar.setCookie(cookie, fullUri)
+                }
+            })
+        }
+
         request(options, (_error, _response, _body) => {
             if (_error) {
                 console.error(_error, options) // eslint-disable-line no-console
@@ -190,7 +214,7 @@ exports.makeRequest = (method, path, baseUrl) => {
 
             if (cookieJar !== null) {
                 responseCookies = {}
-                cookieJar.getCookies(`${baseUrl}${path}`).forEach(cookie => {
+                cookieJar.getCookies(fullUri).forEach(cookie => {
                     responseCookies[cookie.key] = cookie
                 })
             }
