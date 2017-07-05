@@ -430,9 +430,9 @@ When:
 Then:
   - /^response status code should be ([1-5][0-9][0-9])$/
   - /^response status should be (.+)$/
-  - /^response should have a (.*) cookie$/
-  - /^response (.*) cookie should (not )?be secure$/
-  - /^response (.*) cookie should (not )?be http only/
+  - /^response should (not )?have an? (.+) cookie$/
+  - /^response (.+) cookie should (not )?be secure$/
+  - /^response (.+) cookie should (not )?be http only/
   - /^(?:I )?should receive a json response (fully )?matching$/
   - /^(?:I )?should receive a collection of ([0-9]+) items?(?: for path )?(.+)?$/
   - /^response should match snapshot (.+)$/
