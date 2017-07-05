@@ -144,9 +144,17 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     /**
      * Dumping response headers
      */
-    When(/^(?:I )?dump response headers/, function() {
+    When(/^(?:I )?dump response headers$/, function() {
         const response = mustGetResponse(this.httpApiClient)
         console.log(response.headers) // eslint-disable-line no-console
+    })
+
+    /**
+     * Dumping response cookies
+     */
+    When(/^(?:I )?dump response cookies$/, function() {
+        mustGetResponse(this.httpApiClient)
+        console.log(this.httpApiClient.getCookies()) // eslint-disable-line no-console
     })
 
     /**
