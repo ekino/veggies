@@ -258,6 +258,34 @@ test('test cookie is not secure', () => {
     expect(require('chai').expect).toHaveBeenCalledWith(false, `Cookie 'test' is secure`)
 })
 
+test('test cookie is http only', () => {
+    const context = helper.define(definitions)
+
+    const def = context.getDefinitionByMatcher('response (.+) cookie should (not )?be http only')
+    def.shouldHaveType('Then')
+    def.shouldNotMatch('response  cookie should be http only')
+    def.shouldMatch('response test cookie should be http only', ['test', undefined])
+
+    const clientMock = { httpApiClient: { getCookie: jest.fn(() => ({ httpOnly: true })) } }
+    def.exec(clientMock, 'test', undefined)
+    expect(clientMock.httpApiClient.getCookie).toHaveBeenCalledWith('test')
+    expect(require('chai').expect).toHaveBeenCalledWith(true, `Cookie 'test' is not http only`)
+})
+
+test('test cookie is not http only', () => {
+    const context = helper.define(definitions)
+
+    const def = context.getDefinitionByMatcher('response (.+) cookie should (not )?be http only')
+    def.shouldHaveType('Then')
+    def.shouldNotMatch('response  cookie should not be http only')
+    def.shouldMatch('response test cookie should not be http only', ['test', 'not '])
+
+    const clientMock = { httpApiClient: { getCookie: jest.fn(() => ({ httpOnly: false })) } }
+    def.exec(clientMock, 'test', 'not ')
+    expect(clientMock.httpApiClient.getCookie).toHaveBeenCalledWith('test')
+    expect(require('chai').expect).toHaveBeenCalledWith(false, `Cookie 'test' is http only`)
+})
+
 test('reset http client', () => {
     const context = helper.define(definitions)
 
