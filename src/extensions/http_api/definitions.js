@@ -177,7 +177,7 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     /**
      * Checking response cookie httpOnly
      */
-    Then(/^response (.+) cookie should (not )?be http only/, function(key, flag) {
+    Then(/^response (.+) cookie should (not )?be http only$/, function(key, flag) {
         const cookie = this.httpApiClient.getCookie(key)
         expect(cookie, `No cookie found for key '${key}'`).to.not.be.null
 
@@ -185,6 +185,20 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
             expect(cookie.httpOnly, `Cookie '${key}' is not http only`).to.be.true
         } else {
             expect(cookie.httpOnly, `Cookie '${key}' is http only`).to.be.false
+        }
+    })
+
+    /**
+     * Checking response cookie domain
+     */
+    Then(/^response (.+) cookie domain should (not )?be (.+)$/, function(key, flag, domain) {
+        const cookie = this.httpApiClient.getCookie(key)
+        expect(cookie, `No cookie found for key '${key}'`).to.not.be.null
+
+        if (flag === undefined) {
+            expect(cookie.domain, `Expected cookie '${key}' domain to be '${domain}', found '${cookie.domain}'`).to.equal(domain)
+        } else {
+            expect(cookie.domain, `Cookie '${key}' domain is '${domain}'`).to.not.equal(domain)
         }
     })
 

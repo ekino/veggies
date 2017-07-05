@@ -286,6 +286,36 @@ test('test cookie is not http only', () => {
     expect(require('chai').expect).toHaveBeenCalledWith(false, `Cookie 'test' is http only`)
 })
 
+test('test cookie domain equals given value', () => {
+    const context = helper.define(definitions)
+
+    const def = context.getDefinitionByMatcher('response (.+) cookie domain should (not )?be (.+)')
+    def.shouldHaveType('Then')
+    def.shouldNotMatch('response  cookie domain should be domain')
+    def.shouldNotMatch('response test cookie domain should be ')
+    def.shouldMatch('response test cookie domain should be domain', ['test', undefined, 'domain'])
+
+    const clientMock = { httpApiClient: { getCookie: jest.fn(() => ({ domain: 'domain' })) } }
+    def.exec(clientMock, 'test', undefined, 'domain')
+    expect(clientMock.httpApiClient.getCookie).toHaveBeenCalledWith('test')
+    expect(require('chai').expect).toHaveBeenCalledWith('domain', `Expected cookie 'test' domain to be 'domain', found 'domain'`)
+})
+
+test('test cookie domain does not equal given value', () => {
+    const context = helper.define(definitions)
+
+    const def = context.getDefinitionByMatcher('response (.+) cookie domain should (not )?be (.+)')
+    def.shouldHaveType('Then')
+    def.shouldNotMatch('response  cookie domain should not be domain')
+    def.shouldNotMatch('response test cookie domain should not be ')
+    def.shouldMatch('response test cookie domain should not be domain', ['test', 'not ', 'domain'])
+
+    const clientMock = { httpApiClient: { getCookie: jest.fn(() => ({ domain: 'domain' })) } }
+    def.exec(clientMock, 'test', 'not ', 'domain')
+    expect(clientMock.httpApiClient.getCookie).toHaveBeenCalledWith('test')
+    expect(require('chai').expect).toHaveBeenCalledWith('domain', `Cookie 'test' domain is 'domain'`)
+})
+
 test('reset http client', () => {
     const context = helper.define(definitions)
 
