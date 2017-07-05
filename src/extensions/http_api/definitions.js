@@ -148,7 +148,7 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     })
 
     /**
-     * Checking response cookie exists
+     * Checking response cookie is present|absent
      */
     Then(/^response should (not )?have an? (.+) cookie$/, function(flag, key) {
         const cookie = this.httpApiClient.getCookie(key)
@@ -161,7 +161,7 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     })
 
     /**
-     * Checking response cookie secure
+     * Checking response cookie is|isn't secure
      */
     Then(/^response (.+) cookie should (not )?be secure$/, function(key, flag) {
         const cookie = this.httpApiClient.getCookie(key)
