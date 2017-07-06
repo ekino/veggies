@@ -424,6 +424,7 @@ Given:
   - /^(?:I )?enable cookies$/
   - /^(?:I )?disable cookies$/
   - /^(?:I )?set cookie from (.+)$/
+  - /^(?:I )?clear request cookies$/
 
 When:
   - /^(?:I )?reset http client$/
@@ -439,7 +440,7 @@ Then:
   - /^response (.+) cookie should (not )?be secure$/
   - /^response (.+) cookie should (not )?be http only$/
   - /^response (.+) cookie domain should (not )?be (.+)$/
-  - /^(?:I )?should receive a json response (fully )?matching$/
+  - /^(?:I )?json response should (fully )?match$/
   - /^(?:I )?should receive a collection of ([0-9]+) items?(?: for path )?(.+)?$/
   - /^response should match snapshot (.+)$/
   - /^response header (.+) should (not )?(equal|contain|match) (.+)$/
