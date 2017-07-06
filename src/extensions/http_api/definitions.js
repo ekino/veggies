@@ -120,6 +120,13 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     })
 
     /**
+     * Clearing client request cookies
+     */
+    Given(/^(?:I )?clear request cookies$/, function() {
+        this.httpApiClient.clearRequestCookies()
+    })
+
+    /**
      * Resetting the client's state
      */
     When(/^(?:I )?reset http client$/, function() {
@@ -248,7 +255,7 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
      * - equals
      * - contains
      */
-    Then(/^(?:I )?should receive a json response (fully )?matching$/, function(fully, table) {
+    Then(/^(?:I )?json response should (fully )?match$/, function(fully, table) {
         const response = mustGetResponse(this.httpApiClient)
         const { body } = response
 

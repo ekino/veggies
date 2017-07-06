@@ -141,6 +141,14 @@ exports.setCookie = cookie => {
 }
 
 /**
+ * Clears registered request cookies.
+ * Be aware that it does not clear existing response cookies.
+ */
+exports.clearRequestCookies = () => {
+    cookies = []
+}
+
+/**
  * Retrieves a cookie by its key.
  *
  * @param {string} key - Cookie key
