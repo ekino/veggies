@@ -18,6 +18,7 @@ It's also the perfect companion for testing CLI applications built with commande
         - [Using values issued by a previous request](#using-values-issued-by-a-previous-request)
         - [Using cookies](#using-cookies)
         - [Testing json response](#testing-json-response)
+        - [Debugging failing API tests](#debugging-failing-api-tests)
         - [Type system](#type-system)
     - [CLI testing](#cli-testing) 
        - [Running a simple command](#running-a-simple-command-and-checking-its-exit-code)
@@ -265,6 +266,22 @@ Available matchers are:
 | `present`  | see `defined`                     |     
 | `equal`    | property must equal given value   |
 | `equals`   | see `equal`                       |     
+
+#### Debugging failing API tests
+
+When testing APIs using cucumber, we often faced situations were we didn't understand why a given test were failing.
+The dirty fix was to add some nasty `console.log()` everywhere, that's why **veggies** provides helpers to dump response properties.
+
+```gherkin
+Scenario: Fetching something from the internets
+    When I GET http://whatever.io/things
+    And dump response body
+    And dump response headers
+    And dump response cookies
+```
+
+You'll now have the response body/headers/cookies dumped in your terminal.
+You should disable those steps when the test is fixed as it can be noisy enough.
 
 #### Type system
 
