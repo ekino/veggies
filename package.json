@@ -71,7 +71,7 @@
     "precommit": "lint-staged"
   },
   "lint-staged": {
-    "README.md": ["readme", "git add"],
+    "README.tpl.md": ["readme", "git add"],
     "*.js": ["fmt", "git add"]
   }
 }
