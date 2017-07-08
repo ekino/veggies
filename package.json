@@ -72,6 +72,6 @@
   },
   "lint-staged": {
     "README.tpl.md": ["readme", "git add"],
-    "*.js": ["fmt", "git add"]
+    "*.js": ["fmt", "lint", "git add"]
   }
 }
