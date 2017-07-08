@@ -602,6 +602,14 @@ If you want to only run certain examples, you can use tags, for example to run c
 yarn run examples -- --tags @cli
 ```
 
+There is a special tag which only runs examples not requiring network access:
+
+```sh
+yarn run examples -- --tags @offline
+```
+
+Due to public API rate limit (eg. GitHub API), this tag is used when running on CI.
+
 [npm-image]: https://img.shields.io/npm/v/@ekino/veggies.svg?style=flat-square
 [npm-url]: https://www.npmjs.com/package/@ekino/veggies
 [travis-image]: https://img.shields.io/travis/ekino/veggies.svg?style=flat-square
