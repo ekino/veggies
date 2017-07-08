@@ -245,7 +245,7 @@ Properties not listed will just be ignored, if you want a full match:
 ```gherkin
 Scenario: Fetching some json response from the internets
     When I GET http://whatever.io/things/1
-    Then json response should match
+    Then json response should fully match
       | field           | matcher | value     |
       | name            | match   | ^(.+)ing$ |
       | address.country | equal   | Japan     |
