@@ -18,6 +18,7 @@ It's also the perfect companion for testing CLI applications built with commande
         - [Using values issued by a previous request](#using-values-issued-by-a-previous-request)
         - [Using cookies](#using-cookies)
         - [Testing json response](#testing-json-response)
+        - [Testing response headers](#testing-response-headers)
         - [Debugging failing API tests](#debugging-failing-api-tests)
         - [Type system](#type-system)
     - [CLI testing](#cli-testing) 
@@ -266,6 +267,30 @@ Available matchers are:
 | `present`  | see `defined`                     |     
 | `equal`    | property must equal given value   |
 | `equals`   | see `equal`                       |     
+
+#### Testing response headers
+
+In order to check response headers, you have the following gherkin expression available.
+It supports multiple combinations to verify header value conforms to what you expect, the corresponding gherkin expression is:
+
+```
+/^response header (.+) should (not )?(equal|contain|match) (.+)$/
+```
+
+This example illustrates the different features of this definition:
+
+```gherkin
+Scenario: Testing header related expectations
+    When I GET http://whatever.io/
+    Then response header X-Whatever-A should equal whatever
+    And response header X-Whatever-B should not equal whatever
+    And response header X-Whatever-C should contain part
+    And response header X-Whatever-D should not contain part
+    And response header X-Whatever-E should match ^(thing|other)$
+    And response header X-Whatever-F should not match ^(thing|other)$
+```
+
+I the headers does not exist, the test fails.
 
 #### Debugging failing API tests
 
