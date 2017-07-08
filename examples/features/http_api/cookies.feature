@@ -1,7 +1,7 @@
 @http_api @cookies
 Feature: Using cookies
 
-  Scenario: Twitter home
+  Scenario: Visiting twitter home
     Given enable cookies
     When I GET https://twitter.com/
     Then response status should be ok
