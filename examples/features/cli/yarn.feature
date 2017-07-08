@@ -4,7 +4,7 @@ Feature: yarn CLI
   Scenario: Running an invalid command
     When I run command yarn invalid
     Then exit code should be 1
-    And stderr should contain error Command "invalid" not found.
+    And stderr should contain Command "invalid" not found.
 
   Scenario: Getting info about installed yarn version
     When I run command yarn --version
