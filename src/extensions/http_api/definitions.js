@@ -169,9 +169,10 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
      */
     Then(/^response status code should be ([1-5][0-9][0-9])$/, function(statusCode) {
         const response = mustGetResponse(this.httpApiClient)
-        expect(response.statusCode, `Expected status code to be: ${statusCode}, but found: ${response.statusCode}`).to.equal(
-            Number(statusCode)
-        )
+        expect(
+            response.statusCode,
+            `Expected status code to be: ${statusCode}, but found: ${response.statusCode}`
+        ).to.equal(Number(statusCode))
     })
 
     /**
@@ -188,7 +189,9 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
 
         expect(
             response.statusCode,
-            `Expected status to be: '${statusMessage}', but found: '${_.lowerCase(currentStatusMessage)}'`
+            `Expected status to be: '${statusMessage}', but found: '${_.lowerCase(
+                currentStatusMessage
+            )}'`
         ).to.equal(Number(statusCode))
     })
 
@@ -241,7 +244,10 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
         expect(cookie, `No cookie found for key '${key}'`).to.not.be.null
 
         if (flag === undefined) {
-            expect(cookie.domain, `Expected cookie '${key}' domain to be '${domain}', found '${cookie.domain}'`).to.equal(domain)
+            expect(
+                cookie.domain,
+                `Expected cookie '${key}' domain to be '${domain}', found '${cookie.domain}'`
+            ).to.equal(domain)
         } else {
             expect(cookie.domain, `Cookie '${key}' domain is '${domain}'`).to.not.equal(domain)
         }
@@ -265,30 +271,59 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
         expect(response.headers['content-type']).to.contain('application/json')
 
         // We check response properties correspond to the expected response
-        expectedProperties.forEach(propertyMatcher => {
-            const expectedValue = Cast.value(this.state.populate(propertyMatcher.value))
+        expectedProperties.forEach(({ field, matcher, value }) => {
+            const currentValue = _.get(body, field)
+            const expectedValue = Cast.value(this.state.populate(value))
 
-            switch (propertyMatcher.matcher) {
-                case 'contains':
-                    expect(_.get(body, propertyMatcher.field)).to.contain(expectedValue)
+            switch (matcher) {
+                case 'match':
+                case 'matches':
+                    expect(
+                        currentValue,
+                        `Property '${field}' (${currentValue}) does not match '${expectedValue}'`
+                    ).to.match(new RegExp(expectedValue))
                     break
+
+                case 'contain':
+                case 'contains':
+                    expect(
+                        currentValue,
+                        `Property '${field}' (${currentValue}) does not contain '${expectedValue}'`
+                    ).to.contain(expectedValue)
+                    break
+
+                case 'defined':
+                case 'present':
+                    expect(currentValue, `Property '${field}' is undefined`).to.not.be.undefined
+                    break
+
+                case 'equal':
                 case 'equals':
                 default:
-                    expect(_.get(body, propertyMatcher.field)).to.be.deep.equal(expectedValue)
+                    expect(
+                        currentValue,
+                        `Expected property '${field}' to equal '${value}', but found '${currentValue}'`
+                    ).to.be.deep.equal(expectedValue)
             }
         })
 
         // We check we have exactly the same number of properties as expected
         if (fully) {
             const propertiesCount = Helper.countNestedProperties(body)
-            expect(propertiesCount).to.be.equal(table.hashes().length)
+            expect(
+                propertiesCount,
+                'Expected json response to fully match spec, but it does not'
+            ).to.be.equal(table.hashes().length)
         }
     })
 
     /**
      * This definition verify that an array for a given path has the expected length
      */
-    Then(/^(?:I )?should receive a collection of ([0-9]+) items?(?: for path )?(.+)?$/, function(size, path) {
+    Then(/^(?:I )?should receive a collection of ([0-9]+) items?(?: for path )?(.+)?$/, function(
+        size,
+        path
+    ) {
         const response = mustGetResponse(this.httpApiClient)
         const { body } = response
 
@@ -308,16 +343,28 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
         })
     })
 
-    Then(/^response header (.+) should (not )?(equal|contain|match) (.+)$/, function(key, flag, comparator, expected) {
+    Then(/^response header (.+) should (not )?(equal|contain|match) (.+)$/, function(
+        key,
+        flag,
+        comparator,
+        expectedValue
+    ) {
         const response = mustGetResponse(this.httpApiClient)
         const header = response.headers[key.toLowerCase()]
 
         expect(header, `Header '${key}' does not exist`).to.not.be.undefined
 
-        let expectFn = expect(header).to
+        let expectFn = expect(
+            header,
+            `Expected header '${key}' to ${flag
+                ? flag
+                : ''}${comparator} '${expectedValue}', but found '${header}' which does${flag
+                ? ''
+                : ' not'}`
+        ).to
         if (flag !== undefined) {
             expectFn = expectFn.not
         }
-        expectFn[comparator](expected)
+        expectFn[comparator](expectedValue)
     })
 }

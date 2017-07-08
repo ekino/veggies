@@ -17,6 +17,7 @@ It's also the perfect companion for testing CLI applications built with commande
         - [Posting data using fixture file](#posting-data-using-fixture-file)
         - [Using values issued by a previous request](#using-values-issued-by-a-previous-request)
         - [Using cookies](#using-cookies)
+        - [Testing json response](#testing-json-response)
         - [Type system](#type-system)
     - [CLI testing](#cli-testing) 
        - [Running a simple command](#running-a-simple-command-and-checking-its-exit-code)
@@ -196,6 +197,74 @@ Scenario: Disabling cookies
 ```
 
 See [definitions](#http-api-gherkin-expressions) for all available cookies related gherkin expressions.
+
+#### Testing json response
+
+**veggies** gives you the ability to check json responses, the corresponding gherkin expression is:
+
+```
+/^(?:I )?json response should (fully )?match$/
+```
+
+Checking json response properties equal value:
+ 
+```gherkin
+Scenario: Fetching some json response from the internets
+    When I GET http://whatever.io/things/1
+    Then json response should match
+      | field           | matcher | value |
+      | name            | equal   | thing |
+      | address.country | equal   | Japan |
+``` 
+
+Checking json response properties contain value:
+ 
+```gherkin
+Scenario: Fetching some json response from the internets
+    When I GET http://whatever.io/things/1
+    Then json response should match
+      | field           | matcher | value |
+      | name            | contain | ing   |
+      | address.country | contain | Jap   |
+``` 
+
+Checking json response properties match value:
+
+```gherkin
+Scenario: Fetching some json response from the internets
+    When I GET http://whatever.io/things/1
+    Then json response should match
+      | field           | matcher | value     |
+      | name            | match   | ^(.+)ing$ |
+      | address.country | match   | ^Jap(.+)$ |
+``` 
+
+By default this assertion does not check for full match.
+Properties not listed will just be ignored, if you want a full match:
+
+```gherkin
+Scenario: Fetching some json response from the internets
+    When I GET http://whatever.io/things/1
+    Then json response should match
+      | field           | matcher | value     |
+      | name            | match   | ^(.+)ing$ |
+      | address.country | equal   | Japan     |
+```
+
+Now if the json contains extra properties, the test will fail.
+
+Available matchers are:
+
+| matcher    | description                       |
+|----------- |---------------------------------- |
+| `match`    | property must match given regexp  |
+| `matches`  | see `match`                       |
+| `contain`  | property must contain given value |
+| `contains` | see `contain`                     |
+| `defined`  | property must not be `undefined`  |
+| `present`  | see `defined`                     |     
+| `equal`    | property must equal given value   |
+| `equals`   | see `equal`                       |     
 
 #### Type system
 

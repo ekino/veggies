@@ -32,6 +32,8 @@ const _ = require('lodash')
  * @return {*} The casted value or untouched value if no casting directive found
  */
 exports.value = value => {
+    if (!_.isString(value)) return value
+
     const matchResult = value.match(/^(.*)\(\((\w+)\)\)$/)
     let casted = value
 
@@ -59,7 +61,9 @@ exports.value = value => {
                 break
 
             case 'array':
-                casted = matchResult[1] ? matchResult[1].replace(/\s/g, '').split(',').map(exports.value) : []
+                casted = matchResult[1]
+                    ? matchResult[1].replace(/\s/g, '').split(',').map(exports.value)
+                    : []
                 break
 
             case 'date':

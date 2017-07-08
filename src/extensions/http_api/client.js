@@ -198,7 +198,9 @@ exports.makeRequest = (method, path, baseUrl) => {
 
         if (body !== null) {
             if (!['POST', 'PUT'].includes(method)) {
-                throw new Error(`You can only provides a body for POST and PUT HTTP methods, found: ${method}`)
+                throw new Error(
+                    `You can only provides a body for POST and PUT HTTP methods, found: ${method}`
+                )
             }
 
             if (bodyType === BODY_TYPE_JSON) {

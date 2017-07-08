@@ -7,7 +7,10 @@ module.exports = ({ Given, When, Then }) => {
         this.cli.setCwd(cwd)
     })
 
-    Given(/^(?:I )?set ([^ ]+) (?:env|environment) (?:var|variable) to (.+)$/, function(name, value) {
+    Given(/^(?:I )?set ([^ ]+) (?:env|environment) (?:var|variable) to (.+)$/, function(
+        name,
+        value
+    ) {
         this.cli.setEnvironmentVariable(name, value)
     })
 
@@ -36,9 +39,10 @@ module.exports = ({ Given, When, Then }) => {
     Then(/^(?:the )?(?:command )?exit code should be (\d+)$/, function(expectedExitCode) {
         const exitCode = this.cli.getExitCode()
 
-        expect(exitCode, `The command exit code doesn't match expected ${expectedExitCode}, found: ${exitCode}`).to.equal(
-            Number(expectedExitCode)
-        )
+        expect(
+            exitCode,
+            `The command exit code doesn't match expected ${expectedExitCode}, found: ${exitCode}`
+        ).to.equal(Number(expectedExitCode))
     })
 
     Then(/^(stderr|stdout) should be empty$/, function(type) {
