@@ -270,14 +270,14 @@ Available matchers are:
 
 #### Testing response headers
 
-In order to check response headers, you have the following gherkin expression available.
-It supports multiple combinations to verify header value conforms to what you expect, the corresponding gherkin expression is:
+In order to check response headers, you have the following gherkin expression available:
 
 ```
 /^response header (.+) should (not )?(equal|contain|match) (.+)$/
 ```
 
-This example illustrates the different features of this definition:
+It supports multiple combinations to verify header value conforms to what you expect.
+This example illustrates its different features:
 
 ```gherkin
 Scenario: Testing header related expectations
@@ -290,7 +290,7 @@ Scenario: Testing header related expectations
     And response header X-Whatever-F should not match ^(thing|other)$
 ```
 
-I the headers does not exist, the test fails.
+If the header does not exist, the test will fail.
 
 #### Debugging failing API tests
 
