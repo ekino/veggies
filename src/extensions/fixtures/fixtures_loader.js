@@ -61,12 +61,18 @@ exports.loadYaml = file =>
         try {
             const data = yaml.safeLoad(content)
             if (data === undefined) {
-                return Promise.reject(new Error(`Fixture file is invalid, yaml parsing resulted in undefined data for file: ${file}`))
+                return Promise.reject(
+                    new Error(
+                        `Fixture file is invalid, yaml parsing resulted in undefined data for file: ${file}`
+                    )
+                )
             }
 
             return data
         } catch (err) {
-            return Promise.reject(new Error(`Unable to parse yaml fixture file: ${file}.\nerror: ${err.message}`))
+            return Promise.reject(
+                new Error(`Unable to parse yaml fixture file: ${file}.\nerror: ${err.message}`)
+            )
         }
     })
 
@@ -83,7 +89,9 @@ exports.loadJson = file =>
 
             return data
         } catch (err) {
-            return Promise.reject(new Error(`Unable to parse json fixture file: ${file}.\nerror: ${err.message}`))
+            return Promise.reject(
+                new Error(`Unable to parse json fixture file: ${file}.\nerror: ${err.message}`)
+            )
         }
     })
 
@@ -111,7 +119,11 @@ exports.loadModule = file => {
 
         return Promise.resolve(mod())
     } catch (err) {
-        return Promise.reject(new Error(`An error occurred while loading fixture file: ${file}\nerror: ${err.message}`))
+        return Promise.reject(
+            new Error(
+                `An error occurred while loading fixture file: ${file}\nerror: ${err.message}`
+            )
+        )
     }
 }
 
@@ -128,7 +140,8 @@ exports.loadModule = file => {
  * @return {Promise.<Object|string>} Fixture content
  */
 exports.load = fixture => {
-    if (featureUri === undefined) return Promise.reject(new Error(`Cannot load fixture: ${fixture}, no feature uri defined`))
+    if (featureUri === undefined)
+        return Promise.reject(new Error(`Cannot load fixture: ${fixture}, no feature uri defined`))
 
     const relativePath = path.relative(process.cwd(), path.dirname(featureUri))
     const pattern = `${relativePath}/${fixturesDir}/${fixture}.@(yaml|yml|js|json|txt)`
@@ -137,13 +150,14 @@ exports.load = fixture => {
         glob(pattern, (err, files) => {
             const fixturesCount = files.length
 
-            if (fixturesCount === 0) return reject(new Error(`No fixture found for: ${fixture} (${pattern})`))
+            if (fixturesCount === 0)
+                return reject(new Error(`No fixture found for: ${fixture} (${pattern})`))
             if (fixturesCount > 1) {
                 return reject(
                     new Error(
                         [
                             `Found ${fixturesCount} matching fixture files, `,
-                            `you should have only one matching '${fixture}':\n  `,
+                            `you should have only one matching '${fixture}', matches:\n  `,
                             `- ${files.join('\n  - ')}`
                         ].join('')
                     )

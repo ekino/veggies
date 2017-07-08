@@ -165,7 +165,11 @@ exports.run = rawCommand => {
                 if (killed !== true) {
                     clearTimeout(killer)
 
-                    return reject(new Error(`process.kill('${killSignal}') scheduled but process exited (delay: ${killDelay}ms)`))
+                    return reject(
+                        new Error(
+                            `process.kill('${killSignal}') scheduled but process exited (delay: ${killDelay}ms)`
+                        )
+                    )
                 }
             }
 

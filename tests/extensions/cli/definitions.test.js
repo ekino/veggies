@@ -128,7 +128,10 @@ test('check exit code', () => {
     const cliMock = { cli: { getExitCode: jest.fn(() => 0) } }
     def.exec(cliMock, '0')
     expect(cliMock.cli.getExitCode).toHaveBeenCalled()
-    expect(require('chai').expect).toHaveBeenCalledWith(0, `The command exit code doesn't match expected 0, found: 0`)
+    expect(require('chai').expect).toHaveBeenCalledWith(
+        0,
+        `The command exit code doesn't match expected 0, found: 0`
+    )
     expect(require('chai').equal).toHaveBeenCalledWith(0)
 })
 

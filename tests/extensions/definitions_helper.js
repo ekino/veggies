@@ -83,10 +83,14 @@ exports.define = definitions => {
     return {
         definitions: registeredDefinitions,
         getDefinitionByMatcher: pattern => {
-            const found = registeredDefinitions.filter(({ matcher }) => matcher.toString().includes(pattern))
+            const found = registeredDefinitions.filter(({ matcher }) =>
+                matcher.toString().includes(pattern)
+            )
             if (found.length === 0) {
                 throw new TypeError(
-                    `No definition found for pattern: '${pattern}', available definition matchers:\n  - ${matchers.join('\n  - ')}`
+                    `No definition found for pattern: '${pattern}', available definition matchers:\n  - ${matchers.join(
+                        '\n  - '
+                    )}`
                 )
             }
 

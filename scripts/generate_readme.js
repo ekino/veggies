@@ -119,7 +119,10 @@ const isModuleExport = node => {
 }
 
 const extractModuleExportBody = (file, node) => {
-    if (node.type !== 'ArrowFunctionExpression' || !['BlockStatement', 'ArrowFunctionExpression'].includes(node.body.type)) {
+    if (
+        node.type !== 'ArrowFunctionExpression' ||
+        !['BlockStatement', 'ArrowFunctionExpression'].includes(node.body.type)
+    ) {
         console.error(
             chalk.red(`
 ! Unable to find definitions body for: ${file},
@@ -162,7 +165,9 @@ const isDefinition = node => {
 const extractDefinitionInfo = (file, node) => {
     const [regex] = node.expression.arguments
     if (!regex || regex.type !== 'RegExpLiteral') {
-        console.error(chalk.red(`! Found invalid definition in: '${file}' at line ${node.loc.start.line}`))
+        console.error(
+            chalk.red(`! Found invalid definition in: '${file}' at line ${node.loc.start.line}`)
+        )
         process.exit(1)
     }
 
@@ -194,13 +199,16 @@ const parseDefinitions = (file, code) => {
 
     const body = extractModuleExportBody(file, exportStatement.expression.right)
 
-    return body.filter(isDefinition).map(def => extractDefinitionInfo(file, def)).reduce((byType, { type, matcher }) => {
-        if (!byType[type]) byType[type] = []
+    return body
+        .filter(isDefinition)
+        .map(def => extractDefinitionInfo(file, def))
+        .reduce((byType, { type, matcher }) => {
+            if (!byType[type]) byType[type] = []
 
-        byType[type].push({ type, matcher })
+            byType[type].push({ type, matcher })
 
-        return byType
-    }, {})
+            return byType
+        }, {})
 }
 
 /**
