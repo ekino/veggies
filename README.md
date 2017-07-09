@@ -9,6 +9,7 @@ Veggies is an awesome cucumberjs library for API/CLI testing.
 Great for testing APIs built upon Express, Koa, HAPI, Loopback and others.
 It's also the perfect companion for testing CLI applications built with commander, meow & Co. 
 
+- [Requirements](#requirements)
 - [Installation](#installation)
 - [Features](#features)
     - [API testing](#api-testing)
@@ -30,6 +31,11 @@ It's also the perfect companion for testing CLI applications built with commande
     - [**http API**](#http-api-extension) [install](#http-api-installation) | [gherkin expressions](#http-api-gherkin-expressions) | [low level API](#http-api-low-level-api)
     - [**CLI**](#cli-extension) [install](#cli-installation) | [gherkin expressions](#cli-gherkin-expressions) | [low level API](#cli-low-level-api)
 - [Examples](#examples)   
+    
+## Requirements
+    
+- Node.js `>=6.0.0`
+- cucumber `>=2.0.0`
     
 ## Installation
 
