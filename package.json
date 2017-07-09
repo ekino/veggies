@@ -50,7 +50,8 @@
     "minami": "^1.2.3",
     "mustache": "^2.3.0",
     "nock": "^9.0.13",
-    "prettier": "^1.5.2"
+    "prettier": "^1.5.2",
+    "validate-commit-msg": "^2.12.2"
   },
   "peerDependencies": {
     "cucumber": "^2.3.1"
@@ -69,16 +70,39 @@
     "doc-pub": "yarn run readme && yarn run doc && gh-pages -d _doc",
     "examples": "cucumberjs --require examples/support examples/features",
     "changelog": "git-changelog -t false -n v${npm_package_version}",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "commitmsg": "validate-commit-msg"
   },
   "lint-staged": {
-    "README.tpl.md": ["readme", "git add"],
-    "*.feature": ["examples"],
+    "README.tpl.md": [
+      "readme",
+      "git add"
+    ],
+    "*.feature": [
+      "examples"
+    ],
     "*.js": [
       "lint-fix",
       "fmt",
       "git add",
       "jest --bail --findRelatedTests"
     ]
+  },
+  "config": {
+    "validate-commit-msg": {
+      "types": ["feat", "fix", "docs", "style", "refactor", "perf", "test", "build", "ci", "chore", "revert"],
+      "scope": {
+        "required": false,
+        "allowed": ["*"],
+        "validate": false,
+        "multiple": false
+      },
+      "warnOnFail": false,
+      "maxSubjectLength": 80,
+      "subjectPattern": ".+",
+      "subjectPatternErrorMsg": "subject does not match subject pattern!",
+      "helpMessage": "",
+      "autoFix": false
+    }
   }
 }
