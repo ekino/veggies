@@ -5,6 +5,10 @@
 [![Coverage Status][coverage-image]][coverage-url]
 [![styled with prettier][prettier-image]][prettier-url]
 
+[![Watch on GitHub][github-watch-badge]][github-watch]
+[![Star on GitHub][github-star-badge]][github-star]
+[![Tweet][twitter-badge]][twitter]
+
 Veggies is an awesome cucumberjs library for API/CLI testing.
 Great for testing APIs built upon Express, Koa, HAPI, Loopback and others.
 It's also the perfect companion for testing CLI applications built with commander, meow & Co. 
@@ -674,3 +678,10 @@ Due to public API rate limit (eg. GitHub API), this tag is used when running on 
 [prettier-url]: https://github.com/prettier/prettier
 [coverage-image]: https://img.shields.io/coveralls/ekino/veggies/master.svg?style=flat-square
 [coverage-url]: https://coveralls.io/github/ekino/veggies?branch=master
+
+[github-watch-badge]: https://img.shields.io/github/watchers/ekino/veggies.svg?style=social
+[github-watch]: https://github.com/ekino/veggies/watchers
+[github-star-badge]: https://img.shields.io/github/stars/ekino/veggies.svg?style=social
+[github-star]: https://github.com/ekino/veggies/stargazers
+[twitter]: https://twitter.com/intent/tweet?text=Check%20out%20veggies!%20https://github.com/ekino/veggies%20%F0%9F%91%8D
+[twitter-badge]: https://img.shields.io/twitter/url/https/github.com/ekino/veggies.svg?style=social
