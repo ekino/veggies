@@ -63,6 +63,7 @@
     "check-fmt": "prettier --print-width 100 --tab-width=4 --single-quote --bracket-spacing --no-semi --list-different \"{src,tests,scripts}/**/*.js\"",
     "version": "echo ${npm_package_version}",
     "lint": "eslint .",
+    "lint-fix": "eslint --fix .",
     "readme": "node scripts/generate_readme",
     "doc": "jsdoc src -R README.md -r -d _doc --verbose -t node_modules/minami",
     "doc-pub": "yarn run readme && yarn run doc && gh-pages -d _doc",
@@ -73,6 +74,11 @@
   "lint-staged": {
     "README.tpl.md": ["readme", "git add"],
     "*.feature": ["examples"],
-    "*.js": ["fmt", "lint", "git add"]
+    "*.js": [
+      "lint-fix",
+      "fmt",
+      "git add",
+      "jest --bail --findRelatedTests"
+    ]
   }
 }

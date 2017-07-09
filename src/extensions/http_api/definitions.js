@@ -343,6 +343,9 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
         })
     })
 
+    /**
+     * Checking response header.
+     */
     Then(/^response header (.+) should (not )?(equal|contain|match) (.+)$/, function(
         key,
         flag,
