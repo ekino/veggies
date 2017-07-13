@@ -24,7 +24,7 @@ test('cast dates', () => {
 test('throw when trying to cast invalid numbers', () => {
     expect(() => {
         Cast.value('nan((number))')
-    }).toThrow(`Unable to cast value to number 'nan((number))'`)
+    }).toThrow(`Unable to cast value to number 'nan'`)
 })
 
 test('cast booleans', () => {
@@ -64,4 +64,19 @@ test('cast array of objects', () => {
     expect(
         Cast.objects([{ a: '1((number))' }, { b: 'true((boolean))' }, { c: 'a,b,c((array))' }])
     ).toEqual([{ a: 1 }, { b: true }, { c: ['a', 'b', 'c'] }])
+})
+
+test('Add a new type to cast', () => {
+    Cast.addType('newType', value => value === 'true')
+    expect(Cast.value('test((newType))')).toEqual(false)
+})
+
+test('throw when trying to add a type without providing a casting function', () => {
+    expect(() => {
+        Cast.addType('newType2', 'test')
+    }).toThrow('Invalid cast function provided, must be a function')
+
+    expect(() => {
+        Cast.value('test((newType2))')
+    }).toThrow(`Invalid type provided: newType2 'test((newType2))'`)
 })

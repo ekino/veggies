@@ -34,6 +34,8 @@ It's also the perfect companion for testing CLI applications built with commande
     - [**fixtures**](#fixtures-extension) [install](#fixtures-installation) | [low level API](#fixtures-low-level-api)
     - [**http API**](#http-api-extension) [install](#http-api-installation) | [gherkin expressions](#http-api-gherkin-expressions) | [low level API](#http-api-low-level-api)
     - [**CLI**](#cli-extension) [install](#cli-installation) | [gherkin expressions](#cli-gherkin-expressions) | [low level API](#cli-low-level-api)
+- [Helpers](#helpers)
+    - [**cast**](#cast-helper) [usage](#cast-usage) | [add a type](#add-a-type)
 - [Examples](#examples)   
     
 ## Requirements
@@ -647,6 +649,54 @@ defineSupportCode(({ When }) => {
     })
 })
 ```
+
+## Helpers
+
+### Cast helper
+
+Cast helper can be used to cast values for custom gherkin rules.
+To find more about casting see [Type System](#type-system).
+
+#### Cast usage
+
+This must be used on gherkin arrays. Based on your array type you have to use: 
+ * ```step.hashes()``` -> ```Cast.objects(step.hashes())```
+ * ```step.rows()``` -> ```Cast.array(step.rows())```
+ * ```step.raw()``` -> ```Cast.array(step.raw())```
+ * ```step.rowsHash()``` -> ```Cast.objects(step.rowsHash())```
+ 
+For example:
+```javascript
+const { cast } = require('@ekino/veggies')
+const { defineSupportCode } = require('cucumber')
+
+defineSupportCode(function({ Given, When, Then }) {
+    Then(/^User data should be$/, (step) => {
+        const userData = this.userData
+        const expectedData = Cast.objects(step.rowsHash())
+        expect(userData).to.be.deep.equal(expectedData)
+    })
+})
+```
+
+#### Add a type
+
+You can provide your own type.
+For example: 
+```javascript
+Cast.addType('newType', value => value === 'true')
+```
+
+Can be used on:
+```gherkin
+  Given I get user id1 profile
+  Then I should receive
+    | id              | id1             |
+    | age             | 1((number))     |
+    | name            | veggies         |
+    | isPublic        | true((newType)) |
+```
+
 
 ## Examples
 

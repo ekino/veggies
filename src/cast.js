@@ -7,6 +7,102 @@
 const _ = require('lodash')
 
 /**
+ * @name CastFunction
+ * @function
+ * @param {string} Value to cast
+ * @return {*} casted value
+ */
+
+const castFunctions = {}
+
+/**
+ * Cast to undefined
+ * @return {undefined}
+ */
+castFunctions['undefined'] = () => {
+    return undefined
+}
+
+/**
+ * Cast to null
+ * @return {null}
+ */
+castFunctions['null'] = () => {
+    return null
+}
+
+/**
+ * Cast to number. If is NaN, it throws an error
+ * @param {string} value
+ * @return {number}
+ */
+castFunctions['number'] = value => {
+    const result = Number(value)
+    if (_.isNaN(result)) {
+        throw new TypeError(`Unable to cast value to number '${value}'`)
+    }
+    return result
+}
+
+/**
+ * Cast to a boolean.
+ * @param {string} value - true or false
+ * @return {boolean} - true if true. False in all other case.
+ */
+castFunctions['boolean'] = value => {
+    return value === 'true'
+}
+
+/**
+ * Cast to an array
+ * @param {string} value - Should follow the pattern "value1, value2, ..."
+ * @return {Array}
+ */
+castFunctions['array'] = value => {
+    return value ? value.replace(/\s/g, '').split(',').map(exports.value) : []
+}
+
+/**
+ * Cast to as date
+ * @param {string} value - today or a date as string
+ * @return {string} - A date json formatted
+ */
+castFunctions['date'] = value => {
+    if (value === 'today') {
+        return new Date().toJSON().slice(0, 10)
+    }
+
+    return new Date(value).toJSON()
+}
+
+/**
+ * Cast to a string
+ * @param {string} value
+ * @return {string}
+ */
+castFunctions['string'] = value => {
+    return `${value}`
+}
+
+/**
+ * Add a new type to cast. This new type can then be used as MyValue((typeName))
+ *
+ * @example
+ * Cast.addType('boolean2', value => value === 'true')
+ * //Then it can be used as "true((boolean2))"
+ *
+ * @param {string} typeName - New type name to add. It will be used in the "(( ))"
+ * @param {CastFunction} castFunction
+ */
+exports.addType = (typeName, castFunction) => {
+    if (!_.isFunction(castFunction))
+        throw new TypeError(
+            `Invalid cast function provided, must be a function (${typeof castFunction})`
+        )
+    castFunctions[typeName] = castFunction
+}
+
+/**
  * Casts a value according to type directives.
  * Supports the following types:
  * - undefined
@@ -35,55 +131,15 @@ exports.value = value => {
     if (!_.isString(value)) return value
 
     const matchResult = value.match(/^(.*)\(\((\w+)\)\)$/)
-    let casted = value
 
     if (matchResult) {
         const type = matchResult[2]
-
-        switch (type) {
-            case 'undefined':
-                casted = undefined
-                break
-
-            case 'null':
-                casted = null
-                break
-
-            case 'number':
-                casted = Number(matchResult[1])
-                if (_.isNaN(casted)) {
-                    throw new TypeError(`Unable to cast value to number '${value}'`)
-                }
-                break
-
-            case 'boolean':
-                casted = matchResult[1] === 'true'
-                break
-
-            case 'array':
-                casted = matchResult[1]
-                    ? matchResult[1].replace(/\s/g, '').split(',').map(exports.value)
-                    : []
-                break
-
-            case 'date':
-                if (matchResult[1] === 'today') {
-                    casted = new Date().toJSON().slice(0, 10)
-                } else {
-                    casted = new Date(matchResult[1]).toJSON()
-                }
-                break
-
-            case 'string':
-                casted = matchResult[1]
-                break
-
-            default:
-                throw new TypeError(`Invalid type provided: ${type} '${value}'`)
-        }
+        const castFunction = castFunctions[type]
+        if (!castFunction) throw new TypeError(`Invalid type provided: ${type} '${value}'`)
+        return castFunction(matchResult[1])
     }
 
-    return casted
+    return value
 }
 
 /**
