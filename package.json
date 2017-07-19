@@ -29,6 +29,7 @@
   "engineStrict": true,
   "dependencies": {
     "chai": "^4.0.2",
+    "fs-extra": "^4.0.0",
     "glob": "^7.1.2",
     "js-yaml": "^3.8.4",
     "lodash": "^4.17.4",
@@ -90,10 +91,24 @@
   },
   "config": {
     "validate-commit-msg": {
-      "types": ["feat", "fix", "docs", "style", "refactor", "perf", "test", "build", "ci", "chore", "revert"],
+      "types": [
+        "feat",
+        "fix",
+        "docs",
+        "style",
+        "refactor",
+        "perf",
+        "test",
+        "build",
+        "ci",
+        "chore",
+        "revert"
+      ],
       "scope": {
         "required": false,
-        "allowed": ["*"],
+        "allowed": [
+          "*"
+        ],
         "validate": false,
         "multiple": false
       },

@@ -2,7 +2,14 @@
 
 const { expect } = require('chai')
 
-module.exports = ({ Then }) => {
+module.exports = ({ Given, Then }) => {
+    /**
+     * Creating a directory.
+     */
+    Given(/^(?:I )?create directory (.+)$/, function(directory) {
+        return this.fileSystem.createDirectory(this.cli.getCwd(), directory)
+    })
+
     /**
      * Checking file/directory presence.
      */
