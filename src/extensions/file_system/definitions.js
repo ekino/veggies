@@ -4,6 +4,24 @@ const { expect } = require('chai')
 
 module.exports = ({ Then }) => {
     /**
+     * Checking file/directory presence.
+     */
+    Then(/^(file|directory) (.+) should (not )?exist$/, function(type, file, flag) {
+        return this.fileSystem.getFileInfo(this.cli.getCwd(), file).then(info => {
+            if (flag === 'not ') {
+                expect(info, `${type} '${file}' exists`).to.be.null
+            } else {
+                expect(info, `${type} '${file}' does not exist`).not.to.be.null
+                if (type === 'file') {
+                    expect(info.isFile(), `'${file}' is not a file`).to.be.true
+                } else {
+                    expect(info.isDirectory(), `'${file}' is not a directory`).to.be.true
+                }
+            }
+        })
+    })
+
+    /**
      * Checking file content.
      */
     Then(/^file (.+) content should (not )?(equal|contain|match) (.+)$/, function(
@@ -26,11 +44,12 @@ module.exports = ({ Then }) => {
                 if (flag !== undefined) {
                     expectFn = expectFn.not
                 }
-                expectFn[comparator](expectedValue)
+                expectFn[comparator](
+                    comparator === 'match' ? new RegExp(expectedValue) : expectedValue
+                )
             })
             .catch(err => {
-                if (err.message.startsWith('ENOENT'))
-                    return expect.fail('', '', `File '${file}' should exist`)
+                if (err.code === 'ENOENT') return expect.fail('', '', `File '${file}' should exist`)
 
                 return Promise.reject(err)
             })

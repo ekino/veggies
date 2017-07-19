@@ -368,6 +368,6 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
         if (flag !== undefined) {
             expectFn = expectFn.not
         }
-        expectFn[comparator](expectedValue)
+        expectFn[comparator](comparator === 'match' ? new RegExp(expectedValue) : expectedValue)
     })
 }
