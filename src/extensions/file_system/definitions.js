@@ -11,6 +11,13 @@ module.exports = ({ Given, Then }) => {
     })
 
     /**
+     * Remove a file or directory.
+     */
+    Given(/^(?:I )?remove (?:file|directory) (.+)$/, function(fileOrDirectory) {
+        return this.fileSystem.remove(this.cli.getCwd(), fileOrDirectory)
+    })
+
+    /**
      * Checking file/directory presence.
      */
     Then(/^(file|directory) (.+) should (not )?exist$/, function(type, file, flag) {
