@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>extensions/fixtures/hooks - Documentation</title>
+    <title>extensions/file_system/file_system.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,128 +29,58 @@
 
 <div id="main">
     
-    <h1 class="page-title">extensions/fixtures/hooks</h1>
+    <h1 class="page-title">extensions/file_system/file_system.js</h1>
     
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-            
-        
-    
-</header>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict'
 
-<article>
-    <div class="container-overview">
-    
-        
-            <div class="description">Registers hooks for the fixtures extension.</div>
-        
+const path = require('path')
+const fs = require('fs')
 
-        
-            
-<div class="section-method">
+/**
+ * Loads file content.
+ *
+ * @param {string} cwd               - Current Working Directory
+ * @param {string} file              - File name
+ * @param {string} [encoding='utf8'] - Content encoding
+ * @return {Promise.&lt;string>} File content
+ */
+exports.getFileContent = (cwd, file, encoding = 'utf8') =>
+    new Promise((resolve, reject) => {
+        fs.readFile(path.join(cwd, file), (err, data) => {
+            if (err) return reject(err)
+            resolve(data.toString(encoding))
+        })
+    })
 
+/**
+ * Gets info about file/directory.
+ *
+ * @param {string} cwd  - Current Working Directory
+ * @param {string} file - File name
+ * @return {Promise.&lt;fs.Stat|null>} File/directory info or null if file/directory does not exist
+ */
+exports.getFileInfo = (cwd, file) =>
+    new Promise((resolve, reject) => {
+        fs.stat(path.join(cwd, file), (err, stat) => {
+            if (err) {
+                if (err.code === 'ENOENT') return resolve(null)
+                return reject(err)
+            }
 
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="extensions_fixtures_hooks.js.html">extensions/fixtures/hooks.js</a>, <a href="extensions_fixtures_hooks.js.html#line3">line 3</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-</div>
-        
-    
-    </div>
-
-    
-
-    
-
-    
-
-     
-
-    
-
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+            resolve(stat)
+        })
+    })
+</code></pre>
+        </article>
+    </section>
 
 
 

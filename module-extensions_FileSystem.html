@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>extensions/fixtures/hooks - Documentation</title>
+    <title>extensions/FileSystem - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">extensions/fixtures/hooks</h1>
+    <h1 class="page-title">extensions/FileSystem</h1>
     
 
     
@@ -42,8 +42,6 @@
 <header>
     
         
-            
-        
     
 </header>
 
@@ -51,14 +49,42 @@
     <div class="container-overview">
     
         
-            <div class="description">Registers hooks for the fixtures extension.</div>
+
         
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
 
         
             
 <div class="section-method">
 
+    
 
+    <h4 class="name" id=".extendWorld"><span class="type-signature">(static) </span>extendWorld<span class="signature">(world)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Extends cucumber world object.
+Must be used inside customWorldConstructor.
+</div>
 
 
 
@@ -93,7 +119,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="extensions_fixtures_hooks.js.html">extensions/fixtures/hooks.js</a>, <a href="extensions_fixtures_hooks.js.html#line3">line 3</a>
+        <a href="extensions_file_system_index.js.html">extensions/file_system/index.js</a>, <a href="extensions_file_system_index.js.html#line30">line 30</a>
     </li></ul></dd>
     
 
@@ -112,6 +138,56 @@
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>world</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                The cucumber world object
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -125,24 +201,186 @@
 
 
 
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>// /support/world.js
+
+const { defineSupportCode } = require('cucumber')
+const { state, cli, fileSystem } = require('@ekino/veggies')
+
+defineSupportCode(({ setWorldConstructor }) => {
+    setWorldConstructor(function() {
+        state.extendWorld(this) // cli extension requires state extension
+        cli.extendWorld(this) // fileSystem extension requires cli extension
+        fileSystem.extendWorld(this)
+    })
+})</code></pre>
+
+</div>
 
 </div>
         
-    
-    </div>
+            
+<div class="section-method">
 
     
 
+    <h4 class="name" id=".install"><span class="type-signature">(static) </span>install<span class="signature">(define)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Installs the extension.
+</div>
+
+
+
+
+
+<dl class="details">
+
     
 
     
 
-     
+    
+
+    
 
     
 
     
 
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extensions_file_system_index.js.html">extensions/file_system/index.js</a>, <a href="extensions_file_system_index.js.html#line55">line 55</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>define</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                The `defineSupportCode` helper from cucumber
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-examples">
+<h5>Example</h5>
+
+    <pre class="prettyprint"><code>// /support/world.js
+
+const { defineSupportCode } = require('cucumber')
+const { state, cli, fileSystem } = require('@ekino/veggies')
+
+defineSupportCode(({ setWorldConstructor }) => {
+    setWorldConstructor(function() {
+        state.extendWorld(this) // cli extension requires state extension
+        cli.extendWorld(this) // fileSystem extension requires cli extension
+        fileSystem.extendWorld(this)
+    })
+})
+
+state.install(defineSupportCode)
+cli.install(defineSupportCode)
+fileSystem.install(defineSupportCode)</code></pre>
+
+</div>
+
+</div>
+        
     
 
     
