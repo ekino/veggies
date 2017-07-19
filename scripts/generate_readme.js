@@ -60,7 +60,8 @@ Then:
 const definitionFiles = {
     cli: './src/extensions/cli/definitions.js',
     httpApi: './src/extensions/http_api/definitions.js',
-    state: './src/extensions/state/definitions.js'
+    state: './src/extensions/state/definitions.js',
+    fileSystem: './src/extensions/file_system/definitions.js'
 }
 
 /**
