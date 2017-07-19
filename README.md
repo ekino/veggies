@@ -713,7 +713,7 @@ fileSystem.install(defineSupportCode)
 
 ```yaml    
 Given:
-  # No definitions
+  - /^(?:I )?create directory (.+)$/
 
 When:
   # No definitions

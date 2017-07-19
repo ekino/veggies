@@ -40,3 +40,13 @@ Feature: File system extension
   Scenario: Checking directory does not exist
     Given I set cwd to examples/features/file_system/files
     Then directory crap_dir should not exist
+
+  Scenario: Creating a directory
+    Given I set cwd to examples/features/file_system/files
+    And I create directory generated
+    Then directory generated should exist
+
+  Scenario: Creating nested directory
+    Given I set cwd to examples/features/file_system/files
+    And I create directory deeply/nested/directory
+    Then directory deeply/nested/directory should exist

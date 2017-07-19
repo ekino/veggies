@@ -38,3 +38,5 @@ jspm_packages
 .idea
 bin
 _doc
+/examples/features/file_system/files/generated
+/examples/features/file_system/files/deeply

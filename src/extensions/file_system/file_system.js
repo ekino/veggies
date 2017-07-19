@@ -1,7 +1,13 @@
 'use strict'
 
+/**
+ * The FileSystem helper used by the FileSystem extension.
+ *
+ * @module extensions/FileSystem/FileSystem
+ */
+
 const path = require('path')
-const fs = require('fs')
+const fs = require('fs-extra')
 
 /**
  * Loads file content.
@@ -35,5 +41,20 @@ exports.getFileInfo = (cwd, file) =>
             }
 
             resolve(stat)
+        })
+    })
+
+/**
+ * Creates a directory.
+ *
+ * @param {string} cwd       - Current Working Directory
+ * @param {string} directory - Directory name
+ * @return {Promise.<boolean>}
+ */
+exports.createDirectory = (cwd, directory) =>
+    new Promise((resolve, reject) => {
+        fs.mkdirs(path.join(cwd, directory), err => {
+            if (err) return reject(err)
+            resolve(true)
         })
     })
