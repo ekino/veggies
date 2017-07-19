@@ -50,3 +50,10 @@ Feature: File system extension
     Given I set cwd to examples/features/file_system/files
     And I create directory deeply/nested/directory
     Then directory deeply/nested/directory should exist
+
+  Scenario: Creating and removing directory
+    Given I set cwd to examples/features/file_system/files
+    And I create directory deeply/nested/directory
+    Then directory deeply/nested/directory should exist
+    Given I remove directory deeply/nested/directory
+    Then directory deeply/nested/directory should not exist

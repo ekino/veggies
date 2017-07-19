@@ -714,6 +714,7 @@ fileSystem.install(defineSupportCode)
 ```yaml    
 Given:
   - /^(?:I )?create directory (.+)$/
+  - /^(?:I )?remove (?:file|directory) (.+)$/
 
 When:
   # No definitions

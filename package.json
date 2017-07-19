@@ -80,7 +80,7 @@
       "git add"
     ],
     "*.feature": [
-      "examples"
+      "cucumberjs --require examples/support examples/features --tags @offline"
     ],
     "*.js": [
       "lint-fix",

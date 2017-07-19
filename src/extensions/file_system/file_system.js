@@ -51,10 +51,13 @@ exports.getFileInfo = (cwd, file) =>
  * @param {string} directory - Directory name
  * @return {Promise.<boolean>}
  */
-exports.createDirectory = (cwd, directory) =>
-    new Promise((resolve, reject) => {
-        fs.mkdirs(path.join(cwd, directory), err => {
-            if (err) return reject(err)
-            resolve(true)
-        })
-    })
+exports.createDirectory = (cwd, directory) => fs.mkdirs(path.join(cwd, directory))
+
+/**
+ * Removes a file or directory.
+ *
+ * @param {string} cwd             - Current Working Directory
+ * @param {string} fileOrDirectory - File or directory name
+ * @return {Promise.<boolean>}
+ */
+exports.remove = (cwd, fileOrDirectory) => fs.remove(path.join(cwd, fileOrDirectory))
