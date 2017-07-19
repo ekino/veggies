@@ -1,7 +1,7 @@
 'use strict'
 
 const { defineSupportCode } = require('cucumber')
-const { state, fixtures, httpApi, cli } = require('../../src')
+const { state, fixtures, httpApi, cli, fileSystem } = require('../../src')
 
 defineSupportCode(({ setWorldConstructor }) => {
     setWorldConstructor(function() {
@@ -9,6 +9,7 @@ defineSupportCode(({ setWorldConstructor }) => {
         fixtures.extendWorld(this)
         httpApi.extendWorld(this)
         cli.extendWorld(this)
+        fileSystem.extendWorld(this)
     })
 })
 
@@ -16,3 +17,4 @@ state.install(defineSupportCode)
 fixtures.install(defineSupportCode)
 httpApi.install()(defineSupportCode)
 cli.install(defineSupportCode)
+fileSystem.install(defineSupportCode)

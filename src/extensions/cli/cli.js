@@ -64,6 +64,13 @@ exports.setCwd = _cwd => {
 }
 
 /**
+ * Returns Current Working Directory.
+ *
+ * @return {string}
+ */
+exports.getCwd = () => cwd
+
+/**
  * Defines environment variables.
  * Beware that all existing ones will be overridden!
  *
