@@ -719,6 +719,7 @@ When:
   # No definitions
 
 Then:
+  - /^(file|directory) (.+) should (not )?exist$/
   - /^file (.+) content should (not )?(equal|contain|match) (.+)$/
 ```
 
