@@ -29,11 +29,14 @@ It's also the perfect companion for testing CLI applications built with commande
     - [CLI testing](#cli-testing) 
        - [Running a simple command](#running-a-simple-command-and-checking-its-exit-code)
        - [Testing a command error](#testing-a-command-error)
+    - [File System testing](#file-system-testing)   
+       - [Testing file content](#testing-file-content)
 - [Extensions](#extensions)
     - [**state**](#state-extension) [install](#state-installation) | [gherkin expressions](#state-gherkin-expressions) | [low level API](#state-low-level-api)
     - [**fixtures**](#fixtures-extension) [install](#fixtures-installation) | [low level API](#fixtures-low-level-api)
     - [**http API**](#http-api-extension) [install](#http-api-installation) | [gherkin expressions](#http-api-gherkin-expressions) | [low level API](#http-api-low-level-api)
     - [**CLI**](#cli-extension) [install](#cli-installation) | [gherkin expressions](#cli-gherkin-expressions) | [low level API](#cli-low-level-api)
+    - [**fileSystem**](#file-system-extension) [install](#file-system-installation) | [gherkin expressions](#file-system-gherkin-expressions) | [low level API](#file-system-low-level-api)
 - [Helpers](#helpers)
     - [**cast**](#cast-helper) [usage](#cast-usage) | [add a type](#add-a-type)
 - [Examples](#examples)   
@@ -389,6 +392,31 @@ Scenario: Running an invalid command
   And stderr should contain error Command "invalid" not found.
 ```
 
+### File System testing
+
+#### Testing file content
+
+In order to check file content, you have the following gherkin expression available:
+
+```
+/^file (.+) content (not )?(equal|contain|match) (.+)$/
+```
+
+It supports multiple combinations to verify file content conforms to what you expect.
+This example illustrates its different features:
+
+```gherkin
+Scenario: Testing file content related expectations
+    Then file sample_A.text content should equal whatever
+    And file sample_B.text content should not equal whatever
+    And file sample_C.text content should contain part
+    And file sample_D.text content should not contain part
+    And file sample_E.text content should match ^(thing|other)$
+    And file sample_F.text content should not match ^(thing|other)$
+```
+
+If the file does not exist, the test will fail.
+
 ## Extensions
 
 This module is composed of several extensions.
@@ -650,6 +678,67 @@ defineSupportCode(({ When }) => {
 })
 ```
 
+### File system extension 
+
+#### File system installation
+
+The fileSystem extension relies on the [cli](#cli-extension) extension,
+so make sure it's registered prior to installation.
+
+To install the extension, you should add the following snippet
+to your `world` file:
+
+```javascript
+// /support/world.js
+
+const { defineSupportCode } = require('cucumber')
+const { state, fixtures, cli, fileSystem } = require('@ekino/veggies')
+
+defineSupportCode(({ setWorldConstructor }) => {
+    setWorldConstructor(function() {
+        state.extendWorld(this)
+        fixtures.extendWorld(this)
+        cli.extendWorld(this)
+        fileSystem.extendWorld(this)
+    })
+})
+
+state.install(defineSupportCode)
+fixtures.install(defineSupportCode)
+cli.install(defineSupportCode)
+fileSystem.install(defineSupportCode)
+```
+
+#### File system gherkin expressions
+
+```yaml    
+Given:
+  # No definitions
+
+When:
+  # No definitions
+
+Then:
+  - /^file (.+) content should (not )?(equal|contain|match) (.+)$/
+```
+
+#### File system low level API
+
+When installed, you can access it from the global cucumber context in your own step definitions.
+For available methods on the fileSystem, please refer to its own
+[documentation](https://ekino.github.io/veggies/module-extensions_Cli_Cli.html).
+
+```javascript
+defineSupportCode(({ Then }) => {
+    Then(/^I check something using file system$/, function() {
+        return this.fileSystem.getFileContent('whatever')
+            .then(content => {
+                // …    
+            })
+    })
+})
+```
+
 ## Helpers
 
 ### Cast helper
@@ -666,6 +755,7 @@ This must be used on gherkin arrays. Based on your array type you have to use:
  * ```step.rowsHash()``` -> ```Cast.objects(step.rowsHash())```
  
 For example:
+
 ```javascript
 const { cast } = require('@ekino/veggies')
 const { defineSupportCode } = require('cucumber')
@@ -682,7 +772,8 @@ defineSupportCode(function({ Given, When, Then }) {
 #### Add a type
 
 You can provide your own type.
-For example: 
+For example:
+
 ```javascript
 Cast.addType('newType', value => value === 'true')
 ```
