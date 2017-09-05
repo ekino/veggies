@@ -1,7 +1,7 @@
 'use strict'
 
 const Helper = require('../../helper')
-const cli = require('./cli')
+const Cli = require('./cli')
 
 module.exports = world => {
     if (!Helper.hasExtension(world, 'state')) {
@@ -10,6 +10,6 @@ module.exports = world => {
         )
     }
 
-    world.cli = cli
+    world.cli = Cli()
     Helper.registerExtension(world, 'cli')
 }

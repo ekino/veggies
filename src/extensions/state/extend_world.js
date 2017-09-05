@@ -1,9 +1,9 @@
 'use strict'
 
 const Helper = require('../../helper')
-const state = require('./state')
+const State = require('./state')
 
 module.exports = world => {
-    world.state = state
+    world.state = State()
     Helper.registerExtension(world, 'state')
 }

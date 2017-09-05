@@ -13,230 +13,256 @@ const { Cookie } = require('tough-cookie')
 const BODY_TYPE_JSON = 'json'
 const BODY_TYPE_FORM = 'form'
 
-// REQUEST INFORMATION
-let body = null
-let bodyType = null
-let headers = null
-let query = null
-
-let cookies = []
-let cookieJar = null
-
-// RESPONSE INFORMATION
-let response = null
-let responseCookies = {}
-
 /**
- * Resets the client.
- */
-exports.reset = () => {
-    body = null
-    bodyType = null
-    headers = null
-    query = null
-
-    cookies = []
-    cookieJar = null
-
-    response = null
-    responseCookies = {}
-}
-
-/**
- * Sets request json body.
+ * Http Api Client extension.
  *
- * @param {Object} payload
+ * @class
  */
-exports.setJsonBody = payload => {
-    bodyType = BODY_TYPE_JSON
-    body = payload
-}
+class HttpApiClient {
+    constructor() {
+        // REQUEST INFORMATION
+        this.body = null
+        this.bodyType = null
+        this.headers = null
+        this.query = null
+        this.cookies = []
+        this.cookieJar = null
 
-/**
- * Sets request form body.
- *
- * @param {Object} payload
- */
-exports.setFormBody = payload => {
-    bodyType = BODY_TYPE_FORM
-    body = payload
-}
-
-/**
- * Clears current request body
- */
-exports.clearBody = () => {
-    body = null
-    bodyType = null
-}
-
-/**
- * Sets request query parameters.
- *
- * @param {Object} _query
- */
-exports.setQuery = _query => {
-    query = _query
-}
-
-/**
- * Sets request headers.
- *
- * @param {Object} _headers
- */
-exports.setHeaders = _headers => {
-    headers = _headers
-}
-
-/**
- * Sets a single request header.
- *
- * @param {string} key
- * @param {string} value
- */
-exports.setHeader = (key, value) => {
-    headers = headers || {}
-    headers[key] = value
-}
-
-/**
- * Clears current request headers.
- */
-exports.clearHeaders = () => {
-    headers = null
-}
-
-/**
- * Enables cookie jar.
- */
-exports.enableCookies = () => {
-    if (cookieJar !== null) return
-
-    cookieJar = request.jar()
-    cookieJar._jar.rejectPublicSuffixes = false
-}
-
-/**
- * Disables cookie jar.
- */
-exports.disableCookies = () => {
-    cookieJar = null
-}
-
-/**
- * Sets a cookie.
- * It does not actually add the cookie to the cookie jar
- * because setting the cookie requires the request url,
- * which we only have when making the request.
- *
- * @param {string|Object} cookie - Cookie string or Object
- */
-exports.setCookie = cookie => {
-    if (!_.isPlainObject(cookie) && !_.isString(cookie)) {
-        throw new TypeError(`"cookie" must be a string or a cookie object`)
+        // RESPONSE INFORMATION
+        this.response = null
+        this.responseCookies = {}
     }
 
-    exports.enableCookies()
-    cookies.push(cookie)
-}
+    /**
+     * Resets the client.
+     */
+    reset() {
+        this.body = null
+        this.bodyType = null
+        this.headers = null
+        this.query = null
 
-/**
- * Clears registered request cookies.
- * Be aware that it does not clear existing response cookies.
- */
-exports.clearRequestCookies = () => {
-    cookies = []
-}
+        this.cookies = []
+        this.cookieJar = null
 
-/**
- * Retrieves a cookie by its key.
- *
- * @param {string} key - Cookie key
- * @return {Object|null} The cookie object if any, or null
- */
-exports.getCookie = key => {
-    if (responseCookies === null) return null
-    if (responseCookies[key] === undefined) return null
+        this.response = null
+        this.responseCookies = {}
+    }
 
-    return responseCookies[key]
-}
+    /**
+     * Sets request json body.
+     *
+     * @param {Object} payload
+     */
+    setJsonBody(payload) {
+        this.bodyType = BODY_TYPE_JSON
+        this.body = payload
+    }
 
-/**
- * Returns current response cookies.
- *
- * @return {Object} current response cookies
- */
-exports.getCookies = () => responseCookies
+    /**
+     * Sets request form body.
+     *
+     * @param {Object} payload
+     */
+    setFormBody(payload) {
+        this.bodyType = BODY_TYPE_FORM
+        this.body = payload
+    }
 
-/**
- * Returns the latest collected response.
- */
-exports.getResponse = () => response
+    /**
+     * Clears current request body
+     */
+    clearBody() {
+        this.body = null
+        this.bodyType = null
+    }
 
-/**
- * Performs a request using all previously defined paramaters:
- * - headers
- * - query
- * - body
- *
- * @param {string} method    - The http verb
- * @param {string} path      - The path
- * @param {string} [baseUrl] - The base url
- */
-exports.makeRequest = (method, path, baseUrl) => {
-    return new Promise((resolve, reject) => {
-        const options = {
-            baseUrl: baseUrl,
-            uri: path,
-            method,
-            qs: query || {},
-            headers,
-            jar: cookieJar
+    /**
+     * Sets request query parameters.
+     *
+     * @param {Object} query
+     */
+    setQuery(query) {
+        this.query = query
+    }
+
+    /**
+     * Sets request headers.
+     *
+     * @param {Object} headers
+     */
+    setHeaders(headers) {
+        this.headers = headers
+    }
+
+    /**
+     * Sets a single request header.
+     *
+     * @param {string} key
+     * @param {string} value
+     */
+    setHeader(key, value) {
+        this.headers = this.headers || {}
+        this.headers[key] = value
+    }
+
+    /**
+     * Clears current request headers.
+     */
+    clearHeaders() {
+        this.headers = null
+    }
+
+    /**
+     * Enables cookie jar.
+     */
+    enableCookies() {
+        if (this.cookieJar !== null) return
+
+        this.cookieJar = request.jar()
+        this.cookieJar._jar.rejectPublicSuffixes = false
+    }
+
+    /**
+     * Disables cookie jar.
+     */
+    disableCookies() {
+        this.cookieJar = null
+    }
+
+    /**
+     * Sets a cookie.
+     * It does not actually add the cookie to the cookie jar
+     * because setting the cookie requires the request url,
+     * which we only have when making the request.
+     *
+     * @param {string|Object} cookie - Cookie string or Object
+     */
+    setCookie(cookie) {
+        if (!_.isPlainObject(cookie) && !_.isString(cookie)) {
+            throw new TypeError(`"cookie" must be a string or a cookie object`)
         }
 
-        const fullUri = `${baseUrl}${path}`
+        this.enableCookies()
+        this.cookies.push(cookie)
+    }
 
-        if (body !== null) {
-            if (!['POST', 'PUT'].includes(method)) {
-                throw new Error(
-                    `You can only provides a body for POST and PUT HTTP methods, found: ${method}`
-                )
+    /**
+     * Clears registered request cookies.
+     * Be aware that it does not clear existing response cookies.
+     */
+    clearRequestCookies() {
+        this.cookies = []
+    }
+
+    /**
+     * Retrieves a cookie by its key.
+     *
+     * @param {string} key - Cookie key
+     * @return {Object|null} The cookie object if any, or null
+     */
+    getCookie(key) {
+        if (this.responseCookies === null) return null
+        if (this.responseCookies[key] === undefined) return null
+
+        return this.responseCookies[key]
+    }
+
+    /**
+     * Returns current response cookies.
+     *
+     * @return {Object} current response cookies
+     */
+    getCookies() {
+        return this.responseCookies
+    }
+
+    /**
+     * Returns the latest collected response.
+     */
+    getResponse() {
+        return this.response
+    }
+
+    /**
+     * Performs a request using all previously defined paramaters:
+     * - headers
+     * - query
+     * - body
+     *
+     * @param {string} method    - The http verb
+     * @param {string} path      - The path
+     * @param {string} [baseUrl] - The base url
+     */
+    makeRequest(method, path, baseUrl) {
+        return new Promise((resolve, reject) => {
+            const options = {
+                baseUrl: baseUrl,
+                uri: path,
+                method,
+                qs: this.query || {},
+                headers: this.headers,
+                jar: this.cookieJar
             }
 
-            if (bodyType === BODY_TYPE_JSON) {
-                options.json = true
-                options.body = body
-            } else if (bodyType === BODY_TYPE_FORM) {
-                options.form = body
-            }
-        }
+            const fullUri = `${baseUrl}${path}`
 
-        if (cookieJar !== null) {
-            cookies.forEach(cookie => {
-                if (_.isPlainObject(cookie)) {
-                    cookieJar.setCookie(new Cookie(cookie), fullUri)
-                } else if (_.isString(cookie)) {
-                    cookieJar.setCookie(cookie, fullUri)
+            if (this.body !== null) {
+                if (!['POST', 'PUT'].includes(method)) {
+                    throw new Error(
+                        `You can only provides a body for POST and PUT HTTP methods, found: ${method}`
+                    )
                 }
-            })
-        }
 
-        request(options, (_error, _response, _body) => {
-            if (_error) {
-                console.error(_error, options) // eslint-disable-line no-console
-                reject()
+                if (this.bodyType === BODY_TYPE_JSON) {
+                    options.json = true
+                    options.body = this.body
+                } else if (this.bodyType === BODY_TYPE_FORM) {
+                    options.form = this.body
+                }
             }
 
-            response = _response
-
-            if (cookieJar !== null) {
-                responseCookies = {}
-                cookieJar.getCookies(fullUri).forEach(cookie => {
-                    responseCookies[cookie.key] = cookie
+            if (this.cookieJar !== null) {
+                this.cookies.forEach(cookie => {
+                    if (_.isPlainObject(cookie)) {
+                        this.cookieJar.setCookie(new Cookie(cookie), fullUri)
+                    } else if (_.isString(cookie)) {
+                        this.cookieJar.setCookie(cookie, fullUri)
+                    }
                 })
             }
 
-            resolve()
+            request(options, (_error, _response, _body) => {
+                if (_error) {
+                    console.error(_error, options) // eslint-disable-line no-console
+                    reject()
+                }
+
+                this.response = _response
+
+                if (this.cookieJar !== null) {
+                    this.responseCookies = {}
+                    this.cookieJar.getCookies(fullUri).forEach(cookie => {
+                        this.responseCookies[cookie.key] = cookie
+                    })
+                }
+
+                resolve()
+            })
         })
-    })
+    }
 }
+
+/**
+ * Create a new isolated http api client
+ * @return {HttpApiClient}
+ */
+module.exports = function(...args) {
+    return new HttpApiClient(...args)
+}
+
+/**
+ * Http api client extension.
+ * @type {HttpApiClient}
+ */
+module.exports.HttpApiClient = HttpApiClient

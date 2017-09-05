@@ -1,7 +1,7 @@
 'use strict'
 
 const Helper = require('../../helper')
-const client = require('./client')
+const Client = require('./client')
 
 module.exports = world => {
     if (!Helper.hasExtension(world, 'state')) {
@@ -10,6 +10,6 @@ module.exports = world => {
         )
     }
 
-    world.httpApiClient = client
+    world.httpApiClient = Client()
     Helper.registerExtension(world, 'http_api')
 }

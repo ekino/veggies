@@ -40,7 +40,7 @@
     "babylon": "^6.17.4",
     "chalk": "^2.0.1",
     "coveralls": "^2.13.1",
-    "cucumber": "^2.3.1",
+    "cucumber": "3.x.x",
     "eslint": "^4.1.1",
     "gh-pages": "^1.0.0",
     "git-changelog": "^1.1.2",
@@ -55,7 +55,7 @@
     "validate-commit-msg": "^2.12.2"
   },
   "peerDependencies": {
-    "cucumber": "^2.3.1"
+    "cucumber": ">=2.3.1 <4.0.0"
   },
   "scripts": {
     "test": "jest --verbose",
