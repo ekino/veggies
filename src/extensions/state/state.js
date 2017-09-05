@@ -6,34 +6,77 @@
 
 const _ = require('lodash')
 
-let state = {}
-
 /**
- * Sets value for given key.
+ * State extension.
  *
- * @param {string} key   - The key you wish to set a value for
- * @param {*}      value - The value
+ * @class
  */
-exports.set = (key, value) => _.set(state, key, value)
+class State {
+    constructor() {
+        /**
+         * World state
+         * @type {Object}
+         */
+        this.state = {}
+    }
 
-/**
- * Retrieves a value for given key.
- *
- * @param {string} key - The key you wish to retrieve a value for
- * @return {*}
- */
-exports.get = key => _.get(state, key)
+    /**
+    * Sets value for given key.
+    *
+    * @param {string} key   - The key you wish to set a value for
+    * @param {*}      value - The value
+    */
+    set(key, value) {
+        return _.set(this.state, key, value)
+    }
 
-exports.clear = () => {
-    state = {}
+    /**
+    * Retrieves a value for given key.
+    *
+    * @param {string} key - The key you wish to retrieve a value for
+    * @return {*}
+    */
+    get(key) {
+        return _.get(this.state, key)
+    }
+
+    /**
+     * Clear the state
+     */
+    clear() {
+        this.state = {}
+    }
+
+    /**
+     * Dump state content
+     * @return {Object|{}|*}
+     */
+    dump() {
+        return this.state
+    }
+
+    populate(value) {
+        return _.template(value, { interpolate: /{{([\s\S]+?)}}/g })(this.state)
+    }
+
+    populateObject(object) {
+        return _.mapValues(object, value => {
+            if (_.isPlainObject(value)) return this.populateObject(value)
+            return this.populate(value)
+        })
+    }
 }
 
-exports.dump = () => state
+/**
+ * Create a new isolated state
+ * @return {State}
+ */
+module.exports = function(...args) {
+    return new State(...args)
+}
 
-exports.populate = value => _.template(value, { interpolate: /{{([\s\S]+?)}}/g })(state)
-
-exports.populateObject = object =>
-    _.mapValues(object, value => {
-        if (_.isPlainObject(value)) return exports.populateObject(value)
-        return exports.populate(value)
-    })
+/**
+ * State extension.
+ * @type {State}
+ */
+module.exports.State = State

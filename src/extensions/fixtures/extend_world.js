@@ -4,7 +4,6 @@ const Helper = require('../../helper')
 const Loader = require('./fixtures_loader')
 
 module.exports = (world, options) => {
-    Loader.configure(options)
-    world.fixtures = Loader
+    world.fixtures = Loader(options)
     Helper.registerExtension(world, 'fixtures')
 }

@@ -1,5 +1,7 @@
 'use strict'
 
+const path = require('path')
+
 /**
  * Registers hooks for the fixtures extension.
  *
@@ -7,8 +9,13 @@
  */
 
 module.exports = ({ Before }) => {
-    Before(function(scenarioResult) {
-        this.fixtures.reset()
-        this.fixtures.setFeatureUri(scenarioResult.scenario.feature.uri)
+    Before(function(scenarioInfos) {
+        if (scenarioInfos.sourceLocation) {
+            this.fixtures.setFeatureUri(scenarioInfos.sourceLocation.uri)
+        } else {
+            const fullPath = scenarioInfos.scenario.feature.uri
+            const relativePath = path.relative(process.cwd(), fullPath)
+            this.fixtures.setFeatureUri(relativePath)
+        }
     })
 }

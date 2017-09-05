@@ -1,6 +1,8 @@
 'use strict'
 
-const state = require('../src/extensions/state/state')
+const State = require('../src/extensions/state/state')
+
+const state = State()
 
 test('should return null value', () => {
     expect(state.populate('((null))')).toBe('((null))')

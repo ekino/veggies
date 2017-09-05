@@ -5,7 +5,6 @@
  */
 
 const definitions = require('./definitions')
-const hooks = require('./hooks')
 
 /**
  * Extends cucumber world object.
@@ -52,5 +51,4 @@ exports.extendWorld = require('./extend_world')
  */
 exports.install = define => {
     define(definitions)
-    define(hooks)
 }
