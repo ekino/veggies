@@ -333,12 +333,12 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     })
 
     /**
-     * Verifies that response matches snapshot.
-     */
-    Then(/^response should match snapshot (.+)$/, function(snapshotId) {
+     * Verifies that response matches a fixture.
+     **/
+    Then(/^response should match fixture (.+)$/, function(fixtureId) {
         const response = mustGetResponse(this.httpApiClient)
 
-        return this.fixtures.load(snapshotId).then(snapshot => {
+        return this.fixtures.load(fixtureId).then(snapshot => {
             expect(response.body).to.deep.equal(snapshot)
         })
     })

@@ -31,12 +31,17 @@ It's also the perfect companion for testing CLI applications built with commande
        - [Testing a command error](#testing-a-command-error)
     - [File System testing](#file-system-testing)   
        - [Testing file content](#testing-file-content)
+    - [Snapshot testing](#snapshot-testing)   
+       - [API Snapshot testing](api-snapshot-testing)
+       - [CLI Snapshot testing](cli-snapshot-testing)
+       - [File Snapshot testing](file-snapshot-testing)
 - [Extensions](#extensions)
     - [**state**](#state-extension) [install](#state-installation) | [gherkin expressions](#state-gherkin-expressions) | [low level API](#state-low-level-api)
     - [**fixtures**](#fixtures-extension) [install](#fixtures-installation) | [low level API](#fixtures-low-level-api)
     - [**http API**](#http-api-extension) [install](#http-api-installation) | [gherkin expressions](#http-api-gherkin-expressions) | [low level API](#http-api-low-level-api)
     - [**CLI**](#cli-extension) [install](#cli-installation) | [gherkin expressions](#cli-gherkin-expressions) | [low level API](#cli-low-level-api)
     - [**fileSystem**](#file-system-extension) [install](#file-system-installation) | [gherkin expressions](#file-system-gherkin-expressions) | [low level API](#file-system-low-level-api)
+    - [**snapshot**](#snapshot-extension) [install](#snapshot-installation) | [gherkin expressions](#snapshot-gherkin-expressions) | [low level API](#snapshot-low-level-api)
 - [Helpers](#helpers)
     - [**cast**](#cast-helper) [usage](#cast-usage) | [add a type](#add-a-type)
 - [Examples](#examples)   
@@ -421,6 +426,79 @@ Scenario: Testing file content related expectations
 
 If the file does not exist, the test will fail.
 
+### Snapshot testing
+
+Snapshot testing test a response / content against a saved response.
+Snapshots are stored in a file with same name as the feature file with the extension ".snap"
+in a folder __snapshots__ in the same folder as the feature file.
+In a snapshot file, snapshot name follow the pattern : 
+SNAPSHOT_NAME NUMBER_OF_TIME_THIS_NAME_WAS_ENCOUNTERED_IN_CURRENT_FILE.NUMBER_OF_TIME_WE_HAD_A_SNAPSHOT_IN_THIS_SCENARIO.
+For example, this would give : Scnenario 1 1.1
+
+If a snapshot doesn't exists, it will be created the first time.
+
+To update snapshot use the cucumber commande line option '-u'. If you narrowed the tests with tags, only the snapshots 
+related to the tagged scenario will be updated
+
+In case you need to remove unused snapshots, you can use the option "--cleanSnapshots".
+Warning : You shouldn't use this option with tags. It may result in used snapshots removed.
+Info : Snapshot files related to feature files with no snapshots anymore won't get removed. You need to do it manually.
+
+#### API Snapshot testing
+
+In order to check an api response against a snapshot, you have the following gherkin expression available:
+
+```
+/^response body should match snapshot$/
+```
+
+This example illustrates it:
+
+```gherkin
+Scenario: Creating a resource using typed json payload
+  Given I set request json body
+    | username  | plouc((string))          |
+    | team_id   | 1((number))              |
+    | is_active | true((boolean))          |
+    | hobbies   | drawing,hacking((array)) |
+  When I POST https://my-api.io/users
+  Then I should receive a 201 HTTP status code
+  And response body should match snapshot
+```
+
+#### CLI Snapshot testing
+
+In order to check a CLI output against a snapshot, you have the following gherkin expression available:
+
+```
+/^(stderr|stdout) output should match snapshot$/
+```
+
+This example illustrates it:
+
+```gherkin
+Scenario: Getting info about installed yarn version
+  When I run command yarn --version
+  Then exit code should be 0
+  And stdout output should match snapshot
+  And stderr output should match snapshot
+```
+
+#### File Snapshot testing
+
+In order to check a file content against a snapshot, you have the following gherkin expression available:
+
+```
+/^file (.+) should match snapshot$/
+```
+
+This example illustrates it:
+
+```gherkin
+Scenario: Testing file content related expectations
+    Then file sample_1.text should match snapshot
+```
+
 ## Extensions
 
 This module is composed of several extensions.
@@ -679,6 +757,60 @@ defineSupportCode(({ Then }) => {
             .then(content => {
                 // …    
             })
+    })
+})
+```
+
+### Snapshot extension 
+
+#### Snapshot extension installation
+
+The snapshot extension add capabilities to [api](#api-extension), [clie](#cli--extension) and [file](#file-extension) extensions,
+so you will need these extensions if you want to use the gherkin patterns.
+
+To install the extension, you should add the following snippet
+to your `world` file:
+
+```javascript
+// /support/world.js
+
+const { defineSupportCode } = require('cucumber')
+const { state, fixtures, cli, fileSystem, snapshot } = require('@ekino/veggies')
+
+defineSupportCode(({ setWorldConstructor }) => {
+    setWorldConstructor(function() {
+        state.extendWorld(this)
+        fixtures.extendWorld(this)
+        cli.extendWorld(this)
+        fileSystem.extendWorld(this)
+        snapshot.extendWorld(this)
+    })
+})
+
+state.install(defineSupportCode)
+fixtures.install(defineSupportCode)
+cli.install(defineSupportCode)
+fileSystem.install(defineSupportCode)
+snapshot.install(defineSupportCode)
+```
+
+#### Snapshot gherkin expressions
+
+{{#definitions.snapshot}}
+{{> definitions}}
+{{/definitions.snapshot}}
+
+
+#### Snapshot low level API
+
+When installed, you can access it from the global cucumber context in your own step definitions.
+For available methods on the snapshot, please refer to its own
+[documentation](https://ekino.github.io/veggies/module-extensions_snapshot_extension.html).
+
+```javascript
+defineSupportCode(({ Then }) => {
+    Then(/^Some content should match snapshot$/, function() {
+        this.snapshot.expectToMatch('whatever')
     })
 })
 ```
