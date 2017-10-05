@@ -1,0 +1,6 @@
+
+
+exports[`Snapshot testing on an api 1.1`] = `Object {
+  "gender": "male",
+  "username": "someone",
+}`;

@@ -1,0 +1,24 @@
+
+
+exports[`Setting json body from .yaml fixture file 1.1`] = `Object {
+  "first_name": "Raphaël",
+  "gender": "male",
+  "id": 1,
+  "last_name": "Benitte",
+}`;
+
+exports[`Snapshot testing on an api 1.1`] = `Object {
+  "first_name": "Raphaël",
+  "gender": "male",
+  "id": 1,
+  "last_name": "Benitte",
+}`;
+
+exports[`Snapshot testing on cli 1.1`] = `"test
+"`;
+
+exports[`Snapshot testing on files 1.1`] = `"id:         1
+first_name: Raphaël
+last_name:  Benitte
+gender:     male
+"`;

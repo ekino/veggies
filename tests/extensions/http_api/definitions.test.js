@@ -645,15 +645,15 @@ test('check json collection size for a given path', () => {
     expect(require('chai').equal).toHaveBeenCalledWith(3)
 })
 
-test('response match snapshot', () => {
+test('response match fixture', () => {
     const context = helper.define(definitions)
 
     expect.assertions(5)
 
-    const def = context.getDefinitionByMatcher('should match snapshot')
+    const def = context.getDefinitionByMatcher('should match fixture')
     def.shouldHaveType('Then')
-    def.shouldNotMatch('response should match snapshot ')
-    def.shouldMatch('response should match snapshot snapshot', ['snapshot'])
+    def.shouldNotMatch('response should match fixture ')
+    def.shouldMatch('response should match fixture fixture', ['fixture'])
 
     const snapshot = { testing: true }
     const worldMock = {
