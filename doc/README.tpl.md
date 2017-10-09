@@ -104,7 +104,7 @@ for the [dedicated extension](#http-api-extension).
 Scenario: Using GitHub API
   Given I set User-Agent request header to veggies/1.0
   When I GET https://api.github.com/
-  Then I should receive a 200 HTTP status code
+  Then response status code should be 200
 ```
 
 #### Posting data
@@ -117,7 +117,7 @@ Scenario: Creating a resource using json payload
     | username | plouc |
     | gender   | male  |
   When I POST https://my-api.io/users
-  Then I should receive a 201 HTTP status code
+  Then response status code should be 201
 ```
 
 You can also use form encoded values, all you have to do is
@@ -129,7 +129,7 @@ Scenario: Creating a resource using json payload
     | username | plouc |
     | gender   | male  |
   When I POST https://my-api.io/users
-  Then I should receive a 201 HTTP status code
+  Then response status code should be 201
 ```
 
 #### Posting data using fixture file
@@ -150,7 +150,7 @@ gender:   male
 Scenario: Creating a resource using json payload
   Given I set request form body from user
   When I POST https://my-api.io/users
-  Then I should receive a 201 HTTP status code
+  Then response status code should be 201
 ```
 
 #### Using values issued by a previous request
@@ -177,7 +177,7 @@ Scenario: Using GitHub API
   When I GET https://api.github.com/
   And I pick response json emojis_url as emojisUrl
   And I GET {{emojisUrl}}
-  Then I should receive a 200 HTTP status code
+  Then response status code should be 200
 ```
 <%={{ }}=%>
 
@@ -192,10 +192,10 @@ using different response values for second request.
 Scenario Outline: Fetching <key> API endpoint from root endpoint
   Given I set User-Agent request header to veggies/1.0
   When I GET https://api.github.com/
-  Then I should receive a 200 HTTP status code
+  Then response status code should be 200
   When I pick response json <key> as <key>
   And I GET {{<key>}}
-  Then I should receive a 200 HTTP status code
+  Then response status code should be 200
 
   Examples:
     | key              |
@@ -361,7 +361,7 @@ Scenario: Creating a resource using typed json payload
     | is_active | true((boolean))          |
     | hobbies   | drawing,hacking((array)) |
   When I POST https://my-api.io/users
-  Then I should receive a 201 HTTP status code
+  Then response status code should be 201
 ```
 
 which will generate the following payload:
@@ -474,7 +474,7 @@ Scenario: Creating a resource using typed json payload
     | is_active | true((boolean))          |
     | hobbies   | drawing,hacking((array)) |
   When I POST https://my-api.io/users
-  Then I should receive a 201 HTTP status code
+  Then response status code should be 201
   And response body should match snapshot
 ```
 

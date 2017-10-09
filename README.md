@@ -117,7 +117,7 @@ Scenario: Creating a resource using json payload
     | username | plouc |
     | gender   | male  |
   When I POST https://my-api.io/users
-  Then response status code should be 200
+  Then response status code should be 201
 ```
 
 You can also use form encoded values, all you have to do is
@@ -129,7 +129,7 @@ Scenario: Creating a resource using json payload
     | username | plouc |
     | gender   | male  |
   When I POST https://my-api.io/users
-  Then response status code should be 200
+  Then response status code should be 201
 ```
 
 #### Posting data using fixture file
@@ -150,7 +150,7 @@ gender:   male
 Scenario: Creating a resource using json payload
   Given I set request form body from user
   When I POST https://my-api.io/users
-  Then response status code should be 200
+  Then response status code should be 201
 ```
 
 #### Using values issued by a previous request
@@ -357,7 +357,7 @@ Scenario: Creating a resource using typed json payload
     | is_active | true((boolean))          |
     | hobbies   | drawing,hacking((array)) |
   When I POST https://my-api.io/users
-  Then response status code should be 200
+  Then response status code should be 201
 ```
 
 which will generate the following payload:
@@ -470,7 +470,7 @@ Scenario: Creating a resource using typed json payload
     | is_active | true((boolean))          |
     | hobbies   | drawing,hacking((array)) |
   When I POST https://my-api.io/users
-  Then I should receive a 201 HTTP status code
+  Then response status code should be 201
   And response body should match snapshot
 ```
 
