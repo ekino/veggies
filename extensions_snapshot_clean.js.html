@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>extensions/fixtures/FixturesLoader - Documentation</title>
+    <title>extensions/snapshot/clean.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,242 +29,74 @@
 
 <div id="main">
     
-    <h1 class="page-title">extensions/fixtures/FixturesLoader</h1>
+    <h1 class="page-title">extensions/snapshot/clean.js</h1>
     
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="module:extensions/fixtures/FixturesLoader"><span class="type-signature"></span>(require("extensions/fixtures/FixturesLoader"))<span class="signature">()</span><span class="type-signature"> &rarr; {FixturesLoader}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Create a new isolated fixtures loader
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line216">line 216</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>FixturesLoader</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-</div>
-        
-    
-    </div>
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-extensions_fixtures_FixturesLoader-FixturesLoader.html">FixturesLoader</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<div class="section-members">
-<h4 class="name" id=".Fixture"><span class="type-signature">(static) </span>Fixture<span class="type-signature"> :FixturesLoader</span></h4>
-
-
-
-
-<div class="description">
-    fixtures loader extension.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line224">line 224</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><code>FixturesLoader</code></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-</div>
-
-        
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict'
+
+/**
+ * @module extensions/snapshot/cleanup
+ */
+
+const _ = require('lodash')
+
+const snapshot = require('./snapshot')
+const fileSystem = require('./fs')
+const statistics = require('./statistics')
+
+exports._snapshots = {}
+
+/**
+ * Store a snapshot name for a snapshot file
+ * This can be used after to clean up unused snapshots
+ * @param {string} file - File path
+ * @param {string} snapshotName - Snapshot name
+ */
+exports.referenceSnapshot = function(file, snapshotName) {
+    exports._snapshots[file] = exports._snapshots[file] || []
+    exports._snapshots[file].push(snapshotName)
+}
+
+/**
+ * Clean snapshots names and files
+ * Used after tests to clear entries
+ */
+exports.resetReferences = function() {
+    exports._snapshots = {}
+}
+
+/**
+ * Clean snapshots file from removed snapshots
+ * If a snapshot file is empty, it's deleted
+ * Only files that have been referenced will be cleaned
+ */
+exports.cleanSnapshots = function() {
+    _.forOwn(exports._snapshots, (snapshotNames, file) => {
+        if (_.isEmpty(snapshotNames)) {
+            fileSystem.remove(file)
+            return true
+        }
+
+        const content = snapshot.readSnapshotFile(file)
+        const newContent = _.pick(content, snapshotNames)
+        snapshot.writeSnapshotFile(file, newContent)
+
+        const omitedContent = _.omit(content, snapshotNames)
+        _.forOwn(omitedContent, (snapshotContent, snapshotName) => {
+            statistics.removed.push({ file: file, name: snapshotName })
+        })
+    })
+}
+</code></pre>
+        </article>
+    </section>
 
 
 
@@ -274,7 +106,7 @@
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon Oct 09 2017 18:24:32 GMT+0200 (CEST) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon Oct 09 2017 18:24:31 GMT+0200 (CEST) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

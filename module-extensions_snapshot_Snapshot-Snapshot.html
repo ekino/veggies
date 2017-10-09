@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>extensions/fixtures/FixturesLoader - Documentation</title>
+    <title>Snapshot - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">extensions/fixtures/FixturesLoader</h1>
+    <h1 class="page-title">Snapshot</h1>
     
 
     
@@ -41,8 +41,13 @@
 
 <header>
     
+        <h2>
+            <span class="ancestors"><a href="module-extensions_snapshot_Snapshot.html">extensions/snapshot/Snapshot</a>~</span>
         
-            
+        Snapshot
+        </h2>
+        
+            <div class="class-description">Snapshot extension.</div>
         
     
 </header>
@@ -51,22 +56,17 @@
     <div class="container-overview">
     
         
-
-        
-            
 <div class="section-method">
 
     
+    <h2>Constructor</h2>
+    
 
-    <h4 class="name" id="module:extensions/fixtures/FixturesLoader"><span class="type-signature"></span>(require("extensions/fixtures/FixturesLoader"))<span class="signature">()</span><span class="type-signature"> &rarr; {FixturesLoader}</span></h4>
+    <h4 class="name" id="Snapshot"><span class="type-signature"></span>new Snapshot<span class="signature">(options)</span><span class="type-signature"></span></h4>
 
     
 
 
-
-<div class="description">
-    Create a new isolated fixtures loader
-</div>
 
 
 
@@ -101,7 +101,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line216">line 216</a>
+        <a href="extensions_snapshot_extension.js.html">extensions/snapshot/extension.js</a>, <a href="extensions_snapshot_extension.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -120,43 +120,186 @@
 
 
 
+    <h5>Parameters:</h5>
+    
 
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
 
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
+        <th>Type</th>
 
         
 
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
         
-<span class="param-type"><code>FixturesLoader</code></span>
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
 
 
-    </dd>
-</dl>
+            
+            </td>
 
+            
+
+            
+
+            <td class="description last">
+                Options
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>updateSnapshots</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>boolean</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">
+                Should we update the snapshots
+                
+            </td>
+        </tr>
 
     
+
+        <tr>
+            
+                <td class="name"><code>cleanSnapshots</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>boolean</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">
+                Should we clean the snapshot to remove unused snapshots
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 </div>
-
-
-
-</div>
-        
     
     </div>
 
@@ -165,31 +308,40 @@
     
 
     
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-extensions_fixtures_FixturesLoader-FixturesLoader.html">FixturesLoader</a></dt>
-            <dd></dd>
-        </dl>
-    
 
      
 
     
 
     
-        <h3 class="subsection-title">Members</h3>
+
+    
+        <h3 class="subsection-title">Methods</h3>
 
         
             
-<div class="section-members">
-<h4 class="name" id=".Fixture"><span class="type-signature">(static) </span>Fixture<span class="type-signature"> :FixturesLoader</span></h4>
+<div class="section-method">
 
+    
+
+    <h4 class="name" id="expectToMatch"><span class="type-signature"></span>expectToMatch<span class="signature">(expectedContent)</span><span class="type-signature"></span></h4>
+
+    
 
 
 
 <div class="description">
-    fixtures loader extension.
+    Compare a content to it's snapshot.
+If no snapshot yet, it create it.
+
+It uses the context to name the snapshot: feature file, scenario name and nth snapshot of scenario
+Snapshot name will be by default stored in FEATURE_FILE_FOLDER_PATH/__snapshots__/FEATURE_FILE_NAME.snap
+And snapshot name will be "SCENARIO_NAME NUMBER_OF_TIME_SCNEARIO_NAME_APPEARD_IN_FEATURE.NUMBER_OF_TIME_WE_SNAPSHOTED_IN_CURRENT_SCENARIO"
+For the first scenario of a scenario called "Scenario 1" that only appears once in feature file,
+snapshot name will be "Scenario 1 1.1"
+
+If option "-u" or "--updateSnapshots" is used, all snapshots will be updated
+If options "--cleanSnapshots" is used, unused stored snapshots will be removed.
 </div>
 
 
@@ -225,7 +377,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line224">line 224</a>
+        <a href="extensions_snapshot_extension.js.html">extensions/snapshot/extension.js</a>, <a href="extensions_snapshot_extension.js.html#line50">line 50</a>
     </li></ul></dd>
     
 
@@ -238,25 +390,112 @@
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
             
-<span class="param-type"><code>FixturesLoader</code></span>
+                <td class="name"><code>expectedContent</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>*</code></span>
 
 
-        </li>
-    </ul>
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Content to compare to snapshot
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-throws">
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        If snapshot and expected content doesn't match, it throws diff between both
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>string</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
 
 
 
 
 
 </div>
-
         
-    
-
     
 
     

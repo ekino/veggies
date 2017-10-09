@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>extensions/fixtures/FixturesLoader - Documentation</title>
+    <title>Cli - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">extensions/fixtures/FixturesLoader</h1>
+    <h1 class="page-title">Cli</h1>
     
 
     
@@ -41,8 +41,13 @@
 
 <header>
     
+        <h2>
+            <span class="ancestors"><a href="module-extensions_Cli_Cli.html">module:extensions/Cli/Cli</a>~</span>
         
-            
+        Cli
+        </h2>
+        
+            <div class="class-description">Cli extension.</div>
         
     
 </header>
@@ -51,6 +56,102 @@
     <div class="container-overview">
     
         
+<div class="section-method">
+
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="Cli"><span class="type-signature"></span>new Cli<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extensions_cli_cli.js.html">extensions/cli/cli.js</a>, <a href="extensions_cli_cli.js.html#line17">line 17</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
 
         
             
@@ -58,14 +159,14 @@
 
     
 
-    <h4 class="name" id="module:extensions/fixtures/FixturesLoader"><span class="type-signature"></span>(require("extensions/fixtures/FixturesLoader"))<span class="signature">()</span><span class="type-signature"> &rarr; {FixturesLoader}</span></h4>
+    <h4 class="name" id="getCwd"><span class="type-signature"></span>getCwd<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
 
     
 
 
 
 <div class="description">
-    Create a new isolated fixtures loader
+    Returns Current Working Directory.
 </div>
 
 
@@ -101,7 +202,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line216">line 216</a>
+        <a href="extensions_cli_cli.js.html">extensions/cli/cli.js</a>, <a href="extensions_cli_cli.js.html#line79">line 79</a>
     </li></ul></dd>
     
 
@@ -143,7 +244,7 @@
     </dt>
     <dd>
         
-<span class="param-type"><code>FixturesLoader</code></span>
+<span class="param-type"><code>string</code></span>
 
 
     </dd>
@@ -157,39 +258,19 @@
 
 </div>
         
-    
-    </div>
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-extensions_fixtures_FixturesLoader-FixturesLoader.html">FixturesLoader</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
             
-<div class="section-members">
-<h4 class="name" id=".Fixture"><span class="type-signature">(static) </span>Fixture<span class="type-signature"> :FixturesLoader</span></h4>
+<div class="section-method">
 
+    
+
+    <h4 class="name" id="getExitCode"><span class="type-signature"></span>getExitCode<span class="signature">()</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
 
 
 
 <div class="description">
-    fixtures loader extension.
+    Returns latest command execution exit code.
 </div>
 
 
@@ -225,7 +306,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line224">line 224</a>
+        <a href="extensions_cli_cli.js.html">extensions/cli/cli.js</a>, <a href="extensions_cli_cli.js.html#line113">line 113</a>
     </li></ul></dd>
     
 
@@ -238,25 +319,946 @@
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>number</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    The exit code
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
             
-<span class="param-type"><code>FixturesLoader</code></span>
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getOutput"><span class="type-signature"></span>getOutput<span class="signature">(type<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {string}</span></h4>
+
+    
 
 
-        </li>
-    </ul>
+
+<div class="description">
+    Returns captured output.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extensions_cli_cli.js.html">extensions/cli/cli.js</a>, <a href="extensions_cli_cli.js.html#line124">line 124</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    stdout
+                
+                </td>
+            
+
+            <td class="description last">
+                The standard stream type
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-throws">
+<h5>Throws:</h5>
+
+        
+
+<dl>
+    <dt>
+        <div class="param-desc">
+        Argument `type` must be one of: 'stdout', 'stderr'
+        </div>
+    </dt>
+    <dd></dd>
+    <dt>
+        <dl>
+            <dt>
+                Type
+            </dt>
+            <dd>
+                
+<span class="param-type"><code>TypeError</code></span>
+
+
+            </dd>
+        </dl>
+    </dt>
+    <dd></dd>
+</dl>
+
+
+    
+</div>
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>string</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    The captured output
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="reset"><span class="type-signature"></span>reset<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Resets the Cli helper:
+- CWD is reset to current process CWD
+- environment variables
+- killDelay & killSignal are disabled
+- exitCode is set to null
+- stdout is set to an empty string
+- stderr is set to an empty string
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extensions_cli_cli.js.html">extensions/cli/cli.js</a>, <a href="extensions_cli_cli.js.html#line140">line 140</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 </div>
-
         
+            
+<div class="section-method">
+
     
 
+    <h4 class="name" id="run"><span class="type-signature"></span>run<span class="signature">(rawCommand)</span><span class="type-signature"> &rarr; {Promise.&lt;boolean>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    Run given command.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extensions_cli_cli.js.html">extensions/cli/cli.js</a>, <a href="extensions_cli_cli.js.html#line156">line 156</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>rawCommand</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                The command string
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Promise.&lt;boolean></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    The resulting `Promise`
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="setCwd"><span class="type-signature"></span>setCwd<span class="signature">(cwd)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Sets the Current Working Directory for the command.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extensions_cli_cli.js.html">extensions/cli/cli.js</a>, <a href="extensions_cli_cli.js.html#line66">line 66</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>cwd</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                The new CWD
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="setEnvironmentVariable"><span class="type-signature"></span>setEnvironmentVariable<span class="signature">(name, value)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Defines a single environment variable.
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extensions_cli_cli.js.html">extensions/cli/cli.js</a>, <a href="extensions_cli_cli.js.html#line99">line 99</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                The environment variable name
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                The value associated to the variable
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="setEnvironmentVariables"><span class="type-signature"></span>setEnvironmentVariables<span class="signature">(env)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Defines environment variables.
+Beware that all existing ones will be overridden!
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extensions_cli_cli.js.html">extensions/cli/cli.js</a>, <a href="extensions_cli_cli.js.html#line89">line 89</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>env</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                The environment variables object
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
     
 
     
@@ -274,7 +1276,7 @@
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon Oct 09 2017 18:24:32 GMT+0200 (CEST) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon Oct 09 2017 18:24:31 GMT+0200 (CEST) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

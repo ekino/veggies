@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>extensions/fixtures/FixturesLoader - Documentation</title>
+    <title>extensions/snapshot/hooks.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,242 +29,77 @@
 
 <div id="main">
     
-    <h1 class="page-title">extensions/fixtures/FixturesLoader</h1>
+    <h1 class="page-title">extensions/snapshot/hooks.js</h1>
     
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="module:extensions/fixtures/FixturesLoader"><span class="type-signature"></span>(require("extensions/fixtures/FixturesLoader"))<span class="signature">()</span><span class="type-signature"> &rarr; {FixturesLoader}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Create a new isolated fixtures loader
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line216">line 216</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>FixturesLoader</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-</div>
-        
-    
-    </div>
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-extensions_fixtures_FixturesLoader-FixturesLoader.html">FixturesLoader</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<div class="section-members">
-<h4 class="name" id=".Fixture"><span class="type-signature">(static) </span>Fixture<span class="type-signature"> :FixturesLoader</span></h4>
-
-
-
-
-<div class="description">
-    fixtures loader extension.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line224">line 224</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><code>FixturesLoader</code></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-</div>
-
-        
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict'
+
+const path = require('path')
+const _ = require('lodash')
+
+const clean = require('./clean')
+const cmdOptions = require('./cmdOptions')
+const statistics = require('./statistics')
+
+/**
+ * Registers hooks for the fixtures extension.
+ *
+ * @module extensions/fixtures/hooks
+ */
+
+module.exports = ({ registerHandler, Before, BeforeAll, AfterAll }) => {
+    Before(function(scenarioInfos) {
+        let file = null
+        let line = null
+
+        if (scenarioInfos.sourceLocation) {
+            // This works with cucumber 3 but not 2
+            file = scenarioInfos.sourceLocation.uri
+            line = scenarioInfos.sourceLocation.line
+        } else {
+            // this works with cucumber 2 but not 3
+            const fullPath = scenarioInfos.scenario.feature.uri
+            const relativePath = path.relative(process.cwd(), fullPath)
+            file = relativePath
+            line = scenarioInfos.scenario.line
+        }
+
+        this.snapshot.featureFile = file
+        this.snapshot.scenarioLine = line
+    })
+
+    if (registerHandler) {
+        // this works with cucumber 2 but not 3
+        registerHandler('BeforeFeatures', function() {
+            clean.resetReferences()
+        })
+
+        registerHandler('AfterFeatures', function() {
+            if (cmdOptions.cleanSnapshots) clean.cleanSnapshots()
+            statistics.printReport()
+        })
+    } else {
+        // This works with cucumber 3 but not 2
+        BeforeAll(function() {
+            clean.resetReferences()
+        })
+
+        AfterAll(function() {
+            if (cmdOptions.cleanSnapshots) clean.cleanSnapshots()
+            statistics.printReport()
+        })
+    }
+}
+</code></pre>
+        </article>
+    </section>
 
 
 
@@ -274,7 +109,7 @@
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon Oct 09 2017 18:24:32 GMT+0200 (CEST) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon Oct 09 2017 18:24:31 GMT+0200 (CEST) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>

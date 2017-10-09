@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>extensions/fixtures/FixturesLoader - Documentation</title>
+    <title>extensions/snapshot/cleanup - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,7 +29,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">extensions/fixtures/FixturesLoader</h1>
+    <h1 class="page-title">extensions/snapshot/cleanup</h1>
     
 
     
@@ -42,8 +42,6 @@
 <header>
     
         
-            
-        
     
 </header>
 
@@ -53,110 +51,6 @@
         
 
         
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="module:extensions/fixtures/FixturesLoader"><span class="type-signature"></span>(require("extensions/fixtures/FixturesLoader"))<span class="signature">()</span><span class="type-signature"> &rarr; {FixturesLoader}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Create a new isolated fixtures loader
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line216">line 216</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>FixturesLoader</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-</div>
-        
     
     </div>
 
@@ -165,31 +59,32 @@
     
 
     
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-extensions_fixtures_FixturesLoader-FixturesLoader.html">FixturesLoader</a></dt>
-            <dd></dd>
-        </dl>
-    
 
      
 
     
 
     
-        <h3 class="subsection-title">Members</h3>
+
+    
+        <h3 class="subsection-title">Methods</h3>
 
         
             
-<div class="section-members">
-<h4 class="name" id=".Fixture"><span class="type-signature">(static) </span>Fixture<span class="type-signature"> :FixturesLoader</span></h4>
+<div class="section-method">
 
+    
+
+    <h4 class="name" id=".cleanSnapshots"><span class="type-signature">(static) </span>cleanSnapshots<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
 
 
 
 <div class="description">
-    fixtures loader extension.
+    Clean snapshots file from removed snapshots
+If a snapshot file is empty, it's deleted
+Only files that have been referenced will be cleaned
 </div>
 
 
@@ -225,7 +120,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line224">line 224</a>
+        <a href="extensions_snapshot_clean.js.html">extensions/snapshot/clean.js</a>, <a href="extensions_snapshot_clean.js.html#line39">line 39</a>
     </li></ul></dd>
     
 
@@ -238,25 +133,274 @@
 
 
 
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><code>FixturesLoader</code></span>
 
 
-        </li>
-    </ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
 
 
 </div>
-
         
+            
+<div class="section-method">
+
     
 
+    <h4 class="name" id=".referenceSnapshot"><span class="type-signature">(static) </span>referenceSnapshot<span class="signature">(file, snapshotName)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Store a snapshot name for a snapshot file
+This can be used after to clean up unused snapshots
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extensions_snapshot_clean.js.html">extensions/snapshot/clean.js</a>, <a href="extensions_snapshot_clean.js.html#line21">line 21</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>file</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                File path
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>snapshotName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                Snapshot name
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id=".resetReferences"><span class="type-signature">(static) </span>resetReferences<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    Clean snapshots names and files
+Used after tests to clear entries
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extensions_snapshot_clean.js.html">extensions/snapshot/clean.js</a>, <a href="extensions_snapshot_clean.js.html#line30">line 30</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
     
 
     

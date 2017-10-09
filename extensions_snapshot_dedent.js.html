@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>extensions/fixtures/FixturesLoader - Documentation</title>
+    <title>extensions/snapshot/dedent.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,242 +29,107 @@
 
 <div id="main">
     
-    <h1 class="page-title">extensions/fixtures/FixturesLoader</h1>
+    <h1 class="page-title">extensions/snapshot/dedent.js</h1>
     
 
     
 
 
 
-
-<section>
-
-<header>
     
-        
-            
-        
-    
-</header>
-
-<article>
-    <div class="container-overview">
-    
-        
-
-        
-            
-<div class="section-method">
-
-    
-
-    <h4 class="name" id="module:extensions/fixtures/FixturesLoader"><span class="type-signature"></span>(require("extensions/fixtures/FixturesLoader"))<span class="signature">()</span><span class="type-signature"> &rarr; {FixturesLoader}</span></h4>
-
-    
-
-
-
-<div class="description">
-    Create a new isolated fixtures loader
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line216">line 216</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class="section-returns">
-<h5>Returns:</h5>
-
-        
-
-<dl class="param-type">
-    <dt>
-        Type:
-    </dt>
-    <dd>
-        
-<span class="param-type"><code>FixturesLoader</code></span>
-
-
-    </dd>
-</dl>
-
-
-    
-</div>
-
-
-
-</div>
-        
-    
-    </div>
-
-    
-
-    
-
-    
-        <h3 class="subsection-title">Classes</h3>
-
-        <dl>
-            <dt><a href="module-extensions_fixtures_FixturesLoader-FixturesLoader.html">FixturesLoader</a></dt>
-            <dd></dd>
-        </dl>
-    
-
-     
-
-    
-
-    
-        <h3 class="subsection-title">Members</h3>
-
-        
-            
-<div class="section-members">
-<h4 class="name" id=".Fixture"><span class="type-signature">(static) </span>Fixture<span class="type-signature"> :FixturesLoader</span></h4>
-
-
-
-
-<div class="description">
-    fixtures loader extension.
-</div>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="extensions_fixtures_fixtures_loader.js.html">extensions/fixtures/fixtures_loader.js</a>, <a href="extensions_fixtures_fixtures_loader.js.html#line224">line 224</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type"><code>FixturesLoader</code></span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-</div>
-
-        
-    
-
-    
-
-    
-
-    
-</article>
-
-</section>
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>'use strict'
+
+/**
+ * @module extensions/snapshot/dedent
+ */
+
+/**
+ * Extract spaces length
+ * @param {string} text
+ * @returns {number} length tab and space before first char
+ */
+const getSpacesLength = text => {
+    let length = 0
+
+    while (length &lt; text.length) {
+        const char = text[length]
+        if (char !== ' ' &amp;&amp; char !== '\t') break
+        length += 1
+    }
+
+    return length
+}
+
+/**
+ * Used to remove indentation from a text. Usefull with multine string in backticks.
+ *
+ * Two way to use it : `
+ *     My text
+ *       Another line
+ *     Another line again
+ * `
+ * the result text will be :
+ * "My text
+ *   Another line
+ * Another line again"
+ *
+ * In this case, alignment is done on the length of the first character that is not a space or a tab of all lines
+ *
+ * Or
+ *
+ * Another way : `
+ *     """
+ *       My text
+ *         Another line
+ *      Another line again
+ *     """
+ * `
+ * the result text will be :
+ * "  My text
+ *      Another line
+ *  Another line again"
+ *
+ *  In this case, alignment is donne on the spaces or tab before """
+ *
+ * Warning : First line and last line will always be ignored
+ *
+ * @param {string} text
+ * @return {string}
+ */
+module.exports = text => {
+    if (typeof text !== 'string') text = text[0]
+
+    let lines = text.split('\n')
+    if (lines.length &lt; 3) return text
+
+    lines = lines.slice(1, lines.length - 1)
+
+    let skipLength = getSpacesLength(lines[0])
+
+    if (
+        lines[0].substr(skipLength, 3) === '"""' &amp;&amp;
+        lines[lines.length - 1].substr(skipLength, 3) === '"""'
+    ) {
+        lines = lines.slice(1, lines.length - 1)
+    } else {
+        for (let i = 0; i &lt; lines.length; i++) {
+            const line = lines[i]
+            skipLength = Math.min(skipLength, getSpacesLength(line))
+        }
+    }
+
+    const resultLines = []
+    for (let i = 0; i &lt; lines.length; i++) {
+        resultLines.push(lines[i].substring(skipLength))
+    }
+
+    return resultLines.join('\n')
+}
+</code></pre>
+        </article>
+    </section>
 
 
 
@@ -274,7 +139,7 @@
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon Oct 09 2017 18:24:32 GMT+0200 (CEST) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a> on Mon Oct 09 2017 18:24:31 GMT+0200 (CEST) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
