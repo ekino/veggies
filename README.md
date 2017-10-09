@@ -427,7 +427,9 @@ If the file does not exist, the test will fail.
 Snapshot testing test a response / content against a saved snapshot.
 Snapshots are stored in a file with same name as the feature file with the extension `.snap`
 in a folder __snapshots__ in the same folder as the feature file.
+
 **:warning: Snapshots files should be versioned to be compared while running tests**
+
 Folder tree should look like : 
 support/
 features/
@@ -435,7 +437,7 @@ features/
   feature_without_snapshot.feature
   __snapshots__/
     feature_with_snapshot.feature.snap
-…
+  …
 
 In a snapshot file, snapshot name follow the pattern: 
 SNAPSHOT_NAME NUMBER_OF_TIME_THIS_NAME_WAS_ENCOUNTERED_IN_CURRENT_FILE.NUMBER_OF_TIME_WE_HAD_A_SNAPSHOT_IN_THIS_SCENARIO.
@@ -465,7 +467,7 @@ Scenario: Creating a resource using typed json payload
   Given I set request json body
     | username  | plouc((string))          |
     | team_id   | 1((number))              |
-    | is_active | true((boolean))          |
+    | is_active | true((boolean))          |
     | hobbies   | drawing,hacking((array)) |
   When I POST https://my-api.io/users
   Then I should receive a 201 HTTP status code
@@ -681,6 +683,7 @@ Then:
   - /^response (.+) cookie domain should (not )?be (.+)$/
   - /^(?:I )?json response should (fully )?match$/
   - /^(?:I )?should receive a collection of ([0-9]+) items?(?: for path )?(.+)?$/
+  - /^response should match fixture (.+)$/
   - /^response header (.+) should (not )?(equal|contain|match) (.+)$/
 ```
 
@@ -873,7 +876,7 @@ defineSupportCode(({ Then }) => {
         this.snapshot.expectToMatch('whatever')
     })
 })
-```
+``
 
 ## Helpers
 

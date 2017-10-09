@@ -41,7 +41,7 @@ It's also the perfect companion for testing CLI applications built with commande
     - [**http API**](#http-api-extension) [install](#http-api-installation) | [gherkin expressions](#http-api-gherkin-expressions) | [low level API](#http-api-low-level-api)
     - [**CLI**](#cli-extension) [install](#cli-installation) | [gherkin expressions](#cli-gherkin-expressions) | [low level API](#cli-low-level-api)
     - [**fileSystem**](#file-system-extension) [install](#file-system-installation) | [gherkin expressions](#file-system-gherkin-expressions) | [low level API](#file-system-low-level-api)
-    - [**snapshot**](#snapshot-extension) [install](#snapshot-installation) | [gherkin expressions](#snapshot-gherkin-expressions) | [low level API](#snapshot-low-level-api)
+    - [**snapshot**](#snapshot-extension) [install](#snapshot-installation) | [low level API](#snapshot-low-level-api)
 - [Helpers](#helpers)
     - [**cast**](#cast-helper) [usage](#cast-usage) | [add a type](#add-a-type)
 - [Examples](#examples)   
@@ -428,21 +428,33 @@ If the file does not exist, the test will fail.
 
 ### Snapshot testing
 
-Snapshot testing test a response / content against a saved response.
-Snapshots are stored in a file with same name as the feature file with the extension ".snap"
+Snapshot testing test a response / content against a saved snapshot.
+Snapshots are stored in a file with same name as the feature file with the extension `.snap`
 in a folder __snapshots__ in the same folder as the feature file.
-In a snapshot file, snapshot name follow the pattern : 
+
+**:warning: Snapshots files should be versioned to be compared while running tests**
+
+Folder tree should look like : 
+support/
+features/
+  feature_with_snapshot.feature
+  feature_without_snapshot.feature
+  __snapshots__/
+    feature_with_snapshot.feature.snap
+  …
+
+In a snapshot file, snapshot name follow the pattern: 
 SNAPSHOT_NAME NUMBER_OF_TIME_THIS_NAME_WAS_ENCOUNTERED_IN_CURRENT_FILE.NUMBER_OF_TIME_WE_HAD_A_SNAPSHOT_IN_THIS_SCENARIO.
-For example, this would give : Scnenario 1 1.1
+For example, this would give: Scnenario 1 1.1
 
 If a snapshot doesn't exists, it will be created the first time.
 
-To update snapshot use the cucumber commande line option '-u'. If you narrowed the tests with tags, only the snapshots 
-related to the tagged scenario will be updated
+To update snapshot use the cucumber command line option '-u'. If you narrowed the tests with tags, only the snapshots 
+related to the tagged scenarios will be updated.
 
-In case you need to remove unused snapshots, you can use the option "--cleanSnapshots".
-Warning : You shouldn't use this option with tags. It may result in used snapshots removed.
-Info : Snapshot files related to feature files with no snapshots anymore won't get removed. You need to do it manually.
+In case you need to remove unused snapshots, you can use the option `--cleanSnapshots`.
+:warning: You shouldn't use this option with tags. It may result in used snapshots removed.
+:information_source: Snapshot files related to feature files with no snapshots anymore won't get removed. You need to do it manually.
 
 #### API Snapshot testing
 
@@ -459,7 +471,7 @@ Scenario: Creating a resource using typed json payload
   Given I set request json body
     | username  | plouc((string))          |
     | team_id   | 1((number))              |
-    | is_active | true((boolean))          |
+    | is_active | true((boolean))          |
     | hobbies   | drawing,hacking((array)) |
   When I POST https://my-api.io/users
   Then I should receive a 201 HTTP status code
@@ -765,8 +777,8 @@ defineSupportCode(({ Then }) => {
 
 #### Snapshot extension installation
 
-The snapshot extension add capabilities to [api](#api-extension), [clie](#cli--extension) and [file](#file-extension) extensions,
-so you will need these extensions if you want to use the gherkin patterns.
+The snapshot extension add capabilities to [api](#http-api-extension), [cli](#cli--extension) and [file](#file-system-extension) extensions,
+so you will need these extensions if you want to use snapshot related gherkin definitions.
 
 To install the extension, you should add the following snippet
 to your `world` file:
@@ -794,13 +806,6 @@ fileSystem.install(defineSupportCode)
 snapshot.install(defineSupportCode)
 ```
 
-#### Snapshot gherkin expressions
-
-{{#definitions.snapshot}}
-{{> definitions}}
-{{/definitions.snapshot}}
-
-
 #### Snapshot low level API
 
 When installed, you can access it from the global cucumber context in your own step definitions.
@@ -813,7 +818,7 @@ defineSupportCode(({ Then }) => {
         this.snapshot.expectToMatch('whatever')
     })
 })
-```
+``
 
 ## Helpers
 
