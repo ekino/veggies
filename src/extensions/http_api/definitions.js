@@ -30,6 +30,16 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     })
 
     /**
+     * Assign http headers
+     * The difference from "set request headers" is that "set" set the whole headers object
+     * "assign" replace or set the given headers, keeping untouched the ones already set 
+     */
+    Given(/^(?:I )?assign request headers$/, function(step) {
+        const headers = Cast.object(this.state.populateObject(step.rowsHash()))
+        _.each(headers, (value, key) => this.httpApiClient.setHeader(key, value))
+    })
+
+    /**
      * Setting a single http header
      */
     Given(/^(?:I )?set ([a-zA-Z0-9-]+) request header to (.+)$/, function(key, value) {
