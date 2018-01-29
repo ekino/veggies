@@ -653,6 +653,7 @@ httpApi.install({
 ```yaml    
 Given:
   - /^(?:I )?set request headers$/
+  - /^(?:I )?assign request headers$/
   - /^(?:I )?set ([a-zA-Z0-9-]+) request header to (.+)$/
   - /^(?:I )?clear request headers/
   - /^(?:I )?set request json body$/

@@ -27,6 +27,28 @@ test('set request headers', () => {
     expect(clientMock.httpApiClient.setHeaders).toHaveBeenCalledWith(headers)
 })
 
+test('assign request headers', () => {
+    const context = helper.define(definitions)
+
+    const def = context.getDefinitionByMatcher('assign request headers')
+    def.shouldHaveType('Given')
+    def.shouldMatch('I assign request headers')
+    def.shouldMatch('assign request headers')
+
+    const clientMock = {
+        httpApiClient: { setHeader: jest.fn() },
+        state: { populateObject: o => o }
+    }
+    const headers = {
+        Accept: 'application/json',
+        'User-Agent': 'veggies/1.0'
+    }
+    def.exec(clientMock, { rowsHash: () => headers })
+    expect(clientMock.httpApiClient.setHeader).toHaveBeenCalledTimes(2)
+    expect(clientMock.httpApiClient.setHeader).toHaveBeenCalledWith('Accept', 'application/json')
+    expect(clientMock.httpApiClient.setHeader).toHaveBeenCalledWith('User-Agent', 'veggies/1.0')
+})
+
 test('set a single request header', () => {
     const context = helper.define(definitions)
 
