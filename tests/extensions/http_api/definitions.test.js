@@ -1,5 +1,6 @@
 'use strict'
 
+jest.mock('fs')
 const fs = require('fs')
 
 const helper = require('../definitions_helper')
