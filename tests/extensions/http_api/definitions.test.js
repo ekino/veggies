@@ -1,8 +1,9 @@
 'use strict'
 
+const fs = require('fs')
+
 const helper = require('../definitions_helper')
 const definitions = require('../../../src/extensions/http_api/definitions')()
-const fs = require('fs')
 
 beforeEach(() => {
     require('chai').clear()
@@ -150,15 +151,6 @@ test('set request form body from fixture file', () => {
     })
 })
 
-test('set request multipart body', () => {
-    const context = helper.define(definitions)
-
-    const def = context.getDefinitionByMatcher('set request multipart body$')
-    def.shouldHaveType('Given')
-    def.shouldMatch('I set request multipart body')
-    def.shouldMatch('set request multipart body')
-})
-
 test('set request multipart body from', () => {
     const context = helper.define(definitions)
 
@@ -172,7 +164,7 @@ test('set request multipart body from', () => {
 
     const fixture = {
         id: '2',
-        file: '/path/to/file.txt'
+        file: fs.ReadStream('path/to/file', {})
     }
     const worldMock = {
         httpApiClient: { setMultipartBody: jest.fn() },
