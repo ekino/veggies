@@ -96,7 +96,9 @@ exports.define = definitions => {
 
             if (found.length > 1) {
                 throw new TypeError(
-                    `Pattern '${pattern}' is ambiguous, found ${found.length} definitions:\n  - ${found
+                    `Pattern '${pattern}' is ambiguous, found ${
+                        found.length
+                    } definitions:\n  - ${found
                         .map(({ matcher }) => matcher.toString())
                         .join('\n  - ')}`
                 )

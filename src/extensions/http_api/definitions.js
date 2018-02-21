@@ -101,6 +101,13 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     })
 
     /**
+     * Setting multipart data
+     */
+    Given(/^(?:I )?set request multipart body$/, function(step) {
+        this.httpApiClient.setMultipartBody(Cast.object(this.state.populateObject(step.rowsHash())))
+    })
+
+    /**
      * Setting multipart data from fixture file
      */
     Given(/^(?:I )?set request multipart body from (.+)$/, function(fixture) {
@@ -352,11 +359,11 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
 
         let expectFn = expect(
             header,
-            `Expected header '${key}' to ${flag
-                ? flag
-                : ''}${comparator} '${expectedValue}', but found '${header}' which does${flag
-                ? ''
-                : ' not'}`
+            `Expected header '${key}' to ${
+                flag ? flag : ''
+            }${comparator} '${expectedValue}', but found '${header}' which does${
+                flag ? '' : ' not'
+            }`
         ).to
         if (flag !== undefined) {
             expectFn = expectFn.not
