@@ -12,6 +12,7 @@ const { Cookie } = require('tough-cookie')
 
 const BODY_TYPE_JSON = 'json'
 const BODY_TYPE_FORM = 'form'
+const BODY_TYPE_MULTIPART = 'form-data'
 
 /**
  * Http Api Client extension.
@@ -66,6 +67,16 @@ class HttpApiClient {
      */
     setFormBody(payload) {
         this.bodyType = BODY_TYPE_FORM
+        this.body = payload
+    }
+
+    /**
+     * Sets request body for multipart form data
+     *
+     * @param {Object} payload
+     */
+    setMultipartBody(payload) {
+        this.bodyType = BODY_TYPE_MULTIPART
         this.body = payload
     }
 
@@ -219,6 +230,8 @@ class HttpApiClient {
                     options.body = this.body
                 } else if (this.bodyType === BODY_TYPE_FORM) {
                     options.form = this.body
+                } else if (this.bodyType == BODY_TYPE_MULTIPART) {
+                    options.formData = this.body
                 }
             }
 

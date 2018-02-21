@@ -149,6 +149,15 @@ test('set request form body from fixture file', () => {
     })
 })
 
+test('set request multipart body', () => {
+    const context = helper.define(definitions)
+
+    const def = context.getDefinitionByMatcher('set request multipart body$')
+    def.shouldHaveType('Given')
+    def.shouldMatch('I set request multipart body')
+    def.shouldMatch('set request multipart body')
+})
+
 test('clear request body', () => {
     const context = helper.define(definitions)
 

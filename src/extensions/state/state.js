@@ -21,21 +21,21 @@ class State {
     }
 
     /**
-    * Sets value for given key.
-    *
-    * @param {string} key   - The key you wish to set a value for
-    * @param {*}      value - The value
-    */
+     * Sets value for given key.
+     *
+     * @param {string} key   - The key you wish to set a value for
+     * @param {*}      value - The value
+     */
     set(key, value) {
         return _.set(this.state, key, value)
     }
 
     /**
-    * Retrieves a value for given key.
-    *
-    * @param {string} key - The key you wish to retrieve a value for
-    * @return {*}
-    */
+     * Retrieves a value for given key.
+     *
+     * @param {string} key - The key you wish to retrieve a value for
+     * @return {*}
+     */
     get(key) {
         return _.get(this.state, key)
     }

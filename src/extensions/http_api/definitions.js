@@ -32,7 +32,7 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     /**
      * Assign http headers
      * The difference from "set request headers" is that "set" set the whole headers object
-     * "assign" replace or set the given headers, keeping untouched the ones already set 
+     * "assign" replace or set the given headers, keeping untouched the ones already set
      */
     Given(/^(?:I )?assign request headers$/, function(step) {
         const headers = Cast.object(this.state.populateObject(step.rowsHash()))
@@ -82,6 +82,22 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     Given(/^(?:I )?set request form body from (.+)$/, function(fixture) {
         return this.fixtures.load(fixture).then(data => {
             this.httpApiClient.setFormBody(data)
+        })
+    })
+
+    /**
+     * Setting multipart data
+     */
+    Given(/^(?:I )?set request multipart body$/, function(step) {
+        this.httpApiClient.setMultipartBody(Cast.object(this.state.populateObject(step.rowsHash())))
+    })
+
+    /**
+     * Setting multipart data from fixture file
+     */
+    Given(/^(?:I )?set request multipart body from (.+)$/, function(fixture) {
+        return this.fixtures.load(fixture).then(data => {
+            this.httpApiClient.setMultipartBody(data)
         })
     })
 
@@ -369,11 +385,11 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
 
         let expectFn = expect(
             header,
-            `Expected header '${key}' to ${flag
-                ? flag
-                : ''}${comparator} '${expectedValue}', but found '${header}' which does${flag
-                ? ''
-                : ' not'}`
+            `Expected header '${key}' to ${
+                flag ? flag : ''
+            }${comparator} '${expectedValue}', but found '${header}' which does${
+                flag ? '' : ' not'
+            }`
         ).to
         if (flag !== undefined) {
             expectFn = expectFn.not
