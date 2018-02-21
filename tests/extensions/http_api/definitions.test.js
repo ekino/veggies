@@ -2,6 +2,7 @@
 
 const helper = require('../definitions_helper')
 const definitions = require('../../../src/extensions/http_api/definitions')()
+const fs = require('fs')
 
 beforeEach(() => {
     require('chai').clear()
@@ -156,6 +157,32 @@ test('set request multipart body', () => {
     def.shouldHaveType('Given')
     def.shouldMatch('I set request multipart body')
     def.shouldMatch('set request multipart body')
+})
+
+test('set request multipart body from', () => {
+    const context = helper.define(definitions)
+
+    expect.assertions(6)
+
+    const def = context.getDefinitionByMatcher('set request multipart body from')
+    def.shouldHaveType('Given')
+    def.shouldNotMatch('I set request multipart body from ')
+    def.shouldMatch('I set request multipart body from fixture')
+    def.shouldMatch('set request multipart body from fixture')
+
+    const fixture = {
+        id: '2',
+        file: '/path/to/file.txt'
+    }
+    const worldMock = {
+        httpApiClient: { setMultipartBody: jest.fn() },
+        fixtures: { load: jest.fn(() => Promise.resolve(fixture)) }
+    }
+
+    return def.exec(worldMock, 'fixture').then(() => {
+        expect(worldMock.fixtures.load).toHaveBeenCalledWith('fixture')
+        expect(worldMock.httpApiClient.setMultipartBody).toHaveBeenCalledWith(fixture)
+    })
 })
 
 test('clear request body', () => {
