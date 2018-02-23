@@ -32,7 +32,7 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     /**
      * Assign http headers
      * The difference from "set request headers" is that "set" set the whole headers object
-     * "assign" replace or set the given headers, keeping untouched the ones already set 
+     * "assign" replace or set the given headers, keeping untouched the ones already set
      */
     Given(/^(?:I )?assign request headers$/, function(step) {
         const headers = Cast.object(this.state.populateObject(step.rowsHash()))
@@ -82,6 +82,15 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     Given(/^(?:I )?set request form body from (.+)$/, function(fixture) {
         return this.fixtures.load(fixture).then(data => {
             this.httpApiClient.setFormBody(data)
+        })
+    })
+
+    /**
+     * Setting multipart data from fixture file
+     */
+    Given(/^(?:I )?set request multipart body from (.+)$/, function(fixture) {
+        return this.fixtures.load(fixture).then(data => {
+            this.httpApiClient.setMultipartBody(data)
         })
     })
 
