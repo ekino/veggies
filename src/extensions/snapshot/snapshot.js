@@ -17,7 +17,8 @@ const EXPECTED_COLOR = chalk.green
 const RECEIVED_COLOR = chalk.red
 
 exports.scenarioRegex = /^[\s]*Scenario:[\s]*(.*[^\s])[\s]*$/
-
+exports.examplesRegex = /^[\s]*Examples:[\s]*$/
+exports.oneExampleRegex = /\|(.*)\|/
 /**
  * Extract scenarios from a feature file
  * @param {string} file - Feature file path
@@ -32,13 +33,66 @@ exports.extractScenarios = file => {
     const linesContent = _.split(content, '\n')
 
     let result = []
+    let skipToIndex = -1
+
     _.forEach(linesContent, (lineContent, idx) => {
+        //In the case of a Scenario Outline, skip to its end after it has been processed
+        if (skipToIndex > 0) {
+            if (skipToIndex === idx) {
+                skipToIndex = -1
+            } else {
+                return
+            }
+        }
+
         const line = idx + 1
         const scenarioInfos = this.scenarioRegex.exec(lineContent)
         if (scenarioInfos) result.push({ line, name: scenarioInfos[1] })
+
+        const scenarioOutlineInfo = this.examplesRegex.exec(lineContent)
+        if (scenarioOutlineInfo) {
+            const examples = extractExampleLines(
+                _.slice(linesContent, idx + 1),
+                idx + 2,
+                scenarioOutlineInfo[1]
+            )
+            result.push(...examples.results)
+        }
     })
 
     return result
+}
+
+/**
+ * A function to extract the lines of examples in the Scenario outline
+ *
+ * @param {Array<String>}   examplesLinesContent - The remaining lines to be examined and parsed
+ * @param {number}          offset               - The index of the first line in the original text
+ * @param {String}          name                 - the name for the scenarios
+ * @returns {{results: Array, endIndex: *}}
+ */
+const extractExampleLines = (examplesLinesContent, offset, name = 'Scenario Outline') => {
+    const results = []
+    let endIndex = offset
+    let headersSkipped = false
+
+    _.forEach(examplesLinesContent, (lineContent, idx) => {
+        if (lineContent.match(/^\s*$/) || lineContent.match(/[\s]*#.*/)) return //skip empty lines and comments
+        const index = offset + idx
+        endIndex = index
+        const example = this.oneExampleRegex.exec(lineContent)
+        if (example) {
+            if (headersSkipped) {
+                results.push({ line: index, name })
+            } else {
+                headersSkipped = true
+            }
+        } else {
+            return false //break out of the loop
+        }
+    })
+
+    return { results, endIndex }
 }
 
 /**

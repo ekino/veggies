@@ -15,3 +15,23 @@ Feature: Using snapshot definitions
     Scenario: Snapshot testing on files
         Given I set cwd to examples/features/snapshot/fixtures
         Then file file.yaml should match snapshot
+
+    Scenario Outline: I get all posts filtered using '<filter>=<value>' directive
+        Given I mock http call to forward request body for path /users/yaml
+        When I POST http://fake.io/users/yaml
+        Then response status code should be 200
+        And response body should match snapshot
+
+        Examples:
+            | filter       | value          |
+
+            | title        | car industry   |
+
+            | anotherTitle | antother value |
+            # this comment and the empty lines above and below shouldn't be taken into account
+
+
+            | tester       | tesfdkngjsfk   |
+    Scenario: Snapshot testing on files
+        Given I set cwd to examples/features/snapshot/fixtures
+        Then file file.yaml should match snapshot

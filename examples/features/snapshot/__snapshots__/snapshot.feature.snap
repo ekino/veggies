@@ -1,5 +1,13 @@
 
 
+exports[`Scenario Outline 1.1`] = `undefined`;
+
+exports[`Scenario Outline 2.1`] = `undefined`;
+
+exports[`Scenario Outline 3.1`] = `undefined`;
+
+exports[`Scenario Outline 4.1`] = `undefined`;
+
 exports[`Setting json body from .yaml fixture file 1.1`] = `Object {
   "first_name": "Raphaël",
   "gender": "male",
@@ -18,6 +26,12 @@ exports[`Snapshot testing on cli 1.1`] = `"test
 "`;
 
 exports[`Snapshot testing on files 1.1`] = `"id:         1
+first_name: Raphaël
+last_name:  Benitte
+gender:     male
+"`;
+
+exports[`Snapshot testing on files 2.1`] = `"id:         1
 first_name: Raphaël
 last_name:  Benitte
 gender:     male
