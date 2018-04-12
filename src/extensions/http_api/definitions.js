@@ -32,14 +32,14 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     /**
      * Setting http option followRedirect to false
      */
-    Given(/^(?:I )? do not follow redirect$/, function() {
+    Given(/^(?:I )?do not follow redirect$/, function() {
         this.httpApiClient.setFollowRedirect(false)
     })
 
     /**
      * Setting http option followRedirect to true
      */
-    Given(/^(?:I )? follow redirect$/, function() {
+    Given(/^(?:I )?follow redirect$/, function() {
         this.httpApiClient.setFollowRedirect(true)
     })
 
