@@ -653,8 +653,8 @@ httpApi.install({
 ```yaml    
 Given:
   - /^(?:I )?set request headers$/
-  - /^(?:I )? do not follow redirect$/
-  - /^(?:I )? follow redirect$/
+  - /^(?:I )?do not follow redirect$/
+  - /^(?:I )?follow redirect$/
   - /^(?:I )?assign request headers$/
   - /^(?:I )?set ([a-zA-Z0-9-]+) request header to (.+)$/
   - /^(?:I )?clear request headers/
