@@ -30,6 +30,20 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     })
 
     /**
+     * Setting http option followRedirect to false
+     */
+    Given(/^(?:I )? do not follow redirect$/, function() {
+        this.httpApiClient.setFollowRedirect(false)
+    })
+
+    /**
+     * Setting http option followRedirect to true
+     */
+    Given(/^(?:I )? follow redirect$/, function() {
+        this.httpApiClient.setFollowRedirect(true)
+    })
+
+    /**
      * Assign http headers
      * The difference from "set request headers" is that "set" set the whole headers object
      * "assign" replace or set the given headers, keeping untouched the ones already set
