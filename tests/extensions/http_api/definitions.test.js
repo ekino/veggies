@@ -401,10 +401,11 @@ test('reset http client', () => {
 test('perform a request', () => {
     const context = helper.define(definitions)
 
-    const def = context.getDefinitionByMatcher('GET|POST|PUT|DELETE')
+    const def = context.getDefinitionByMatcher('GET|PATCH|POST|PUT|DELETE')
     def.shouldHaveType('When')
     def.shouldNotMatch('I GET ')
     def.shouldMatch('I GET /', ['GET', '/'])
+    def.shouldMatch('I PATCH /updatePartial', ['PATCH', '/updatePartial'])
     def.shouldMatch('I POST /create', ['POST', '/create'])
     def.shouldMatch('I PUT /update', ['PUT', '/update'])
     def.shouldMatch('I DELETE /delete', ['DELETE', '/delete'])
