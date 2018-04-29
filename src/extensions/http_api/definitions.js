@@ -170,7 +170,7 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     /**
      * Performing a request
      */
-    When(/^(?:I )?(GET|POST|PUT|DELETE) (.+)$/, function(method, path) {
+    When(/^(?:I )?(GET|PATCH|POST|PUT|DELETE) (.+)$/, function(method, path) {
         return this.httpApiClient.makeRequest(method, this.state.populate(path), baseUrl)
     })
 
