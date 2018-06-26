@@ -1,6 +1,6 @@
 'use strict'
 
-const Cast = require('../src/cast')
+const Cast = require('../../src/core/cast')
 
 test('cast nulls', () => {
     expect(Cast.value('((null))')).toBe(null)

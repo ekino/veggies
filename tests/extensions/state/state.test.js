@@ -1,6 +1,6 @@
 'use strict'
 
-const State = require('../src/extensions/state/state')
+const State = require('../../../src/extensions/state/state')
 
 const state = State()
 

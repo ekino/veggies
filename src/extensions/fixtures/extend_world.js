@@ -1,9 +1,9 @@
 'use strict'
 
-const Helper = require('../../helper')
+const Registry = require('../../core/registry')
 const Loader = require('./fixtures_loader')
 
 module.exports = (world, options) => {
     world.fixtures = Loader(options)
-    Helper.registerExtension(world, 'fixtures')
+    Registry.registerExtension(world, 'fixtures')
 }
