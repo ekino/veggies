@@ -1,6 +1,6 @@
 'use strict'
 
-const Cast = require('../../cast')
+const Cast = require('../../core/cast')
 
 module.exports = ({ Given, When }) => {
     Given(/^(?:I )?set state (.+) to (.+)$/, function(key, value) {

@@ -211,6 +211,36 @@ test('set request query', () => {
     expect(clientMock.httpApiClient.setQuery).toHaveBeenCalledWith(query)
 })
 
+test('follow redirect', () => {
+    const context = helper.define(definitions)
+
+    const def = context.getDefinitionByMatcher('?follow redirect')
+    def.shouldHaveType('Given')
+    def.shouldMatch('I follow redirect')
+    def.shouldMatch('follow redirect')
+
+    const clientMock = {
+        httpApiClient: { setFollowRedirect: jest.fn() }
+    }
+    def.exec(clientMock)
+    expect(clientMock.httpApiClient.setFollowRedirect).toHaveBeenCalledWith(true)
+})
+
+test('do not follow redirect', () => {
+    const context = helper.define(definitions)
+
+    const def = context.getDefinitionByMatcher('do not follow redirect')
+    def.shouldHaveType('Given')
+    def.shouldMatch('I do not follow redirect')
+    def.shouldMatch('do not follow redirect')
+
+    const clientMock = {
+        httpApiClient: { setFollowRedirect: jest.fn() }
+    }
+    def.exec(clientMock)
+    expect(clientMock.httpApiClient.setFollowRedirect).toHaveBeenCalledWith(false)
+})
+
 test('pick response json property', () => {
     const context = helper.define(definitions)
 

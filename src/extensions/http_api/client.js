@@ -14,6 +14,9 @@ const BODY_TYPE_JSON = 'json'
 const BODY_TYPE_FORM = 'form'
 const BODY_TYPE_MULTIPART = 'form-data'
 
+const verbsAcceptingBody = ['POST', 'PUT', 'DELETE']
+
+
 /**
  * Http Api Client extension.
  *
@@ -28,6 +31,7 @@ class HttpApiClient {
         this.query = null
         this.cookies = []
         this.cookieJar = null
+        this.followRedirect = true
 
         // RESPONSE INFORMATION
         this.response = null
@@ -45,6 +49,7 @@ class HttpApiClient {
 
         this.cookies = []
         this.cookieJar = null
+        this.followRedirect = true
 
         this.response = null
         this.responseCookies = {}
@@ -71,6 +76,15 @@ class HttpApiClient {
     }
 
     /**
+
+     * Sets Follow Redirect option.
+     *
+     */
+    setFollowRedirect(isEnabled) {
+        this.followRedirect = isEnabled
+    }
+
+ /**
      * Sets request body for multipart form data
      *
      * @param {Object} payload
@@ -213,7 +227,8 @@ class HttpApiClient {
                 method,
                 qs: this.query || {},
                 headers: this.headers,
-                jar: this.cookieJar
+                jar: this.cookieJar,
+                followRedirect: this.followRedirect
             }
 
             const fullUri = `${baseUrl}${path}`
@@ -222,6 +237,12 @@ class HttpApiClient {
                 if (!['POST', 'PUT', 'PATCH'].includes(method)) {
                     throw new Error(
                         `You can only provides a body for POST, PUT, PATCH HTTP methods, found: ${method}`
+
+                if (!verbsAcceptingBody.includes(method)) {
+                    throw new Error(
+                        `You can only provide a body for ${verbsAcceptingBody.join(
+                            ', '
+                        )} HTTP methods, found: ${method}`
                     )
                 }
 
