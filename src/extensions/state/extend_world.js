@@ -1,9 +1,9 @@
 'use strict'
 
-const Helper = require('../../helper')
+const Registry = require('../../core/registry')
 const State = require('./state')
 
 module.exports = world => {
     world.state = State()
-    Helper.registerExtension(world, 'state')
+    Registry.registerExtension(world, 'state')
 }

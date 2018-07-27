@@ -11,6 +11,7 @@ exports.fileSystem = require('./extensions/file_system')
 exports.snapshot = require('./extensions/snapshot')
 
 //**********************************************************************************************************************
-// Helpers
+// Core
 //**********************************************************************************************************************
-exports.cast = require('./cast')
+exports.cast = require('./core/cast')
+exports.assertions = require('./core/assertions')

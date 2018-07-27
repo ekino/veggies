@@ -653,6 +653,8 @@ httpApi.install({
 ```yaml    
 Given:
   - /^(?:I )?set request headers$/
+  - /^(?:I )?do not follow redirect$/
+  - /^(?:I )?follow redirect$/
   - /^(?:I )?assign request headers$/
   - /^(?:I )?set ([a-zA-Z0-9-]+) request header to (.+)$/
   - /^(?:I )?clear request headers/
@@ -660,6 +662,7 @@ Given:
   - /^(?:I )?set request json body from (.+)$/
   - /^(?:I )?set request form body$/
   - /^(?:I )?set request form body from (.+)$/
+  - /^(?:I )?set request multipart body from (.+)$/
   - /^(?:I )?clear request body$/
   - /^(?:I )?set request query$/
   - /^(?:I )?pick response json (.+) as (.+)$/

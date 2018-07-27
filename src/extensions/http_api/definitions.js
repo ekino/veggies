@@ -1,10 +1,11 @@
 'use strict'
 
+const { inspect } = require('util')
 const { expect } = require('chai')
 const _ = require('lodash')
 
-const Cast = require('../../cast')
-const Helper = require('../../helper')
+const Cast = require('../../core/cast')
+const { assertObjectMatchSpec } = require('../../core/assertions')
 
 const { STATUS_CODES } = require('http')
 const STATUS_MESSAGES = _.values(STATUS_CODES).map(_.lowerCase)
@@ -27,6 +28,20 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
      */
     Given(/^(?:I )?set request headers$/, function(step) {
         this.httpApiClient.setHeaders(Cast.object(this.state.populateObject(step.rowsHash())))
+    })
+
+    /**
+     * Setting http option followRedirect to false
+     */
+    Given(/^(?:I )?do not follow redirect$/, function() {
+        this.httpApiClient.setFollowRedirect(false)
+    })
+
+    /**
+     * Setting http option followRedirect to true
+     */
+    Given(/^(?:I )?follow redirect$/, function() {
+        this.httpApiClient.setFollowRedirect(true)
     })
 
     /**
@@ -164,7 +179,7 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
      */
     When(/^(?:I )?dump response body$/, function() {
         const response = mustGetResponse(this.httpApiClient)
-        console.log(response.body) // eslint-disable-line no-console
+        console.log(inspect(response.body, { colors: true, depth: null })) // eslint-disable-line no-console
     })
 
     /**
@@ -276,64 +291,23 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
      * This definition can be used for checking an object response.
      * It check that the properties of this object match with the expected properties
      * The columns header are | field | matcher | value |
-     * You can define severals matchers :
-     * - equals
-     * - contains
+     * @see Assertions.assertObjectMatchSpec
      */
     Then(/^(?:I )?json response should (fully )?match$/, function(fully, table) {
         const response = mustGetResponse(this.httpApiClient)
         const { body } = response
 
-        const expectedProperties = table.hashes()
-
         // We check the response has json content-type
         expect(response.headers['content-type']).to.contain('application/json')
 
-        // We check response properties correspond to the expected response
-        expectedProperties.forEach(({ field, matcher, value }) => {
-            const currentValue = _.get(body, field)
-            const expectedValue = Cast.value(this.state.populate(value))
+        // First we populate spec values if it contains some placeholder
+        const spec = table.hashes().map(fieldSpec =>
+            _.assign({}, fieldSpec, {
+                value: this.state.populate(fieldSpec.value)
+            })
+        )
 
-            switch (matcher) {
-                case 'match':
-                case 'matches':
-                    expect(
-                        currentValue,
-                        `Property '${field}' (${currentValue}) does not match '${expectedValue}'`
-                    ).to.match(new RegExp(expectedValue))
-                    break
-
-                case 'contain':
-                case 'contains':
-                    expect(
-                        currentValue,
-                        `Property '${field}' (${currentValue}) does not contain '${expectedValue}'`
-                    ).to.contain(expectedValue)
-                    break
-
-                case 'defined':
-                case 'present':
-                    expect(currentValue, `Property '${field}' is undefined`).to.not.be.undefined
-                    break
-
-                case 'equal':
-                case 'equals':
-                default:
-                    expect(
-                        currentValue,
-                        `Expected property '${field}' to equal '${value}', but found '${currentValue}'`
-                    ).to.be.deep.equal(expectedValue)
-            }
-        })
-
-        // We check we have exactly the same number of properties as expected
-        if (fully) {
-            const propertiesCount = Helper.countNestedProperties(body)
-            expect(
-                propertiesCount,
-                'Expected json response to fully match spec, but it does not'
-            ).to.be.equal(table.hashes().length)
-        }
+        assertObjectMatchSpec(body, spec, !!fully)
     })
 
     /**
