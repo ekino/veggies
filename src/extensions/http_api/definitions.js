@@ -306,7 +306,6 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
                 value: this.state.populate(fieldSpec.value)
             })
         )
-
         assertObjectMatchSpec(body, spec, !!fully)
     })
 
