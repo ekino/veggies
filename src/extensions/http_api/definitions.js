@@ -315,7 +315,9 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
                 case 'present':
                     expect(currentValue, `Property '${field}' is undefined`).to.not.be.undefined
                     break
-
+                case 'notPresent':
+                expect(currentValue, `Property '${field}' is undefined`).to.be.undefined
+                    break
                 case 'equal':
                 case 'equals':
                 default:
