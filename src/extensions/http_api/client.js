@@ -14,7 +14,7 @@ const BODY_TYPE_JSON = 'json'
 const BODY_TYPE_FORM = 'form'
 const BODY_TYPE_MULTIPART = 'form-data'
 
-const verbsAcceptingBody = ['POST', 'PUT', 'DELETE']
+const verbsAcceptingBody = ['POST', 'PUT', 'DELETE', 'PATCH']
 
 /**
  * Http Api Client extension.
@@ -232,6 +232,7 @@ class HttpApiClient {
             const fullUri = `${baseUrl}${path}`
 
             if (this.body !== null) {
+
                 if (!verbsAcceptingBody.includes(method)) {
                     throw new Error(
                         `You can only provide a body for ${verbsAcceptingBody.join(
