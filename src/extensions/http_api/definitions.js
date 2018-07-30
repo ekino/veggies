@@ -297,9 +297,10 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
         const response = mustGetResponse(this.httpApiClient)
         const { body } = response
 
+        const expectedProperties = table.hashes()
+
         // We check the response has json content-type
         expect(response.headers['content-type']).to.contain('application/json')
-
 
         // We check response properties correspond to the expected response
         expectedProperties.forEach(({ field, matcher, value }) => {
@@ -327,9 +328,7 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
                 case 'present':
                     expect(currentValue, `Property '${field}' is undefined`).to.not.be.undefined
                     break
-                case 'notPresent':
-                expect(currentValue, `Property '${field}' is undefined`).to.be.undefined
-                    break
+
                 case 'equal':
                 case 'equals':
                 default:
@@ -346,7 +345,6 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
                 value: this.state.populate(fieldSpec.value)
             })
         )
-
 
         assertObjectMatchSpec(body, spec, !!fully)
     })
@@ -393,11 +391,11 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
 
         let expectFn = expect(
             header,
-            `Expected header '${key}' to ${flag
-                ? flag
-                : ''}${comparator} '${expectedValue}', but found '${header}' which does${flag
-                ? ''
-                : ' not'}`
+            `Expected header '${key}' to ${
+                flag ? flag : ''
+            }${comparator} '${expectedValue}', but found '${header}' which does${
+                flag ? '' : ' not'
+            }`
         ).to
         if (flag !== undefined) {
             expectFn = expectFn.not

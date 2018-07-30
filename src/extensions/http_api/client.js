@@ -14,8 +14,7 @@ const BODY_TYPE_JSON = 'json'
 const BODY_TYPE_FORM = 'form'
 const BODY_TYPE_MULTIPART = 'form-data'
 
-const verbsAcceptingBody = ['POST', 'PUT', 'DELETE']
-
+const verbsAcceptingBody = ['POST', 'PUT', 'DELETE', 'PATCH']
 
 /**
  * Http Api Client extension.
@@ -84,7 +83,7 @@ class HttpApiClient {
         this.followRedirect = isEnabled
     }
 
- /**
+    /**
      * Sets request body for multipart form data
      *
      * @param {Object} payload
@@ -237,6 +236,8 @@ class HttpApiClient {
                 if (!['POST', 'PUT', 'PATCH'].includes(method)) {
                     throw new Error(
                         `You can only provides a body for POST, PUT, PATCH HTTP methods, found: ${method}`
+                    )
+                }
 
                 if (!verbsAcceptingBody.includes(method)) {
                     throw new Error(

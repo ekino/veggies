@@ -108,12 +108,13 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
                     `Property '${field}' (${currentValue}) does not contain '${expectedValue}'`
                 ).to.contain(expectedValue)
                 break
-
             case 'defined':
             case 'present':
                 expect(currentValue, `Property '${field}' is undefined`).to.not.be.undefined
                 break
-
+            case 'notPresent':
+                expect(currentValue, `Property '${field}' is undefined`).to.be.undefined
+                break
             case 'equal':
             case 'equals':
             default:
