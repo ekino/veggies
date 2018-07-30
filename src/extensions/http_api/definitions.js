@@ -170,7 +170,7 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
     /**
      * Performing a request
      */
-    When(/^(?:I )?(GET|POST|PUT|DELETE) (.+)$/, function(method, path) {
+    When(/^(?:I )?(GET|PATCH|POST|PUT|DELETE) (.+)$/, function(method, path) {
         return this.httpApiClient.makeRequest(method, this.state.populate(path), baseUrl)
     })
 
@@ -297,6 +297,8 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
         const response = mustGetResponse(this.httpApiClient)
         const { body } = response
 
+        const expectedProperties = table.hashes()
+
         // We check the response has json content-type
         expect(response.headers['content-type']).to.contain('application/json')
 
@@ -352,11 +354,11 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
 
         let expectFn = expect(
             header,
-            `Expected header '${key}' to ${flag
-                ? flag
-                : ''}${comparator} '${expectedValue}', but found '${header}' which does${flag
-                ? ''
-                : ' not'}`
+            `Expected header '${key}' to ${
+                flag ? flag : ''
+            }${comparator} '${expectedValue}', but found '${header}' which does${
+                flag ? '' : ' not'
+            }`
         ).to
         if (flag !== undefined) {
             expectFn = expectFn.not
