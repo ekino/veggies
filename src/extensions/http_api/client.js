@@ -233,12 +233,6 @@ class HttpApiClient {
             const fullUri = `${baseUrl}${path}`
 
             if (this.body !== null) {
-                if (!['POST', 'PUT', 'PATCH'].includes(method)) {
-                    throw new Error(
-                        `You can only provides a body for POST, PUT, PATCH HTTP methods, found: ${method}`
-                    )
-                }
-
                 if (!verbsAcceptingBody.includes(method)) {
                     throw new Error(
                         `You can only provide a body for ${verbsAcceptingBody.join(
