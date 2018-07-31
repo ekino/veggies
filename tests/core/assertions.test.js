@@ -96,12 +96,17 @@ test('object property is not defined', () => {
         {
             field: 'name',
             matcher: 'notPresent'
+        },
+        {
+            field: 'gender',
+            matcher: 'notPresent'
         }
     ]
 
     assertObjectMatchSpec({ name: 'Joe' }, spec)
 
     expect(require('chai').expect).toHaveBeenCalledWith('Joe', `Property 'name' is defined`)
+    expect(require('chai').expect).toHaveBeenCalledWith(undefined, `Property 'gender' is defined`)
 })
 
 test('check object property equals expected value', () => {
