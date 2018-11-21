@@ -165,7 +165,7 @@ test('set request multipart body from', () => {
 
     const fixture = {
         id: '2',
-        file: fs.ReadStream('path/to/file', {})
+        file: fs.createReadStream('path/to/file', {})
     }
     const worldMock = {
         httpApiClient: { setMultipartBody: jest.fn() },

@@ -1,8 +1,9 @@
 language: node_js
 node_js:
   - '6'
-  - '7'
   - '8'
+  - '10'
+  - '11'
 env:
   - CUMCUMBER_VERSION=2.x.x
   - CUMCUMBER_VERSION=3.x.x

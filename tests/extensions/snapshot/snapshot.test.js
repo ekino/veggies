@@ -112,7 +112,7 @@ test('diff should show multiples diff', () => {
         \u001b[31m+             "key4": "value7",\u001b[39m
         \u001b[2m              "key5": "value5",\u001b[22m
         \u001b[2m          }\u001b[22m
-        \u001b[2m      \u001b[22m
+        \u001b[2m  \u001b[43m    \u001b[49m\u001b[22m
         """
     `
 

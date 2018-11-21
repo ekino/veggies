@@ -39,7 +39,7 @@ afterEach(function() {
 })
 
 test('Snapshot should report created snapshots', () => {
-    const cucumberBin = path.join(process.cwd(), './node_modules/.bin/cucumberjs')
+    const cucumberBin = path.join(process.cwd(), './node_modules/.bin/cucumber-js')
     let command = `${cucumberBin} --color --require cucumber_test/support cucumber_test/features`
     const cwd = __dirname
 
@@ -59,7 +59,7 @@ test('Snapshot should report created snapshots', () => {
 })
 
 test('Snapshot module report updated snapshots and support the -u option', () => {
-    const cucumberBin = path.join(process.cwd(), './node_modules/.bin/cucumberjs')
+    const cucumberBin = path.join(process.cwd(), './node_modules/.bin/cucumber-js')
     let command = `${cucumberBin} --color -u --require cucumber_test/support cucumber_test/features`
     const cwd = __dirname
 
@@ -79,7 +79,7 @@ test('Snapshot module report updated snapshots and support the -u option', () =>
 })
 
 test('Snapshot module report removed snapshots and support --cleanSnapshots option', () => {
-    const cucumberBin = path.join(process.cwd(), './node_modules/.bin/cucumberjs')
+    const cucumberBin = path.join(process.cwd(), './node_modules/.bin/cucumber-js')
     let command = `${cucumberBin} --color --cleanSnapshots --require cucumber_test/support cucumber_test/features`
     const cwd = __dirname
 
@@ -99,7 +99,7 @@ test('Snapshot module report removed snapshots and support --cleanSnapshots opti
 })
 
 test('Snapshot module report created, updated and removed snapshots and support the --updateSnapshots option', () => {
-    const cucumberBin = path.join(process.cwd(), './node_modules/.bin/cucumberjs')
+    const cucumberBin = path.join(process.cwd(), './node_modules/.bin/cucumber-js')
     let command = `${cucumberBin} --color --cleanSnapshots --updateSnapshots --require cucumber_test/support cucumber_test/features`
     const cwd = __dirname
 

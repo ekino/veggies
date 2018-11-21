@@ -1,0 +1,12 @@
+README.tpl.md:
+  - readme
+  - git add
+
+"*.feature":
+  - cucumberjs --require examples/support examples/features --tags @offline
+
+"*.js":
+  - yarn lint-fix
+  - yarn fmt
+  - git add
+  - jest --bail --findRelatedTests
