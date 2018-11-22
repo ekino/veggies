@@ -1,8 +1,9 @@
 'use strict'
 
+const { Given, Then } = require('cucumber')
 const { expect } = require('chai')
 
-module.exports = ({ Given, Then }) => {
+exports.install = () => {
     /**
      * Creating a directory.
      */

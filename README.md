@@ -49,7 +49,7 @@ It's also the perfect companion for testing CLI applications built with commande
 ## Requirements
     
 - Node.js `>=6.0.0`
-- cucumber `>=2.0.0`
+- cucumber `>=4.0.0`
     
 ## Installation
 
@@ -70,24 +70,24 @@ Then all you have to do is installing the provided extensions:
 ```javascript
 // /support/world.js
 
-const { defineSupportCode } = require('cucumber')
+const { setWorldConstructor } = require('cucumber')
 const { state, fixtures, httpApi, cli } = require('@ekino/veggies')
 
-defineSupportCode(({ setWorldConstructor }) => {
-    setWorldConstructor(function() {
-        state.extendWorld(this)
-        fixtures.extendWorld(this)
-        httpApi.extendWorld(this)
-        cli.extendWorld(this)
-    })
+
+setWorldConstructor(function() {
+    state.extendWorld(this)
+    fixtures.extendWorld(this)
+    httpApi.extendWorld(this)
+    cli.extendWorld(this)
 })
 
-state.install(defineSupportCode)
-fixtures.install(defineSupportCode)
+
+state.install()
+fixtures.install()
 httpApi.install({
-    baseUrl: 'http://localhost:3000',
-})(defineSupportCode)
-cli.install(defineSupportCode)
+    baseUrl: 'http://localhost:3000'
+})
+cli.install()
 ```
 
 ## Features

@@ -5,8 +5,8 @@ node_js:
   - '10'
   - '11'
 env:
-  - CUMCUMBER_VERSION=2.x.x
-  - CUMCUMBER_VERSION=3.x.x
+  - CUMCUMBER_VERSION=4.x
+  - CUMCUMBER_VERSION=5.x
 script:
   - yarn add cucumber@${CUMCUMBER_VERSION}
   - yarn run lint

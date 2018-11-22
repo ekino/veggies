@@ -58,10 +58,10 @@
     "prettier": "1.x"
   },
   "peerDependencies": {
-    "cucumber": ">=2.3.1 <4.0.0"
+    "cucumber": ">=4.0.0 <6.0.0"
   },
   "scripts": {
-    "test": "jest --verbose",
+    "test": "jest --verbose tests",
     "test-cover": "jest --verbose --coverage",
     "coverage": "cat ./coverage/lcov.info | coveralls",
     "fmt": "prettier --print-width 100 --tab-width=4 --single-quote --bracket-spacing --no-semi --color --write \"{src,tests,scripts}/**/*.js\"",

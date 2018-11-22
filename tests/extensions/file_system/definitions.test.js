@@ -6,14 +6,18 @@ const helper = require('../definitions_helper')
 const definitions = require('../../../src/extensions/file_system/definitions')
 
 beforeEach(() => {
+    definitions.install()
     require('chai').clear()
 })
 
+afterEach(() => {
+    helper.clearContext()
+})
+
 test('create directory', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext(definitions)
 
     const def = context.getDefinitionByMatcher('create directory')
-    def.shouldHaveType('Given')
     def.shouldNotMatch('I create directory')
     def.shouldNotMatch('create directory')
     def.shouldMatch('I create directory test')
@@ -28,10 +32,9 @@ test('create directory', () => {
 })
 
 test('remove file or directory', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher('remove (?:file|directory)')
-    def.shouldHaveType('Given')
     def.shouldNotMatch('I remove file')
     def.shouldNotMatch('I remove directory')
     def.shouldNotMatch('I remove file')
@@ -50,10 +53,9 @@ test('remove file or directory', () => {
 })
 
 test('file or directory presence', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher('(file|directory) (.+) should (not )?exist')
-    def.shouldHaveType('Then')
     def.shouldNotMatch('file  should exist')
     def.shouldNotMatch('file  should not exist')
     def.shouldNotMatch('directory  should exist')
@@ -67,7 +69,7 @@ test('file or directory presence', () => {
 })
 
 test('file should exist', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher('(file|directory) (.+) should (not )?exist')
 
@@ -88,7 +90,7 @@ test('file should exist', () => {
 })
 
 test('file should not exist', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher('(file|directory) (.+) should (not )?exist')
 
@@ -108,7 +110,7 @@ test('file should not exist', () => {
 })
 
 test('directory should exist', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher('(file|directory) (.+) should (not )?exist')
 
@@ -135,7 +137,7 @@ test('directory should exist', () => {
 })
 
 test('directory should not exist', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher('(file|directory) (.+) should (not )?exist')
 
@@ -155,7 +157,7 @@ test('directory should not exist', () => {
 })
 
 test('file content matcher without file existing', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher(
         'file (.+) content should (not )?(equal|contain|match)'
@@ -178,7 +180,7 @@ test('file content matcher without file existing', () => {
 })
 
 test('file content should equal', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher(
         'file (.+) content should (not )?(equal|contain|match)'
@@ -203,7 +205,7 @@ test('file content should equal', () => {
 })
 
 test('file content should not equal', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher(
         'file (.+) content should (not )?(equal|contain|match)'
@@ -228,7 +230,7 @@ test('file content should not equal', () => {
 })
 
 test('file content should contain', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher(
         'file (.+) content should (not )?(equal|contain|match)'
@@ -253,7 +255,7 @@ test('file content should contain', () => {
 })
 
 test('file content should not contain', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher(
         'file (.+) content should (not )?(equal|contain|match)'
@@ -278,7 +280,7 @@ test('file content should not contain', () => {
 })
 
 test('file content should match', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher(
         'file (.+) content should (not )?(equal|contain|match)'
@@ -303,7 +305,7 @@ test('file content should match', () => {
 })
 
 test('file content should not match', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher(
         'file (.+) content should (not )?(equal|contain|match)'

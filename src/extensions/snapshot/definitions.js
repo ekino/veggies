@@ -1,8 +1,9 @@
 'use strict'
 
+const { Then } = require('cucumber')
 const _ = require('lodash')
 
-module.exports = () => ({ Then }) => {
+exports.install = () => {
     /**
      * Checking if an http response body match a snapshot
      */

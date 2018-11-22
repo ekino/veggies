@@ -13,13 +13,11 @@ const hooks = require('./hooks')
  * @example
  * // /support/world.js
  *
- * const { defineSupportCode } = require('cucumber')
+ * const { setWorldConstructor } = require('cucumber')
  * const { fixtures } = require('@ekino/veggies')
  *
- * defineSupportCode(({ setWorldConstructor }) => {
- *     setWorldConstructor(function() {
- *         fixtures.extendWorld(this)
- *     })
+ * setWorldConstructor(function() {
+ *     fixtures.extendWorld(this)
  * })
  *
  * @function
@@ -33,19 +31,15 @@ exports.extendWorld = require('./extend_world')
  * @example
  * // /support/world.js
  *
- * const { defineSupportCode } = require('cucumber')
+ * const { setWorldConstructor } = require('cucumber')
  * const { fixtures } = require('@ekino/veggies')
  *
- * defineSupportCode(({ setWorldConstructor }) => {
- *     setWorldConstructor(function() {
- *         fixtures.extendWorld(this)
- *     })
+ * setWorldConstructor(function() {
+ *     fixtures.extendWorld(this)
  * })
  *
  * fixtures.install(defineSupportCode)
- *
- * @param {Function} define - The `defineSupportCode` helper from cucumber
  */
-exports.install = define => {
-    define(hooks)
+exports.install = () => {
+    hooks.install()
 }

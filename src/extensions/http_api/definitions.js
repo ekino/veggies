@@ -1,5 +1,6 @@
 'use strict'
 
+const { Given, Then, When } = require('cucumber')
 const { inspect } = require('util')
 const { expect } = require('chai')
 const _ = require('lodash')
@@ -22,7 +23,7 @@ const mustGetResponse = client => {
     return response
 }
 
-module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
+exports.install = ({ baseUrl = '' } = {}) => {
     /**
      * Setting http headers
      */

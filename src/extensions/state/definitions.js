@@ -1,8 +1,9 @@
 'use strict'
 
+const { Given, When } = require('cucumber')
 const Cast = require('../../core/cast')
 
-module.exports = ({ Given, When }) => {
+exports.install = () => {
     Given(/^(?:I )?set state (.+) to (.+)$/, function(key, value) {
         this.state.set(key, Cast.value(value))
     })
