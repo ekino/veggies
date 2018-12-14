@@ -33,10 +33,10 @@
     "glob": "^7.1.2",
     "jest-diff": "^21.0.0",
     "js-yaml": "^3.8.4",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.11",
     "natural-compare": "^1.4.0",
     "pretty-format": "^21.0.2",
-    "request": "^2.81.0",
+    "request": "^2.88.0",
     "tough-cookie": "^2.3.2"
   },
   "devDependencies": {
@@ -54,7 +54,7 @@
     "minami": "^1.2.3",
     "mustache": "^2.3.0",
     "nock": "^9.0.13",
-    "prettier": "^1.5.2",
+    "prettier": "1.5.2",
     "validate-commit-msg": "^2.12.2"
   },
   "peerDependencies": {
