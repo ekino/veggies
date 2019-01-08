@@ -23,7 +23,7 @@ beforeAll(() => {
             return fixtures.featureFileContent1
         if (file === fixtures.featureFile1With3SnapshotsInAScenario)
             return fixtures.featureFileContent1
-
+        if (file === fixtures.featureFileMultilineString) return fixtures.featureFileContent1
         if (file === fixtures.snapshotFile1) return fixtures.snapshotFileContent1
         if (file === fixtures.snapshotFile1WithPropertyMatchers)
             return fixtures.snapshotFileContent1WithPropertyMatchers
@@ -32,7 +32,8 @@ beforeAll(() => {
             return fixtures.snapshotFileContent1
         if (file === fixtures.snapshotFile1With3SnapshotsInAScenario)
             return fixtures.snapshotFileContent1With3SnapshotsInAScenario
-
+        if (file === fixtures.snapshotFileMultilineString)
+            return fixtures.snapshotFileContentMultilineString
         throw new Error(`Unexpected call to readFileSync with file ${file}`)
     })
 
@@ -45,6 +46,7 @@ beforeAll(() => {
         if (file === fixtures.snapshotFile1And2) return {}
         if (file === fixtures.snapshotFile1With2SnapshotsInAScenario) return {}
         if (file === fixtures.snapshotFile1With3SnapshotsInAScenario) return {}
+        if (file === fixtures.snapshotFileMultilineString) return {}
         throw new Error(`Unexpected call to statSync with file ${file}`)
     })
 })
@@ -238,4 +240,13 @@ test('expectToMatchJson should throw an error if a property matcher changes', ()
     expect(() => snapshot.expectToMatchJson(fixtures.value1WithError, propertiesMatchers)).toThrow(
         fixtures.diffErrorFile1WithPropertyMatchers
     )
+})
+
+test('expectToMatch should handle multline content correctly', () => {
+    const snapshot = Snapshot({ cleanSnapshots: true })
+
+    snapshot.featureFile = fixtures.featureFileMultilineString
+    snapshot.scenarioLine = 3
+    expect(snapshot.expectToMatch(fixtures.multilineValue)).toBeUndefined()
+    clean.cleanSnapshots()
 })

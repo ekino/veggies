@@ -821,9 +821,9 @@ Then(/^I check something using file system$/, function() {
 
 ### Snapshot extension 
 
-#### Snapshot extension installation
+#### Snapshot installation
 
-The snapshot extension add capabilities to [api](#http-api-extension), [cli](#cli--extension) and [file](#file-system-extension) extensions,
+The snapshot extension add capabilities to [api](#http-api-extension), [cli](#cli-extension) and [file](#file-system-extension) extensions,
 so you will need these extensions if you want to use snapshot related gherkin definitions.
 
 To install the extension, you should add the following snippet
@@ -934,13 +934,13 @@ yarn run examples -- --tags @offline
 
 Due to public API rate limit (eg. GitHub API), this tag is used when running on CI.
 
-[npm-image]: https://img.shields.io/npm/v/@ekino/veggies.svg?style=flat-square
+[npm-image]: https://img.shields.io/npm/v/@ekino/veggies.svg?longCache=true&style=for-the-badge
 [npm-url]: https://www.npmjs.com/package/@ekino/veggies
-[travis-image]: https://img.shields.io/travis/ekino/veggies.svg?style=flat-square
+[travis-image]: https://img.shields.io/travis/ekino/veggies.svg?longCache=true&style=for-the-badge
 [travis-url]: https://travis-ci.org/ekino/veggies
-[prettier-image]: https://img.shields.io/badge/styled_with-prettier-ff69b4.svg?style=flat-square
+[prettier-image]: https://img.shields.io/badge/styled_with-prettier-ff69b4.svg?longCache=true&style=for-the-badge
 [prettier-url]: https://github.com/prettier/prettier
-[coverage-image]: https://img.shields.io/coveralls/ekino/veggies/master.svg?style=flat-square
+[coverage-image]: https://img.shields.io/coveralls/ekino/veggies/master.svg?longCache=true&style=for-the-badge
 [coverage-url]: https://coveralls.io/github/ekino/veggies?branch=master
 
 [github-watch-badge]: https://img.shields.io/github/watchers/ekino/veggies.svg?style=social
