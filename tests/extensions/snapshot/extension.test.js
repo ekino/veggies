@@ -7,6 +7,8 @@ const clean = require('../../../src/extensions/snapshot/clean')
 const fixtures = require('./fixtures')
 
 beforeAll(() => {
+    //
+
     fs.statSync = jest.fn()
     fs.readFileSync = jest.fn()
     fs.writeFileSync = jest.fn()
@@ -14,18 +16,23 @@ beforeAll(() => {
 
     fs.readFileSync.mockImplementation(file => {
         if (file === fixtures.featureFile1) return fixtures.featureFileContent1
+        if (file === fixtures.featureFile1WithPropertyMatchers) return fixtures.featureFileContent1
         if (file === fixtures.featureFile1NotExists) return fixtures.featureFileContent1
         if (file === fixtures.featureFile1And2) return fixtures.featureFileContent1
         if (file === fixtures.featureFile1With2SnapshotsInAScenario)
             return fixtures.featureFileContent1
         if (file === fixtures.featureFile1With3SnapshotsInAScenario)
             return fixtures.featureFileContent1
+
         if (file === fixtures.snapshotFile1) return fixtures.snapshotFileContent1
+        if (file === fixtures.snapshotFile1WithPropertyMatchers)
+            return fixtures.snapshotFileContent1WithPropertyMatchers
         if (file === fixtures.snapshotFile1And2) return fixtures.snapshotFileContent1And2
         if (file === fixtures.snapshotFile1With2SnapshotsInAScenario)
             return fixtures.snapshotFileContent1
         if (file === fixtures.snapshotFile1With3SnapshotsInAScenario)
             return fixtures.snapshotFileContent1With3SnapshotsInAScenario
+
         throw new Error(`Unexpected call to readFileSync with file ${file}`)
     })
 
@@ -33,6 +40,7 @@ beforeAll(() => {
 
     fs.statSync.mockImplementation(file => {
         if (file === fixtures.snapshotFile1) return {}
+        if (file === fixtures.snapshotFile1WithPropertyMatchers) return {}
         if (file === fixtures.snapshotFile1NotExists) return null
         if (file === fixtures.snapshotFile1And2) return {}
         if (file === fixtures.snapshotFile1With2SnapshotsInAScenario) return {}
@@ -173,4 +181,61 @@ test("expectToMatch should notify all played snapshots in scenarios so they don'
         fixtures.snapshotFileContent1With2SnapshotsInAScenario
     )
     expect(fs.writeFileSync.mock.calls.length).toBe(1)
+})
+
+test('expectToMatchJson should success if there are no json field specified for matchers', () => {
+    const snapshot = Snapshot()
+    snapshot.featureFile = fixtures.featureFile1
+    snapshot.scenarioLine = 3
+
+    snapshot.expectToMatchJson(fixtures.value1, [])
+
+    expect(fs.readFileSync).toHaveBeenCalledWith(fixtures.featureFile1)
+    expect(fs.readFileSync).toHaveBeenCalledWith(fixtures.snapshotFile1)
+    expect(fs.statSync).toHaveBeenCalledWith(fixtures.snapshotFile1)
+
+    expect(fs.readFileSync.mock.calls.length).toBe(2)
+    expect(fs.writeFileSync.mock.calls.length).toBe(0)
+    expect(fs.statSync.mock.calls.length).toBe(1)
+})
+
+test('expectToMatchJson should success if there is a json field specified and field matches', () => {
+    const snapshot = Snapshot()
+    snapshot.featureFile = fixtures.featureFile1WithPropertyMatchers
+    snapshot.scenarioLine = 3
+
+    const propertiesMatchers = [{ field: 'key2', matcher: 'type', value: 'string' }]
+    snapshot.expectToMatchJson(fixtures.value1, propertiesMatchers)
+
+    expect(fs.readFileSync).toHaveBeenCalledWith(fixtures.featureFile1WithPropertyMatchers)
+    expect(fs.readFileSync).toHaveBeenCalledWith(fixtures.snapshotFile1WithPropertyMatchers)
+    expect(fs.statSync).toHaveBeenCalledWith(fixtures.snapshotFile1WithPropertyMatchers)
+
+    expect(fs.readFileSync.mock.calls.length).toBe(2)
+    expect(fs.writeFileSync.mock.calls.length).toBe(0)
+    expect(fs.statSync.mock.calls.length).toBe(1)
+})
+
+test("expectToMatchJson should throw an error if a field doesn't match it's matcher", () => {
+    const snapshot = Snapshot()
+    snapshot.featureFile = fixtures.featureFile1WithPropertyMatchers
+    snapshot.scenarioLine = 3
+
+    const propertiesMatchers = [{ field: 'key2', matcher: 'type', value: 'string' }]
+
+    expect(() =>
+        snapshot.expectToMatchJson(fixtures.value1WithError, propertiesMatchers)
+    ).toThrowError("Property 'key2' (2) type is not 'string': expected 2 to be a string")
+})
+
+test('expectToMatchJson should throw an error if a property matcher changes', () => {
+    const snapshot = Snapshot()
+    snapshot.featureFile = fixtures.featureFile1WithPropertyMatchers
+    snapshot.scenarioLine = 3
+
+    const propertiesMatchers = [{ field: 'key2', matcher: 'type', value: 'number' }]
+
+    expect(() => snapshot.expectToMatchJson(fixtures.value1WithError, propertiesMatchers)).toThrow(
+        fixtures.diffErrorFile1WithPropertyMatchers
+    )
 })

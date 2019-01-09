@@ -45,9 +45,24 @@ exports.snapshotContent3 = dedent`
     }
 `
 
+exports.snapshotContent1WithPropertyMatchers = dedent`
+    Object {
+      "key1": "value1",
+      "key2": "type(string)",
+      "key3": "value3",
+      "key4": "value4",
+      "key5": "value5",
+    }
+`
+
 exports.snapshotFileContent1 = `
 
 exports[\`scenario 1 1.1\`] = \`${exports.snapshotContent1}\`;
+`
+
+exports.snapshotFileContent1WithPropertyMatchers = `
+
+exports[\`scenario 1 1.1\`] = \`${exports.snapshotContent1WithPropertyMatchers}\`;
 `
 
 exports.snapshotFileContent1And2 = `
@@ -101,17 +116,42 @@ exports.diffErrorValue1VsValue2 = dedent`
     \u001b[2m  }\u001b[22m
 `
 
+exports.diffErrorFile1WithPropertyMatchers = dedent`
+    
+    \u001b[32m- Snapshot\u001b[39m
+    \u001b[31m+ Received\u001b[39m
+    
+    \u001b[2m  Object {\u001b[22m
+    \u001b[2m    "key1": "value1",\u001b[22m
+    \u001b[32m-   "key2": "type(string)",\u001b[39m
+    \u001b[31m+   "key2": "type(number)",\u001b[39m
+    \u001b[2m    "key3": "value3",\u001b[22m
+    \u001b[2m    "key4": "value4",\u001b[22m
+    \u001b[2m    "key5": "value5",\u001b[22m
+    \u001b[2m  }\u001b[22m
+`
+
 exports.value1 = { key1: 'value1', key2: 'value2', key3: 'value3', key4: 'value4', key5: 'value5' }
+exports.value1WithError = {
+    key1: 'value1',
+    key2: 2,
+    key3: 'value3',
+    key4: 'value4',
+    key5: 'value5'
+}
 exports.value2 = { key1: 'value1', key2: 'value2', key3: 'value8', key4: 'value4', key5: 'value5' }
 exports.value3 = { key1: 'value1', key2: 'value2', key3: 'value9', key4: 'value4', key5: 'value5' }
 
 exports.featureFile1 = './snapshot1.feature'
+exports.featureFile1WithPropertyMatchers = './snapshot1WithPropertyMatchers.feature'
 exports.featureFile1And2 = './snapshot1And2.feature'
 exports.featureFile1NotExists = './snapshot1NotExists.feature'
 exports.featureFile1With2SnapshotsInAScenario = './snapshot1With2SnapshotsInAScenario.feature'
 exports.featureFile1With3SnapshotsInAScenario = './snapshot1With3SnapshotsInAScenario.feature'
 
 exports.snapshotFile1 = '__snapshots__/snapshot1.feature.snap'
+exports.snapshotFile1WithPropertyMatchers =
+    '__snapshots__/snapshot1WithPropertyMatchers.feature.snap'
 exports.snapshotFile1NotExists = '__snapshots__/snapshot1NotExists.feature.snap'
 exports.snapshotFile1And2 = '__snapshots__/snapshot1And2.feature.snap'
 exports.snapshotFile1With2SnapshotsInAScenario =

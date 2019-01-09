@@ -1,5 +1,7 @@
 'use strict'
 
+const sinon = require('sinon')
+
 jest.mock('fs')
 const fs = require('fs')
 
@@ -8,7 +10,6 @@ const definitions = require('../../../src/extensions/http_api/definitions')
 
 beforeEach(() => {
     definitions.install()
-    require('chai').clear()
 })
 
 afterEach(() => {
@@ -275,10 +276,16 @@ test('test cookie is present', () => {
     def.shouldMatch('response should have a test cookie', [undefined, 'test'])
     def.shouldMatch('response should have an test cookie', [undefined, 'test'])
 
-    const clientMock = { httpApiClient: { getCookie: jest.fn() } }
-    def.exec(clientMock, undefined, 'test')
-    expect(clientMock.httpApiClient.getCookie).toHaveBeenCalledWith('test')
-    expect(require('chai').expect).toHaveBeenCalledWith(undefined, `No cookie found for key 'test'`)
+    const getCookie = sinon.stub()
+    getCookie.withArgs('cookie_exist').returns('some content')
+    getCookie.withArgs('cookie_dont_exist').returns(null)
+
+    const clientMock = { httpApiClient: { getCookie } }
+
+    expect(() => def.exec(clientMock, undefined, 'cookie_exist')).not.toThrow()
+    expect(() => def.exec(clientMock, undefined, 'cookie_dont_exist')).toThrow(
+        "No cookie found for key 'cookie_dont_exist': expected null not to be null"
+    )
 })
 
 test('test cookie is absent', () => {
@@ -292,10 +299,16 @@ test('test cookie is absent', () => {
     def.shouldMatch('response should not have a test cookie', ['not ', 'test'])
     def.shouldMatch('response should not have an test cookie', ['not ', 'test'])
 
-    const clientMock = { httpApiClient: { getCookie: jest.fn() } }
-    def.exec(clientMock, 'not ', 'test')
-    expect(clientMock.httpApiClient.getCookie).toHaveBeenCalledWith('test')
-    expect(require('chai').expect).toHaveBeenCalledWith(undefined, `A cookie exists for key 'test'`)
+    const getCookie = sinon.stub()
+    getCookie.withArgs('cookie_exist').returns('some content')
+    getCookie.withArgs('cookie_dont_exist').returns(null)
+
+    const clientMock = { httpApiClient: { getCookie: getCookie } }
+
+    expect(() => def.exec(clientMock, 'not ', 'cookie_exist')).toThrow(
+        "A cookie exists for key 'cookie_exist': expected 'some content' to be null"
+    )
+    expect(() => def.exec(clientMock, 'not ', 'cookie_dont_exist')).not.toThrow()
 })
 
 test('test cookie is secure', () => {
@@ -305,12 +318,15 @@ test('test cookie is secure', () => {
     def.shouldNotMatch('response  cookie should be secure')
     def.shouldMatch('response test cookie should be secure', ['test', undefined])
 
-    const clientMock = {
-        httpApiClient: { getCookie: jest.fn(() => ({ secure: true })) }
-    }
-    def.exec(clientMock, 'test', undefined)
-    expect(clientMock.httpApiClient.getCookie).toHaveBeenCalledWith('test')
-    expect(require('chai').expect).toHaveBeenCalledWith(true, `Cookie 'test' is not secure`)
+    const getCookie = sinon.stub()
+    getCookie.withArgs('secure_cookie').returns({ secure: true })
+    getCookie.withArgs('not_secure_cookie').returns({ secure: false })
+    const clientMock = { httpApiClient: { getCookie: getCookie } }
+
+    expect(() => def.exec(clientMock, 'secure_cookie', undefined)).not.toThrow()
+    expect(() => def.exec(clientMock, 'not_secure_cookie', undefined)).toThrow(
+        "Cookie 'not_secure_cookie' is not secure: expected false to be true"
+    )
 })
 
 test('test cookie is not secure', () => {
@@ -320,12 +336,15 @@ test('test cookie is not secure', () => {
     def.shouldNotMatch('response  cookie should not be secure')
     def.shouldMatch('response test cookie should not be secure', ['test', 'not '])
 
-    const clientMock = {
-        httpApiClient: { getCookie: jest.fn(() => ({ secure: false })) }
-    }
-    def.exec(clientMock, 'test', 'not ')
-    expect(clientMock.httpApiClient.getCookie).toHaveBeenCalledWith('test')
-    expect(require('chai').expect).toHaveBeenCalledWith(false, `Cookie 'test' is secure`)
+    const getCookie = sinon.stub()
+    getCookie.withArgs('secure_cookie').returns({ secure: true })
+    getCookie.withArgs('not_secure_cookie').returns({ secure: false })
+    const clientMock = { httpApiClient: { getCookie: getCookie } }
+
+    expect(() => def.exec(clientMock, 'secure_cookie', 'not ')).toThrow(
+        "Cookie 'secure_cookie' is secure: expected true to be false"
+    )
+    expect(() => def.exec(clientMock, 'not_secure_cookie', 'not ')).not.toThrow()
 })
 
 test('test cookie is http only', () => {
@@ -335,12 +354,15 @@ test('test cookie is http only', () => {
     def.shouldNotMatch('response  cookie should be http only')
     def.shouldMatch('response test cookie should be http only', ['test', undefined])
 
-    const clientMock = {
-        httpApiClient: { getCookie: jest.fn(() => ({ httpOnly: true })) }
-    }
-    def.exec(clientMock, 'test', undefined)
-    expect(clientMock.httpApiClient.getCookie).toHaveBeenCalledWith('test')
-    expect(require('chai').expect).toHaveBeenCalledWith(true, `Cookie 'test' is not http only`)
+    const getCookie = sinon.stub()
+    getCookie.withArgs('http_only').returns({ httpOnly: true })
+    getCookie.withArgs('not_http_only').returns({ httpOnly: false })
+    const clientMock = { httpApiClient: { getCookie: getCookie } }
+
+    expect(() => def.exec(clientMock, 'http_only', undefined)).not.toThrow()
+    expect(() => def.exec(clientMock, 'not_http_only', undefined)).toThrow(
+        "Cookie 'not_http_only' is not http only: expected false to be true"
+    )
 })
 
 test('test cookie is not http only', () => {
@@ -350,12 +372,15 @@ test('test cookie is not http only', () => {
     def.shouldNotMatch('response  cookie should not be http only')
     def.shouldMatch('response test cookie should not be http only', ['test', 'not '])
 
-    const clientMock = {
-        httpApiClient: { getCookie: jest.fn(() => ({ httpOnly: false })) }
-    }
-    def.exec(clientMock, 'test', 'not ')
-    expect(clientMock.httpApiClient.getCookie).toHaveBeenCalledWith('test')
-    expect(require('chai').expect).toHaveBeenCalledWith(false, `Cookie 'test' is http only`)
+    const getCookie = sinon.stub()
+    getCookie.withArgs('http_only').returns({ httpOnly: true })
+    getCookie.withArgs('not_http_only').returns({ httpOnly: false })
+    const clientMock = { httpApiClient: { getCookie: getCookie } }
+
+    expect(() => def.exec(clientMock, 'http_only', 'not ')).toThrow(
+        "Cookie 'http_only' is http only: expected true to be false"
+    )
+    expect(() => def.exec(clientMock, 'not_http_only', 'not ')).not.toThrow()
 })
 
 test('test cookie domain equals given value', () => {
@@ -366,14 +391,14 @@ test('test cookie domain equals given value', () => {
     def.shouldNotMatch('response test cookie domain should be ')
     def.shouldMatch('response test cookie domain should be domain', ['test', undefined, 'domain'])
 
-    const clientMock = {
-        httpApiClient: { getCookie: jest.fn(() => ({ domain: 'domain' })) }
-    }
-    def.exec(clientMock, 'test', undefined, 'domain')
-    expect(clientMock.httpApiClient.getCookie).toHaveBeenCalledWith('test')
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'domain',
-        `Expected cookie 'test' domain to be 'domain', found 'domain'`
+    const getCookie = sinon.stub()
+    getCookie.withArgs('domain1').returns({ domain: 'domain1' })
+    getCookie.withArgs('domain2').returns({ domain: 'domain2' })
+    const clientMock = { httpApiClient: { getCookie: getCookie } }
+
+    expect(() => def.exec(clientMock, 'domain1', undefined, 'domain1')).not.toThrow()
+    expect(() => def.exec(clientMock, 'domain2', undefined, 'domain1')).toThrow(
+        `Expected cookie 'domain2' domain to be 'domain1', found 'domain2': expected 'domain2' to equal 'domain1'`
     )
 })
 
@@ -385,15 +410,15 @@ test('test cookie domain does not equal given value', () => {
     def.shouldNotMatch('response test cookie domain should not be ')
     def.shouldMatch('response test cookie domain should not be domain', ['test', 'not ', 'domain'])
 
-    const clientMock = {
-        httpApiClient: { getCookie: jest.fn(() => ({ domain: 'domain' })) }
-    }
-    def.exec(clientMock, 'test', 'not ', 'domain')
-    expect(clientMock.httpApiClient.getCookie).toHaveBeenCalledWith('test')
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'domain',
-        `Cookie 'test' domain is 'domain'`
+    const getCookie = sinon.stub()
+    getCookie.withArgs('domain1').returns({ domain: 'domain1' })
+    getCookie.withArgs('domain2').returns({ domain: 'domain2' })
+    const clientMock = { httpApiClient: { getCookie: getCookie } }
+
+    expect(() => def.exec(clientMock, 'domain1', 'not ', 'domain1')).toThrow(
+        `Cookie 'domain1' domain is 'domain1': expected 'domain1' to not equal 'domain1'`
     )
+    expect(() => def.exec(clientMock, 'domain2', 'not ', 'domain1')).not.toThrow()
 })
 
 test('reset http client', () => {
@@ -447,14 +472,14 @@ test('check response HTTP status code', () => {
     def.shouldMatch('response status code should be 200', ['200'])
     def.shouldMatch('response status code should be 404', ['404'])
 
-    const clientMock = {
-        httpApiClient: { getResponse: jest.fn(() => ({ statusCode: 200 })) }
-    }
-    def.exec(clientMock, '200')
-    expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        200,
-        'Expected status code to be: 200, but found: 200'
+    const getResponse = sinon.stub()
+    getResponse.onFirstCall().returns({ statusCode: 200 })
+    getResponse.onSecondCall().returns({ statusCode: 400 })
+    const clientMock = { httpApiClient: { getResponse: getResponse } }
+
+    expect(() => def.exec(clientMock, '200')).not.toThrow()
+    expect(() => def.exec(clientMock, '200')).toThrow(
+        `Expected status code to be: 200, but found: 400: expected 400 to equal 200`
     )
 })
 
@@ -466,19 +491,16 @@ test('check response HTTP status by message', () => {
     def.shouldMatch('response status should be ok', ['ok'])
     def.shouldMatch('response status should be forbidden', ['forbidden'])
 
-    const clientMock = {
-        httpApiClient: { getResponse: jest.fn(() => ({ statusCode: 200 })) }
-    }
-    def.exec(clientMock, 'ok')
-    expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        200,
-        `Expected status to be: 'ok', but found: 'ok'`
-    )
+    const getResponse = sinon.stub()
+    getResponse.onFirstCall().returns({ statusCode: 200 })
+    getResponse.onSecondCall().returns({ statusCode: 500 })
+    const clientMock = { httpApiClient: { getResponse: getResponse } }
 
-    expect(() => {
-        def.exec(clientMock, 'invalid')
-    }).toThrow(new TypeError(`'invalid' is not a valid status message`))
+    expect(() => def.exec(clientMock, 'ok')).not.toThrow()
+    expect(() => def.exec(clientMock, 'ok')).toThrow(
+        `Expected status to be: 'ok', but found: 'internal server error': expected 500 to equal 200`
+    )
+    expect(() => def.exec(clientMock, 'invalid')).toThrow(`'invalid' is not a valid status message`)
 })
 
 test('check json response', () => {
@@ -494,14 +516,22 @@ test('check json response property is defined', () => {
 
     const def = context.getDefinitionByMatcher('json response should (fully )?match')
 
+    const getResponse = sinon.stub()
+    getResponse.onFirstCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: { name: 'john', gender: 'male' }
+    })
+    getResponse.onSecondCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: { name: 'john' }
+    })
+    getResponse.onThirdCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: {}
+    })
     const clientMock = {
         state: { populate: v => v },
-        httpApiClient: {
-            getResponse: jest.fn(() => ({
-                headers: { 'content-type': 'application/json' },
-                body: {}
-            }))
-        }
+        httpApiClient: { getResponse: getResponse }
     }
     const spec = [
         {
@@ -513,10 +543,14 @@ test('check json response property is defined', () => {
             matcher: 'present'
         }
     ]
-    def.exec(clientMock, undefined, { hashes: () => spec })
-    expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
-    expect(require('chai').expect).toHaveBeenCalledWith(undefined, `Property 'name' is undefined`)
-    expect(require('chai').expect).toHaveBeenCalledWith(undefined, `Property 'gender' is undefined`)
+
+    expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).not.toThrow()
+    expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
+        `Property 'gender' is undefined: expected undefined not to be undefined`
+    )
+    expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
+        `Property 'name' is undefined: expected undefined not to be undefined`
+    )
 })
 
 test('check json response property equals expected value', () => {
@@ -524,29 +558,31 @@ test('check json response property equals expected value', () => {
 
     const def = context.getDefinitionByMatcher('json response should (fully )?match')
 
+    const getResponse = sinon.stub()
+    getResponse.onFirstCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: { name: 'plouc' }
+    })
+    getResponse.onSecondCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: { name: 'john' }
+    })
     const clientMock = {
         state: { populate: v => v },
-        httpApiClient: {
-            getResponse: jest.fn(() => ({
-                headers: { 'content-type': 'application/json' },
-                body: {
-                    name: 'plouc'
-                }
-            }))
-        }
+        httpApiClient: { getResponse: getResponse }
     }
+
     const spec = [
         {
             field: 'name',
             matcher: 'equals',
-            value: 'whatever'
+            value: 'plouc'
         }
     ]
-    def.exec(clientMock, undefined, { hashes: () => spec })
-    expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'plouc',
-        `Expected property 'name' to equal 'whatever', but found 'plouc'`
+
+    expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).not.toThrow()
+    expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
+        `Expected property 'name' to equal 'plouc', but found 'john': expected 'john' to deeply equal 'plouc'`
     )
 })
 
@@ -555,18 +591,24 @@ test('check json response property contains value', () => {
 
     const def = context.getDefinitionByMatcher('json response should (fully )?match')
 
+    const getResponse = sinon.stub()
+    getResponse.onFirstCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: { first_name: 'raphael', last_name: 'benn' }
+    })
+    getResponse.onSecondCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: { first_name: 'raphael', last_name: 'be' }
+    })
+    getResponse.onThirdCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: { first_name: 'rap', last_name: 'ben' }
+    })
     const clientMock = {
         state: { populate: v => v },
-        httpApiClient: {
-            getResponse: jest.fn(() => ({
-                headers: { 'content-type': 'application/json' },
-                body: {
-                    first_name: 'Raphaël',
-                    last_name: 'Benitte'
-                }
-            }))
-        }
+        httpApiClient: { getResponse: getResponse }
     }
+
     const spec = [
         {
             field: 'first_name',
@@ -579,15 +621,13 @@ test('check json response property contains value', () => {
             value: 'ben'
         }
     ]
-    def.exec(clientMock, undefined, { hashes: () => spec })
-    expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'Raphaël',
-        `Property 'first_name' (Raphaël) does not contain 'raph'`
+
+    expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).not.toThrow()
+    expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
+        `Property 'last_name' (be) does not contain 'ben': expected 'be' to include 'ben'`
     )
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'Benitte',
-        `Property 'last_name' (Benitte) does not contain 'ben'`
+    expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
+        `Property 'first_name' (rap) does not contain 'raph': expected 'rap' to include 'raph'`
     )
 })
 
@@ -596,18 +636,24 @@ test('check json response property matches regexp', () => {
 
     const def = context.getDefinitionByMatcher('json response should (fully )?match')
 
+    const getResponse = sinon.stub()
+    getResponse.onFirstCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: { first_name: 'raphael', last_name: 'benn' }
+    })
+    getResponse.onSecondCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: { first_name: 'raphael', last_name: 'be' }
+    })
+    getResponse.onThirdCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: { first_name: 'rap', last_name: 'ben' }
+    })
     const clientMock = {
         state: { populate: v => v },
-        httpApiClient: {
-            getResponse: jest.fn(() => ({
-                headers: { 'content-type': 'application/json' },
-                body: {
-                    first_name: 'Raphaël',
-                    last_name: 'Benitte'
-                }
-            }))
-        }
+        httpApiClient: { getResponse: getResponse }
     }
+
     const spec = [
         {
             field: 'first_name',
@@ -620,15 +666,13 @@ test('check json response property matches regexp', () => {
             value: 'ben'
         }
     ]
-    def.exec(clientMock, undefined, { hashes: () => spec })
-    expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'Raphaël',
-        `Property 'first_name' (Raphaël) does not match 'raph'`
+
+    expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).not.toThrow()
+    expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
+        `Property 'last_name' (be) does not match 'ben': expected 'be' to match /ben/`
     )
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'Benitte',
-        `Property 'last_name' (Benitte) does not match 'ben'`
+    expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
+        `Property 'first_name' (rap) does not match 'raph': expected 'rap' to match /raph/`
     )
 })
 
@@ -637,18 +681,24 @@ test('check json response fully matches spec', () => {
 
     const def = context.getDefinitionByMatcher('json response should (fully )?match')
 
+    const getResponse = sinon.stub()
+    getResponse.onFirstCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: { first_name: 'Raphaël', last_name: 'ben' }
+    })
+    getResponse.onSecondCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: { first_name: 'Raphaël', last_name: 'ben', gender: 'male' }
+    })
+    getResponse.onThirdCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: { first_name: 'Raphaël', last_name: 'be' }
+    })
     const clientMock = {
         state: { populate: v => v },
-        httpApiClient: {
-            getResponse: jest.fn(() => ({
-                headers: { 'content-type': 'application/json' },
-                body: {
-                    first_name: 'Raphaël',
-                    last_name: 'Benitte'
-                }
-            }))
-        }
+        httpApiClient: { getResponse: getResponse }
     }
+
     const spec = [
         {
             field: 'first_name',
@@ -661,19 +711,13 @@ test('check json response fully matches spec', () => {
             value: 'ben'
         }
     ]
-    def.exec(clientMock, 'fully ', { hashes: () => spec })
-    expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'Raphaël',
-        `Expected property 'first_name' to equal 'Raphaël', but found 'Raphaël'`
+
+    expect(() => def.exec(clientMock, 'fully ', { hashes: () => spec })).not.toThrow()
+    expect(() => def.exec(clientMock, 'fully ', { hashes: () => spec })).toThrow(
+        `Expected json response to fully match spec, but it does not: expected 3 to equal 2`
     )
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'Benitte',
-        `Property 'last_name' (Benitte) does not match 'ben'`
-    )
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        2,
-        'Expected json response to fully match spec, but it does not'
+    expect(() => def.exec(clientMock, 'fully ', { hashes: () => spec })).toThrow(
+        `Property 'last_name' (be) does not match 'ben': expected 'be' to match /ben/`
     )
 })
 
@@ -687,39 +731,39 @@ test('check json collection size for a given path', () => {
     def.shouldMatch('should receive a collection of 1 item for path property', ['1', 'property'])
     def.shouldMatch('should receive a collection of 2 items', ['2', undefined])
 
-    const clientMock = {
-        httpApiClient: {
-            getResponse: jest.fn(() => ({
-                body: { property: ['a', 'b', 'c'] }
-            }))
-        }
-    }
-    def.exec(clientMock, '3', 'property')
-    expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
-    expect(require('chai').expect).toHaveBeenCalledWith(3)
-    expect(require('chai').equal).toHaveBeenCalledWith(3)
+    const getResponse = sinon.stub()
+    getResponse.onFirstCall().returns({ body: { property: ['a', 'b', 'c'] } })
+    getResponse.onSecondCall().returns({ body: { property: ['a', 'b'] } })
+    const clientMock = { httpApiClient: { getResponse: getResponse } }
+
+    expect(() => def.exec(clientMock, '3', 'property')).not.toThrow()
+    expect(() => def.exec(clientMock, '3', 'property')).toThrow(`expected 2 to equal 3`)
 })
 
 test('response match fixture', () => {
     const context = helper.getContext() // Extension context
 
-    expect.assertions(4)
+    expect.assertions(5)
 
     const def = context.getDefinitionByMatcher('should match fixture')
     def.shouldNotMatch('response should match fixture ')
     def.shouldMatch('response should match fixture fixture', ['fixture'])
 
     const snapshot = { testing: true }
+    const getResponse = sinon.stub()
+    getResponse.onFirstCall().returns({ statusCode: 200, body: snapshot })
+    getResponse.onSecondCall().returns({ statusCode: 200, body: { app: true } })
     const worldMock = {
-        httpApiClient: {
-            getResponse: jest.fn(() => ({ statusCode: 200, body: snapshot }))
-        },
+        httpApiClient: { getResponse: getResponse },
         fixtures: { load: jest.fn(() => Promise.resolve(snapshot)) }
     }
 
-    return def.exec(worldMock, 'snapshot').then(() => {
-        expect(require('chai').expect).toHaveBeenCalledWith(snapshot)
-    })
+    return Promise.all([
+        expect(def.exec(worldMock, 'snapshot')).resolves.toBe(),
+        expect(def.exec(worldMock, 'snapshot')).rejects.toThrow(
+            `expected { app: true } to deeply equal { testing: true }`
+        )
+    ])
 })
 
 test('check response header value', () => {
@@ -747,24 +791,26 @@ test('check response header equals expected value', () => {
         'application/json'
     ])
 
+    const getResponse = sinon.stub()
+    getResponse.onFirstCall().returns({ headers: { 'content-type': 'application/json' } })
+    getResponse.onSecondCall().returns({ headers: { 'content-type': 'application/xml' } })
+    getResponse.onThirdCall().returns({ headers: { 'another-header': 'application/json' } })
     const clientMock = {
         state: { populate: v => v },
-        httpApiClient: {
-            getResponse: jest.fn(() => ({
-                headers: { 'content-type': 'application/json' }
-            }))
-        }
+        httpApiClient: { getResponse: getResponse }
     }
-    def.exec(clientMock, 'Content-Type', undefined, 'equal', 'application/json')
-    expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'application/json',
-        `Header 'Content-Type' does not exist`
+
+    expect(() =>
+        def.exec(clientMock, 'Content-Type', undefined, 'equal', 'application/json')
+    ).not.toThrow()
+    expect(() =>
+        def.exec(clientMock, 'Content-Type', undefined, 'equal', 'application/json')
+    ).toThrow(
+        `Expected header 'Content-Type' to equal 'application/json', but found 'application/xml' which does not: expected 'application/xml' to equal 'application/json'`
     )
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'application/json',
-        `Expected header 'Content-Type' to equal 'application/json', but found 'application/json' which does not`
-    )
+    expect(() =>
+        def.exec(clientMock, 'Content-Type', undefined, 'equal', 'application/json')
+    ).toThrow(`Header 'Content-Type' does not exist: expected undefined not to be undefined`)
 })
 
 test('check response header does not equal expected value', () => {
@@ -781,23 +827,23 @@ test('check response header does not equal expected value', () => {
         'application/json'
     ])
 
+    const getResponse = sinon.stub()
+    getResponse.onFirstCall().returns({ headers: { 'content-type': 'application/json' } })
+    getResponse.onSecondCall().returns({ headers: { 'content-type': 'application/xml' } })
+    getResponse.onThirdCall().returns({ headers: { 'another-header': 'application/json' } })
     const clientMock = {
         state: { populate: v => v },
-        httpApiClient: {
-            getResponse: jest.fn(() => ({
-                headers: { 'content-type': 'application/json' }
-            }))
-        }
+        httpApiClient: { getResponse: getResponse }
     }
-    def.exec(clientMock, 'Content-Type', 'not ', 'equal', 'application/json')
-    expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'application/json',
-        `Header 'Content-Type' does not exist`
+
+    expect(() => def.exec(clientMock, 'Content-Type', 'not ', 'equal', 'application/json')).toThrow(
+        `Expected header 'Content-Type' to not equal 'application/json', but found 'application/json' which does: expected 'application/json' to not equal 'application/json'`
     )
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'application/json',
-        `Expected header 'Content-Type' to not equal 'application/json', but found 'application/json' which does`
+    expect(() =>
+        def.exec(clientMock, 'Content-Type', 'not ', 'equal', 'application/json')
+    ).not.toThrow()
+    expect(() => def.exec(clientMock, 'Content-Type', 'not ', 'equal', 'application/json')).toThrow(
+        `Header 'Content-Type' does not exist: expected undefined not to be undefined`
     )
 })
 
@@ -815,23 +861,21 @@ test('check response header contains value', () => {
         'application/json'
     ])
 
+    const getResponse = sinon.stub()
+    getResponse.onFirstCall().returns({ headers: { 'content-type': 'application/json' } })
+    getResponse.onSecondCall().returns({ headers: { 'content-type': 'application/xml' } })
+    getResponse.onThirdCall().returns({ headers: { 'another-header': 'application/json' } })
     const clientMock = {
         state: { populate: v => v },
-        httpApiClient: {
-            getResponse: jest.fn(() => ({
-                headers: { 'content-type': 'application/json' }
-            }))
-        }
+        httpApiClient: { getResponse: getResponse }
     }
-    def.exec(clientMock, 'Content-Type', undefined, 'contain', 'json')
-    expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'application/json',
-        `Header 'Content-Type' does not exist`
+
+    expect(() => def.exec(clientMock, 'Content-Type', undefined, 'contain', 'json')).not.toThrow()
+    expect(() => def.exec(clientMock, 'Content-Type', undefined, 'contain', 'json')).toThrow(
+        `Expected header 'Content-Type' to contain 'json', but found 'application/xml' which does not: expected 'application/xml' to include 'json'`
     )
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'application/json',
-        `Expected header 'Content-Type' to contain 'json', but found 'application/json' which does not`
+    expect(() => def.exec(clientMock, 'Content-Type', undefined, 'contain', 'json')).toThrow(
+        `Header 'Content-Type' does not exist: expected undefined not to be undefined`
     )
 })
 
@@ -849,23 +893,21 @@ test('check response header does not contain value', () => {
         'application/json'
     ])
 
+    const getResponse = sinon.stub()
+    getResponse.onFirstCall().returns({ headers: { 'content-type': 'application/json' } })
+    getResponse.onSecondCall().returns({ headers: { 'content-type': 'application/xml' } })
+    getResponse.onThirdCall().returns({ headers: { 'another-header': 'application/json' } })
     const clientMock = {
         state: { populate: v => v },
-        httpApiClient: {
-            getResponse: jest.fn(() => ({
-                headers: { 'content-type': 'application/json' }
-            }))
-        }
+        httpApiClient: { getResponse: getResponse }
     }
-    def.exec(clientMock, 'Content-Type', 'not ', 'contain', 'json')
-    expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'application/json',
-        `Header 'Content-Type' does not exist`
+
+    expect(() => def.exec(clientMock, 'Content-Type', 'not ', 'contain', 'json')).toThrow(
+        `Expected header 'Content-Type' to not contain 'json', but found 'application/json' which does: expected 'application/json' to not include 'json'`
     )
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'application/json',
-        `Expected header 'Content-Type' to not contain 'json', but found 'application/json' which does`
+    expect(() => def.exec(clientMock, 'Content-Type', 'not ', 'contain', 'json')).not.toThrow()
+    expect(() => def.exec(clientMock, 'Content-Type', 'not ', 'contain', 'json')).toThrow(
+        `Header 'Content-Type' does not exist: expected undefined not to be undefined`
     )
 })
 
@@ -883,24 +925,26 @@ test('check response header matches regexp', () => {
         '^application/json$'
     ])
 
+    const getResponse = sinon.stub()
+    getResponse.onFirstCall().returns({ headers: { 'content-type': 'application/json' } })
+    getResponse.onSecondCall().returns({ headers: { 'content-type': 'application/xml' } })
+    getResponse.onThirdCall().returns({ headers: { 'another-header': 'application/json' } })
     const clientMock = {
         state: { populate: v => v },
-        httpApiClient: {
-            getResponse: jest.fn(() => ({
-                headers: { 'content-type': 'application/json' }
-            }))
-        }
+        httpApiClient: { getResponse: getResponse }
     }
-    def.exec(clientMock, 'Content-Type', undefined, 'match', '^application/json$')
-    expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'application/json',
-        `Header 'Content-Type' does not exist`
+
+    expect(() =>
+        def.exec(clientMock, 'Content-Type', undefined, 'match', '^application/json$')
+    ).not.toThrow()
+    expect(() =>
+        def.exec(clientMock, 'Content-Type', undefined, 'match', '^application/json$')
+    ).toThrow(
+        `Expected header 'Content-Type' to match '^application/json$', but found 'application/xml' which does not: expected 'application/xml' to match /^application\\/json$/`
     )
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'application/json',
-        `Expected header 'Content-Type' to match '^application/json$', but found 'application/json' which does not`
-    )
+    expect(() =>
+        def.exec(clientMock, 'Content-Type', undefined, 'match', '^application/json$')
+    ).toThrow(`Header 'Content-Type' does not exist: expected undefined not to be undefined`)
 })
 
 test('check response header does not match regexp', () => {
@@ -917,22 +961,24 @@ test('check response header does not match regexp', () => {
         '^application/json$'
     ])
 
+    const getResponse = sinon.stub()
+    getResponse.onFirstCall().returns({ headers: { 'content-type': 'application/json' } })
+    getResponse.onSecondCall().returns({ headers: { 'content-type': 'application/xml' } })
+    getResponse.onThirdCall().returns({ headers: { 'another-header': 'application/json' } })
     const clientMock = {
         state: { populate: v => v },
-        httpApiClient: {
-            getResponse: jest.fn(() => ({
-                headers: { 'content-type': 'application/json' }
-            }))
-        }
+        httpApiClient: { getResponse: getResponse }
     }
-    def.exec(clientMock, 'Content-Type', 'not ', 'match', '^application/json$')
-    expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'application/json',
-        `Header 'Content-Type' does not exist`
+
+    expect(() =>
+        def.exec(clientMock, 'Content-Type', 'not ', 'match', '^application/json$')
+    ).toThrow(
+        `Expected header 'Content-Type' to not match '^application/json$', but found 'application/json' which does: expected 'application/json' not to match /^application\\/json$/`
     )
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'application/json',
-        `Expected header 'Content-Type' to not match '^application/json$', but found 'application/json' which does`
-    )
+    expect(() =>
+        def.exec(clientMock, 'Content-Type', 'not ', 'match', '^application/json$')
+    ).not.toThrow()
+    expect(() =>
+        def.exec(clientMock, 'Content-Type', 'not ', 'match', '^application/json$')
+    ).toThrow(`Header 'Content-Type' does not exist: expected undefined not to be undefined`)
 })

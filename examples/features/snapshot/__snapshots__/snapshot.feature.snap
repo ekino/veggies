@@ -7,6 +7,25 @@ exports[`Setting json body from .yaml fixture file 1.1`] = `Object {
   "last_name": "Benitte",
 }`;
 
+exports[`Snapshot testing on a cli with json output 1.1`] = `Object {
+  "gender": "equal(male)",
+  "name": "john",
+}`;
+
+exports[`Snapshot testing on a json api 1.1`] = `Object {
+  "first_name": "Raphaël",
+  "gender": "type(string)",
+  "id": 1,
+  "last_name": "Benitte",
+}`;
+
+exports[`Snapshot testing on a json file 1.1`] = `Object {
+  "first_name": "Raphaël",
+  "gender": "type(string)",
+  "id": "type(number)",
+  "last_name": "Benitte",
+}`;
+
 exports[`Snapshot testing on an api 1.1`] = `Object {
   "first_name": "Raphaël",
   "gender": "male",

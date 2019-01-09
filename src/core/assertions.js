@@ -114,6 +114,13 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
                 expect(currentValue, `Property '${field}' is undefined`).to.not.be.undefined
                 break
 
+            case 'type':
+                expect(
+                    currentValue,
+                    `Property '${field}' (${currentValue}) type is not '${expectedValue}'`
+                ).to.be.a(expectedValue)
+                break
+
             case 'equal':
             case 'equals':
             default:
