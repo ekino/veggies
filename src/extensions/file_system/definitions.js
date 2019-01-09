@@ -1,8 +1,9 @@
 'use strict'
 
+const { Given, Then } = require('cucumber')
 const { expect } = require('chai')
 
-module.exports = ({ Given, Then }) => {
+exports.install = () => {
     /**
      * Creating a directory.
      */
@@ -49,11 +50,11 @@ module.exports = ({ Given, Then }) => {
             .then(content => {
                 let expectFn = expect(
                     content,
-                    `Expected file '${file}' to ${flag
-                        ? flag
-                        : ''}${comparator} '${expectedValue}', but found '${content}' which does${flag
-                        ? ''
-                        : ' not'}`
+                    `Expected file '${file}' to ${
+                        flag ? flag : ''
+                    }${comparator} '${expectedValue}', but found '${content}' which does${
+                        flag ? '' : ' not'
+                    }`
                 ).to
                 if (flag !== undefined) {
                     expectFn = expectFn.not

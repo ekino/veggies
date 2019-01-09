@@ -1,5 +1,6 @@
 'use strict'
 
+const { Given, Then, When } = require('cucumber')
 const { inspect } = require('util')
 const { expect } = require('chai')
 const _ = require('lodash')
@@ -22,7 +23,7 @@ const mustGetResponse = client => {
     return response
 }
 
-module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
+exports.install = ({ baseUrl = '' } = {}) => {
     /**
      * Setting http headers
      */
@@ -352,11 +353,11 @@ module.exports = ({ baseUrl = '' } = {}) => ({ Given, When, Then }) => {
 
         let expectFn = expect(
             header,
-            `Expected header '${key}' to ${flag
-                ? flag
-                : ''}${comparator} '${expectedValue}', but found '${header}' which does${flag
-                ? ''
-                : ' not'}`
+            `Expected header '${key}' to ${
+                flag ? flag : ''
+            }${comparator} '${expectedValue}', but found '${header}' which does${
+                flag ? '' : ' not'
+            }`
         ).to
         if (flag !== undefined) {
             expectFn = expectFn.not

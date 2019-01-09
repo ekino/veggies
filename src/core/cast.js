@@ -59,7 +59,12 @@ castFunctions['boolean'] = value => {
  * @return {Array}
  */
 castFunctions['array'] = value => {
-    return value ? value.replace(/\s/g, '').split(',').map(exports.value) : []
+    return value
+        ? value
+              .replace(/\s/g, '')
+              .split(',')
+              .map(exports.value)
+        : []
 }
 
 /**

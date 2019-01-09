@@ -4,17 +4,21 @@ jest.mock('fs')
 const fs = require('fs')
 
 const helper = require('../definitions_helper')
-const definitions = require('../../../src/extensions/http_api/definitions')()
+const definitions = require('../../../src/extensions/http_api/definitions')
 
 beforeEach(() => {
+    definitions.install()
     require('chai').clear()
 })
 
+afterEach(() => {
+    helper.clearContext()
+})
+
 test('set request headers', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('set request headers')
-    def.shouldHaveType('Given')
     def.shouldMatch('I set request headers')
     def.shouldMatch('set request headers')
 
@@ -31,10 +35,9 @@ test('set request headers', () => {
 })
 
 test('assign request headers', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('assign request headers')
-    def.shouldHaveType('Given')
     def.shouldMatch('I assign request headers')
     def.shouldMatch('assign request headers')
 
@@ -53,10 +56,9 @@ test('assign request headers', () => {
 })
 
 test('set a single request header', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('request header to')
-    def.shouldHaveType('Given')
     def.shouldNotMatch('I set Accept request header to ')
     def.shouldMatch('I set Accept request header to test', ['Accept', 'test'])
     def.shouldMatch('set Accept request header to test', ['Accept', 'test'])
@@ -70,10 +72,9 @@ test('set a single request header', () => {
 })
 
 test('clear request headers', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('clear request headers')
-    def.shouldHaveType('Given')
     def.shouldMatch('I clear request headers')
     def.shouldMatch('clear request headers')
 
@@ -83,21 +84,19 @@ test('clear request headers', () => {
 })
 
 test('set request json body', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('set request json body$')
-    def.shouldHaveType('Given')
     def.shouldMatch('I set request json body')
     def.shouldMatch('set request json body')
 })
 
 test('set request json body from fixture file', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
-    expect.assertions(6)
+    expect.assertions(5)
 
     const def = context.getDefinitionByMatcher('set request json body from')
-    def.shouldHaveType('Given')
     def.shouldNotMatch('I set request json body from ')
     def.shouldMatch('I set request json body from fixture')
     def.shouldMatch('set request json body from fixture')
@@ -118,21 +117,19 @@ test('set request json body from fixture file', () => {
 })
 
 test('set request form body', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('set request form body$')
-    def.shouldHaveType('Given')
     def.shouldMatch('I set request form body')
     def.shouldMatch('set request form body')
 })
 
 test('set request form body from fixture file', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
-    expect.assertions(6)
+    expect.assertions(5)
 
     const def = context.getDefinitionByMatcher('set request form body from')
-    def.shouldHaveType('Given')
     def.shouldNotMatch('I set request form body from ')
     def.shouldMatch('I set request form body from fixture')
     def.shouldMatch('set request form body from fixture')
@@ -153,19 +150,18 @@ test('set request form body from fixture file', () => {
 })
 
 test('set request multipart body from', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
-    expect.assertions(6)
+    expect.assertions(5)
 
     const def = context.getDefinitionByMatcher('set request multipart body from')
-    def.shouldHaveType('Given')
     def.shouldNotMatch('I set request multipart body from ')
     def.shouldMatch('I set request multipart body from fixture')
     def.shouldMatch('set request multipart body from fixture')
 
     const fixture = {
         id: '2',
-        file: fs.ReadStream('path/to/file', {})
+        file: fs.createReadStream('path/to/file', {})
     }
     const worldMock = {
         httpApiClient: { setMultipartBody: jest.fn() },
@@ -179,10 +175,9 @@ test('set request multipart body from', () => {
 })
 
 test('clear request body', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('clear request body')
-    def.shouldHaveType('Given')
     def.shouldMatch('I clear request body')
     def.shouldMatch('clear request body')
 
@@ -192,10 +187,9 @@ test('clear request body', () => {
 })
 
 test('set request query', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('set request query')
-    def.shouldHaveType('Given')
     def.shouldMatch('I set request query')
     def.shouldMatch('set request query')
 
@@ -212,10 +206,9 @@ test('set request query', () => {
 })
 
 test('follow redirect', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('?follow redirect')
-    def.shouldHaveType('Given')
     def.shouldMatch('I follow redirect')
     def.shouldMatch('follow redirect')
 
@@ -227,10 +220,9 @@ test('follow redirect', () => {
 })
 
 test('do not follow redirect', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('do not follow redirect')
-    def.shouldHaveType('Given')
     def.shouldMatch('I do not follow redirect')
     def.shouldMatch('do not follow redirect')
 
@@ -242,20 +234,18 @@ test('do not follow redirect', () => {
 })
 
 test('pick response json property', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('pick response json')
-    def.shouldHaveType('Given')
     def.shouldNotMatch('I pick response json  as ')
     def.shouldMatch('I pick response json key as value', ['key', 'value'])
     def.shouldMatch('pick response json key as value', ['key', 'value'])
 })
 
 test('enable cookies', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('enable cookies')
-    def.shouldHaveType('Given')
     def.shouldMatch('I enable cookies')
     def.shouldMatch('enable cookies')
 
@@ -265,10 +255,9 @@ test('enable cookies', () => {
 })
 
 test('disable cookies', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('disable cookies')
-    def.shouldHaveType('Given')
     def.shouldMatch('I disable cookies')
     def.shouldMatch('disable cookies')
 
@@ -278,10 +267,9 @@ test('disable cookies', () => {
 })
 
 test('test cookie is present', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('response should (not )?have an? (.+) cookie')
-    def.shouldHaveType('Then')
     def.shouldNotMatch('response should have a  cookie')
     def.shouldNotMatch('response should have an  cookie')
     def.shouldMatch('response should have a test cookie', [undefined, 'test'])
@@ -294,10 +282,9 @@ test('test cookie is present', () => {
 })
 
 test('test cookie is absent', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('response should (not )?have an? (.+) cookie')
-    def.shouldHaveType('Then')
     def.shouldNotMatch('response should crap have a  cookie')
     def.shouldNotMatch('response should crap have an  cookie')
     def.shouldNotMatch('response should not have a  cookie')
@@ -312,10 +299,9 @@ test('test cookie is absent', () => {
 })
 
 test('test cookie is secure', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('response (.+) cookie should (not )?be secure')
-    def.shouldHaveType('Then')
     def.shouldNotMatch('response  cookie should be secure')
     def.shouldMatch('response test cookie should be secure', ['test', undefined])
 
@@ -328,10 +314,9 @@ test('test cookie is secure', () => {
 })
 
 test('test cookie is not secure', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('response (.+) cookie should (not )?be secure')
-    def.shouldHaveType('Then')
     def.shouldNotMatch('response  cookie should not be secure')
     def.shouldMatch('response test cookie should not be secure', ['test', 'not '])
 
@@ -344,10 +329,9 @@ test('test cookie is not secure', () => {
 })
 
 test('test cookie is http only', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('response (.+) cookie should (not )?be http only')
-    def.shouldHaveType('Then')
     def.shouldNotMatch('response  cookie should be http only')
     def.shouldMatch('response test cookie should be http only', ['test', undefined])
 
@@ -360,10 +344,9 @@ test('test cookie is http only', () => {
 })
 
 test('test cookie is not http only', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('response (.+) cookie should (not )?be http only')
-    def.shouldHaveType('Then')
     def.shouldNotMatch('response  cookie should not be http only')
     def.shouldMatch('response test cookie should not be http only', ['test', 'not '])
 
@@ -376,10 +359,9 @@ test('test cookie is not http only', () => {
 })
 
 test('test cookie domain equals given value', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('response (.+) cookie domain should (not )?be (.+)')
-    def.shouldHaveType('Then')
     def.shouldNotMatch('response  cookie domain should be domain')
     def.shouldNotMatch('response test cookie domain should be ')
     def.shouldMatch('response test cookie domain should be domain', ['test', undefined, 'domain'])
@@ -396,10 +378,9 @@ test('test cookie domain equals given value', () => {
 })
 
 test('test cookie domain does not equal given value', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('response (.+) cookie domain should (not )?be (.+)')
-    def.shouldHaveType('Then')
     def.shouldNotMatch('response  cookie domain should not be domain')
     def.shouldNotMatch('response test cookie domain should not be ')
     def.shouldMatch('response test cookie domain should not be domain', ['test', 'not ', 'domain'])
@@ -416,10 +397,9 @@ test('test cookie domain does not equal given value', () => {
 })
 
 test('reset http client', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('reset http client')
-    def.shouldHaveType('When')
     def.shouldMatch('I reset http client')
     def.shouldMatch('reset http client')
 
@@ -429,10 +409,9 @@ test('reset http client', () => {
 })
 
 test('perform a request', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('GET|POST|PUT|DELETE')
-    def.shouldHaveType('When')
     def.shouldNotMatch('I GET ')
     def.shouldMatch('I GET /', ['GET', '/'])
     def.shouldMatch('I POST /create', ['POST', '/create'])
@@ -445,10 +424,9 @@ test('perform a request', () => {
 })
 
 test('dump response body', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('dump response body')
-    def.shouldHaveType('When')
     def.shouldMatch('I dump response body')
     def.shouldMatch('dump response body')
 
@@ -460,10 +438,9 @@ test('dump response body', () => {
 })
 
 test('check response HTTP status code', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('response status code should be')
-    def.shouldHaveType('Then')
     def.shouldNotMatch('response status code should be ')
     def.shouldNotMatch('response status code should be string')
     def.shouldNotMatch('response status code should be 600')
@@ -482,10 +459,9 @@ test('check response HTTP status code', () => {
 })
 
 test('check response HTTP status by message', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('response status should be')
-    def.shouldHaveType('Then')
     def.shouldNotMatch('response status should be ')
     def.shouldMatch('response status should be ok', ['ok'])
     def.shouldMatch('response status should be forbidden', ['forbidden'])
@@ -506,16 +482,15 @@ test('check response HTTP status by message', () => {
 })
 
 test('check json response', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('json response should (fully )?match')
-    def.shouldHaveType('Then')
     def.shouldMatch('json response should match', [undefined])
     def.shouldMatch('json response should fully match', ['fully '])
 })
 
 test('check json response property is defined', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('json response should (fully )?match')
 
@@ -545,7 +520,7 @@ test('check json response property is defined', () => {
 })
 
 test('check json response property equals expected value', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('json response should (fully )?match')
 
@@ -576,7 +551,7 @@ test('check json response property equals expected value', () => {
 })
 
 test('check json response property contains value', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('json response should (fully )?match')
 
@@ -617,7 +592,7 @@ test('check json response property contains value', () => {
 })
 
 test('check json response property matches regexp', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('json response should (fully )?match')
 
@@ -658,7 +633,7 @@ test('check json response property matches regexp', () => {
 })
 
 test('check json response fully matches spec', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('json response should (fully )?match')
 
@@ -703,10 +678,9 @@ test('check json response fully matches spec', () => {
 })
 
 test('check json collection size for a given path', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('should receive a collection of')
-    def.shouldHaveType('Then')
     def.shouldNotMatch('I should receive a collection of x items for path whatever')
     def.shouldMatch('I should receive a collection of 1 item for path property', ['1', 'property'])
     def.shouldMatch('I should receive a collection of 2 items for path property', ['2', 'property'])
@@ -727,12 +701,11 @@ test('check json collection size for a given path', () => {
 })
 
 test('response match fixture', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
-    expect.assertions(5)
+    expect.assertions(4)
 
     const def = context.getDefinitionByMatcher('should match fixture')
-    def.shouldHaveType('Then')
     def.shouldNotMatch('response should match fixture ')
     def.shouldMatch('response should match fixture fixture', ['fixture'])
 
@@ -750,19 +723,18 @@ test('response match fixture', () => {
 })
 
 test('check response header value', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher(
         'response header (.+) should (not )?(equal|contain|match)'
     )
-    def.shouldHaveType('Then')
     def.shouldNotMatch('response header  should match pattern ')
     def.shouldNotMatch('response header Content-Type should match ')
     def.shouldNotMatch('response header Content-Type should invalid thing')
 })
 
 test('check response header equals expected value', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher(
         'response header (.+) should (not )?(equal|contain|match)'
@@ -796,7 +768,7 @@ test('check response header equals expected value', () => {
 })
 
 test('check response header does not equal expected value', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher(
         'response header (.+) should (not )?(equal|contain|match)'
@@ -830,7 +802,7 @@ test('check response header does not equal expected value', () => {
 })
 
 test('check response header contains value', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher(
         'response header (.+) should (not )?(equal|contain|match)'
@@ -864,7 +836,7 @@ test('check response header contains value', () => {
 })
 
 test('check response header does not contain value', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher(
         'response header (.+) should (not )?(equal|contain|match)'
@@ -898,7 +870,7 @@ test('check response header does not contain value', () => {
 })
 
 test('check response header matches regexp', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher(
         'response header (.+) should (not )?(equal|contain|match)'
@@ -932,7 +904,7 @@ test('check response header matches regexp', () => {
 })
 
 test('check response header does not match regexp', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher(
         'response header (.+) should (not )?(equal|contain|match)'

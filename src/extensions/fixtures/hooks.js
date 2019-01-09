@@ -1,6 +1,6 @@
 'use strict'
 
-const path = require('path')
+const { Before } = require('cucumber')
 
 /**
  * Registers hooks for the fixtures extension.
@@ -8,14 +8,8 @@ const path = require('path')
  * @module extensions/fixtures/hooks
  */
 
-module.exports = ({ Before }) => {
+exports.install = () => {
     Before(function(scenarioInfos) {
-        if (scenarioInfos.sourceLocation) {
-            this.fixtures.setFeatureUri(scenarioInfos.sourceLocation.uri)
-        } else {
-            const fullPath = scenarioInfos.scenario.feature.uri
-            const relativePath = path.relative(process.cwd(), fullPath)
-            this.fixtures.setFeatureUri(relativePath)
-        }
+        this.fixtures.setFeatureUri(scenarioInfos.sourceLocation.uri)
     })
 }

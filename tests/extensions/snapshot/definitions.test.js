@@ -1,13 +1,21 @@
 'use strict'
 
 const helper = require('../definitions_helper')
-const definitions = require('../../../src/extensions/snapshot/definitions')()
+const definitions = require('../../../src/extensions/snapshot/definitions')
+
+beforeEach(() => {
+    definitions.install()
+    require('chai').clear()
+})
+
+afterEach(() => {
+    helper.clearContext()
+})
 
 test('response match snapshot', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher('response body should match snapshot')
-    def.shouldHaveType('Then')
     def.shouldMatch('response body should match snapshot')
 
     const content = 'test'
@@ -26,9 +34,8 @@ test('response match snapshot', () => {
 })
 
 test('stdout/stderr match snapshot', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
     const def = context.getDefinitionByMatcher('(stderr|stdout) output should match snapshot')
-    def.shouldHaveType('Then')
     def.shouldMatch('stdout output should match snapshot')
     def.shouldMatch('stderr output should match snapshot')
 
@@ -44,9 +51,8 @@ test('stdout/stderr match snapshot', () => {
 })
 
 test('file match snapshot', () => {
-    const context = helper.define(definitions)
+    const context = helper.getContext() // Extension context
     const def = context.getDefinitionByMatcher('file (.+) should match snapshot')
-    def.shouldHaveType('Then')
     def.shouldMatch('file somefile.txt should match snapshot')
     def.shouldNotMatch('file should match snapshot')
 

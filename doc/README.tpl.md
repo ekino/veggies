@@ -49,7 +49,7 @@ It's also the perfect companion for testing CLI applications built with commande
 ## Requirements
     
 - Node.js `>=6.0.0`
-- cucumber `>=2.0.0`
+- cucumber `>=4.0.0`
     
 ## Installation
 
@@ -70,24 +70,22 @@ Then all you have to do is installing the provided extensions:
 ```javascript
 // /support/world.js
 
-const { defineSupportCode } = require('cucumber')
+const { setWorldConstructor } = require('cucumber')
 const { state, fixtures, httpApi, cli } = require('@ekino/veggies')
 
-defineSupportCode(({ setWorldConstructor }) => {
-    setWorldConstructor(function() {
-        state.extendWorld(this)
-        fixtures.extendWorld(this)
-        httpApi.extendWorld(this)
-        cli.extendWorld(this)
-    })
+setWorldConstructor(function() {
+    state.extendWorld(this)
+    fixtures.extendWorld(this)
+    httpApi.extendWorld(this)
+    cli.extendWorld(this)
 })
 
-state.install(defineSupportCode)
-fixtures.install(defineSupportCode)
+state.install()
+fixtures.install()
 httpApi.install({
     baseUrl: 'http://localhost:3000',
-})(defineSupportCode)
-cli.install(defineSupportCode)
+})
+cli.install()
 ```
 
 ## Features
@@ -532,16 +530,14 @@ To install the extension, you should add the following snippet to your `world` f
 ```javascript
 // /support/world.js
 
-const { defineSupportCode } = require('cucumber')
+const { setWorldConstructor } = require('cucumber')
 const { state } = require('@ekino/veggies')
 
-defineSupportCode(({ setWorldConstructor }) => {
-    setWorldConstructor(function() {
-        state.extendWorld(this)
-    })
+setWorldConstructor(function() {
+    state.extendWorld(this)
 })
 
-state.install(defineSupportCode)
+state.install()
 ```
 
 #### State gherkin expressions
@@ -558,11 +554,11 @@ For available methods on the state, please refer to its own
 [documentation](https://ekino.github.io/veggies/module-extensions_state_State.html).
 
 ```javascript
-defineSupportCode(({ When }) => {
-    When(/^I do something useful$/, function() {
-        const stateValue = this.state.get('whatever')
-        // …
-    })
+const { When } = require('cucumber')
+    
+When(/^I do something useful$/, function() {
+    const stateValue = this.state.get('whatever')
+    // …
 })
 ```
 
@@ -585,16 +581,14 @@ To install the extension, you should add the following snippet to your `world` f
 ```javascript
 // /support/world.js
 
-const { defineSupportCode } = require('cucumber')
+const { setWorldConstructor } = require('cucumber')
 const { fixtures } = require('@ekino/veggies')
 
-defineSupportCode(({ setWorldConstructor }) => {
-    setWorldConstructor(function() {
-        fixtures.extendWorld(this)
-    })
+setWorldConstructor(function() {
+    fixtures.extendWorld(this)
 })
 
-fixtures.install(defineSupportCode)
+fixtures.install()
 ```
 
 #### Fixtures low level API
@@ -604,14 +598,14 @@ For available methods on the fixtures loader, please refer to its own
 [documentation](https://ekino.github.io/veggies/module-extensions_fixtures_FixturesLoader.html).
 
 ```javascript
-defineSupportCode(({ When }) => {
-    When(/^I do something useful with fixtures$/, function() {
-        return this.fixtures.load('whatever')
-            .then(fixture => {
-                // …
-            })
-    })
-})
+const { When } = require('cucumber')
+
+When(/^I do something useful with fixtures$/, function() {
+    return this.fixtures.load('whatever')
+        .then(fixture => {
+            // …
+        })
+
 ```
 
 ### http API extension 
@@ -628,21 +622,19 @@ to your `world` file:
 ```javascript
 // /support/world.js
 
-const { defineSupportCode } = require('cucumber')
+const { setWorldConstructor } = require('cucumber')
 const { state, fixtures, httpApi } = require('@ekino/veggies')
 
-defineSupportCode(({ setWorldConstructor }) => {
-    setWorldConstructor(function() {
-        state.extendWorld(this)
-        fixtures.extendWorld(this)
-        httpApi.extendWorld(this)
-    })
+setWorldConstructor(function() {
+    state.extendWorld(this)
+    fixtures.extendWorld(this)
+    httpApi.extendWorld(this)
 })
 
-state.install(defineSupportCode)
+state.install()
 httpApi.install({
     baseUrl: 'http://localhost:3000',
-})(defineSupportCode)
+})
 ```
 
 #### http API gherkin expressions
@@ -659,10 +651,10 @@ For available methods on the client, please refer to its own
 [documentation](https://ekino.github.io/veggies/module-extensions_httpApi_client.html).
 
 ```javascript
-defineSupportCode(({ When }) => {
-    When(/^I do something useful$/, function() {
-        return this.httpApiClient.makeRequest(/* … */)
-    })
+const { When } = require('cucumber')
+
+When(/^I do something useful$/, function() {
+    return this.httpApiClient.makeRequest(/* … */)
 })
 ```
 
@@ -680,20 +672,18 @@ to your `world` file:
 ```javascript
 // /support/world.js
 
-const { defineSupportCode } = require('cucumber')
+const { setWorldConstructor } = require('cucumber')
 const { state, fixtures, cli } = require('@ekino/veggies')
 
-defineSupportCode(({ setWorldConstructor }) => {
-    setWorldConstructor(function() {
-        state.extendWorld(this)
-        fixtures.extendWorld(this)
-        cli.extendWorld(this)
-    })
+setWorldConstructor(function() {
+    state.extendWorld(this)
+    fixtures.extendWorld(this)
+    cli.extendWorld(this)
 })
 
-state.install(defineSupportCode)
-fixtures.install(defineSupportCode)
-cli.install(defineSupportCode)
+state.install()
+fixtures.install()
+cli.install()
 ```
 
 #### CLI gherkin expressions
@@ -710,11 +700,11 @@ For available methods on the client, please refer to its own
 [documentation](https://ekino.github.io/veggies/module-extensions_Cli_Cli.html).
 
 ```javascript
-defineSupportCode(({ When }) => {
-    Then(/^I check something from the CLI output$/, function() {
-        const out = this.cli.getOutput()
-        // …
-    })
+const { When } = require('cucumber')
+
+Then(/^I check something from the CLI output$/, function() {
+    const out = this.cli.getOutput()
+    // …
 })
 ```
 
@@ -731,22 +721,20 @@ to your `world` file:
 ```javascript
 // /support/world.js
 
-const { defineSupportCode } = require('cucumber')
+const { setWorldConstructor } = require('cucumber')
 const { state, fixtures, cli, fileSystem } = require('@ekino/veggies')
 
-defineSupportCode(({ setWorldConstructor }) => {
-    setWorldConstructor(function() {
-        state.extendWorld(this)
-        fixtures.extendWorld(this)
-        cli.extendWorld(this)
-        fileSystem.extendWorld(this)
-    })
+setWorldConstructor(function() {
+    state.extendWorld(this)
+    fixtures.extendWorld(this)
+    cli.extendWorld(this)
+    fileSystem.extendWorld(this)
 })
 
-state.install(defineSupportCode)
-fixtures.install(defineSupportCode)
-cli.install(defineSupportCode)
-fileSystem.install(defineSupportCode)
+state.install()
+fixtures.install()
+cli.install()
+fileSystem.install()
 ```
 
 #### File system gherkin expressions
@@ -763,13 +751,13 @@ For available methods on the fileSystem, please refer to its own
 [documentation](https://ekino.github.io/veggies/module-extensions_FileSystem_FileSystem.html).
 
 ```javascript
-defineSupportCode(({ Then }) => {
-    Then(/^I check something using file system$/, function() {
-        return this.fileSystem.getFileContent('whatever')
-            .then(content => {
-                // …    
-            })
-    })
+const { Then } = require('cucumber')
+
+Then(/^I check something using file system$/, function() {
+    return this.fileSystem.getFileContent('whatever')
+        .then(content => {
+            // …    
+        })
 })
 ```
 
@@ -786,24 +774,22 @@ to your `world` file:
 ```javascript
 // /support/world.js
 
-const { defineSupportCode } = require('cucumber')
+const { setWorldConstructor } = require('cucumber')
 const { state, fixtures, cli, fileSystem, snapshot } = require('@ekino/veggies')
 
-defineSupportCode(({ setWorldConstructor }) => {
-    setWorldConstructor(function() {
-        state.extendWorld(this)
-        fixtures.extendWorld(this)
-        cli.extendWorld(this)
-        fileSystem.extendWorld(this)
-        snapshot.extendWorld(this)
-    })
+setWorldConstructor(function() {
+    state.extendWorld(this)
+    fixtures.extendWorld(this)
+    cli.extendWorld(this)
+    fileSystem.extendWorld(this)
+    snapshot.extendWorld(this)
 })
 
-state.install(defineSupportCode)
-fixtures.install(defineSupportCode)
-cli.install(defineSupportCode)
-fileSystem.install(defineSupportCode)
-snapshot.install(defineSupportCode)
+state.install()
+fixtures.install()
+cli.install()
+fileSystem.install()
+snapshot.install()
 ```
 
 #### Snapshot low level API
@@ -813,11 +799,11 @@ For available methods on the snapshot, please refer to its own
 [documentation](https://ekino.github.io/veggies/module-extensions_snapshot_extension.html).
 
 ```javascript
-defineSupportCode(({ Then }) => {
-    Then(/^Some content should match snapshot$/, function() {
-        this.snapshot.expectToMatch('whatever')
-    })
-})
+const { Then } = require('cucumber')
+
+Then(/^Some content should match snapshot$/, function() {
+    this.snapshot.expectToMatch('whatever')
+
 ``
 
 ## Helpers
@@ -839,14 +825,12 @@ For example:
 
 ```javascript
 const { cast } = require('@ekino/veggies')
-const { defineSupportCode } = require('cucumber')
+const { Given, When, Then } = require('cucumber')
 
-defineSupportCode(function({ Given, When, Then }) {
-    Then(/^User data should be$/, (step) => {
-        const userData = this.userData
-        const expectedData = Cast.objects(step.rowsHash())
-        expect(userData).to.be.deep.equal(expectedData)
-    })
+Then(/^User data should be$/, (step) => {
+    const userData = this.userData
+    const expectedData = Cast.objects(step.rowsHash())
+    expect(userData).to.be.deep.equal(expectedData)
 })
 ```
 

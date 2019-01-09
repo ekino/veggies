@@ -13,15 +13,13 @@ const definitions = require('./definitions')
  * @example
  * // /support/world.js
  *
- * const { defineSupportCode } = require('cucumber')
+ * const { setWorldConstructor } = require('cucumber')
  * const { state, cli, fileSystem } = require('@ekino/veggies')
  *
- * defineSupportCode(({ setWorldConstructor }) => {
- *     setWorldConstructor(function() {
- *         state.extendWorld(this) // cli extension requires state extension
- *         cli.extendWorld(this) // fileSystem extension requires cli extension
- *         fileSystem.extendWorld(this)
- *     })
+ * setWorldConstructor(function() {
+ *     state.extendWorld(this) // cli extension requires state extension
+ *     cli.extendWorld(this) // fileSystem extension requires cli extension
+ *     fileSystem.extendWorld(this)
  * })
  *
  * @function
@@ -35,23 +33,19 @@ exports.extendWorld = require('./extend_world')
  * @example
  * // /support/world.js
  *
- * const { defineSupportCode } = require('cucumber')
+ * const { setWorldConstructor } = require('cucumber')
  * const { state, cli, fileSystem } = require('@ekino/veggies')
  *
- * defineSupportCode(({ setWorldConstructor }) => {
- *     setWorldConstructor(function() {
- *         state.extendWorld(this) // cli extension requires state extension
- *         cli.extendWorld(this) // fileSystem extension requires cli extension
- *         fileSystem.extendWorld(this)
- *     })
+ * setWorldConstructor(function() {
+ *     state.extendWorld(this) // cli extension requires state extension
+ *     cli.extendWorld(this) // fileSystem extension requires cli extension
+ *     fileSystem.extendWorld(this)
  * })
  *
- * state.install(defineSupportCode)
- * cli.install(defineSupportCode)
- * fileSystem.install(defineSupportCode)
- *
- * @param {Function} define - The `defineSupportCode` helper from cucumber
+ * state.install()
+ * cli.install()
+ * fileSystem.install()
  */
-exports.install = define => {
-    define(definitions)
+exports.install = () => {
+    definitions.install()
 }

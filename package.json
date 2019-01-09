@@ -28,40 +28,40 @@
   },
   "engineStrict": true,
   "dependencies": {
-    "chai": "^4.0.2",
-    "fs-extra": "^4.0.0",
-    "glob": "^7.1.2",
-    "jest-diff": "^21.0.0",
-    "js-yaml": "^3.8.4",
-    "lodash": "^4.17.4",
-    "natural-compare": "^1.4.0",
-    "pretty-format": "^21.0.2",
-    "request": "^2.81.0",
-    "tough-cookie": "^2.3.2"
+    "chai": "4.2",
+    "fs-extra": "7.0",
+    "glob": "7.1",
+    "jest-diff": "23.6",
+    "js-yaml": "3.12",
+    "lodash": "4.17",
+    "natural-compare": "1.4",
+    "pretty-format": "23.6",
+    "request": "2.88",
+    "tough-cookie": "2.4"
   },
   "devDependencies": {
-    "babylon": "^6.17.4",
-    "chalk": "^2.0.1",
-    "coveralls": "^2.13.1",
-    "cucumber": "3.x.x",
-    "eslint": "^4.1.1",
-    "gh-pages": "^1.0.0",
-    "git-changelog": "^1.1.2",
-    "husky": "^0.14.3",
-    "jest": "^20.0.4",
-    "jsdoc": "^3.4.3",
-    "lint-staged": "^4.0.1",
-    "minami": "^1.2.3",
-    "mustache": "^2.3.0",
-    "nock": "^9.0.13",
-    "prettier": "^1.5.2",
-    "validate-commit-msg": "^2.12.2"
+    "babylon": "6.x",
+    "chalk": "2.x",
+    "commitlint": "7.x",
+    "coveralls": "3.x",
+    "cucumber": "5.x",
+    "eslint": "5.x",
+    "gh-pages": "2.x",
+    "git-changelog": "1.x",
+    "husky": "1.x",
+    "jest": "23.x",
+    "jsdoc": "3.x",
+    "lint-staged": "8.x",
+    "minami": "1.x",
+    "mustache": "3.x",
+    "nock": "10.x",
+    "prettier": "1.x"
   },
   "peerDependencies": {
-    "cucumber": ">=2.3.1 <4.0.0"
+    "cucumber": ">=4.0.0 <6.0.0"
   },
   "scripts": {
-    "test": "jest --verbose",
+    "test": "jest --verbose tests",
     "test-cover": "jest --verbose --coverage",
     "coverage": "cat ./coverage/lcov.info | coveralls",
     "fmt": "prettier --print-width 100 --tab-width=4 --single-quote --bracket-spacing --no-semi --color --write \"{src,tests,scripts}/**/*.js\"",
@@ -72,55 +72,7 @@
     "readme": "node scripts/generate_readme",
     "doc": "jsdoc src -R README.md -r -d _doc --verbose -t node_modules/minami",
     "doc-pub": "yarn run readme && yarn run doc && gh-pages -d _doc",
-    "examples": "cucumberjs --require examples/support examples/features",
-    "changelog": "git-changelog -t false -n v${npm_package_version}",
-    "precommit": "lint-staged",
-    "commitmsg": "validate-commit-msg"
-  },
-  "lint-staged": {
-    "README.tpl.md": [
-      "readme",
-      "git add"
-    ],
-    "*.feature": [
-      "cucumberjs --require examples/support examples/features --tags @offline"
-    ],
-    "*.js": [
-      "lint-fix",
-      "fmt",
-      "git add",
-      "jest --bail --findRelatedTests"
-    ]
-  },
-  "config": {
-    "validate-commit-msg": {
-      "types": [
-        "feat",
-        "fix",
-        "docs",
-        "style",
-        "refactor",
-        "perf",
-        "test",
-        "build",
-        "ci",
-        "chore",
-        "revert"
-      ],
-      "scope": {
-        "required": false,
-        "allowed": [
-          "*"
-        ],
-        "validate": false,
-        "multiple": false
-      },
-      "warnOnFail": false,
-      "maxSubjectLength": 80,
-      "subjectPattern": ".+",
-      "subjectPatternErrorMsg": "subject does not match subject pattern!",
-      "helpMessage": "",
-      "autoFix": false
-    }
+    "examples": "cucumber-js --require examples/support examples/features",
+    "changelog": "git-changelog -t false -n v${npm_package_version}"
   }
 }

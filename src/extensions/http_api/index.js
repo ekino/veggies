@@ -13,14 +13,12 @@ const definitions = require('./definitions')
  * @example
  * // /support/world.js
  *
- * const { defineSupportCode } = require('cucumber')
+ * const { setWorldConstructor } = require('cucumber')
  * const { state, httpApi } = require('@ekino/veggies')
  *
- * defineSupportCode(({ setWorldConstructor }) => {
- *     setWorldConstructor(function() {
- *         state.extendWorld(this) // httpApi extension requires state extension
- *         httpApi.extendWorld(this)
- *     })
+ * setWorldConstructor(function() {
+ *     state.extendWorld(this) // httpApi extension requires state extension
+ *     httpApi.extendWorld(this)
  * })
  *
  * @function
@@ -41,24 +39,19 @@ exports.extendWorld = require('./extend_world')
  * @example
  * // /support/world.js
  *
- * const { defineSupportCode } = require('cucumber')
+ * const { setWorldConstructor } = require('cucumber')
  * const { state, httpApi } = require('@ekino/veggies')
  *
- * defineSupportCode(({ setWorldConstructor }) => {
- *     setWorldConstructor(function() {
- *         state.extendWorld(this) // httpApi extension requires state extension
- *         httpApi.extendWorld(this)
- *     })
+ * setWorldConstructor(function() {
+ *     state.extendWorld(this) // httpApi extension requires state extension
+ *     httpApi.extendWorld(this)
  * })
  *
- * state.install(defineSupportCode)
- * httpApi.install({
- *     baseUrl: 'http://localhost:3000',
- * })(defineSupportCode)
+ * state.install()
+ * httpApi.install({ baseUrl: 'http://localhost:3000' })
  *
- * @param {HttpApiConfig} config - The `defineSupportCode` helper from cucumber
- * @return {Function} The installation function
+ * @param {HttpApiConfig} config - Http global conf
  */
-exports.install = ({ baseUrl = '' } = {}) => define => {
-    define(definitions({ baseUrl }))
+exports.install = ({ baseUrl = '' } = {}) => {
+    definitions.install({ baseUrl })
 }
