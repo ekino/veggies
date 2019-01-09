@@ -1,11 +1,12 @@
 'use strict'
 
+const sinon = require('sinon')
+
 const helper = require('../definitions_helper')
 const definitions = require('../../../src/extensions/cli/definitions')
 
 beforeEach(() => {
     definitions.install()
-    require('chai').clear()
 })
 
 afterEach(() => {
@@ -116,14 +117,12 @@ test('check exit code', () => {
     def.shouldMatch('command exit code should be 0', ['0'])
     def.shouldMatch('exit code should be 32', ['32'])
 
-    const cliMock = { cli: { getExitCode: jest.fn(() => 0) } }
-    def.exec(cliMock, '0')
+    const cliMock = { cli: { getExitCode: jest.fn(() => 1) } }
+    expect(() => {
+        def.exec(cliMock, '0')
+    }).toThrow('0', `The command exit code doesn't match expected 0, found: 0`)
+
     expect(cliMock.cli.getExitCode).toHaveBeenCalled()
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        0,
-        `The command exit code doesn't match expected 0, found: 0`
-    )
-    expect(require('chai').equal).toHaveBeenCalledWith(0)
 })
 
 test('check if stdout or stderr is empty', () => {
@@ -133,10 +132,33 @@ test('check if stdout or stderr is empty', () => {
     def.shouldMatch('stdout should be empty', ['stdout'])
     def.shouldMatch('stderr should be empty', ['stderr'])
 
-    const cliMock = { cli: { getOutput: jest.fn(() => 'output') } }
-    def.exec(cliMock, 'stdout')
-    expect(cliMock.cli.getOutput).toHaveBeenCalledWith('stdout')
-    expect(require('chai').expect).toHaveBeenCalledWith('output')
+    const getOutput = sinon.stub()
+    getOutput.withArgs('stdout').returns('not empty stdout')
+    getOutput
+        .withArgs('stdout')
+        .onSecondCall()
+        .returns('')
+    getOutput.withArgs('stderr').returns('not empty stderr')
+    getOutput
+        .withArgs('stderr')
+        .onSecondCall()
+        .returns('')
+
+    const cliMock = { cli: { getOutput: getOutput } }
+
+    expect(() => {
+        def.exec(cliMock, 'stdout')
+    }).toThrow("expected 'not empty stdout' to be empty")
+    expect(() => {
+        def.exec(cliMock, 'stdout')
+    }).not.toThrow()
+
+    expect(() => {
+        def.exec(cliMock, 'stderr')
+    }).toThrow("expected 'not empty stderr' to be empty")
+    expect(() => {
+        def.exec(cliMock, 'stderr')
+    }).not.toThrow()
 })
 
 test('check if stdout or stderr contains something', () => {
@@ -147,11 +169,32 @@ test('check if stdout or stderr contains something', () => {
     def.shouldMatch('stdout should contain something', ['stdout', 'something'])
     def.shouldMatch('stderr should contain something', ['stderr', 'something'])
 
-    const cliMock = { cli: { getOutput: jest.fn(() => 'output') } }
-    def.exec(cliMock, 'stdout', 'something')
-    expect(cliMock.cli.getOutput).toHaveBeenCalledWith('stdout')
-    expect(require('chai').expect).toHaveBeenCalledWith('output')
-    expect(require('chai').contain).toHaveBeenCalledWith('something')
+    const getOutput = sinon.stub()
+    getOutput.withArgs('stdout').returns('nothing on stdout')
+    getOutput
+        .withArgs('stdout')
+        .onSecondCall()
+        .returns('something on stdout')
+    getOutput.withArgs('stderr').returns('nothing on stderr')
+    getOutput
+        .withArgs('stderr')
+        .onSecondCall()
+        .returns('something on stderr')
+    const cliMock = { cli: { getOutput: getOutput } }
+
+    expect(() => {
+        def.exec(cliMock, 'stdout', 'something')
+    }).toThrow(`expected 'nothing on stdout' to include 'something'`)
+    expect(() => {
+        def.exec(cliMock, 'stdout', 'something')
+    }).not.toThrow()
+
+    expect(() => {
+        def.exec(cliMock, 'stderr', 'something')
+    }).toThrow(`expected 'nothing on stderr' to include 'something'`)
+    expect(() => {
+        def.exec(cliMock, 'stderr', 'something')
+    }).not.toThrow()
 })
 
 test('check if stdout or stderr does not contain something', () => {
@@ -162,11 +205,32 @@ test('check if stdout or stderr does not contain something', () => {
     def.shouldMatch('stdout should not contain something', ['stdout', 'something'])
     def.shouldMatch('stderr should not contain something', ['stderr', 'something'])
 
-    const cliMock = { cli: { getOutput: jest.fn(() => 'output') } }
-    def.exec(cliMock, 'stdout', 'something')
-    expect(cliMock.cli.getOutput).toHaveBeenCalledWith('stdout')
-    expect(require('chai').expect).toHaveBeenCalledWith('output')
-    expect(require('chai').contain).toHaveBeenCalledWith('something')
+    const getOutput = sinon.stub()
+    getOutput.withArgs('stdout').returns('something on stdout')
+    getOutput
+        .withArgs('stdout')
+        .onSecondCall()
+        .returns('nothing on stdout')
+    getOutput.withArgs('stderr').returns('something on stderr')
+    getOutput
+        .withArgs('stderr')
+        .onSecondCall()
+        .returns('nothing on stderr')
+    const cliMock = { cli: { getOutput: getOutput } }
+
+    expect(() => {
+        def.exec(cliMock, 'stdout', 'something')
+    }).toThrow(`expected 'something on stdout' to not include 'something'`)
+    expect(() => {
+        def.exec(cliMock, 'stdout', 'something')
+    }).not.toThrow()
+
+    expect(() => {
+        def.exec(cliMock, 'stderr', 'something')
+    }).toThrow(`expected 'something on stderr' to not include 'something'`)
+    expect(() => {
+        def.exec(cliMock, 'stderr', 'something')
+    }).not.toThrow()
 })
 
 test('check if stdout or stderr matches a regular expression', () => {
@@ -177,11 +241,32 @@ test('check if stdout or stderr matches a regular expression', () => {
     def.shouldMatch('stdout should match regex', ['stdout', 'regex'])
     def.shouldMatch('stderr should match regex', ['stderr', 'regex'])
 
-    const cliMock = { cli: { getOutput: jest.fn(() => 'output') } }
-    def.exec(cliMock, 'stdout', 'something')
-    expect(cliMock.cli.getOutput).toHaveBeenCalledWith('stdout')
-    expect(require('chai').expect).toHaveBeenCalledWith('output')
-    expect(require('chai').match).toHaveBeenCalledWith(/something/gim)
+    const getOutput = sinon.stub()
+    getOutput.withArgs('stdout').returns('nothing on stdout')
+    getOutput
+        .withArgs('stdout')
+        .onSecondCall()
+        .returns('something on stdout')
+    getOutput.withArgs('stderr').returns('nothing on stderr')
+    getOutput
+        .withArgs('stderr')
+        .onSecondCall()
+        .returns('something on stderr')
+    const cliMock = { cli: { getOutput: getOutput } }
+
+    expect(() => {
+        def.exec(cliMock, 'stdout', 'something')
+    }).toThrow(`expected 'nothing on stdout' to match /something/gim`)
+    expect(() => {
+        def.exec(cliMock, 'stdout', 'something')
+    }).not.toThrow()
+
+    expect(() => {
+        def.exec(cliMock, 'stderr', 'something')
+    }).toThrow(`expected 'nothing on stderr' to match /something/gim`)
+    expect(() => {
+        def.exec(cliMock, 'stderr', 'something')
+    }).not.toThrow()
 })
 
 test('check if stdout or stderr does not match a regular expression', () => {
@@ -192,9 +277,30 @@ test('check if stdout or stderr does not match a regular expression', () => {
     def.shouldMatch('stdout should not match regex', ['stdout', 'regex'])
     def.shouldMatch('stderr should not match regex', ['stderr', 'regex'])
 
-    const cliMock = { cli: { getOutput: jest.fn(() => 'output') } }
-    def.exec(cliMock, 'stdout', 'something')
-    expect(cliMock.cli.getOutput).toHaveBeenCalledWith('stdout')
-    expect(require('chai').expect).toHaveBeenCalledWith('output')
-    expect(require('chai').match).toHaveBeenCalledWith(/something/gim)
+    const getOutput = sinon.stub()
+    getOutput.withArgs('stdout').returns('something on stdout')
+    getOutput
+        .withArgs('stdout')
+        .onSecondCall()
+        .returns('nothing on stdout')
+    getOutput.withArgs('stderr').returns('something on stderr')
+    getOutput
+        .withArgs('stderr')
+        .onSecondCall()
+        .returns('nothing on stderr')
+    const cliMock = { cli: { getOutput: getOutput } }
+
+    expect(() => {
+        def.exec(cliMock, 'stdout', 'something')
+    }).toThrow(`expected 'something on stdout' not to match /something/gim`)
+    expect(() => {
+        def.exec(cliMock, 'stdout', 'something')
+    }).not.toThrow()
+
+    expect(() => {
+        def.exec(cliMock, 'stderr', 'something')
+    }).toThrow(`expected 'something on stderr' not to match /something/gim`)
+    expect(() => {
+        def.exec(cliMock, 'stderr', 'something')
+    }).not.toThrow()
 })

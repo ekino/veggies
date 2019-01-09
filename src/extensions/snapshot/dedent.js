@@ -50,7 +50,7 @@ const getSpacesLength = text => {
  *      Another line
  *  Another line again"
  *
- *  In this case, alignment is donne on the spaces or tab before """
+ *  In this case, alignment is done on the spaces or tab before """
  *
  * Warning : First line and last line will always be ignored
  *

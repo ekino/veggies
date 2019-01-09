@@ -2,9 +2,7 @@
 
 const { countNestedProperties, assertObjectMatchSpec } = require('../../src/core/assertions')
 
-beforeEach(() => {
-    require('chai').clear()
-})
+beforeEach(() => {})
 
 test('should allow to count object properties', () => {
     expect(
@@ -86,9 +84,16 @@ test('object property is defined', () => {
         }
     ]
 
-    assertObjectMatchSpec({}, spec)
-    expect(require('chai').expect).toHaveBeenCalledWith(undefined, `Property 'name' is undefined`)
-    expect(require('chai').expect).toHaveBeenCalledWith(undefined, `Property 'gender' is undefined`)
+    expect(() => assertObjectMatchSpec({ name: 'john', gender: 'male' }, spec)).not.toThrow()
+    expect(() => assertObjectMatchSpec({ name: 'john' }, spec)).toThrow(
+        `Property 'gender' is undefined: expected undefined not to be undefined`
+    )
+    expect(() => assertObjectMatchSpec({ gender: 'john' }, spec)).toThrow(
+        `Property 'name' is undefined: expected undefined not to be undefined`
+    )
+    expect(() => assertObjectMatchSpec({}, spec)).toThrow(
+        `Property 'name' is undefined: expected undefined not to be undefined`
+    )
 })
 
 test('check object property equals expected value', () => {
@@ -96,104 +101,125 @@ test('check object property equals expected value', () => {
         {
             field: 'name',
             matcher: 'equals',
-            value: 'whatever'
+            value: 'john'
         }
     ]
 
-    assertObjectMatchSpec({ name: 'plouc' }, spec)
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'plouc',
-        `Expected property 'name' to equal 'whatever', but found 'plouc'`
+    expect(() => assertObjectMatchSpec({ name: 'john' }, spec)).not.toThrow()
+    expect(() => assertObjectMatchSpec({ name: 'plouc' }, spec)).toThrow(
+        `Expected property 'name' to equal 'john', but found 'plouc': expected 'plouc' to deeply equal 'john'`
     )
 })
 
 test('check object property contains value', () => {
-    const object = {
-        first_name: 'Raphaël',
-        last_name: 'Benitte'
-    }
     const spec = [
         {
             field: 'first_name',
             matcher: 'contain',
-            value: 'raph'
+            value: 'john'
         },
         {
             field: 'last_name',
             matcher: 'contains',
-            value: 'ben'
+            value: 'doe'
         }
     ]
 
-    assertObjectMatchSpec(object, spec)
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'Raphaël',
-        `Property 'first_name' (Raphaël) does not contain 'raph'`
+    expect(() =>
+        assertObjectMatchSpec({ first_name: 'johnny', last_name: 'doet' }, spec)
+    ).not.toThrow()
+    expect(() => assertObjectMatchSpec({ first_name: 'john', last_name: 'john' }, spec)).toThrow(
+        `Property 'last_name' (john) does not contain 'doe': expected 'john' to include 'doe'`
     )
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'Benitte',
-        `Property 'last_name' (Benitte) does not contain 'ben'`
+    expect(() => assertObjectMatchSpec({ first_name: 'doe', last_name: 'doe' }, spec)).toThrow(
+        `Property 'first_name' (doe) does not contain 'john': expected 'doe' to include 'john'`
     )
 })
 
 test('check object property matches regexp', () => {
-    const object = {
-        first_name: 'Raphaël',
-        last_name: 'Benitte'
-    }
     const spec = [
         {
             field: 'first_name',
             matcher: 'matches',
-            value: 'raph'
+            value: '^john'
         },
         {
             field: 'last_name',
             matcher: 'match',
-            value: 'ben'
+            value: '^doe'
         }
     ]
 
-    assertObjectMatchSpec(object, spec)
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'Raphaël',
-        `Property 'first_name' (Raphaël) does not match 'raph'`
+    expect(() =>
+        assertObjectMatchSpec({ first_name: 'johnny', last_name: 'doet' }, spec)
+    ).not.toThrow()
+    expect(() => assertObjectMatchSpec({ first_name: 'john', last_name: 'john' }, spec)).toThrow(
+        `Property 'last_name' (john) does not match '^doe': expected 'john' to match /^doe/`
     )
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'Benitte',
-        `Property 'last_name' (Benitte) does not match 'ben'`
+    expect(() => assertObjectMatchSpec({ first_name: 'doe', last_name: 'doe' }, spec)).toThrow(
+        `Property 'first_name' (doe) does not match '^john': expected 'doe' to match /^john/`
     )
 })
 
 test('check object fully matches spec', () => {
-    const object = {
-        first_name: 'Raphaël',
-        last_name: 'Benitte'
-    }
     const spec = [
         {
             field: 'first_name',
             matcher: 'equal',
-            value: 'Raphaël'
+            value: 'john'
         },
         {
             field: 'last_name',
             matcher: 'match',
-            value: 'ben'
+            value: '^doe'
         }
     ]
 
-    assertObjectMatchSpec(object, spec, true)
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'Raphaël',
-        `Expected property 'first_name' to equal 'Raphaël', but found 'Raphaël'`
+    expect(() =>
+        assertObjectMatchSpec({ first_name: 'john', last_name: 'doet' }, spec, true)
+    ).not.toThrow()
+    expect(() =>
+        assertObjectMatchSpec({ first_name: 'john', last_name: 'doet', gender: 'male' }, spec, true)
+    ).toThrow(`Expected json response to fully match spec, but it does not: expected 3 to equal 2`)
+    expect(() =>
+        assertObjectMatchSpec({ first_name: 'john', last_name: 'john' }, spec, true)
+    ).toThrow(`Property 'last_name' (john) does not match '^doe': expected 'john' to match /^doe/`)
+    expect(() =>
+        assertObjectMatchSpec({ first_name: 'doe', last_name: 'doe' }, spec, true)
+    ).toThrow(
+        `Expected property 'first_name' to equal 'john', but found 'doe': expected 'doe' to deeply equal 'john'`
     )
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        'Benitte',
-        `Property 'last_name' (Benitte) does not match 'ben'`
-    )
-    expect(require('chai').expect).toHaveBeenCalledWith(
-        2,
-        'Expected json response to fully match spec, but it does not'
-    )
+})
+
+test('check object property type', () => {
+    const spec = [
+        {
+            field: 'first_name',
+            matcher: 'type',
+            value: 'string'
+        },
+        {
+            field: 'last_name',
+            matcher: 'type',
+            value: 'string'
+        },
+        {
+            field: 'age',
+            matcher: 'type',
+            value: 'number'
+        }
+    ]
+
+    expect(() =>
+        assertObjectMatchSpec({ first_name: 'john', last_name: 'doe', age: 23 }, spec)
+    ).not.toThrow()
+    expect(() =>
+        assertObjectMatchSpec({ first_name: true, last_name: 'doe', age: 23 }, spec)
+    ).toThrow(`Property 'first_name' (true) type is not 'string': expected true to be a string`)
+    expect(() =>
+        assertObjectMatchSpec({ first_name: 'john', last_name: 45, age: 'test' }, spec)
+    ).toThrow(`Property 'last_name' (45) type is not 'string': expected 45 to be a string`)
+    expect(() =>
+        assertObjectMatchSpec({ first_name: 'john', last_name: 'doe', age: 'test' }, spec)
+    ).toThrow(`Property 'age' (test) type is not 'number': expected 'test' to be a number`)
 })

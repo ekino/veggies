@@ -5,7 +5,6 @@ const definitions = require('../../../src/extensions/state/definitions')
 
 beforeEach(() => {
     definitions.install()
-    require('chai').clear()
 })
 
 afterEach(() => {

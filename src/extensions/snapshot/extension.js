@@ -5,10 +5,12 @@
  */
 
 const prettyFormat = require('pretty-format')
+const _ = require('lodash')
 
 const snapshot = require('./snapshot')
 const clean = require('./clean')
 const statistics = require('./statistics')
+const assertions = require('../../core/assertions')
 
 /**
  * Snapshot extension.
@@ -30,6 +32,26 @@ class Snapshot {
         this.scenarioLine = -1
 
         this._snapshotsCount = 0
+    }
+
+    /**
+     * When you do snapshots, it happens that some fields change at each snapshot check (ids, dates ...).
+     * This work the same way as expectToMath but allow you to check some fields in a json objects against a matcher
+     * and ignore them in the snapshot diff replacing them with a generic value.
+     * @param {*} expectedContent - Content to compare to snapshot
+     * @param {ObjectFieldSpec[]} spec  - specification
+     * @throws {string} If snapshot and expected content doesn't match, it throws diff between both
+     */
+    expectToMatchJson(expectedContent, spec) {
+        assertions.assertObjectMatchSpec(expectedContent, spec) // Check optional fields
+
+        const copy = _.cloneDeep(expectedContent)
+        spec.forEach(({ field, matcher, value }) => {
+            // Replace value with generic one
+            _.set(copy, field, `${matcher}(${value})`)
+        })
+
+        this.expectToMatch(copy)
     }
 
     /**

@@ -3,7 +3,7 @@ README.tpl.md:
   - git add
 
 "*.feature":
-  - cucumberjs --require examples/support examples/features --tags @offline
+  - yarn examples --tags @offline
 
 "*.js":
   - yarn lint-fix

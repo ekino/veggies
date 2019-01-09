@@ -31,11 +31,11 @@
     "chai": "4.2",
     "fs-extra": "7.0",
     "glob": "7.1",
-    "jest-diff": "23.6",
+    "jest-diff": "24.0",
     "js-yaml": "3.12",
     "lodash": "4.17",
     "natural-compare": "1.4",
-    "pretty-format": "23.6",
+    "pretty-format": "24.0",
     "request": "2.88",
     "tough-cookie": "2.4"
   },
@@ -49,13 +49,14 @@
     "gh-pages": "2.x",
     "git-changelog": "1.x",
     "husky": "1.x",
-    "jest": "23.x",
+    "jest": "24.x",
     "jsdoc": "3.x",
     "lint-staged": "8.x",
     "minami": "1.x",
     "mustache": "3.x",
     "nock": "10.x",
-    "prettier": "1.x"
+    "prettier": "1.x",
+    "sinon": "7.x"
   },
   "peerDependencies": {
     "cucumber": ">=4.0.0 <6.0.0"

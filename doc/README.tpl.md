@@ -476,6 +476,29 @@ Scenario: Creating a resource using typed json payload
   And response body should match snapshot
 ```
 
+It is sometimes useful to ignore some fields in a response when comparing with the snapshot.
+In this case and if it's json you can then use with a table:
+```
+/^response json body should match snapshot$/
+```
+
+This examples illustrates it:
+```gherkin
+Scenario: Creating a resource using typed json payload
+  Given I set request json body
+    | username  | plouc((string))          |
+    | team_id   | 1((number))              |
+    | is_active | true((boolean))          |
+    | hobbies   | drawing,hacking((array)) |
+  When I POST https://my-api.io/users
+  Then response status code should be 201
+  And response json body should match snapshot
+    | field  | matcher | value  |
+    | url    | type    | string |
+```
+
+The table supports anything defined in [Testing json response](#testing-json-response)
+
 #### CLI Snapshot testing
 
 In order to check a CLI output against a snapshot, you have the following gherkin expression available:
@@ -494,6 +517,25 @@ Scenario: Getting info about installed yarn version
   And stderr output should match snapshot
 ```
 
+It is sometimes useful to ignore some fields in a cli json formatted output when comparing with the snapshot.
+In this case and if it's json you can then use with a table:
+```
+/^(stderr|stdout) json output should match snapshot$/
+```
+
+This examples illustrates it:
+```gherkin
+Scenario: Snapshot testing on a json file
+  Given I set cwd to examples/features/snapshot/fixtures
+  Then json file file2.json content should match snapshot
+    | field           | matcher | value      |
+    | gender          | type    | string     |
+    | id              | type    | number     |
+```
+
+The table supports anything defined in [Testing json response](#testing-json-response)
+
+
 #### File Snapshot testing
 
 In order to check a file content against a snapshot, you have the following gherkin expression available:
@@ -508,6 +550,22 @@ This example illustrates it:
 Scenario: Testing file content related expectations
     Then file sample_1.text should match snapshot
 ```
+
+It is sometimes useful to ignore some fields in a json file when comparing with the snapshot.
+In this case and if it's json you can then use with a table:
+```
+/^json file (.+) content should match snapshot$/
+```
+
+This examples illustrates it:
+```gherkin
+Scenario: Creating a resource using typed json payload
+  Then json file sample_1.text content should match snapshot
+    | field  | matcher | value  |
+    | url    | type    | string |
+```
+
+The table supports anything defined in [Testing json response](#testing-json-response)
 
 ## Extensions
 

@@ -1,5 +1,7 @@
 'use strict'
 
+const sinon = require('sinon')
+
 jest.mock('fs')
 
 const helper = require('../definitions_helper')
@@ -7,7 +9,6 @@ const definitions = require('../../../src/extensions/file_system/definitions')
 
 beforeEach(() => {
     definitions.install()
-    require('chai').clear()
 })
 
 afterEach(() => {
@@ -73,20 +74,27 @@ test('file should exist', () => {
 
     const def = context.getDefinitionByMatcher('(file|directory) (.+) should (not )?exist')
 
-    const file = 'test.txt'
-    const info = { isFile: () => true }
+    const getFileInfo = sinon.stub()
+    getFileInfo.withArgs('test-cwd', 'file_exist').resolves({ isFile: () => true })
+    getFileInfo.withArgs('test-cwd', 'a_directory').resolves({ isFile: () => false })
+    getFileInfo.withArgs('test-cwd', 'file_dont_exist').resolves(null)
+
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileInfo: jest.fn(() => Promise.resolve(info)) }
+        fileSystem: { getFileInfo: getFileInfo }
     }
 
     expect.assertions(3)
 
-    return def.exec(world, 'file', 'test.txt', undefined).then(() => {
-        expect(world.fileSystem.getFileInfo).toHaveBeenCalledWith('test-cwd', file)
-        expect(require('chai').expect).toHaveBeenCalledWith(true, `'${file}' is not a file`)
-        expect(require('chai').expect).toHaveBeenCalledWith(info, `file '${file}' does not exist`)
-    })
+    return Promise.all([
+        expect(def.exec(world, 'file', 'file_exist', undefined)).resolves.toBe(),
+        expect(def.exec(world, 'file', 'a_directory', undefined)).rejects.toThrow(
+            "'a_directory' is not a file: expected false to be true"
+        ),
+        expect(def.exec(world, 'file', 'file_dont_exist', undefined)).rejects.toThrow(
+            "file 'file_dont_exist' does not exist: expected null not to be null"
+        )
+    ])
 })
 
 test('file should not exist', () => {
@@ -94,19 +102,27 @@ test('file should not exist', () => {
 
     const def = context.getDefinitionByMatcher('(file|directory) (.+) should (not )?exist')
 
-    const file = 'test.txt'
-    const info = null
+    const getFileInfo = sinon.stub()
+    getFileInfo.withArgs('test-cwd', 'file_exist').resolves({ isFile: () => true })
+    getFileInfo.withArgs('test-cwd', 'a_directory').resolves({ isFile: () => false })
+    getFileInfo.withArgs('test-cwd', 'file_dont_exist').resolves(null)
+
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileInfo: jest.fn(() => Promise.resolve(info)) }
+        fileSystem: { getFileInfo: getFileInfo }
     }
 
-    expect.assertions(2)
+    expect.assertions(3)
 
-    return def.exec(world, 'file', file, 'not ').then(() => {
-        expect(world.fileSystem.getFileInfo).toHaveBeenCalledWith('test-cwd', file)
-        expect(require('chai').expect).toHaveBeenCalledWith(info, `file '${file}' exists`)
-    })
+    return Promise.all([
+        expect(def.exec(world, 'file', 'file_exist', 'not ')).rejects.toThrow(
+            `file 'file_exist' exists: expected { isFile: [Function: isFile] } to be null`
+        ),
+        expect(def.exec(world, 'file', 'a_directory', 'not ')).rejects.toThrow(
+            `file 'a_directory' exists: expected { isFile: [Function: isFile] } to be null`
+        ),
+        expect(def.exec(world, 'file', 'file_dont_exist', 'not ')).resolves.toBe()
+    ])
 })
 
 test('directory should exist', () => {
@@ -114,26 +130,27 @@ test('directory should exist', () => {
 
     const def = context.getDefinitionByMatcher('(file|directory) (.+) should (not )?exist')
 
-    const directory = 'test-dir'
-    const info = { isDirectory: () => true }
+    const getFileInfo = sinon.stub()
+    getFileInfo.withArgs('test-cwd', 'directory_exist').resolves({ isDirectory: () => true })
+    getFileInfo.withArgs('test-cwd', 'a_file').resolves({ isDirectory: () => false })
+    getFileInfo.withArgs('test-cwd', 'directory_dont_exist').resolves(null)
+
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileInfo: jest.fn(() => Promise.resolve(info)) }
+        fileSystem: { getFileInfo: getFileInfo }
     }
 
     expect.assertions(3)
 
-    return def.exec(world, 'directory', directory, undefined).then(() => {
-        expect(world.fileSystem.getFileInfo).toHaveBeenCalledWith('test-cwd', directory)
-        expect(require('chai').expect).toHaveBeenCalledWith(
-            true,
-            `'${directory}' is not a directory`
+    return Promise.all([
+        expect(def.exec(world, 'directory', 'directory_exist', undefined)).resolves.toBe(),
+        expect(def.exec(world, 'directory', 'a_file', undefined)).rejects.toThrow(
+            `'a_file' is not a directory: expected false to be true`
+        ),
+        expect(def.exec(world, 'directory', 'directory_dont_exist', undefined)).rejects.toThrow(
+            `directory 'directory_dont_exist' does not exist: expected null not to be null`
         )
-        expect(require('chai').expect).toHaveBeenCalledWith(
-            info,
-            `directory '${directory}' does not exist`
-        )
-    })
+    ])
 })
 
 test('directory should not exist', () => {
@@ -141,19 +158,27 @@ test('directory should not exist', () => {
 
     const def = context.getDefinitionByMatcher('(file|directory) (.+) should (not )?exist')
 
-    const directory = 'test-dir'
-    const info = null
+    const getFileInfo = sinon.stub()
+    getFileInfo.withArgs('test-cwd', 'directory_exist').resolves({ isDirectory: () => true })
+    getFileInfo.withArgs('test-cwd', 'a_file').resolves({ isDirectory: () => false })
+    getFileInfo.withArgs('test-cwd', 'directory_dont_exist').resolves(null)
+
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileInfo: jest.fn(() => Promise.resolve(info)) }
+        fileSystem: { getFileInfo: getFileInfo }
     }
 
-    expect.assertions(2)
+    expect.assertions(3)
 
-    return def.exec(world, 'directory', directory, 'not ').then(() => {
-        expect(world.fileSystem.getFileInfo).toHaveBeenCalledWith('test-cwd', directory)
-        expect(require('chai').expect).toHaveBeenCalledWith(info, `directory '${directory}' exists`)
-    })
+    return Promise.all([
+        expect(def.exec(world, 'directory', 'directory_exist', 'not ')).rejects.toThrow(
+            `directory_exist' exists: expected { Object (isDirectory) } to be null`
+        ),
+        expect(def.exec(world, 'directory', 'a_file', 'not ')).rejects.toThrow(
+            `directory 'a_file' exists: expected { Object (isDirectory) } to be null`
+        ),
+        expect(def.exec(world, 'directory', 'directory_dont_exist', 'not ')).resolves.toBe()
+    ])
 })
 
 test('file content matcher without file existing', () => {
@@ -163,20 +188,27 @@ test('file content matcher without file existing', () => {
         'file (.+) content should (not )?(equal|contain|match)'
     )
 
-    const file = 'test.txt'
     const error = new Error()
     error.code = 'ENOENT'
+
+    const getFileContent = sinon.stub()
+    getFileContent.withArgs('test-cwd', 'file_exists').resolves('expected content')
+    getFileContent.withArgs('test-cwd', 'file_dont_exist').rejects(error)
+
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileContent: jest.fn(() => Promise.reject(error)) }
+        fileSystem: { getFileContent: getFileContent }
     }
 
     expect.assertions(2)
-
-    return def.exec(world, file, undefined, 'equal', 'expected content').then(() => {
-        expect(world.fileSystem.getFileContent).toHaveBeenCalledWith('test-cwd', file)
-        expect(require('chai').fail).toHaveBeenCalledWith('', '', `File '${file}' should exist`)
-    })
+    return Promise.all([
+        expect(
+            def.exec(world, 'file_exists', undefined, 'equal', 'expected content')
+        ).resolves.toBe(),
+        expect(
+            def.exec(world, 'file_dont_exist', undefined, 'equal', 'expected content')
+        ).rejects.toThrow(`File 'file_dont_exist' should exist`)
+    ])
 })
 
 test('file content should equal', () => {
@@ -186,22 +218,26 @@ test('file content should equal', () => {
         'file (.+) content should (not )?(equal|contain|match)'
     )
 
-    const file = 'test.txt'
-    const content = 'file content'
+    const getFileContent = sinon.stub()
+    getFileContent.withArgs('test-cwd', 'file_some_content').resolves('some content')
+    getFileContent.withArgs('test-cwd', 'file_another_content').resolves('another content')
+
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileContent: jest.fn(() => Promise.resolve(content)) }
+        fileSystem: { getFileContent: getFileContent }
     }
 
     expect.assertions(2)
-
-    return def.exec(world, file, undefined, 'equal', 'expected content').then(() => {
-        expect(world.fileSystem.getFileContent).toHaveBeenCalledWith('test-cwd', file)
-        expect(require('chai').expect).toHaveBeenCalledWith(
-            `file content`,
-            `Expected file '${file}' to equal 'expected content', but found '${content}' which does not`
+    return Promise.all([
+        expect(
+            def.exec(world, 'file_some_content', undefined, 'equal', 'some content')
+        ).resolves.toBe(),
+        expect(
+            def.exec(world, 'file_another_content', undefined, 'equal', 'some content')
+        ).rejects.toThrow(
+            `Expected file 'file_another_content' to equal 'some content', but found 'another content' which does not: expected 'another content' to equal 'some content'`
         )
-    })
+    ])
 })
 
 test('file content should not equal', () => {
@@ -211,22 +247,27 @@ test('file content should not equal', () => {
         'file (.+) content should (not )?(equal|contain|match)'
     )
 
-    const file = 'test.txt'
-    const content = 'file content'
+    const getFileContent = sinon.stub()
+    getFileContent.withArgs('test-cwd', 'file_some_content').resolves('some content')
+    getFileContent.withArgs('test-cwd', 'file_another_content').resolves('another content')
+
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileContent: jest.fn(() => Promise.resolve(content)) }
+        fileSystem: { getFileContent: getFileContent }
     }
 
     expect.assertions(2)
 
-    return def.exec(world, file, 'not ', 'equal', 'expected content').then(() => {
-        expect(world.fileSystem.getFileContent).toHaveBeenCalledWith('test-cwd', file)
-        expect(require('chai').expect).toHaveBeenCalledWith(
-            `file content`,
-            `Expected file '${file}' to not equal 'expected content', but found '${content}' which does`
-        )
-    })
+    return Promise.all([
+        expect(
+            def.exec(world, 'file_some_content', 'not ', 'equal', 'some content')
+        ).rejects.toThrow(
+            `Expected file 'file_some_content' to not equal 'some content', but found 'some content' which does: expected 'some content' to not equal 'some content'`
+        ),
+        expect(
+            def.exec(world, 'file_another_content', 'not ', 'equal', 'some content')
+        ).resolves.toBe()
+    ])
 })
 
 test('file content should contain', () => {
@@ -236,22 +277,24 @@ test('file content should contain', () => {
         'file (.+) content should (not )?(equal|contain|match)'
     )
 
-    const file = 'test.txt'
-    const content = 'file content'
+    const getFileContent = sinon.stub()
+    getFileContent.withArgs('test-cwd', 'file_some_content').resolves('some content')
+    getFileContent.withArgs('test-cwd', 'file_another_content').resolves('another content')
+
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileContent: jest.fn(() => Promise.resolve(content)) }
+        fileSystem: { getFileContent: getFileContent }
     }
 
     expect.assertions(2)
-
-    return def.exec(world, file, undefined, 'contain', 'expected content').then(() => {
-        expect(world.fileSystem.getFileContent).toHaveBeenCalledWith('test-cwd', file)
-        expect(require('chai').expect).toHaveBeenCalledWith(
-            `file content`,
-            `Expected file '${file}' to contain 'expected content', but found '${content}' which does not`
+    return Promise.all([
+        expect(def.exec(world, 'file_some_content', undefined, 'contain', 'some')).resolves.toBe(),
+        expect(
+            def.exec(world, 'file_another_content', undefined, 'contain', 'some')
+        ).rejects.toThrow(
+            `Expected file 'file_another_content' to contain 'some', but found 'another content' which does not: expected 'another content' to include 'some'`
         )
-    })
+    ])
 })
 
 test('file content should not contain', () => {
@@ -261,22 +304,23 @@ test('file content should not contain', () => {
         'file (.+) content should (not )?(equal|contain|match)'
     )
 
-    const file = 'test.txt'
-    const content = 'file content'
+    const getFileContent = sinon.stub()
+    getFileContent.withArgs('test-cwd', 'file_some_content').resolves('some content')
+    getFileContent.withArgs('test-cwd', 'file_another_content').resolves('another content')
+
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileContent: jest.fn(() => Promise.resolve(content)) }
+        fileSystem: { getFileContent: getFileContent }
     }
 
     expect.assertions(2)
 
-    return def.exec(world, file, 'not ', 'contain', 'expected content').then(() => {
-        expect(world.fileSystem.getFileContent).toHaveBeenCalledWith('test-cwd', file)
-        expect(require('chai').expect).toHaveBeenCalledWith(
-            `file content`,
-            `Expected file '${file}' to not contain 'expected content', but found '${content}' which does`
-        )
-    })
+    return Promise.all([
+        expect(def.exec(world, 'file_some_content', 'not ', 'contain', 'some')).rejects.toThrow(
+            `Expected file 'file_some_content' to not contain 'some', but found 'some content' which does: expected 'some content' to not include 'some'`
+        ),
+        expect(def.exec(world, 'file_another_content', 'not ', 'contain', 'some')).resolves.toBe()
+    ])
 })
 
 test('file content should match', () => {
@@ -286,22 +330,27 @@ test('file content should match', () => {
         'file (.+) content should (not )?(equal|contain|match)'
     )
 
-    const file = 'test.txt'
-    const content = 'file content'
+    const getFileContent = sinon.stub()
+    getFileContent.withArgs('test-cwd', 'file_some_content').resolves('some content')
+    getFileContent.withArgs('test-cwd', 'file_not_some_content').resolves('not some content')
+
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileContent: jest.fn(() => Promise.resolve(content)) }
+        fileSystem: { getFileContent: getFileContent }
     }
 
     expect.assertions(2)
 
-    return def.exec(world, file, undefined, 'match', '^.*$').then(() => {
-        expect(world.fileSystem.getFileContent).toHaveBeenCalledWith('test-cwd', file)
-        expect(require('chai').expect).toHaveBeenCalledWith(
-            `file content`,
-            `Expected file '${file}' to match '^.*$', but found '${content}' which does not`
+    return Promise.all([
+        expect(
+            def.exec(world, 'file_some_content', undefined, 'match', '^some.*$')
+        ).resolves.toBe(),
+        expect(
+            def.exec(world, 'file_not_some_content', undefined, 'match', '^some.*$')
+        ).rejects.toThrow(
+            `Expected file 'file_not_some_content' to match '^some.*$', but found 'not some content' which does not: expected 'not some content' to match /^some.*$/`
         )
-    })
+    ])
 })
 
 test('file content should not match', () => {
@@ -311,20 +360,23 @@ test('file content should not match', () => {
         'file (.+) content should (not )?(equal|contain|match)'
     )
 
-    const file = 'test.txt'
-    const content = 'file content'
+    const getFileContent = sinon.stub()
+    getFileContent.withArgs('test-cwd', 'file_some_content').resolves('some content')
+    getFileContent.withArgs('test-cwd', 'file_not_some_content').resolves('not some content')
+
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileContent: jest.fn(() => Promise.resolve(content)) }
+        fileSystem: { getFileContent: getFileContent }
     }
 
     expect.assertions(2)
 
-    return def.exec(world, file, 'not ', 'match', '^.*$').then(() => {
-        expect(world.fileSystem.getFileContent).toHaveBeenCalledWith('test-cwd', file)
-        expect(require('chai').expect).toHaveBeenCalledWith(
-            `file content`,
-            `Expected file '${file}' to not match '^.*$', but found '${content}' which does`
-        )
-    })
+    return Promise.all([
+        expect(def.exec(world, 'file_some_content', 'not ', 'match', '^some.*$')).rejects.toThrow(
+            `Expected file 'file_some_content' to not match '^some.*$', but found 'some content' which does: expected 'some content' not to match /^some.*$/`
+        ),
+        expect(
+            def.exec(world, 'file_not_some_content', 'not ', 'match', '^some.*$')
+        ).resolves.toBe()
+    ])
 })
