@@ -259,6 +259,17 @@ Scenario: Fetching some json response from the internets
       | address.country | match   | ^Jap(.+)$ |
 ``` 
 
+Checking json response properties equalRelativeDate value:
+
+```gherkin
+Scenario: Fetching some json response from the internets
+    When I GET http://whatever.io/things/1
+    Then json response should match
+      | field           | matcher            | value                                        |
+      | endDate         | equalRelativeDate  | 2,days,fr,dddd                               |
+      | beginDate       | equalRelativeDate  | -1,week,fr,[Aujourd'hui] YYYY-MM-DD hh[h]mm  |
+``` 
+
 By default this assertion does not check for full match.
 Properties not listed will just be ignored, if you want a full match:
 
@@ -275,17 +286,17 @@ Now if the json contains extra properties, the test will fail.
 
 Available matchers are:
 
-| matcher    | description                       |
-|----------- |---------------------------------- |
-| `match`    | property must match given regexp  |
-| `matches`  | see `match`                       |
-| `contain`  | property must contain given value |
-| `contains` | see `contain`                     |
-| `defined`  | property must not be `undefined`  |
-| `present`  | see `defined`                     |     
-| `equal`    | property must equal given value   |
-| `equals`   | see `equal`                       |     
-
+| matcher                   | description                                       |
+|-------------------------- |---------------------------------------------------|
+| `match`                   | property must match given regexp                  |
+| `matches`                 | see `match`                                       |
+| `contain`                 | property must contain given value                 |
+| `contains`                | see `contain`                                     |
+| `defined`                 | property must not be `undefined`                  |
+| `present`                 | see `defined`                                     |
+| `equal`                   | property must equal given value                   |
+| `equals`                  | see `equal`                                       |
+| `equalRelativeDate`       | property must be equal to the computed date       |
 #### Testing response headers
 
 In order to check response headers, you have the following gherkin expression available:

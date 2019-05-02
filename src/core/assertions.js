@@ -6,8 +6,10 @@
 
 const _ = require('lodash')
 const { expect } = require('chai')
-
+const moment = require('moment-timezone')
 const Cast = require('./cast')
+
+const relativeDateValueRegex = /^(\+?\d|-?\d),([A-Za-z]+),([A-Za-z-]{2,5}),(.+)$/
 
 /**
  * Count object properties including nested objects ones.
@@ -50,7 +52,7 @@ exports.countNestedProperties = object => {
 /**
  * @typedef {object} ObjectFieldSpec
  * @property {string}                                                                      field
- * @property {'match'|'matches'|'contain'|'contains'|'defined'|'present'|'equal'|'equals'} matcher
+ * @property {'match'|'matches'|'contain'|'contains'|'defined'|'present'|'equal'|'equals'|'equalRelativeDate'} matcher
  * @property {string}                                                                      value
  */
 
@@ -113,7 +115,22 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
             case 'present':
                 expect(currentValue, `Property '${field}' is undefined`).to.not.be.undefined
                 break
+            case 'equalRelativeDate': {
+                const match = relativeDateValueRegex.exec(expectedValue)
+                if (match === null) throw new Error('relative date arguments are invalid')
+                const [, amount, unit, locale, format] = match
+                const normalizedLocale = Intl.getCanonicalLocales(locale)[0]
+                const expectedDate = moment()
+                    .add(amount, unit)
+                    .locale(normalizedLocale)
+                    .format(format)
 
+                expect(
+                    currentValue,
+                    `Expected property '${field}' to equal '${expectedDate}', but found '${currentValue}'`
+                ).to.be.deep.equal(expectedDate)
+                break
+            }
             case 'type':
                 expect(
                     currentValue,
