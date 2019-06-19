@@ -9,6 +9,13 @@ const { expect } = require('chai')
 
 const Cast = require('./cast')
 
+const matchRegex = /match|matches$/
+const containRegex = /contain|contains$/
+const presentRegex = /defined|present$/
+const equalRegex = /equal|equals$/
+const typeRegex = /type$/
+const negationRegex = /^!|not|does not|doesn't|is not|isn't/
+
 /**
  * Count object properties including nested objects ones.
  * If a property is an object, its key is ignored.
@@ -49,9 +56,9 @@ exports.countNestedProperties = object => {
 
 /**
  * @typedef {object} ObjectFieldSpec
- * @property {string}                                                                      field
- * @property {'match'|'matches'|'contain'|'contains'|'defined'|'present'|'equal'|'equals'} matcher
- * @property {string}                                                                      value
+ * @property {string} field
+ * @property {'match'|'matches'|'does not match'|'contain'|'contains'|"doesn't contain"|'defined'|'is not defined'|'present'|"isn't present"|'equal'|'equals'|'does not equal'} matcher
+ * @property {string} value
  */
 
 /**
@@ -92,42 +99,74 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
         const currentValue = _.get(object, field)
         const expectedValue = Cast.value(value)
 
-        switch (matcher) {
-            case 'match':
-            case 'matches':
-                expect(
-                    currentValue,
-                    `Property '${field}' (${currentValue}) does not match '${expectedValue}'`
-                ).to.match(new RegExp(expectedValue))
-                break
+        const isNegated = negationRegex.exec(matcher) !== null
 
-            case 'contain':
-            case 'contains':
-                expect(
-                    currentValue,
-                    `Property '${field}' (${currentValue}) does not contain '${expectedValue}'`
-                ).to.contain(expectedValue)
-                break
+        if (matchRegex.exec(matcher) !== null) {
+            const baseExpect = expect(
+                currentValue,
+                `Property '${field}' (${currentValue}) ${
+                    isNegated ? 'matches' : 'does not match'
+                } '${expectedValue}'`
+            )
+            if (isNegated) {
+                baseExpect.to.not.match(new RegExp(expectedValue))
+            } else {
+                baseExpect.to.match(new RegExp(expectedValue))
+            }
+        }
 
-            case 'defined':
-            case 'present':
-                expect(currentValue, `Property '${field}' is undefined`).to.not.be.undefined
-                break
+        if (containRegex.exec(matcher) !== null) {
+            const baseExpect = expect(
+                currentValue,
+                `Property '${field}' (${currentValue}) ${
+                    isNegated ? 'contains' : 'does not contain'
+                } '${expectedValue}'`
+            )
+            if (isNegated) {
+                baseExpect.to.not.contain(expectedValue)
+            } else {
+                baseExpect.to.contain(expectedValue)
+            }
+        }
 
-            case 'type':
-                expect(
-                    currentValue,
-                    `Property '${field}' (${currentValue}) type is not '${expectedValue}'`
-                ).to.be.a(expectedValue)
-                break
+        if (presentRegex.exec(matcher) !== null) {
+            const baseExpect = expect(
+                currentValue,
+                `Property '${field}' is ${isNegated ? 'defined' : 'undefined'}`
+            )
+            if (isNegated) {
+                baseExpect.to.be.undefined
+            } else {
+                baseExpect.to.not.be.undefined
+            }
+        }
 
-            case 'equal':
-            case 'equals':
-            default:
-                expect(
-                    currentValue,
-                    `Expected property '${field}' to equal '${value}', but found '${currentValue}'`
-                ).to.be.deep.equal(expectedValue)
+        if (typeRegex.exec(matcher) !== null) {
+            const baseExpect = expect(
+                currentValue,
+                `Property '${field}' (${currentValue}) type is${
+                    isNegated ? '' : ' not'
+                } '${expectedValue}'`
+            )
+            if (isNegated) {
+                baseExpect.to.not.be.a(expectedValue)
+            } else {
+                baseExpect.to.be.a(expectedValue)
+            }
+        }
+
+        if (equalRegex.exec(matcher) !== null) {
+            const baseExpect = expect(
+                currentValue,
+                `Expected property '${field}' to${
+                    isNegated ? ' not' : ''
+                } equal '${value}', but found '${currentValue}'`
+            )
+            if (isNegated) {
+                baseExpect.to.not.be.deep.equal(expectedValue)
+            } else {
+                baseExpect.to.be.deep.equal(expectedValue)
+            }
         }
     })
 

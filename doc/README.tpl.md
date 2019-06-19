@@ -279,16 +279,23 @@ Now if the json contains extra properties, the test will fail.
 
 Available matchers are:
 
-| matcher    | description                       |
-|----------- |---------------------------------- |
-| `match`    | property must match given regexp  |
-| `matches`  | see `match`                       |
-| `contain`  | property must contain given value |
-| `contains` | see `contain`                     |
-| `defined`  | property must not be `undefined`  |
-| `present`  | see `defined`                     |     
-| `equal`    | property must equal given value   |
-| `equals`   | see `equal`                       |     
+| matcher            | description                            |
+|--------------------|----------------------------------------|
+| `match`            | property must match given regexp       |
+| `matches`          | see `match`                            |
+| `does not match`   | property must not match given regexp   |
+| `contain`          | property must contain given value      |
+| `contains`         | see `contain`                          |
+| `doesn't contain`  | property must not contain given value  |
+| `defined`          | property must not be `undefined`       |
+| `present`          | see `defined`                          |
+| `is not defined`   | property must be `undefined`           |
+| `isn't present`    | see `is not defined`                   |
+| `equal`            | property must equal given value        |
+| `equals`           | see `equal`                            |
+| `does not equal`   | property must not equal given value    |
+| `type`             | property must be of the given type     |
+| `not type`         | property must not be of the given type |
 
 #### Testing response headers
 
