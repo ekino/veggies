@@ -75,6 +75,7 @@ class HttpApiClient {
     }
 
     /**
+
      * Sets Follow Redirect option.
      *
      */
