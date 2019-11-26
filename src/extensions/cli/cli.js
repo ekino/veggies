@@ -186,9 +186,7 @@ class Cli {
 
                         return reject(
                             new Error(
-                                `process.kill('${
-                                    this.killSignal
-                                }') scheduled but process exited (delay: ${this.killDelay}ms)`
+                                `process.kill('${this.killSignal}') scheduled but process exited (delay: ${this.killDelay}ms)`
                             )
                         )
                     }

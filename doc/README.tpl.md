@@ -48,7 +48,7 @@ It's also the perfect companion for testing CLI applications built with commande
     
 ## Requirements
     
-- Node.js `>=6.0.0`
+- Node.js `>=8.12.0`
 - cucumber `>=4.0.0`
     
 ## Installation
@@ -571,7 +571,7 @@ The table supports anything defined in [Testing json response](#testing-json-res
 
 This module is composed of several extensions.
 
-[state](#state-extension) | [fixtures](#fixtures-extension) | [http API](#http-api-extension) | [CLI](#cli-extension)
+[state](#state-extension) | [fixtures](#fixtures-extension) | [http API](#http-api-extension) | [CLI](#cli-extension) | [file system](#file-system-extension) | [snapshot](#snapshot-extension) 
 
 ### state extension
 
@@ -854,7 +854,7 @@ snapshot.install()
 
 When installed, you can access it from the global cucumber context in your own step definitions.
 For available methods on the snapshot, please refer to its own
-[documentation](https://ekino.github.io/veggies/module-extensions_snapshot_extension.html).
+[documentation](https://ekino.github.io/veggies/module-extensions_snapshot_Snapshot.html).
 
 ```javascript
 const { Then } = require('cucumber')

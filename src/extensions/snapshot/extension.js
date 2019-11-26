@@ -78,9 +78,7 @@ class Snapshot {
 
         if (!snapshotsPrefix)
             throw new Error(
-                `Can not do a snapshot. Scenario not found in file ${this.featureFile} on line ${
-                    this.scenarioLine
-                }`
+                `Can not do a snapshot. Scenario not found in file ${this.featureFile} on line ${this.scenarioLine}`
             )
 
         this._snapshotsCount += 1

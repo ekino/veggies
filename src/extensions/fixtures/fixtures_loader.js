@@ -7,7 +7,6 @@
 const fs = require('fs')
 const path = require('path')
 const glob = require('glob')
-const chalk = require('chalk')
 const yaml = require('js-yaml')
 const _ = require('lodash')
 
