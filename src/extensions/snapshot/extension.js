@@ -71,6 +71,7 @@ class Snapshot {
      */
     expectToMatch(expectedContent) {
         expectedContent = prettyFormat(expectedContent)
+        expectedContent = snapshot.normalizeNewlines(expectedContent)
         let snapshotsFile = snapshot.snapshotsPath(this.featureFile, this.options)
 
         const scenarios = snapshot.extractScenarios(this.featureFile)
