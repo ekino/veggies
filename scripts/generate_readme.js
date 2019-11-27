@@ -26,7 +26,7 @@ const readmePath = './README.md'
  */
 const partials = {
     definitions: `
-\`\`\`yaml    
+\`\`\`yaml
 Given:
 {{#Given}}
   - {{&matcher}}
@@ -61,7 +61,8 @@ const definitionFiles = {
     cli: './src/extensions/cli/definitions.js',
     httpApi: './src/extensions/http_api/definitions.js',
     state: './src/extensions/state/definitions.js',
-    fileSystem: './src/extensions/file_system/definitions.js'
+    fileSystem: './src/extensions/file_system/definitions.js',
+    snapshot: './src/extensions/snapshot/definitions.js'
 }
 
 /**
@@ -101,21 +102,21 @@ const writeFile = (file, content) =>
     })
 
 /**
- * Checks if AST node is a default module export statement.
+ * Checks if AST node is a exports.install statement
  *
  * @param {Object} node - AST node
  * @return {boolean}
  */
-const isModuleExport = node => {
+const isExportInstall = node => {
     return (
         node.type === 'ExpressionStatement' &&
         node.expression.type === 'AssignmentExpression' &&
         node.expression.operator === '=' &&
         node.expression.left.type === 'MemberExpression' &&
         node.expression.left.object.type === 'Identifier' &&
-        node.expression.left.object.name === 'module' &&
+        node.expression.left.object.name === 'exports' &&
         node.expression.left.property.type === 'Identifier' &&
-        node.expression.left.property.name === 'exports'
+        node.expression.left.property.name === 'install'
     )
 }
 
@@ -192,7 +193,7 @@ const parseDefinitions = (file, code) => {
         tokens: false
     })
 
-    const [exportStatement] = parsed.program.body.filter(isModuleExport)
+    const [exportStatement] = parsed.program.body.filter(isExportInstall)
     if (!exportStatement) {
         console.error(chalk.red(`! No 'module.exports' found in '${chalk.white(file)}'`))
         process.exit(1)

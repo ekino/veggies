@@ -1,0 +1,17 @@
+{
+    "source":{
+        "include": ["src"]
+    },
+    "plugins": ["plugins/markdown"],
+    "markdown": {
+        "idInHeadings": true
+    },
+    "opts": {
+        "template": "node_modules/minami",
+        "destination": "_doc/",
+        "recurse": true,
+        "readme": "README.md"
+    }
+}
+
+

@@ -321,7 +321,7 @@ exports.install = ({ baseUrl = '' } = {}) => {
         const response = mustGetResponse(this.httpApiClient)
         const { body } = response
 
-        const array = path !== undefined ? _.get(body, path) : body
+        const array = path != undefined ? _.get(body, path) : body
 
         expect(array.length).to.be.equal(Number(size))
     })

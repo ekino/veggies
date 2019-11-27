@@ -1,5 +1,5 @@
 README.tpl.md:
-  - readme
+  - yarn readme
   - git add
 
 "*.feature":

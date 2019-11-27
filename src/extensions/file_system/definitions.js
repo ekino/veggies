@@ -56,9 +56,10 @@ exports.install = () => {
                         flag ? '' : ' not'
                     }`
                 ).to
-                if (flag !== undefined) {
+                if (flag != undefined) {
                     expectFn = expectFn.not
                 }
+
                 expectFn[comparator](
                     comparator === 'match' ? new RegExp(expectedValue) : expectedValue
                 )

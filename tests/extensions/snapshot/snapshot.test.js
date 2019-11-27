@@ -250,7 +250,10 @@ test('readSnapshotFile throw an error if no file', () => {
 })
 
 test('prefixSnapshots give a prefix per scenario name', () => {
-    const scenarios = [{ name: 'Scenario 1', line: 10 }, { name: 'Scenario 2', line: 20 }]
+    const scenarios = [
+        { name: 'Scenario 1', line: 10 },
+        { name: 'Scenario 2', line: 20 }
+    ]
 
     const expectedResult = {
         10: { name: 'Scenario 1', line: 10, prefix: 'Scenario 1 1' },
