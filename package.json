@@ -40,14 +40,15 @@
     "tough-cookie": "3.0"
   },
   "devDependencies": {
+    "@commitlint/config-conventional": "8.x",
     "babylon": "6.x",
     "chalk": "3.x",
     "commitlint": "8.x",
+    "conventional-changelog-cli": "2.x",
     "coveralls": "3.x",
     "cucumber": "6.x",
     "eslint": "6.x",
     "gh-pages": "2.x",
-    "git-changelog": "1.x",
     "husky": "3.x",
     "jest": "24.x",
     "jsdoc": "3.x",
@@ -74,6 +75,6 @@
     "doc": "jsdoc -c .jsdoc.json --verbose",
     "doc-pub": "yarn run readme && yarn run doc && gh-pages -d _doc",
     "examples": "cucumber-js --require examples/support examples/features",
-    "changelog": "git-changelog -t false -n v${npm_package_version}"
+    "changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s -r 0"
   }
 }
