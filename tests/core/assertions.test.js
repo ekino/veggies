@@ -2,6 +2,15 @@
 
 const { countNestedProperties, assertObjectMatchSpec } = require('../../src/core/assertions')
 
+beforeAll(() => {
+    const MockDate = lastDate => () => new lastDate(2018, 4, 1)
+    global.Date = jest.fn(MockDate(global.Date))
+})
+
+afterAll(() => {
+    global.Date.mockRestore()
+})
+
 beforeEach(() => {})
 
 test('should allow to count object properties', () => {
@@ -222,4 +231,84 @@ test('check object property type', () => {
     expect(() =>
         assertObjectMatchSpec({ first_name: 'john', last_name: 'doe', age: 'test' }, spec)
     ).toThrow(`Property 'age' (test) type is not 'number': expected 'test' to be a number`)
+})
+
+test("check object property equals 'equalRelativeDate' and format", () => {
+    const object = {
+        beginDate: '2018-04-30'
+    }
+    expect(() => {
+        assertObjectMatchSpec(object, [
+            {
+                field: 'beginDate',
+                matcher: 'equalRelativeDate',
+                value: '-1,days,fr,YYYY-MM-DD'
+            }
+        ])
+    }).not.toThrow()
+
+    expect(() => {
+        assertObjectMatchSpec(object, [
+            {
+                field: 'beginDate',
+                matcher: 'equalRelativeDate',
+                value: '+2,days,fr,YYYY-MM-DD'
+            }
+        ])
+    }).toThrow(
+        `Expected property 'beginDate' to equal '2018-05-03', but found '2018-04-30': expected '2018-04-30' to deeply equal '2018-05-03'`
+    )
+
+    expect(() => {
+        assertObjectMatchSpec(object, [
+            {
+                field: 'beginDate',
+                matcher: 'equalRelativeDate',
+                value: '-2,days,fr,YYYY-MM-DD'
+            }
+        ])
+    }).toThrow(
+        `Expected property 'beginDate' to equal '2018-04-29', but found '2018-04-30': expected '2018-04-30' to deeply equal '2018-04-29'`
+    )
+
+    expect(() => {
+        assertObjectMatchSpec(object, [
+            {
+                field: 'beginDate',
+                matcher: 'equalRelativeDate',
+                value: "-2,days,fr,[Aujourd'hui] YYYY-MM-DD hh[h]mm"
+            }
+        ])
+    }).toThrow(
+        `Expected property 'beginDate' to equal 'Aujourd'hui 2018-04-29 12h00', but found '2018-04-30': expected '2018-04-30' to deeply equal 'Aujourd\\'hui 2018-04-29 12h00'`
+    )
+
+    expect(() => {
+        assertObjectMatchSpec(object, [
+            {
+                field: 'beginDate',
+                matcher: 'equalRelativeDate',
+                value: '-2,days,EN-ZS,YYYY-MM-DD'
+            }
+        ])
+    }).toThrow(
+        `Expected property 'beginDate' to equal '2018-04-29', but found '2018-04-30': expected '2018-04-30' to deeply equal '2018-04-29'`
+    )
+})
+
+test('check dateOffset throw Exception given invalid locale set', () => {
+    const object = {
+        beginDate: '2018-05-04'
+    }
+    const spec = [
+        {
+            field: 'beginDate',
+            matcher: 'equalRelativeDate',
+            value: '1,days,EN_US,YYYY-MM-DD'
+        }
+    ]
+
+    expect(() => assertObjectMatchSpec(object, spec)).toThrowError(
+        'relative date arguments are invalid'
+    )
 })
