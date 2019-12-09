@@ -296,7 +296,10 @@ Available matchers are:
 | `present`                 | see `defined`                                     |
 | `equal`                   | property must equal given value                   |
 | `equals`                  | see `equal`                                       |
+| `type`                    | property must be of the given type                |
 | `equalRelativeDate`       | property must be equal to the computed date       |
+
+**Any** of these matchers can be negated when preceded by these : `!`, `not`, `does not`, `doesn't`, `is not` and `isn't`.
 #### Testing response headers
 
 In order to check response headers, you have the following gherkin expression available:
