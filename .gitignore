@@ -36,6 +36,7 @@ jspm_packages
 .unison*
 .DS_Store
 .idea
+*.iml
 bin
 _doc
 /examples/features/file_system/files/generated

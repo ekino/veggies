@@ -9,7 +9,23 @@ const { expect } = require('chai')
 const moment = require('moment-timezone')
 const Cast = require('./cast')
 
+const negationRegex = `!|! |not |does not |doesn't |is not |isn't `
+const matchRegex = new RegExp(`^(${negationRegex})?(match|matches)$`)
+const containRegex = new RegExp(`^(${negationRegex})?(contain|contains)$`)
+const presentRegex = new RegExp(`^(${negationRegex})?(defined|present)$`)
+const equalRegex = new RegExp(`^(${negationRegex})?(equal|equals)$`)
+const typeRegex = new RegExp(`^(${negationRegex})?(type)$`)
+const relativeDateRegex = new RegExp(`^(${negationRegex})?(equalRelativeDate)$`)
 const relativeDateValueRegex = /^(\+?\d|-?\d),([A-Za-z]+),([A-Za-z-]{2,5}),(.+)$/
+
+const RuleName = Object.freeze({
+    Match: Symbol('match'),
+    Contain: Symbol('contain'),
+    Present: Symbol('present'),
+    Equal: Symbol('equal'),
+    Type: Symbol('type'),
+    RelativeDate: Symbol('relativeDate')
+})
 
 /**
  * Count object properties including nested objects ones.
@@ -51,9 +67,9 @@ exports.countNestedProperties = object => {
 
 /**
  * @typedef {object} ObjectFieldSpec
- * @property {string}                                                                      field
- * @property {'match'|'matches'|'contain'|'contains'|'defined'|'present'|'equal'|'equals'|'equalRelativeDate'} matcher
- * @property {string}                                                                      value
+ * @property {string} field
+ * @property {string} matcher
+ * @property {string} value
  */
 
 /**
@@ -94,28 +110,50 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
         const currentValue = _.get(object, field)
         const expectedValue = Cast.value(value)
 
-        switch (matcher) {
-            case 'match':
-            case 'matches':
-                expect(
-                    currentValue,
-                    `Property '${field}' (${currentValue}) does not match '${expectedValue}'`
-                ).to.match(new RegExp(expectedValue))
-                break
+        const rule = exports.getMatchingRule(matcher)
 
-            case 'contain':
-            case 'contains':
-                expect(
+        switch (rule.name) {
+            case RuleName.Match: {
+                const baseExpect = expect(
                     currentValue,
-                    `Property '${field}' (${currentValue}) does not contain '${expectedValue}'`
-                ).to.contain(expectedValue)
+                    `Property '${field}' (${currentValue}) ${
+                        rule.isNegated ? 'matches' : 'does not match'
+                    } '${expectedValue}'`
+                )
+                if (rule.isNegated) {
+                    baseExpect.to.not.match(new RegExp(expectedValue))
+                } else {
+                    baseExpect.to.match(new RegExp(expectedValue))
+                }
                 break
-
-            case 'defined':
-            case 'present':
-                expect(currentValue, `Property '${field}' is undefined`).to.not.be.undefined
+            }
+            case RuleName.Contain: {
+                const baseExpect = expect(
+                    currentValue,
+                    `Property '${field}' (${currentValue}) ${
+                        rule.isNegated ? 'contains' : 'does not contain'
+                    } '${expectedValue}'`
+                )
+                if (rule.isNegated) {
+                    baseExpect.to.not.contain(expectedValue)
+                } else {
+                    baseExpect.to.contain(expectedValue)
+                }
                 break
-            case 'equalRelativeDate': {
+            }
+            case RuleName.Present: {
+                const baseExpect = expect(
+                    currentValue,
+                    `Property '${field}' is ${rule.isNegated ? 'defined' : 'undefined'}`
+                )
+                if (rule.isNegated) {
+                    baseExpect.to.be.undefined
+                } else {
+                    baseExpect.to.not.be.undefined
+                }
+                break
+            }
+            case RuleName.RelativeDate: {
                 const match = relativeDateValueRegex.exec(expectedValue)
                 if (match === null) throw new Error('relative date arguments are invalid')
                 const [, amount, unit, locale, format] = match
@@ -124,27 +162,47 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
                     .add(amount, unit)
                     .locale(normalizedLocale)
                     .format(format)
-
-                expect(
+                const baseExpect = expect(
                     currentValue,
-                    `Expected property '${field}' to equal '${expectedDate}', but found '${currentValue}'`
-                ).to.be.deep.equal(expectedDate)
+                    `Expected property '${field}' to ${
+                        rule.isNegated ? 'not ' : ''
+                    }equal '${expectedDate}', but found '${currentValue}'`
+                )
+                if (rule.isNegated) {
+                    baseExpect.to.not.be.deep.equal(expectedDate)
+                } else {
+                    baseExpect.to.be.deep.equal(expectedDate)
+                }
                 break
             }
-            case 'type':
-                expect(
+            case RuleName.Type: {
+                const baseExpect = expect(
                     currentValue,
-                    `Property '${field}' (${currentValue}) type is not '${expectedValue}'`
-                ).to.be.a(expectedValue)
+                    `Property '${field}' (${currentValue}) type is${
+                        rule.isNegated ? '' : ' not'
+                    } '${expectedValue}'`
+                )
+                if (rule.isNegated) {
+                    baseExpect.to.not.be.a(expectedValue)
+                } else {
+                    baseExpect.to.be.a(expectedValue)
+                }
                 break
-
-            case 'equal':
-            case 'equals':
-            default:
-                expect(
+            }
+            case RuleName.Equal: {
+                const baseExpect = expect(
                     currentValue,
-                    `Expected property '${field}' to equal '${value}', but found '${currentValue}'`
-                ).to.be.deep.equal(expectedValue)
+                    `Expected property '${field}' to${
+                        rule.isNegated ? ' not' : ''
+                    } equal '${value}', but found '${currentValue}'`
+                )
+                if (rule.isNegated) {
+                    baseExpect.to.not.be.deep.equal(expectedValue)
+                } else {
+                    baseExpect.to.be.deep.equal(expectedValue)
+                }
+                break
+            }
         }
     })
 
@@ -156,4 +214,55 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
             'Expected json response to fully match spec, but it does not'
         ).to.be.equal(spec.length)
     }
+}
+
+/**
+ * Get a rule matching the given matcher.
+ * If it didn't match, it returns undefined.
+ *
+ * @example
+ * Assertions.getMatchingRule(`doesn't match`)
+ * // => { name: 'match', isNegated: true }
+ * Assertions.getMatchingRule(`contains`)
+ * // => { name: 'contain', isNegated: false }
+ * Assertions.getMatchingRule(`unknown matcher`)
+ * // => undefined
+ * @typedef {Object} Rule
+ * @property {symbol} name - The name of the rule matched
+ * @property {boolean} isNegated - Whether the matcher is negated or not
+ * @param {string} matcher
+ * @return {Rule} the result of the matching
+ */
+exports.getMatchingRule = matcher => {
+    const matchGroups = matchRegex.exec(matcher)
+    if (matchGroups) {
+        return { name: RuleName.Match, isNegated: !!matchGroups[1] }
+    }
+
+    const containGroups = containRegex.exec(matcher)
+    if (containGroups) {
+        return { name: RuleName.Contain, isNegated: !!containGroups[1] }
+    }
+
+    const presentGroups = presentRegex.exec(matcher)
+    if (presentGroups) {
+        return { name: RuleName.Present, isNegated: !!presentGroups[1] }
+    }
+
+    const equalGroups = equalRegex.exec(matcher)
+    if (equalGroups) {
+        return { name: RuleName.Equal, isNegated: !!equalGroups[1] }
+    }
+
+    const typeGroups = typeRegex.exec(matcher)
+    if (typeGroups) {
+        return { name: RuleName.Type, isNegated: !!typeGroups[1] }
+    }
+
+    const relativeDateGroups = relativeDateRegex.exec(matcher)
+    if (relativeDateGroups) {
+        return { name: RuleName.RelativeDate, isNegated: !!relativeDateGroups[1] }
+    }
+
+    expect.fail(`Matcher "${matcher}" did not match any supported assertions`)
 }
