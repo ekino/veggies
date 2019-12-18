@@ -37,5 +37,7 @@ Makefile
 .eslintrc.yml
 .github
 .gitignore
+.jsdoc.json
+.lintstagedrc
 .huskyrc
 .travis.yml
