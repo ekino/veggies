@@ -23,7 +23,7 @@ node_modules
 .npm
 
 # tests
-/test
+/tests
 
 # IDE
 .idea
@@ -32,8 +32,10 @@ node_modules
 # misc
 scripts
 Makefile
-.github
-.eslintrc.yml
+.commitlintrc.yml
 .eslintignore
+.eslintrc.yml
+.github
 .gitignore
-.changelogrc
+.huskyrc
+.travis.yml
