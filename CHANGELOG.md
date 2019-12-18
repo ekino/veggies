@@ -1,4 +1,28 @@
-## [0.6.0](https://github.com/ekino/veggies/compare/v0.5.0...v0.6.0) (2017-10-09)
+## 0.7.0 (2019-12-18)
+
+
+### Features
+
+* **assertions:** add support for json matchers negation ([1917ecf](https://github.com/ekino/veggies/commit/1917ecfa5874244eee32b6d463027dde82fc67c0))
+* **assertions:** expose function to assert date with formatting ([bdbe7a4](https://github.com/ekino/veggies/commit/bdbe7a4c8e14a0e76d37f055aae1d18b8e929408))
+* **assertions:** expose function to assert objects match spec ([cc0694e](https://github.com/ekino/veggies/commit/cc0694ee0947ba049bc6df717f76422203a1bcf3))
+* **changelog:** Remove git-changelog and use conventional-changelog ([851ba18](https://github.com/ekino/veggies/commit/851ba18ae9321aa760a945411f340a5a2a4aee09))
+* **definitions:** Assign request headers, keeping the previous ones ([da468f7](https://github.com/ekino/veggies/commit/da468f7d948cac4190395af6a447b015caa1462a))
+* **followRedirect:** add followRedirect option for request ([f968b3b](https://github.com/ekino/veggies/commit/f968b3ba6ed57ba9e260b85d05426de7bf3eba5f))
+* **http:** add multipart support ([9158874](https://github.com/ekino/veggies/commit/9158874a0f631913773d5971162a6ffff40f3ff8))
+* **http-api:** accept a body for DELETE request ([febc947](https://github.com/ekino/veggies/commit/febc94727d9b2278960f8c8cb004ab48a760e5d4))
+* **http-api:** handle null and undefined value for negation flag in definitions ([732fb92](https://github.com/ekino/veggies/commit/732fb9232c4608a9006bcfe56149b626d945a425))
+* **packaging:** remove useless files from npm package ([6c94b39](https://github.com/ekino/veggies/commit/6c94b399e5e083c7e95d0508a16de41a209857e2))
+* **snapthot:** add snapshot property matchers ([54d75e1](https://github.com/ekino/veggies/commit/54d75e129d3bdf93087d1aaa6719b11ad93b6890))
+* move to cucumber js 4 / 5 ([1fb34c6](https://github.com/ekino/veggies/commit/1fb34c615a4906d6351e19bc0cd32a5ddd988756))
+
+
+### Bug Fixes
+
+* **http-api:** fix http api extension step definitions ([a353710](https://github.com/ekino/veggies/commit/a35371095fd643bac75baa9fc2cb87f4cf6df72b))
+* **snapshot:** correct snapshot comparison with carriage returns ([74f92fb](https://github.com/ekino/veggies/commit/74f92fb96f36b4ecb03b966ba0f8d2cdf3568e39))
+
+## 0.6.0 (2017-10-09)
 
 
 ### Features
@@ -11,7 +35,7 @@
 
 * **readMe:** fix status code verification step in readme ([de8327d](https://github.com/ekino/veggies/commit/de8327d7d7ae5462fa19da98e31040458aee3da8))
 
-## [0.5.0](https://github.com/ekino/veggies/compare/v0.4.0...v0.5.0) (2017-07-19)
+## 0.5.0 (2017-07-19)
 
 
 ### Features
@@ -28,7 +52,7 @@
 * **file-system:** add ability to test file|directory presence ([acba1a9](https://github.com/ekino/veggies/commit/acba1a912d3bc188e91c559ec9f0629b869c472a))
 * **file-system:** Init fileSystem extension ([2ca79cd](https://github.com/ekino/veggies/commit/2ca79cddf9ca4f520597a00ee57408b32f85101d))
 
-## [0.4.0](https://github.com/ekino/veggies/compare/v0.3.0...v0.4.0) (2017-07-08)
+## 0.4.0 (2017-07-08)
 
 
 ### Features
@@ -38,7 +62,7 @@
 * **cookies:** add ability to set cookie ([23d8924](https://github.com/ekino/veggies/commit/23d8924862662bcf54d1206bf0ffe6692142d03f))
 * **http-api:** improve json response assertion ([eaca04b](https://github.com/ekino/veggies/commit/eaca04b496833b8d02e11fb2af9c83d2b17060dd))
 
-## [0.3.0](https://github.com/ekino/veggies/compare/v0.1.2...v0.3.0) (2017-07-05)
+## 0.3.0 (2017-07-05)
 
 
 ### Features
@@ -72,7 +96,7 @@
 * **format:** add missing formatting ([c367e27](https://github.com/ekino/veggies/commit/c367e2722ed86d22f22e0f6fecdf6cdaabd73972))
 * **http_api:** fix http API definitions test ([33db40e](https://github.com/ekino/veggies/commit/33db40e76778b19c458fd54cd676ceba46b03375))
 
-### [0.1.2](https://github.com/ekino/veggies/compare/6c478d6ea641c2ac6a724d17e5de01657190cbe7...v0.1.2) (2017-06-29)
+### 0.1.2 (2017-06-29)
 
 
 ### Features
