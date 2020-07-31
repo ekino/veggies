@@ -1,3 +1,10 @@
+### 0.7.1 (2020-07-31)
+
+
+### Features
+
+* **packaging:** remove useless files from npm package ([5a6d52b](https://github.com/ekino/veggies/commit/5a6d52b47bfb680e3d6eff6c73e9214d281c0392))
+
 ## 0.7.0 (2019-12-18)
 
 
