@@ -6,7 +6,7 @@ const fs = jest.genMockFromModule('fs')
 
 let mockFiles = {}
 
-const __setMockFiles = _mockFiles => {
+const __setMockFiles = (_mockFiles) => {
     mockFiles = _mockFiles
 }
 

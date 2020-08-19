@@ -18,7 +18,7 @@ const removeSnapshotFile = path.join(
 )
 const removeSnapshotFileContent = fileSystem.getFileContent(removeSnapshotFile)
 
-afterEach(function() {
+afterEach(function () {
     try {
         fileSystem.writeFileContent(updateSnapshotFile, updateSnapshotFileContent)
     } catch (err) {
@@ -53,7 +53,7 @@ test('Snapshot should report created snapshots', () => {
             expect(exitCode).toEqual(0)
             expect(stdout).toContain(expectedOutput)
         })
-        .catch(err => {
+        .catch((err) => {
             return Promise.reject(err)
         })
 })
@@ -73,7 +73,7 @@ test('Snapshot module report updated snapshots and support the -u option', () =>
             expect(exitCode).toEqual(0)
             expect(stdout).toContain(expectedOutput)
         })
-        .catch(err => {
+        .catch((err) => {
             return Promise.reject(err)
         })
 })
@@ -93,7 +93,7 @@ test('Snapshot module report removed snapshots and support --cleanSnapshots opti
             expect(exitCode).toEqual(0)
             expect(stdout).toContain(expectedOutput)
         })
-        .catch(err => {
+        .catch((err) => {
             return Promise.reject(err)
         })
 })
@@ -115,7 +115,7 @@ test('Snapshot module report created, updated and removed snapshots and support 
             expect(exitCode).toEqual(0)
             expect(stdout).toContain(expectedOutput)
         })
-        .catch(err => {
+        .catch((err) => {
             return Promise.reject(err)
         })
 })

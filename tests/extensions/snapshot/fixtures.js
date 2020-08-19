@@ -156,12 +156,12 @@ exports.value1WithError = {
     key2: 2,
     key3: 'value3',
     key4: 'value4',
-    key5: 'value5'
+    key5: 'value5',
 }
 exports.value2 = { key1: 'value1', key2: 'value2', key3: 'value8', key4: 'value4', key5: 'value5' }
 exports.value3 = { key1: 'value1', key2: 'value2', key3: 'value9', key4: 'value4', key5: 'value5' }
 exports.multilineValue = {
-    content: { text: 'i am a text', 'long text': 'I\r\n am \r\n a\r\n long\r\n text' }
+    content: { text: 'i am a text', 'long text': 'I\r\n am \r\n a\r\n long\r\n text' },
 }
 
 exports.featureFile1 = './snapshot1.feature'

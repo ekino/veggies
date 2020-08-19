@@ -25,11 +25,11 @@ test('set request headers', () => {
 
     const clientMock = {
         httpApiClient: { setHeaders: jest.fn() },
-        state: { populateObject: o => o }
+        state: { populateObject: (o) => o },
     }
     const headers = {
         Accept: 'application/json',
-        'User-Agent': 'veggies/1.0'
+        'User-Agent': 'veggies/1.0',
     }
     def.exec(clientMock, { rowsHash: () => headers })
     expect(clientMock.httpApiClient.setHeaders).toHaveBeenCalledWith(headers)
@@ -44,11 +44,11 @@ test('assign request headers', () => {
 
     const clientMock = {
         httpApiClient: { setHeader: jest.fn() },
-        state: { populateObject: o => o }
+        state: { populateObject: (o) => o },
     }
     const headers = {
         Accept: 'application/json',
-        'User-Agent': 'veggies/1.0'
+        'User-Agent': 'veggies/1.0',
     }
     def.exec(clientMock, { rowsHash: () => headers })
     expect(clientMock.httpApiClient.setHeader).toHaveBeenCalledTimes(2)
@@ -66,7 +66,7 @@ test('set a single request header', () => {
 
     const clientMock = {
         httpApiClient: { setHeader: jest.fn() },
-        state: { populate: v => v }
+        state: { populate: (v) => v },
     }
     def.exec(clientMock, 'Accept', 'test')
     expect(clientMock.httpApiClient.setHeader).toHaveBeenCalledWith('Accept', 'test')
@@ -104,11 +104,11 @@ test('set request json body from fixture file', () => {
 
     const fixture = {
         is_active: 'true',
-        id: '2'
+        id: '2',
     }
     const worldMock = {
         httpApiClient: { setJsonBody: jest.fn() },
-        fixtures: { load: jest.fn(() => Promise.resolve(fixture)) }
+        fixtures: { load: jest.fn(() => Promise.resolve(fixture)) },
     }
 
     return def.exec(worldMock, 'fixture').then(() => {
@@ -137,11 +137,11 @@ test('set request form body from fixture file', () => {
 
     const fixture = {
         is_active: 'true',
-        id: '2'
+        id: '2',
     }
     const worldMock = {
         httpApiClient: { setFormBody: jest.fn() },
-        fixtures: { load: jest.fn(() => Promise.resolve(fixture)) }
+        fixtures: { load: jest.fn(() => Promise.resolve(fixture)) },
     }
 
     return def.exec(worldMock, 'fixture').then(() => {
@@ -162,11 +162,11 @@ test('set request multipart body from', () => {
 
     const fixture = {
         id: '2',
-        file: fs.createReadStream('path/to/file', {})
+        file: fs.createReadStream('path/to/file', {}),
     }
     const worldMock = {
         httpApiClient: { setMultipartBody: jest.fn() },
-        fixtures: { load: jest.fn(() => Promise.resolve(fixture)) }
+        fixtures: { load: jest.fn(() => Promise.resolve(fixture)) },
     }
 
     return def.exec(worldMock, 'fixture').then(() => {
@@ -196,11 +196,11 @@ test('set request query', () => {
 
     const clientMock = {
         httpApiClient: { setQuery: jest.fn() },
-        state: { populateObject: o => o }
+        state: { populateObject: (o) => o },
     }
     const query = {
         is_active: 'true',
-        id: '2'
+        id: '2',
     }
     def.exec(clientMock, { rowsHash: () => query })
     expect(clientMock.httpApiClient.setQuery).toHaveBeenCalledWith(query)
@@ -214,7 +214,7 @@ test('follow redirect', () => {
     def.shouldMatch('follow redirect')
 
     const clientMock = {
-        httpApiClient: { setFollowRedirect: jest.fn() }
+        httpApiClient: { setFollowRedirect: jest.fn() },
     }
     def.exec(clientMock)
     expect(clientMock.httpApiClient.setFollowRedirect).toHaveBeenCalledWith(true)
@@ -228,7 +228,7 @@ test('do not follow redirect', () => {
     def.shouldMatch('do not follow redirect')
 
     const clientMock = {
-        httpApiClient: { setFollowRedirect: jest.fn() }
+        httpApiClient: { setFollowRedirect: jest.fn() },
     }
     def.exec(clientMock)
     expect(clientMock.httpApiClient.setFollowRedirect).toHaveBeenCalledWith(false)
@@ -456,7 +456,7 @@ test('dump response body', () => {
     def.shouldMatch('dump response body')
 
     const clientMock = {
-        httpApiClient: { getResponse: jest.fn(() => ({ body: '' })) }
+        httpApiClient: { getResponse: jest.fn(() => ({ body: '' })) },
     }
     def.exec(clientMock)
     expect(clientMock.httpApiClient.getResponse).toHaveBeenCalled()
@@ -519,29 +519,29 @@ test('check json response property is defined', () => {
     const getResponse = sinon.stub()
     getResponse.onFirstCall().returns({
         headers: { 'content-type': 'application/json' },
-        body: { name: 'john', gender: 'male' }
+        body: { name: 'john', gender: 'male' },
     })
     getResponse.onSecondCall().returns({
         headers: { 'content-type': 'application/json' },
-        body: { name: 'john' }
+        body: { name: 'john' },
     })
     getResponse.onThirdCall().returns({
         headers: { 'content-type': 'application/json' },
-        body: {}
+        body: {},
     })
     const clientMock = {
-        state: { populate: v => v },
-        httpApiClient: { getResponse: getResponse }
+        state: { populate: (v) => v },
+        httpApiClient: { getResponse: getResponse },
     }
     const spec = [
         {
             field: 'name',
-            matcher: 'defined'
+            matcher: 'defined',
         },
         {
             field: 'gender',
-            matcher: 'present'
-        }
+            matcher: 'present',
+        },
     ]
 
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).not.toThrow()
@@ -561,23 +561,23 @@ test('check json response property equals expected value', () => {
     const getResponse = sinon.stub()
     getResponse.onFirstCall().returns({
         headers: { 'content-type': 'application/json' },
-        body: { name: 'plouc' }
+        body: { name: 'plouc' },
     })
     getResponse.onSecondCall().returns({
         headers: { 'content-type': 'application/json' },
-        body: { name: 'john' }
+        body: { name: 'john' },
     })
     const clientMock = {
-        state: { populate: v => v },
-        httpApiClient: { getResponse: getResponse }
+        state: { populate: (v) => v },
+        httpApiClient: { getResponse: getResponse },
     }
 
     const spec = [
         {
             field: 'name',
             matcher: 'equals',
-            value: 'plouc'
-        }
+            value: 'plouc',
+        },
     ]
 
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).not.toThrow()
@@ -594,32 +594,32 @@ test('check json response property contains value', () => {
     const getResponse = sinon.stub()
     getResponse.onFirstCall().returns({
         headers: { 'content-type': 'application/json' },
-        body: { first_name: 'raphael', last_name: 'benn' }
+        body: { first_name: 'raphael', last_name: 'benn' },
     })
     getResponse.onSecondCall().returns({
         headers: { 'content-type': 'application/json' },
-        body: { first_name: 'raphael', last_name: 'be' }
+        body: { first_name: 'raphael', last_name: 'be' },
     })
     getResponse.onThirdCall().returns({
         headers: { 'content-type': 'application/json' },
-        body: { first_name: 'rap', last_name: 'ben' }
+        body: { first_name: 'rap', last_name: 'ben' },
     })
     const clientMock = {
-        state: { populate: v => v },
-        httpApiClient: { getResponse: getResponse }
+        state: { populate: (v) => v },
+        httpApiClient: { getResponse: getResponse },
     }
 
     const spec = [
         {
             field: 'first_name',
             matcher: 'contain',
-            value: 'raph'
+            value: 'raph',
         },
         {
             field: 'last_name',
             matcher: 'contains',
-            value: 'ben'
-        }
+            value: 'ben',
+        },
     ]
 
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).not.toThrow()
@@ -639,32 +639,32 @@ test('check json response property matches regexp', () => {
     const getResponse = sinon.stub()
     getResponse.onFirstCall().returns({
         headers: { 'content-type': 'application/json' },
-        body: { first_name: 'raphael', last_name: 'benn' }
+        body: { first_name: 'raphael', last_name: 'benn' },
     })
     getResponse.onSecondCall().returns({
         headers: { 'content-type': 'application/json' },
-        body: { first_name: 'raphael', last_name: 'be' }
+        body: { first_name: 'raphael', last_name: 'be' },
     })
     getResponse.onThirdCall().returns({
         headers: { 'content-type': 'application/json' },
-        body: { first_name: 'rap', last_name: 'ben' }
+        body: { first_name: 'rap', last_name: 'ben' },
     })
     const clientMock = {
-        state: { populate: v => v },
-        httpApiClient: { getResponse: getResponse }
+        state: { populate: (v) => v },
+        httpApiClient: { getResponse: getResponse },
     }
 
     const spec = [
         {
             field: 'first_name',
             matcher: 'matches',
-            value: 'raph'
+            value: 'raph',
         },
         {
             field: 'last_name',
             matcher: 'match',
-            value: 'ben'
-        }
+            value: 'ben',
+        },
     ]
 
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).not.toThrow()
@@ -684,32 +684,32 @@ test('check json response fully matches spec', () => {
     const getResponse = sinon.stub()
     getResponse.onFirstCall().returns({
         headers: { 'content-type': 'application/json' },
-        body: { first_name: 'Raphaël', last_name: 'ben' }
+        body: { first_name: 'Raphaël', last_name: 'ben' },
     })
     getResponse.onSecondCall().returns({
         headers: { 'content-type': 'application/json' },
-        body: { first_name: 'Raphaël', last_name: 'ben', gender: 'male' }
+        body: { first_name: 'Raphaël', last_name: 'ben', gender: 'male' },
     })
     getResponse.onThirdCall().returns({
         headers: { 'content-type': 'application/json' },
-        body: { first_name: 'Raphaël', last_name: 'be' }
+        body: { first_name: 'Raphaël', last_name: 'be' },
     })
     const clientMock = {
-        state: { populate: v => v },
-        httpApiClient: { getResponse: getResponse }
+        state: { populate: (v) => v },
+        httpApiClient: { getResponse: getResponse },
     }
 
     const spec = [
         {
             field: 'first_name',
             matcher: 'equal',
-            value: 'Raphaël'
+            value: 'Raphaël',
         },
         {
             field: 'last_name',
             matcher: 'match',
-            value: 'ben'
-        }
+            value: 'ben',
+        },
     ]
 
     expect(() => def.exec(clientMock, 'fully ', { hashes: () => spec })).not.toThrow()
@@ -755,14 +755,14 @@ test('response match fixture', () => {
     getResponse.onSecondCall().returns({ statusCode: 200, body: { app: true } })
     const worldMock = {
         httpApiClient: { getResponse: getResponse },
-        fixtures: { load: jest.fn(() => Promise.resolve(snapshot)) }
+        fixtures: { load: jest.fn(() => Promise.resolve(snapshot)) },
     }
 
     return Promise.all([
         expect(def.exec(worldMock, 'snapshot')).resolves.toBe(),
         expect(def.exec(worldMock, 'snapshot')).rejects.toThrow(
             `expected { app: true } to deeply equal { testing: true }`
-        )
+        ),
     ])
 })
 
@@ -788,7 +788,7 @@ test('check response header equals expected value', () => {
         'Content-Type',
         undefined,
         'equal',
-        'application/json'
+        'application/json',
     ])
 
     const getResponse = sinon.stub()
@@ -796,8 +796,8 @@ test('check response header equals expected value', () => {
     getResponse.onSecondCall().returns({ headers: { 'content-type': 'application/xml' } })
     getResponse.onThirdCall().returns({ headers: { 'another-header': 'application/json' } })
     const clientMock = {
-        state: { populate: v => v },
-        httpApiClient: { getResponse: getResponse }
+        state: { populate: (v) => v },
+        httpApiClient: { getResponse: getResponse },
     }
 
     expect(() =>
@@ -824,7 +824,7 @@ test('check response header does not equal expected value', () => {
         'Content-Type',
         'not ',
         'equal',
-        'application/json'
+        'application/json',
     ])
 
     const getResponse = sinon.stub()
@@ -832,8 +832,8 @@ test('check response header does not equal expected value', () => {
     getResponse.onSecondCall().returns({ headers: { 'content-type': 'application/xml' } })
     getResponse.onThirdCall().returns({ headers: { 'another-header': 'application/json' } })
     const clientMock = {
-        state: { populate: v => v },
-        httpApiClient: { getResponse: getResponse }
+        state: { populate: (v) => v },
+        httpApiClient: { getResponse: getResponse },
     }
 
     expect(() => def.exec(clientMock, 'Content-Type', 'not ', 'equal', 'application/json')).toThrow(
@@ -858,7 +858,7 @@ test('check response header contains value', () => {
         'Content-Type',
         undefined,
         'contain',
-        'application/json'
+        'application/json',
     ])
 
     const getResponse = sinon.stub()
@@ -866,8 +866,8 @@ test('check response header contains value', () => {
     getResponse.onSecondCall().returns({ headers: { 'content-type': 'application/xml' } })
     getResponse.onThirdCall().returns({ headers: { 'another-header': 'application/json' } })
     const clientMock = {
-        state: { populate: v => v },
-        httpApiClient: { getResponse: getResponse }
+        state: { populate: (v) => v },
+        httpApiClient: { getResponse: getResponse },
     }
 
     expect(() => def.exec(clientMock, 'Content-Type', undefined, 'contain', 'json')).not.toThrow()
@@ -890,7 +890,7 @@ test('check response header does not contain value', () => {
         'Content-Type',
         'not ',
         'contain',
-        'application/json'
+        'application/json',
     ])
 
     const getResponse = sinon.stub()
@@ -898,8 +898,8 @@ test('check response header does not contain value', () => {
     getResponse.onSecondCall().returns({ headers: { 'content-type': 'application/xml' } })
     getResponse.onThirdCall().returns({ headers: { 'another-header': 'application/json' } })
     const clientMock = {
-        state: { populate: v => v },
-        httpApiClient: { getResponse: getResponse }
+        state: { populate: (v) => v },
+        httpApiClient: { getResponse: getResponse },
     }
 
     expect(() => def.exec(clientMock, 'Content-Type', 'not ', 'contain', 'json')).toThrow(
@@ -922,7 +922,7 @@ test('check response header matches regexp', () => {
         'Content-Type',
         undefined,
         'match',
-        '^application/json$'
+        '^application/json$',
     ])
 
     const getResponse = sinon.stub()
@@ -930,8 +930,8 @@ test('check response header matches regexp', () => {
     getResponse.onSecondCall().returns({ headers: { 'content-type': 'application/xml' } })
     getResponse.onThirdCall().returns({ headers: { 'another-header': 'application/json' } })
     const clientMock = {
-        state: { populate: v => v },
-        httpApiClient: { getResponse: getResponse }
+        state: { populate: (v) => v },
+        httpApiClient: { getResponse: getResponse },
     }
 
     expect(() =>
@@ -958,7 +958,7 @@ test('check response header does not match regexp', () => {
         'Content-Type',
         'not ',
         'match',
-        '^application/json$'
+        '^application/json$',
     ])
 
     const getResponse = sinon.stub()
@@ -966,8 +966,8 @@ test('check response header does not match regexp', () => {
     getResponse.onSecondCall().returns({ headers: { 'content-type': 'application/xml' } })
     getResponse.onThirdCall().returns({ headers: { 'another-header': 'application/json' } })
     const clientMock = {
-        state: { populate: v => v },
-        httpApiClient: { getResponse: getResponse }
+        state: { populate: (v) => v },
+        httpApiClient: { getResponse: getResponse },
     }
 
     expect(() =>

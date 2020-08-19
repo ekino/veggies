@@ -7,22 +7,22 @@ exports.install = () => {
     /**
      * Creating a directory.
      */
-    Given(/^(?:I )?create directory (.+)$/, function(directory) {
+    Given(/^(?:I )?create directory (.+)$/, function (directory) {
         return this.fileSystem.createDirectory(this.cli.getCwd(), directory)
     })
 
     /**
      * Remove a file or directory.
      */
-    Given(/^(?:I )?remove (?:file|directory) (.+)$/, function(fileOrDirectory) {
+    Given(/^(?:I )?remove (?:file|directory) (.+)$/, function (fileOrDirectory) {
         return this.fileSystem.remove(this.cli.getCwd(), fileOrDirectory)
     })
 
     /**
      * Checking file/directory presence.
      */
-    Then(/^(file|directory) (.+) should (not )?exist$/, function(type, file, flag) {
-        return this.fileSystem.getFileInfo(this.cli.getCwd(), file).then(info => {
+    Then(/^(file|directory) (.+) should (not )?exist$/, function (type, file, flag) {
+        return this.fileSystem.getFileInfo(this.cli.getCwd(), file).then((info) => {
             if (flag === 'not ') {
                 expect(info, `${type} '${file}' exists`).to.be.null
             } else {
@@ -39,7 +39,7 @@ exports.install = () => {
     /**
      * Checking file content.
      */
-    Then(/^file (.+) content should (not )?(equal|contain|match) (.+)$/, function(
+    Then(/^file (.+) content should (not )?(equal|contain|match) (.+)$/, function (
         file,
         flag,
         comparator,
@@ -47,7 +47,7 @@ exports.install = () => {
     ) {
         return this.fileSystem
             .getFileContent(this.cli.getCwd(), file)
-            .then(content => {
+            .then((content) => {
                 let expectFn = expect(
                     content,
                     `Expected file '${file}' to ${
@@ -64,7 +64,7 @@ exports.install = () => {
                     comparator === 'match' ? new RegExp(expectedValue) : expectedValue
                 )
             })
-            .catch(err => {
+            .catch((err) => {
                 if (err.code === 'ENOENT') return expect.fail('', '', `File '${file}' should exist`)
 
                 return Promise.reject(err)

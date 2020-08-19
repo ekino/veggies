@@ -40,18 +40,18 @@ const defShouldNotMatch = (regex, str) => {
 const execDef = (execFn, thisContext, ...args) => execFn.bind(thisContext)(...args)
 
 exports.getContext = () => {
-    const registeredDefinitions = cucumber.defineStep.mock.calls.map(def => ({
+    const registeredDefinitions = cucumber.defineStep.mock.calls.map((def) => ({
         matcher: def[0], // The step definition regex
         exec: _.partial(execDef, def[1]), // The step definition logic
         shouldMatch: _.partial(defShouldMatch, def[0]),
-        shouldNotMatch: _.partial(defShouldNotMatch, def[0])
+        shouldNotMatch: _.partial(defShouldNotMatch, def[0]),
     }))
 
     const matchers = registeredDefinitions.map(({ matcher }) => matcher.toString())
 
     return {
         definitions: registeredDefinitions,
-        getDefinitionByMatcher: pattern => {
+        getDefinitionByMatcher: (pattern) => {
             const found = registeredDefinitions.filter(({ matcher }) =>
                 matcher.toString().includes(pattern)
             )
@@ -74,7 +74,7 @@ exports.getContext = () => {
             }
 
             return found[0]
-        }
+        },
     }
 }
 

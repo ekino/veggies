@@ -14,7 +14,7 @@ const statistics = require('./statistics')
  */
 
 exports.install = () => {
-    Before(function(scenarioInfos) {
+    Before(function (scenarioInfos) {
         const file = scenarioInfos.sourceLocation.uri
         const line = scenarioInfos.sourceLocation.line
 
@@ -22,11 +22,11 @@ exports.install = () => {
         this.snapshot.scenarioLine = line
     })
 
-    BeforeAll(function() {
+    BeforeAll(function () {
         clean.resetReferences()
     })
 
-    AfterAll(function() {
+    AfterAll(function () {
         if (cmdOptions.cleanSnapshots) clean.cleanSnapshots()
         statistics.printReport()
     })

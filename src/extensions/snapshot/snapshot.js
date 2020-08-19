@@ -23,7 +23,7 @@ exports.scenarioRegex = /^[\s]*Scenario:[\s]*(.*[^\s])[\s]*$/
  * @param {string} file - Feature file path
  * @return {Array<string>} - Scenarios names
  */
-exports.extractScenarios = file => {
+exports.extractScenarios = (file) => {
     if (_.isNil(file)) {
         throw new TypeError(`Invalid feature file ${file}`)
     }
@@ -65,7 +65,7 @@ exports.extractScenarios = file => {
  * @param {Array<string>} scenarios - Scenarios names
  * @return {Object} - Read above for result format
  */
-exports.prefixSnapshots = scenarios => {
+exports.prefixSnapshots = (scenarios) => {
     if (_.isNil(scenarios)) {
         throw new Error(`Scenarios are required to prefix snapshots`)
     }
@@ -73,7 +73,7 @@ exports.prefixSnapshots = scenarios => {
     const nameCount = {}
     const result = {}
 
-    _.forEach(scenarios, scenario => {
+    _.forEach(scenarios, (scenario) => {
         nameCount[scenario.name] = nameCount[scenario.name] | 0
         nameCount[scenario.name]++
 
@@ -91,7 +91,7 @@ exports.prefixSnapshots = scenarios => {
  * @param {string} file - snapshot file path
  * @return {Object} - Return follows the pattern : {snapshot_name: snapshot_content}
  */
-exports.readSnapshotFile = file => {
+exports.readSnapshotFile = (file) => {
     if (_.isNil(file)) {
         throw new Error(`Missing snapshot file ${file} to read snapshots`)
     }
@@ -137,18 +137,18 @@ exports.snapshotsPath = (featureFile, opts) => {
  * @returns {string} Diff message
  */
 exports.diff = (snapshot, expected) => {
-    let diffMessage = diff(snapshot, expected, {
+    let diffMessage = diff.default(snapshot, expected, {
         expand: false,
         colors: true,
         //contextLines: -1, // Forces to use default from Jest
         aAnnotation: 'Snapshot',
-        bAnnotation: 'Received'
+        bAnnotation: 'Received',
     })
 
     diffMessage =
         diffMessage ||
         `${EXPECTED_COLOR('- ' + (expected || ''))} \n ${RECEIVED_COLOR('+ ' + snapshot)}`
-    if (diffMessage === jestDiffConstants.NO_DIFF_MESSAGE) return null
+    if (diffMessage === `\u001b[2m${jestDiffConstants.NO_DIFF_MESSAGE}\u001b[22m`) return null
     return `\n${diffMessage}`
 }
 
@@ -157,7 +157,7 @@ exports.diff = (snapshot, expected) => {
  * @param {string} str - snapshot content
  * @return {string} wrapped content
  */
-exports.wrapWithBacktick = str => {
+exports.wrapWithBacktick = (str) => {
     return '`' + str.replace(/`|\\|\${/g, '\\$&') + '`'
 }
 
@@ -165,7 +165,7 @@ exports.wrapWithBacktick = str => {
  * Normalize new lines to be \n only
  * @param {string} string - Content to normalize
  */
-exports.normalizeNewlines = string => {
+exports.normalizeNewlines = (string) => {
     return string.replace(/\r\n|\r/g, '\n')
 }
 
@@ -174,11 +174,11 @@ exports.normalizeNewlines = string => {
  * @param {object} content - snapshots content
  * @return {string} formated snapshot file
  */
-exports.formatSnapshotFile = content => {
+exports.formatSnapshotFile = (content) => {
     const snapshots = Object.keys(content)
         .sort(naturalCompare)
         .map(
-            key =>
+            (key) =>
                 'exports[' +
                 exports.wrapWithBacktick(key) +
                 '] = ' +
@@ -193,7 +193,7 @@ exports.formatSnapshotFile = content => {
  * @param {string} content - Snapshot file content
  * @return {Object} - should follow the pattern {snapshot_name: snapshot_content}
  */
-exports.parseSnapshotFile = content => {
+exports.parseSnapshotFile = (content) => {
     const data = {}
     const populate = new Function('exports', content)
     populate(data)

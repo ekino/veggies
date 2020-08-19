@@ -26,7 +26,7 @@ test('create directory', () => {
 
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { createDirectory: jest.fn() }
+        fileSystem: { createDirectory: jest.fn() },
     }
     def.exec(world, 'test-directory')
     expect(world.fileSystem.createDirectory).toHaveBeenCalledWith('test-cwd', 'test-directory')
@@ -47,7 +47,7 @@ test('remove file or directory', () => {
 
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { remove: jest.fn() }
+        fileSystem: { remove: jest.fn() },
     }
     def.exec(world, 'test-directory')
     expect(world.fileSystem.remove).toHaveBeenCalledWith('test-cwd', 'test-directory')
@@ -81,7 +81,7 @@ test('file should exist', () => {
 
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileInfo: getFileInfo }
+        fileSystem: { getFileInfo: getFileInfo },
     }
 
     expect.assertions(3)
@@ -93,7 +93,7 @@ test('file should exist', () => {
         ),
         expect(def.exec(world, 'file', 'file_dont_exist', undefined)).rejects.toThrow(
             "file 'file_dont_exist' does not exist: expected null not to be null"
-        )
+        ),
     ])
 })
 
@@ -109,7 +109,7 @@ test('file should not exist', () => {
 
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileInfo: getFileInfo }
+        fileSystem: { getFileInfo: getFileInfo },
     }
 
     expect.assertions(3)
@@ -121,7 +121,7 @@ test('file should not exist', () => {
         expect(def.exec(world, 'file', 'a_directory', 'not ')).rejects.toThrow(
             `file 'a_directory' exists: expected { isFile: [Function: isFile] } to be null`
         ),
-        expect(def.exec(world, 'file', 'file_dont_exist', 'not ')).resolves.toBe()
+        expect(def.exec(world, 'file', 'file_dont_exist', 'not ')).resolves.toBe(),
     ])
 })
 
@@ -137,7 +137,7 @@ test('directory should exist', () => {
 
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileInfo: getFileInfo }
+        fileSystem: { getFileInfo: getFileInfo },
     }
 
     expect.assertions(3)
@@ -149,7 +149,7 @@ test('directory should exist', () => {
         ),
         expect(def.exec(world, 'directory', 'directory_dont_exist', undefined)).rejects.toThrow(
             `directory 'directory_dont_exist' does not exist: expected null not to be null`
-        )
+        ),
     ])
 })
 
@@ -165,7 +165,7 @@ test('directory should not exist', () => {
 
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileInfo: getFileInfo }
+        fileSystem: { getFileInfo: getFileInfo },
     }
 
     expect.assertions(3)
@@ -177,7 +177,7 @@ test('directory should not exist', () => {
         expect(def.exec(world, 'directory', 'a_file', 'not ')).rejects.toThrow(
             `directory 'a_file' exists: expected { Object (isDirectory) } to be null`
         ),
-        expect(def.exec(world, 'directory', 'directory_dont_exist', 'not ')).resolves.toBe()
+        expect(def.exec(world, 'directory', 'directory_dont_exist', 'not ')).resolves.toBe(),
     ])
 })
 
@@ -197,7 +197,7 @@ test('file content matcher without file existing', () => {
 
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileContent: getFileContent }
+        fileSystem: { getFileContent: getFileContent },
     }
 
     expect.assertions(2)
@@ -207,7 +207,7 @@ test('file content matcher without file existing', () => {
         ).resolves.toBe(),
         expect(
             def.exec(world, 'file_dont_exist', undefined, 'equal', 'expected content')
-        ).rejects.toThrow(`File 'file_dont_exist' should exist`)
+        ).rejects.toThrow(`File 'file_dont_exist' should exist`),
     ])
 })
 
@@ -224,7 +224,7 @@ test('file content should equal', () => {
 
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileContent: getFileContent }
+        fileSystem: { getFileContent: getFileContent },
     }
 
     expect.assertions(2)
@@ -236,7 +236,7 @@ test('file content should equal', () => {
             def.exec(world, 'file_another_content', undefined, 'equal', 'some content')
         ).rejects.toThrow(
             `Expected file 'file_another_content' to equal 'some content', but found 'another content' which does not: expected 'another content' to equal 'some content'`
-        )
+        ),
     ])
 })
 
@@ -253,7 +253,7 @@ test('file content should not equal', () => {
 
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileContent: getFileContent }
+        fileSystem: { getFileContent: getFileContent },
     }
 
     expect.assertions(2)
@@ -266,7 +266,7 @@ test('file content should not equal', () => {
         ),
         expect(
             def.exec(world, 'file_another_content', 'not ', 'equal', 'some content')
-        ).resolves.toBe()
+        ).resolves.toBe(),
     ])
 })
 
@@ -283,7 +283,7 @@ test('file content should contain', () => {
 
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileContent: getFileContent }
+        fileSystem: { getFileContent: getFileContent },
     }
 
     expect.assertions(2)
@@ -293,7 +293,7 @@ test('file content should contain', () => {
             def.exec(world, 'file_another_content', undefined, 'contain', 'some')
         ).rejects.toThrow(
             `Expected file 'file_another_content' to contain 'some', but found 'another content' which does not: expected 'another content' to include 'some'`
-        )
+        ),
     ])
 })
 
@@ -310,7 +310,7 @@ test('file content should not contain', () => {
 
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileContent: getFileContent }
+        fileSystem: { getFileContent: getFileContent },
     }
 
     expect.assertions(2)
@@ -319,7 +319,7 @@ test('file content should not contain', () => {
         expect(def.exec(world, 'file_some_content', 'not ', 'contain', 'some')).rejects.toThrow(
             `Expected file 'file_some_content' to not contain 'some', but found 'some content' which does: expected 'some content' to not include 'some'`
         ),
-        expect(def.exec(world, 'file_another_content', 'not ', 'contain', 'some')).resolves.toBe()
+        expect(def.exec(world, 'file_another_content', 'not ', 'contain', 'some')).resolves.toBe(),
     ])
 })
 
@@ -336,7 +336,7 @@ test('file content should match', () => {
 
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileContent: getFileContent }
+        fileSystem: { getFileContent: getFileContent },
     }
 
     expect.assertions(2)
@@ -349,7 +349,7 @@ test('file content should match', () => {
             def.exec(world, 'file_not_some_content', undefined, 'match', '^some.*$')
         ).rejects.toThrow(
             `Expected file 'file_not_some_content' to match '^some.*$', but found 'not some content' which does not: expected 'not some content' to match /^some.*$/`
-        )
+        ),
     ])
 })
 
@@ -366,7 +366,7 @@ test('file content should not match', () => {
 
     const world = {
         cli: { getCwd: () => 'test-cwd' },
-        fileSystem: { getFileContent: getFileContent }
+        fileSystem: { getFileContent: getFileContent },
     }
 
     expect.assertions(2)
@@ -377,6 +377,6 @@ test('file content should not match', () => {
         ),
         expect(
             def.exec(world, 'file_not_some_content', 'not ', 'match', '^some.*$')
-        ).resolves.toBe()
+        ).resolves.toBe(),
     ])
 })

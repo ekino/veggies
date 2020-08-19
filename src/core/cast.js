@@ -36,7 +36,7 @@ castFunctions['null'] = () => {
  * @param {string} value
  * @return {number}
  */
-castFunctions['number'] = value => {
+castFunctions['number'] = (value) => {
     const result = Number(value)
     if (_.isNaN(result)) {
         throw new TypeError(`Unable to cast value to number '${value}'`)
@@ -49,7 +49,7 @@ castFunctions['number'] = value => {
  * @param {string} value - true or false
  * @return {boolean} - true if true. False in all other case.
  */
-castFunctions['boolean'] = value => {
+castFunctions['boolean'] = (value) => {
     return value === 'true'
 }
 
@@ -58,13 +58,8 @@ castFunctions['boolean'] = value => {
  * @param {string} value - Should follow the pattern "value1, value2, ..."
  * @return {Array}
  */
-castFunctions['array'] = value => {
-    return value
-        ? value
-              .replace(/\s/g, '')
-              .split(',')
-              .map(exports.value)
-        : []
+castFunctions['array'] = (value) => {
+    return value ? value.replace(/\s/g, '').split(',').map(exports.value) : []
 }
 
 /**
@@ -72,7 +67,7 @@ castFunctions['array'] = value => {
  * @param {string} value - today or a date as string
  * @return {string} - A date json formatted
  */
-castFunctions['date'] = value => {
+castFunctions['date'] = (value) => {
     if (value === 'today') {
         return new Date().toJSON().slice(0, 10)
     }
@@ -85,7 +80,7 @@ castFunctions['date'] = value => {
  * @param {string} value
  * @return {string}
  */
-castFunctions['string'] = value => {
+castFunctions['string'] = (value) => {
     return `${value}`
 }
 
@@ -132,7 +127,7 @@ exports.addType = (typeName, castFunction) => {
  * @param {string} value - The value to cast
  * @return {*} The casted value or untouched value if no casting directive found
  */
-exports.value = value => {
+exports.value = (value) => {
     if (!_.isString(value)) return value
 
     const matchResult = value.match(/^(.*)\(\((\w+)\)\)$/)
@@ -153,9 +148,9 @@ exports.value = value => {
  * @param {Object} object - The object containing values to cast
  * @return {Object} The object with casted values
  */
-exports.object = object => {
+exports.object = (object) => {
     const castedObject = {}
-    Object.keys(object).forEach(key => {
+    Object.keys(object).forEach((key) => {
         _.set(castedObject, key, exports.value(object[key]))
     })
 
@@ -178,11 +173,11 @@ exports.object = object => {
  *
  * @param {Array.<Object>} objects
  */
-exports.objects = objects => objects.map(object => exports.object(object))
+exports.objects = (objects) => objects.map((object) => exports.object(object))
 
 /**
  * Casts an array of values.
  *
  * @param {Array.<*>} array
  */
-exports.array = array => array.map(value => exports.value(value))
+exports.array = (array) => array.map((value) => exports.value(value))

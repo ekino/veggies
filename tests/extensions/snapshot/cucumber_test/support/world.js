@@ -3,7 +3,7 @@
 const { setWorldConstructor } = require('cucumber')
 const { state, httpApi, snapshot } = require('../../../../../src')
 
-setWorldConstructor(function() {
+setWorldConstructor(function () {
     state.extendWorld(this)
     httpApi.extendWorld(this)
     snapshot.extendWorld(this)

@@ -13,7 +13,7 @@ exports.runCommand = ({ cwd, env, command }) => {
     return new Promise((resolve, reject) => {
         const cmd = spawn(_command, args, {
             cwd: cwd,
-            env: Object.assign({}, process.env, env)
+            env: Object.assign({}, process.env, env),
         })
 
         const cmdStdout = []

@@ -60,7 +60,7 @@ class State {
     }
 
     populateObject(object) {
-        return _.mapValues(object, value => {
+        return _.mapValues(object, (value) => {
             if (_.isPlainObject(value)) return this.populateObject(value)
             return this.populate(value)
         })
@@ -71,7 +71,7 @@ class State {
  * Create a new isolated state
  * @return {State}
  */
-module.exports = function(...args) {
+module.exports = function (...args) {
     return new State(...args)
 }
 

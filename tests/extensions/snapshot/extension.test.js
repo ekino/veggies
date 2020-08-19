@@ -14,7 +14,7 @@ beforeAll(() => {
     fs.writeFileSync = jest.fn()
     fs.mkdirsSync = jest.fn()
 
-    fs.readFileSync.mockImplementation(file => {
+    fs.readFileSync.mockImplementation((file) => {
         if (file === fixtures.featureFile1) return fixtures.featureFileContent1
         if (file === fixtures.featureFile1WithPropertyMatchers) return fixtures.featureFileContent1
         if (file === fixtures.featureFile1NotExists) return fixtures.featureFileContent1
@@ -37,9 +37,9 @@ beforeAll(() => {
         throw new Error(`Unexpected call to readFileSync with file ${file}`)
     })
 
-    fs.writeFileSync.mockImplementation(file => {})
+    fs.writeFileSync.mockImplementation((file) => {})
 
-    fs.statSync.mockImplementation(file => {
+    fs.statSync.mockImplementation((file) => {
         if (file === fixtures.snapshotFile1) return {}
         if (file === fixtures.snapshotFile1WithPropertyMatchers) return {}
         if (file === fixtures.snapshotFile1NotExists) return null

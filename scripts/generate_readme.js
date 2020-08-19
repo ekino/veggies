@@ -51,7 +51,7 @@ Then:
   # No definitions
 {{/Then}}
 \`\`\`
-`.trim()
+`.trim(),
 }
 
 /**
@@ -62,7 +62,7 @@ const definitionFiles = {
     httpApi: './src/extensions/http_api/definitions.js',
     state: './src/extensions/state/definitions.js',
     fileSystem: './src/extensions/file_system/definitions.js',
-    snapshot: './src/extensions/snapshot/definitions.js'
+    snapshot: './src/extensions/snapshot/definitions.js',
 }
 
 /**
@@ -75,7 +75,7 @@ const extensions = Object.keys(definitionFiles)
  *
  * @param {string} file - File path
  */
-const getFileContent = file =>
+const getFileContent = (file) =>
     new Promise((resolve, reject) => {
         console.log(chalk.yellow(`- loading file: ${chalk.white(file)}`))
 
@@ -95,7 +95,7 @@ const getFileContent = file =>
  */
 const writeFile = (file, content) =>
     new Promise((resolve, reject) => {
-        fs.writeFile(file, content, err => {
+        fs.writeFile(file, content, (err) => {
             if (err) return reject(err)
             resolve(true)
         })
@@ -107,7 +107,7 @@ const writeFile = (file, content) =>
  * @param {Object} node - AST node
  * @return {boolean}
  */
-const isExportInstall = node => {
+const isExportInstall = (node) => {
     return (
         node.type === 'ExpressionStatement' &&
         node.expression.type === 'AssignmentExpression' &&
@@ -148,7 +148,7 @@ const extractModuleExportBody = (file, node) => {
  * @param {Object} node - AST node
  * @return {boolean}
  */
-const isDefinition = node => {
+const isDefinition = (node) => {
     return (
         node.type === 'ExpressionStatement' &&
         node.expression.type === 'CallExpression' &&
@@ -175,7 +175,7 @@ const extractDefinitionInfo = (file, node) => {
 
     return {
         type: node.expression.callee.name,
-        matcher: regex.extra.raw
+        matcher: regex.extra.raw,
     }
 }
 
@@ -190,7 +190,7 @@ const parseDefinitions = (file, code) => {
 
     const parsed = parse(code, {
         ranges: false,
-        tokens: false
+        tokens: false,
     })
 
     const [exportStatement] = parsed.program.body.filter(isExportInstall)
@@ -203,7 +203,7 @@ const parseDefinitions = (file, code) => {
 
     return body
         .filter(isDefinition)
-        .map(def => extractDefinitionInfo(file, def))
+        .map((def) => extractDefinitionInfo(file, def))
         .reduce((byType, { type, matcher }) => {
             if (!byType[type]) byType[type] = []
 
@@ -218,31 +218,31 @@ const parseDefinitions = (file, code) => {
  *
  * @param {string} file - Definitions file
  */
-const getDefinitionsFromFile = file => {
-    return getFileContent(file).then(code => parseDefinitions(file, code))
+const getDefinitionsFromFile = (file) => {
+    return getFileContent(file).then((code) => parseDefinitions(file, code))
 }
 
-Promise.all(extensions.map(extensionId => getDefinitionsFromFile(definitionFiles[extensionId])))
-    .then(definitions => {
+Promise.all(extensions.map((extensionId) => getDefinitionsFromFile(definitionFiles[extensionId])))
+    .then((definitions) => {
         const definitionsByExtension = {}
         definitions.forEach((defs, index) => {
             definitionsByExtension[extensions[index]] = defs
         })
 
-        return getFileContent(readmeTemplatePath).then(readmeTemplateContent => {
+        return getFileContent(readmeTemplatePath).then((readmeTemplateContent) => {
             return writeFile(
                 readmePath,
                 Mustache.render(
                     readmeTemplateContent,
                     {
-                        definitions: definitionsByExtension
+                        definitions: definitionsByExtension,
                     },
                     partials
                 )
             )
         })
     })
-    .catch(err => {
+    .catch((err) => {
         console.error(err)
         process.exit(1)
     })

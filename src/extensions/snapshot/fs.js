@@ -39,7 +39,7 @@ exports.writeFileContent = (file, content, { createDir = true } = {}) => {
  * @param {string} file - File path
  * @return {fs.Stat|null} File/directory info or null if file/directory does not exist
  */
-exports.getFileInfo = file => {
+exports.getFileInfo = (file) => {
     let result = null
     try {
         result = fs.statSync(file)
@@ -56,7 +56,7 @@ exports.getFileInfo = file => {
  * @param {string} dir - directory path
  * @return {boolean}
  */
-exports.createDirectory = dir => {
+exports.createDirectory = (dir) => {
     return fs.mkdirsSync(dir)
 }
 
@@ -66,6 +66,6 @@ exports.createDirectory = dir => {
  * @param {string} fileOrDirectory - File or directory path
  * @return {boolean}
  */
-exports.remove = fileOrDir => {
+exports.remove = (fileOrDir) => {
     return fs.removeSync(fileOrDir)
 }
