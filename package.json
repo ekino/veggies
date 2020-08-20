@@ -24,7 +24,7 @@
   ],
   "license": "MIT",
   "engines": {
-    "node": ">=8.12.0"
+    "node": ">=10"
   },
   "engineStrict": true,
   "dependencies": {
@@ -64,8 +64,8 @@
     "cucumber": ">=4.0.0 <7.0.0"
   },
   "scripts": {
-    "test": "jest --verbose tests",
-    "test-cover": "jest --verbose --coverage",
+    "test": "jest --verbose --colors tests",
+    "test-cover": "jest --verbose --colors --coverage",
     "coverage": "cat ./coverage/lcov.info | coveralls",
     "fmt": "prettier --print-width 100 --tab-width=4 --single-quote --bracket-spacing --no-semi --color --write \"{src,tests,scripts}/**/*.js\"",
     "check-fmt": "prettier --print-width 100 --tab-width=4 --single-quote --bracket-spacing --no-semi --list-different \"{src,tests,scripts}/**/*.js\"",

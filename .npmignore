@@ -41,3 +41,7 @@ Makefile
 .lintstagedrc
 .huskyrc
 .travis.yml
+.yarn
+.pnp.*
+jest.config.js
+.yarnrc.yml

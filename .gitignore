@@ -41,3 +41,12 @@ bin
 _doc
 /examples/features/file_system/files/generated
 /examples/features/file_system/files/deeply
+.vscode
+
+# yarn 
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+.pnp.*

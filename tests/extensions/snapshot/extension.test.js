@@ -76,6 +76,17 @@ test("expectToMatch shouldn't throw an error if snapshot matches", () => {
     expect(fs.statSync.mock.calls.length).toBe(1)
 })
 
+test('expectToMatch should throw an error if scenario not found in file', () => {
+    const snapshot = Snapshot()
+    snapshot.featureFile = fixtures.featureFile1
+    snapshot.scenarioLine = 4
+
+    expect(() => snapshot.expectToMatch(fixtures.value2)).toThrow(
+        'Can not do a snapshot. Scenario not found in file ./snapshot1.feature on line 4'
+    )
+    expect(fs.readFileSync.mock.calls.length).toBe(1)
+})
+
 test("expectToMatch should throw an error if snapshot doesn't match", () => {
     const snapshot = Snapshot()
     snapshot.featureFile = fixtures.featureFile1

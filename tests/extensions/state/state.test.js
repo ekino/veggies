@@ -42,3 +42,15 @@ test('should returned complete object populated with the state data', () => {
 
     expect(state.populateObject(object)).toEqual(expectedObject)
 })
+
+test('should dump value all data from state', () => {
+    state.clear()
+    state.set('key1', '1')
+    expect(state.dump()).toStrictEqual({ key1: '1' })
+})
+
+test('should get value from state', () => {
+    state.clear()
+    state.set('key1', '1')
+    expect(state.get('key1')).toBe('1')
+})
