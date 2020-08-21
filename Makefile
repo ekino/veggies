@@ -4,7 +4,7 @@
 NODE_MODULES     ?= "./node_modules"
 NODE_MODULES_BIN ?= "${NODE_MODULES}/.bin"
 
-FROM_VERSION     ?= $(shell yarn run -s version)
+FROM_VERSION     ?= $(shell node -p "require('./package.json').version")
 
 ############## HELP ##############
 
