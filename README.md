@@ -1,7 +1,7 @@
 [![veggies](https://raw.githubusercontent.com/ekino/veggies/master/doc/veggies-banner.png)](https://ekino.github.io/veggies/)
 
 [![NPM version][npm-image]][npm-url]
-[![Travis CI][travis-image]][travis-url]
+[![Github CI][ci-image]][ci-url]
 [![Coverage Status][coverage-image]][coverage-url]
 [![styled with prettier][prettier-image]][prettier-url]
 
@@ -1012,8 +1012,8 @@ Due to public API rate limit (eg. GitHub API), this tag is used when running on 
 
 [npm-image]: https://img.shields.io/npm/v/@ekino/veggies.svg?longCache=true&style=for-the-badge
 [npm-url]: https://www.npmjs.com/package/@ekino/veggies
-[travis-image]: https://img.shields.io/travis/ekino/veggies.svg?longCache=true&style=for-the-badge
-[travis-url]: https://travis-ci.org/ekino/veggies
+[ci-image]: https://img.shields.io/github/workflow/status/ekino/veggies/Node.js%20CI?style=for-the-badge
+[ci-url]: https://github.com/ekino/veggies/actions
 [prettier-image]: https://img.shields.io/badge/styled_with-prettier-ff69b4.svg?longCache=true&style=for-the-badge
 [prettier-url]: https://github.com/prettier/prettier
 [coverage-image]: https://img.shields.io/coveralls/ekino/veggies/master.svg?longCache=true&style=for-the-badge
