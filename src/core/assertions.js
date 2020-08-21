@@ -24,7 +24,7 @@ const RuleName = Object.freeze({
     Present: Symbol('present'),
     Equal: Symbol('equal'),
     Type: Symbol('type'),
-    RelativeDate: Symbol('relativeDate')
+    RelativeDate: Symbol('relativeDate'),
 })
 
 /**
@@ -51,9 +51,9 @@ const RuleName = Object.freeze({
  * @param {Object} object
  * @return {number}
  */
-exports.countNestedProperties = object => {
+exports.countNestedProperties = (object) => {
     let propertiesCount = 0
-    Object.keys(object).forEach(key => {
+    Object.keys(object).forEach((key) => {
         if (!_.isEmpty(object[key]) && typeof object[key] === 'object') {
             const count = exports.countNestedProperties(object[key])
             propertiesCount += count
@@ -233,7 +233,7 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
  * @param {string} matcher
  * @return {Rule} the result of the matching
  */
-exports.getMatchingRule = matcher => {
+exports.getMatchingRule = (matcher) => {
     const matchGroups = matchRegex.exec(matcher)
     if (matchGroups) {
         return { name: RuleName.Match, isNegated: !!matchGroups[1] }

@@ -68,7 +68,7 @@ class FixturesLoader {
      * @return {Promise.<Object|Array>} Parsed yaml data
      */
     loadYaml(file) {
-        return this.loadText(file).then(content => {
+        return this.loadText(file).then((content) => {
             try {
                 const data = yaml.safeLoad(content)
                 if (data === undefined) {
@@ -95,7 +95,7 @@ class FixturesLoader {
      * @return {Promise.<Object>} Json data
      */
     loadJson(file) {
-        return this.loadText(file).then(content => {
+        return this.loadText(file).then((content) => {
             try {
                 const data = JSON.parse(content)
 
@@ -124,7 +124,7 @@ class FixturesLoader {
                     new Error(
                         [
                             `javascript fixture file should export default function.\n`,
-                            `Make sure you declared 'module.exports = <function>' in ${file}`
+                            `Make sure you declared 'module.exports = <function>' in ${file}`,
                         ].join('')
                     )
                 )
@@ -173,7 +173,7 @@ class FixturesLoader {
                             [
                                 `Found ${fixturesCount} matching fixture files, `,
                                 `you should have only one matching '${fixture}', matches:\n  `,
-                                `- ${files.join('\n  - ')}`
+                                `- ${files.join('\n  - ')}`,
                             ].join('')
                         )
                     )
@@ -212,7 +212,7 @@ class FixturesLoader {
  * Create a new isolated fixtures loader
  * @return {FixturesLoader}
  */
-module.exports = function(...args) {
+module.exports = function (...args) {
     return new FixturesLoader(...args)
 }
 

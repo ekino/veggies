@@ -9,7 +9,7 @@ const { Before } = require('cucumber')
  */
 
 exports.install = () => {
-    Before(function(scenarioInfos) {
+    Before(function (scenarioInfos) {
         this.fixtures.setFeatureUri(scenarioInfos.sourceLocation.uri)
     })
 }

@@ -161,7 +161,7 @@ class Cli {
             // otherwise, we can have problem with PATH
             const cmd = spawn(command, args, {
                 cwd: this.cwd,
-                env: Object.assign({}, process.env, this.env)
+                env: Object.assign({}, process.env, this.env),
             })
 
             let killer
@@ -207,7 +207,7 @@ class Cli {
  * Create a new isolated Cli
  * @return {Cli}
  */
-module.exports = function(...args) {
+module.exports = function (...args) {
     return new Cli(...args)
 }
 

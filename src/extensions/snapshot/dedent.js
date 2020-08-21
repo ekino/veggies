@@ -9,7 +9,7 @@
  * @param {string} text
  * @returns {number} length tab and space before first char
  */
-const getSpacesLength = text => {
+const getSpacesLength = (text) => {
     let length = 0
 
     while (length < text.length) {
@@ -57,7 +57,7 @@ const getSpacesLength = text => {
  * @param {string} text
  * @return {string}
  */
-module.exports = text => {
+module.exports = (text) => {
     if (typeof text !== 'string') text = text[0]
 
     let lines = text.split('\n')

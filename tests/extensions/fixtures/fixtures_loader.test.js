@@ -17,7 +17,7 @@ jest.mock(
 )
 
 jest.mock('../../../fixture.js.no_default_function', () => ({}), {
-    virtual: true
+    virtual: true,
 })
 
 const yaml = require('js-yaml')
@@ -30,7 +30,7 @@ const MOCK_FILES = {
     'fixture.yaml.invalid': ':\ninvalid',
     'fixture.txt': textContent,
     'fixture.json': JSON.stringify(jsonContent),
-    'fixture.json.invalid': 'invalid'
+    'fixture.json.invalid': 'invalid',
 }
 
 const MOCK_GLOBS = {
@@ -38,7 +38,7 @@ const MOCK_GLOBS = {
     './txt/fixture.@(yaml|yml|js|json|txt)': ['fixture.txt'],
     './js/fixture.@(yaml|yml|js|json|txt)': ['fixture.js'],
     './json/fixture.@(yaml|yml|js|json|txt)': ['fixture.json'],
-    './multi/fixture.@(yaml|yml|js|json|txt)': ['fixture.json', 'fixture.yaml']
+    './multi/fixture.@(yaml|yml|js|json|txt)': ['fixture.json', 'fixture.yaml'],
 }
 
 beforeEach(() => {
@@ -61,7 +61,7 @@ test('set feature uri', () => {
 test('load valid .yaml fixture file', () => {
     expect.assertions(1)
 
-    return fixturesLoader.loadYaml('fixture.yaml').then(data => {
+    return fixturesLoader.loadYaml('fixture.yaml').then((data) => {
         expect(data).toEqual(yamlContent)
     })
 })
@@ -71,7 +71,7 @@ test('load non existing .yaml fixture file', () => {
 
     return fixturesLoader
         .loadText('noent.yaml')
-        .catch(err => expect(err.message).toEqual('File does not exist (noent.yaml)'))
+        .catch((err) => expect(err.message).toEqual('File does not exist (noent.yaml)'))
 })
 
 test('load empty .yaml fixture file', () => {
@@ -79,7 +79,7 @@ test('load empty .yaml fixture file', () => {
 
     return fixturesLoader
         .loadYaml('fixture.yaml.empty')
-        .catch(err =>
+        .catch((err) =>
             expect(err.message).toMatch(
                 'Fixture file is invalid, yaml parsing resulted in undefined data for file: fixture.yaml.empty'
             )
@@ -89,7 +89,7 @@ test('load empty .yaml fixture file', () => {
 test('load invalid .yaml fixture file', () => {
     expect.assertions(1)
 
-    return fixturesLoader.loadYaml('fixture.yaml.invalid').catch(err => {
+    return fixturesLoader.loadYaml('fixture.yaml.invalid').catch((err) => {
         expect(err.message).toMatch('Unable to parse yaml fixture file: fixture.yaml.invalid')
     })
 })
@@ -100,7 +100,7 @@ test('generic load of .yaml fixture file', () => {
     fixturesLoader.configure({ fixturesDir: 'yaml' })
     fixturesLoader.setFeatureUri('yaml')
 
-    return fixturesLoader.load('fixture').then(data => {
+    return fixturesLoader.load('fixture').then((data) => {
         expect(data).toEqual(yamlContent)
     })
 })
@@ -108,7 +108,7 @@ test('generic load of .yaml fixture file', () => {
 test('load valid .txt fixture file', () => {
     expect.assertions(1)
 
-    return fixturesLoader.loadText('fixture.txt').then(data => {
+    return fixturesLoader.loadText('fixture.txt').then((data) => {
         expect(data).toEqual(textContent)
     })
 })
@@ -118,7 +118,7 @@ test('load non existing .txt fixture file', () => {
 
     return fixturesLoader
         .loadText('noent.txt')
-        .catch(err => expect(err.message).toEqual('File does not exist (noent.txt)'))
+        .catch((err) => expect(err.message).toEqual('File does not exist (noent.txt)'))
 })
 
 test('generic load of .txt fixture file', () => {
@@ -127,7 +127,7 @@ test('generic load of .txt fixture file', () => {
     fixturesLoader.configure({ fixturesDir: 'txt' })
     fixturesLoader.setFeatureUri('txt')
 
-    return fixturesLoader.load('fixture').then(data => {
+    return fixturesLoader.load('fixture').then((data) => {
         expect(data).toEqual(textContent)
     })
 })
@@ -135,19 +135,29 @@ test('generic load of .txt fixture file', () => {
 test('load valid .js fixture file', () => {
     expect.assertions(1)
 
-    return fixturesLoader.loadModule('fixture.js').then(data => {
+    return fixturesLoader.loadModule('fixture.js').then((data) => {
         expect(data).toEqual(jsContent)
     })
 })
 
 test('load non existing .js fixture file', () => {
     expect.assertions(1)
-
-    return fixturesLoader.loadModule('noent.js').catch(err => {
+    const cwd = process.cwd()
+    return fixturesLoader.loadModule('noent.js').catch((err) => {
         expect(err.message).toEqual(
             [
                 'An error occurred while loading fixture file: noent.js',
-                `error: Cannot find module '../../../noent.js' from 'fixtures_loader.js'`
+                'error: Qualified path resolution failed - none of the candidates can be found on the disk.',
+                '',
+                `Source path: ${cwd}/noent.js`,
+                `Rejected candidate: ${cwd}/noent.js`,
+                `Rejected candidate: ${cwd}/noent.js.js`,
+                `Rejected candidate: ${cwd}/noent.js.json`,
+                `Rejected candidate: ${cwd}/noent.js.jsx`,
+                `Rejected candidate: ${cwd}/noent.js.ts`,
+                `Rejected candidate: ${cwd}/noent.js.tsx`,
+                `Rejected candidate: ${cwd}/noent.js.node`,
+                '',
             ].join('\n')
         )
     })
@@ -156,11 +166,11 @@ test('load non existing .js fixture file', () => {
 test('load .js without default exported function', () => {
     expect.assertions(1)
 
-    return fixturesLoader.loadModule('fixture.js.no_default_function').catch(err => {
+    return fixturesLoader.loadModule('fixture.js.no_default_function').catch((err) => {
         expect(err.message).toEqual(
             [
                 'javascript fixture file should export default function.',
-                `Make sure you declared 'module.exports = <function>' in fixture.js.no_default_function`
+                `Make sure you declared 'module.exports = <function>' in fixture.js.no_default_function`,
             ].join('\n')
         )
     })
@@ -172,7 +182,7 @@ test('generic load of .js fixture file', () => {
     fixturesLoader.configure({ fixturesDir: 'js' })
     fixturesLoader.setFeatureUri('js')
 
-    return fixturesLoader.load('fixture').then(data => {
+    return fixturesLoader.load('fixture').then((data) => {
         expect(data).toEqual(jsContent)
     })
 })
@@ -180,7 +190,7 @@ test('generic load of .js fixture file', () => {
 test('load valid .json fixture file', () => {
     expect.assertions(1)
 
-    return fixturesLoader.loadJson('fixture.json').then(data => {
+    return fixturesLoader.loadJson('fixture.json').then((data) => {
         expect(data).toEqual(jsonContent)
     })
 })
@@ -190,7 +200,7 @@ test('load non existing .json fixture file', () => {
 
     return fixturesLoader
         .loadJson('noent.json')
-        .catch(err => expect(err.message).toEqual('File does not exist (noent.json)'))
+        .catch((err) => expect(err.message).toEqual('File does not exist (noent.json)'))
 })
 
 test('load invalid .json fixture file', () => {
@@ -198,7 +208,7 @@ test('load invalid .json fixture file', () => {
 
     return fixturesLoader
         .loadJson('fixture.json.invalid')
-        .catch(err =>
+        .catch((err) =>
             expect(err.message).toMatch('Unable to parse json fixture file: fixture.json.invalid')
         )
 })
@@ -209,7 +219,7 @@ test('generic load of .json fixture file', () => {
     fixturesLoader.configure({ fixturesDir: 'json' })
     fixturesLoader.setFeatureUri('json')
 
-    return fixturesLoader.load('fixture').then(data => {
+    return fixturesLoader.load('fixture').then((data) => {
         expect(data).toEqual(jsonContent)
     })
 })
@@ -219,7 +229,7 @@ test('generic load without feature uri', () => {
 
     fixturesLoader.setFeatureUri(undefined)
 
-    return fixturesLoader.load('fixture').catch(err => {
+    return fixturesLoader.load('fixture').catch((err) => {
         expect(err.message).toEqual('Cannot load fixture: fixture, no feature uri defined')
     })
 })
@@ -230,7 +240,7 @@ test('generic load with no matching fixture file', () => {
     fixturesLoader.configure({ fixturesDir: 'none' })
     fixturesLoader.setFeatureUri('none')
 
-    return fixturesLoader.load('fixture').catch(err => {
+    return fixturesLoader.load('fixture').catch((err) => {
         expect(err.message).toEqual(
             'No fixture found for: fixture (./none/fixture.@(yaml|yml|js|json|txt))'
         )
@@ -243,12 +253,12 @@ test('generic load with multiple matching fixture files', () => {
     fixturesLoader.configure({ fixturesDir: 'multi' })
     fixturesLoader.setFeatureUri('multi')
 
-    return fixturesLoader.load('fixture').catch(err => {
+    return fixturesLoader.load('fixture').catch((err) => {
         expect(err.message).toEqual(
             [
                 `Found 2 matching fixture files, you should have only one matching 'fixture', matches:`,
                 '  - fixture.json',
-                '  - fixture.yaml'
+                '  - fixture.yaml',
             ].join('\n')
         )
     })

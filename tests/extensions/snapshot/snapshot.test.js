@@ -3,6 +3,7 @@
 const snapshot = require('../../../src/extensions/snapshot/snapshot')
 const fileSystem = require('../../../src/extensions/snapshot/fs')
 const dedent = require('../../../src/extensions/snapshot/dedent')
+var fs = require('fs')
 
 test('parseSnapshotFile should parse snapshot file content', () => {
     const content = dedent`
@@ -14,13 +15,19 @@ test('parseSnapshotFile should parse snapshot file content', () => {
         """
     `
 
-    const expected = { ['scenario 1 1.1']: 'some content', ['scenario 2 1.1']: 'another content' }
+    const expected = {
+        ['scenario 1 1.1']: 'some content',
+        ['scenario 2 1.1']: 'another content',
+    }
 
     expect(snapshot.parseSnapshotFile(content)).toEqual(expected)
 })
 
 test('formatSnapshotFile should format snapshot file content', () => {
-    const content = { ['scenario 1 1.1']: 'some content', ['scenario 2 1.1']: 'another content' }
+    const content = {
+        ['scenario 1 1.1']: 'some content',
+        ['scenario 2 1.1']: 'another content',
+    }
 
     const expected = dedent`
         """
@@ -37,7 +44,10 @@ test('formatSnapshotFile should format snapshot file content', () => {
 })
 
 test('formatSnapshotFile should format snapshot file content, sort by keys and escape back ticks', () => {
-    const content = { ['scenario` 1 1.1']: 'some` content`', ['scenario 2 1.1']: 'another content' }
+    const content = {
+        ['scenario` 1 1.1']: 'some` content`',
+        ['scenario 2 1.1']: 'another content',
+    }
 
     const expected = dedent`
         """
@@ -56,7 +66,7 @@ test('formatSnapshotFile should format snapshot file content, sort by keys and e
 test('formatSnapshotFile should normalize new lines', () => {
     const content = {
         ['scenario 1 1.1']: 'some content\rnewline content\r\n',
-        ['scenario 2 1.1']: 'another content'
+        ['scenario 2 1.1']: 'another content',
     }
 
     const expected = dedent`
@@ -102,7 +112,7 @@ test('diff should show multiples diff', () => {
         \u001b[32m- Snapshot\u001b[39m
         \u001b[31m+ Received\u001b[39m
         
-        \u001b[2m  \u001b[22m
+        
         \u001b[2m          Object {\u001b[22m
         \u001b[2m              "key1": "value1",\u001b[22m
         \u001b[32m-             "key2": "value2",\u001b[39m
@@ -112,10 +122,9 @@ test('diff should show multiples diff', () => {
         \u001b[31m+             "key4": "value7",\u001b[39m
         \u001b[2m              "key5": "value5",\u001b[22m
         \u001b[2m          }\u001b[22m
-        \u001b[2m  \u001b[43m    \u001b[49m\u001b[22m
+        \u001b[2m      \u001b[22m
         """
     `
-
     expect(snapshot.diff(snapshotContent, expectedContent)).toEqual(expectedDiff)
 })
 
@@ -129,7 +138,10 @@ test('snapshotsPath returns snapshot path', () => {
 test('snapshotsPath returns snapshot path with overrided folder and extension', () => {
     const featurePath = 'myfolder/featurefile.feature'
     const expectedPath = 'myfolder/testsnap/featurefile.feature.sna'
-    const options = { snaphotsDirname: 'testsnap', snapshotsFileExtension: 'sna' }
+    const options = {
+        snaphotsDirname: 'testsnap',
+        snapshotsFileExtension: 'sna',
+    }
     expect(snapshot.snapshotsPath(featurePath, options)).toEqual(expectedPath)
 })
 
@@ -252,12 +264,12 @@ test('readSnapshotFile throw an error if no file', () => {
 test('prefixSnapshots give a prefix per scenario name', () => {
     const scenarios = [
         { name: 'Scenario 1', line: 10 },
-        { name: 'Scenario 2', line: 20 }
+        { name: 'Scenario 2', line: 20 },
     ]
 
     const expectedResult = {
         10: { name: 'Scenario 1', line: 10, prefix: 'Scenario 1 1' },
-        20: { name: 'Scenario 2', line: 20, prefix: 'Scenario 2 1' }
+        20: { name: 'Scenario 2', line: 20, prefix: 'Scenario 2 1' },
     }
 
     expect(snapshot.prefixSnapshots(scenarios)).toEqual(expectedResult)
@@ -267,13 +279,13 @@ test('prefixSnapshots works with duplicate scenarios names', () => {
     const scenarios = [
         { name: 'Scenario 1', line: 10 },
         { name: 'Scenario 2', line: 20 },
-        { name: 'Scenario 1', line: 30 }
+        { name: 'Scenario 1', line: 30 },
     ]
 
     const expectedResult = {
         10: { name: 'Scenario 1', line: 10, prefix: 'Scenario 1 1' },
         20: { name: 'Scenario 2', line: 20, prefix: 'Scenario 2 1' },
-        30: { name: 'Scenario 1', line: 30, prefix: 'Scenario 1 2' }
+        30: { name: 'Scenario 1', line: 30, prefix: 'Scenario 1 2' },
     }
 
     expect(snapshot.prefixSnapshots(scenarios)).toEqual(expectedResult)
@@ -310,7 +322,7 @@ test('extractScenarios read scenarios names from a file', () => {
     const expectedContent = [
         { name: 'Running an invalid command', line: 5 },
         { name: 'Getting info about installed yarn version', line: 10 },
-        { name: 'Running an invalid command', line: 16 }
+        { name: 'Running an invalid command', line: 16 },
     ]
 
     fileSystem.getFileContent = jest.fn()

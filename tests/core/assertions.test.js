@@ -3,7 +3,7 @@
 const { countNestedProperties, assertObjectMatchSpec } = require('../../src/core/assertions')
 
 beforeAll(() => {
-    const MockDate = lastDate => () => new lastDate(2018, 4, 1)
+    const MockDate = (lastDate) => () => new lastDate(2018, 4, 1)
     global.Date = jest.fn(MockDate(global.Date))
 })
 
@@ -18,7 +18,7 @@ test('should allow to count object properties', () => {
         countNestedProperties({
             a: true,
             b: true,
-            c: true
+            c: true,
         })
     ).toBe(3)
 
@@ -29,8 +29,8 @@ test('should allow to count object properties', () => {
             c: true,
             d: {
                 a: true,
-                b: true
-            }
+                b: true,
+            },
         })
     ).toBe(5)
 })
@@ -42,8 +42,8 @@ test('should allow to count nested objects properties', () => {
             b: true,
             c: {
                 d: 'value1',
-                e: 'value2'
-            }
+                e: 'value2',
+            },
         })
     ).toBe(4)
 })
@@ -53,7 +53,7 @@ test('should allow to count object properties with null, undefined properties ',
         countNestedProperties({
             a: null,
             b: undefined,
-            c: 'value3'
+            c: 'value3',
         })
     ).toBe(3)
 })
@@ -63,7 +63,7 @@ test('should allow to count object with properties array property', () => {
         countNestedProperties({
             a: [1, 2],
             b: true,
-            c: true
+            c: true,
         })
     ).toBe(4)
 })
@@ -75,8 +75,8 @@ test('should allow to count object properties with empty array property', () => 
             b: true,
             c: {
                 d: '',
-                e: []
-            }
+                e: [],
+            },
         })
     ).toBe(4)
 })
@@ -85,12 +85,12 @@ test('object property is defined', () => {
     const spec = [
         {
             field: 'name',
-            matcher: 'defined'
+            matcher: 'defined',
         },
         {
             field: 'gender',
-            matcher: 'present'
-        }
+            matcher: 'present',
+        },
     ]
 
     expect(() => assertObjectMatchSpec({ name: 'john', gender: 'male' }, spec)).not.toThrow()
@@ -109,20 +109,20 @@ test('object property is not defined', () => {
     const spec = [
         {
             field: 'name',
-            matcher: 'not defined'
+            matcher: 'not defined',
         },
         {
             field: 'gender',
-            matcher: 'not present'
+            matcher: 'not present',
         },
         {
             field: 'city',
-            matcher: 'is not defined'
+            matcher: 'is not defined',
         },
         {
             field: 'street',
-            matcher: `isn't defined`
-        }
+            matcher: `isn't defined`,
+        },
     ]
 
     expect(() => assertObjectMatchSpec({}, spec)).not.toThrow()
@@ -151,8 +151,8 @@ test('check object property equals expected value', () => {
         {
             field: 'name',
             matcher: 'equals',
-            value: 'john'
-        }
+            value: 'john',
+        },
     ]
 
     expect(() => assertObjectMatchSpec({ name: 'john' }, spec)).not.toThrow()
@@ -166,8 +166,8 @@ test('check object property does not equal expected value', () => {
         {
             field: 'name',
             matcher: 'does not equal',
-            value: 'john'
-        }
+            value: 'john',
+        },
     ]
 
     expect(() => assertObjectMatchSpec({ name: 'plouc' }, spec)).not.toThrow()
@@ -181,13 +181,13 @@ test('check object property contains value', () => {
         {
             field: 'first_name',
             matcher: 'contain',
-            value: 'john'
+            value: 'john',
         },
         {
             field: 'last_name',
             matcher: 'contains',
-            value: 'doe'
-        }
+            value: 'doe',
+        },
     ]
 
     expect(() =>
@@ -206,23 +206,23 @@ test('check object property does not contain value', () => {
         {
             field: 'first_name',
             matcher: `doesn't contain`,
-            value: 'john'
+            value: 'john',
         },
         {
             field: 'last_name',
             matcher: 'does not contain',
-            value: 'doe'
+            value: 'doe',
         },
         {
             field: 'city',
             matcher: `doesn't contains`,
-            value: 'york'
+            value: 'york',
         },
         {
             field: 'street',
             matcher: 'does not contains',
-            value: 'avenue'
-        }
+            value: 'avenue',
+        },
     ]
 
     expect(() =>
@@ -268,13 +268,13 @@ test('check object property matches regexp', () => {
         {
             field: 'first_name',
             matcher: 'matches',
-            value: '^john'
+            value: '^john',
         },
         {
             field: 'last_name',
             matcher: 'match',
-            value: '^doe'
-        }
+            value: '^doe',
+        },
     ]
 
     expect(() =>
@@ -293,8 +293,8 @@ test('check object property does not match regexp', () => {
         {
             field: 'first_name',
             matcher: `doesn't match`,
-            value: '^john'
-        }
+            value: '^john',
+        },
     ]
 
     expect(() => assertObjectMatchSpec({ first_name: 'bob' }, spec)).not.toThrow()
@@ -308,13 +308,13 @@ test('check object fully matches spec', () => {
         {
             field: 'first_name',
             matcher: 'equal',
-            value: 'john'
+            value: 'john',
         },
         {
             field: 'last_name',
             matcher: 'match',
-            value: '^doe'
-        }
+            value: '^doe',
+        },
     ]
 
     expect(() =>
@@ -338,18 +338,18 @@ test('check object property type', () => {
         {
             field: 'first_name',
             matcher: 'type',
-            value: 'string'
+            value: 'string',
         },
         {
             field: 'last_name',
             matcher: 'type',
-            value: 'string'
+            value: 'string',
         },
         {
             field: 'age',
             matcher: 'type',
-            value: 'number'
-        }
+            value: 'number',
+        },
     ]
 
     expect(() =>
@@ -371,8 +371,8 @@ test('check object property type does not match', () => {
         {
             field: 'first_name',
             matcher: 'not type',
-            value: 'string'
-        }
+            value: 'string',
+        },
     ]
 
     expect(() => assertObjectMatchSpec({ first_name: true }, spec)).not.toThrow()
@@ -383,15 +383,15 @@ test('check object property type does not match', () => {
 
 test("check object property equals 'equalRelativeDate' and format", () => {
     const object = {
-        beginDate: '2018-04-30'
+        beginDate: '2018-04-30',
     }
     expect(() => {
         assertObjectMatchSpec(object, [
             {
                 field: 'beginDate',
                 matcher: 'equalRelativeDate',
-                value: '-1,days,fr,YYYY-MM-DD'
-            }
+                value: '-1,days,fr,YYYY-MM-DD',
+            },
         ])
     }).not.toThrow()
 
@@ -400,8 +400,8 @@ test("check object property equals 'equalRelativeDate' and format", () => {
             {
                 field: 'beginDate',
                 matcher: 'equalRelativeDate',
-                value: '+2,days,fr,YYYY-MM-DD'
-            }
+                value: '+2,days,fr,YYYY-MM-DD',
+            },
         ])
     }).toThrow(
         `Expected property 'beginDate' to equal '2018-05-03', but found '2018-04-30': expected '2018-04-30' to deeply equal '2018-05-03'`
@@ -412,8 +412,8 @@ test("check object property equals 'equalRelativeDate' and format", () => {
             {
                 field: 'beginDate',
                 matcher: 'equalRelativeDate',
-                value: '-2,days,fr,YYYY-MM-DD'
-            }
+                value: '-2,days,fr,YYYY-MM-DD',
+            },
         ])
     }).toThrow(
         `Expected property 'beginDate' to equal '2018-04-29', but found '2018-04-30': expected '2018-04-30' to deeply equal '2018-04-29'`
@@ -424,8 +424,8 @@ test("check object property equals 'equalRelativeDate' and format", () => {
             {
                 field: 'beginDate',
                 matcher: 'equalRelativeDate',
-                value: "-2,days,fr,[Aujourd'hui] YYYY-MM-DD hh[h]mm"
-            }
+                value: "-2,days,fr,[Aujourd'hui] YYYY-MM-DD hh[h]mm",
+            },
         ])
     }).toThrow(
         `Expected property 'beginDate' to equal 'Aujourd'hui 2018-04-29 12h00', but found '2018-04-30': expected '2018-04-30' to deeply equal 'Aujourd\\'hui 2018-04-29 12h00'`
@@ -436,8 +436,8 @@ test("check object property equals 'equalRelativeDate' and format", () => {
             {
                 field: 'beginDate',
                 matcher: 'equalRelativeDate',
-                value: '-2,days,EN-ZS,YYYY-MM-DD'
-            }
+                value: '-2,days,EN-ZS,YYYY-MM-DD',
+            },
         ])
     }).toThrow(
         `Expected property 'beginDate' to equal '2018-04-29', but found '2018-04-30': expected '2018-04-30' to deeply equal '2018-04-29'`
@@ -446,15 +446,15 @@ test("check object property equals 'equalRelativeDate' and format", () => {
 
 test("check object property equals does not 'equalRelativeDate' and format", () => {
     const object = {
-        beginDate: '2018-04-30'
+        beginDate: '2018-04-30',
     }
     expect(() => {
         assertObjectMatchSpec(object, [
             {
                 field: 'beginDate',
                 matcher: 'not equalRelativeDate',
-                value: '-1,days,fr,YYYY-MM-DD'
-            }
+                value: '-1,days,fr,YYYY-MM-DD',
+            },
         ])
     }).toThrow(
         `Expected property 'beginDate' to not equal '2018-04-30', but found '2018-04-30': expected '2018-04-30' to not deeply equal '2018-04-30'`
@@ -465,8 +465,8 @@ test("check object property equals does not 'equalRelativeDate' and format", () 
             {
                 field: 'beginDate',
                 matcher: 'does not equalRelativeDate',
-                value: '+2,days,fr,YYYY-MM-DD'
-            }
+                value: '+2,days,fr,YYYY-MM-DD',
+            },
         ])
     }).not.toThrow()
 
@@ -475,8 +475,8 @@ test("check object property equals does not 'equalRelativeDate' and format", () 
             {
                 field: 'beginDate',
                 matcher: '!equalRelativeDate',
-                value: '-2,days,fr,YYYY-MM-DD'
-            }
+                value: '-2,days,fr,YYYY-MM-DD',
+            },
         ])
     }).not.toThrow()
 
@@ -485,8 +485,8 @@ test("check object property equals does not 'equalRelativeDate' and format", () 
             {
                 field: 'beginDate',
                 matcher: `doesn't equalRelativeDate`,
-                value: "-2,days,fr,[Aujourd'hui] YYYY-MM-DD hh[h]mm"
-            }
+                value: "-2,days,fr,[Aujourd'hui] YYYY-MM-DD hh[h]mm",
+            },
         ])
     }).not.toThrow()
 
@@ -495,22 +495,22 @@ test("check object property equals does not 'equalRelativeDate' and format", () 
             {
                 field: 'beginDate',
                 matcher: 'not equalRelativeDate',
-                value: '-2,days,EN-ZS,YYYY-MM-DD'
-            }
+                value: '-2,days,EN-ZS,YYYY-MM-DD',
+            },
         ])
     }).not.toThrow()
 })
 
 test('check dateOffset throw Exception given invalid locale set', () => {
     const object = {
-        beginDate: '2018-05-04'
+        beginDate: '2018-05-04',
     }
     const spec = [
         {
             field: 'beginDate',
             matcher: 'equalRelativeDate',
-            value: '1,days,EN_US,YYYY-MM-DD'
-        }
+            value: '1,days,EN_US,YYYY-MM-DD',
+        },
     ]
 
     expect(() => assertObjectMatchSpec(object, spec)).toThrowError(
@@ -523,8 +523,8 @@ test('check unsupported matcher should fail', () => {
         {
             field: 'name',
             matcher: 'unknown',
-            value: 'john'
-        }
+            value: 'john',
+        },
     ]
 
     expect(() => assertObjectMatchSpec({ name: 'john' }, spec)).toThrow(

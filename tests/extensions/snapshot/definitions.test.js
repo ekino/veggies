@@ -23,9 +23,9 @@ test('response match snapshot', () => {
         httpApiClient: {
             getResponse: jest.fn(() => {
                 return { body: content }
-            })
+            }),
         },
-        snapshot: { expectToMatch: jest.fn() }
+        snapshot: { expectToMatch: jest.fn() },
     }
 
     def.exec(mock, {})
@@ -41,21 +41,21 @@ test('json response match snapshot', () => {
     const content = { key1: 'value1', key2: 'value2', key3: 3 }
 
     const mock = {
-        state: { populate: v => v },
+        state: { populate: (v) => v },
         httpApiClient: {
             getResponse: jest.fn(() => {
                 return { body: content }
-            })
+            }),
         },
-        snapshot: { expectToMatchJson: jest.fn() }
+        snapshot: { expectToMatchJson: jest.fn() },
     }
 
     const spec = [
         {
             field: 'key1',
             matcher: 'equals',
-            value: 'value1'
-        }
+            value: 'value1',
+        },
     ]
 
     def.exec(mock, { hashes: () => spec })
@@ -72,7 +72,7 @@ test('stdout/stderr match snapshot', () => {
 
     const mock = {
         cli: { getOutput: jest.fn(() => content) },
-        snapshot: { expectToMatch: jest.fn() }
+        snapshot: { expectToMatch: jest.fn() },
     }
 
     def.exec(mock, {})
@@ -89,17 +89,17 @@ test('stdout/stderr with json output match snapshot', () => {
     const content_as_string = JSON.stringify(content)
 
     const mock = {
-        state: { populate: v => v },
+        state: { populate: (v) => v },
         cli: { getOutput: jest.fn(() => content_as_string) },
-        snapshot: { expectToMatchJson: jest.fn() }
+        snapshot: { expectToMatchJson: jest.fn() },
     }
 
     const spec = [
         {
             field: 'key1',
             matcher: 'equals',
-            value: 'value1'
-        }
+            value: 'value1',
+        },
     ]
 
     def.exec(mock, 'stdout', { hashes: () => spec })
@@ -117,7 +117,7 @@ test('file match snapshot', () => {
     const mock = {
         cli: { getCwd: jest.fn(() => '') },
         fileSystem: { getFileContent: jest.fn(() => Promise.resolve(content)) },
-        snapshot: { expectToMatch: jest.fn() }
+        snapshot: { expectToMatch: jest.fn() },
     }
 
     return def.exec(mock, {}).then(() => {
@@ -135,18 +135,18 @@ test('json file match snapshot', () => {
     const content_as_string = JSON.stringify(content)
 
     const mock = {
-        state: { populate: v => v },
+        state: { populate: (v) => v },
         cli: { getCwd: jest.fn(() => '') },
         fileSystem: { getFileContent: jest.fn(() => Promise.resolve(content_as_string)) },
-        snapshot: { expectToMatchJson: jest.fn() }
+        snapshot: { expectToMatchJson: jest.fn() },
     }
 
     const spec = [
         {
             field: 'key1',
             matcher: 'equals',
-            value: 'value1'
-        }
+            value: 'value1',
+        },
     ]
 
     return def.exec(mock, {}, { hashes: () => spec }).then(() => {

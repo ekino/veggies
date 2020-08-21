@@ -18,7 +18,7 @@ exports._snapshots = {}
  * @param {string} file - File path
  * @param {string} snapshotName - Snapshot name
  */
-exports.referenceSnapshot = function(file, snapshotName) {
+exports.referenceSnapshot = function (file, snapshotName) {
     exports._snapshots[file] = exports._snapshots[file] || []
     exports._snapshots[file].push(snapshotName)
 }
@@ -27,7 +27,7 @@ exports.referenceSnapshot = function(file, snapshotName) {
  * Clean snapshots names and files
  * Used after tests to clear entries
  */
-exports.resetReferences = function() {
+exports.resetReferences = function () {
     exports._snapshots = {}
 }
 
@@ -36,7 +36,7 @@ exports.resetReferences = function() {
  * If a snapshot file is empty, it's deleted
  * Only files that have been referenced will be cleaned
  */
-exports.cleanSnapshots = function() {
+exports.cleanSnapshots = function () {
     _.forOwn(exports._snapshots, (snapshotNames, file) => {
         if (_.isEmpty(snapshotNames)) {
             fileSystem.remove(file)

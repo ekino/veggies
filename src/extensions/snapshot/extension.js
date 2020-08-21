@@ -110,7 +110,7 @@ class Snapshot {
  * Create a new isolated Snapshot module
  * @return {Snapshot}
  */
-module.exports = function(...args) {
+module.exports = function (...args) {
     return new Snapshot(...args)
 }
 

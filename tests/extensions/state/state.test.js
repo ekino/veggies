@@ -28,17 +28,29 @@ test('should returned complete object populated with the state data', () => {
         field1: '{{key1}}',
         object2: {
             field1: '1((number))',
-            field2: '{{key2}}((number))'
-        }
+            field2: '{{key2}}((number))',
+        },
     }
 
     const expectedObject = {
         field1: 'value1',
         object2: {
             field1: '1((number))',
-            field2: '2((number))'
-        }
+            field2: '2((number))',
+        },
     }
 
     expect(state.populateObject(object)).toEqual(expectedObject)
+})
+
+test('should dump value all data from state', () => {
+    state.clear()
+    state.set('key1', '1')
+    expect(state.dump()).toStrictEqual({ key1: '1' })
+})
+
+test('should get value from state', () => {
+    state.clear()
+    state.set('key1', '1')
+    expect(state.get('key1')).toBe('1')
 })

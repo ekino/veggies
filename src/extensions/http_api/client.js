@@ -226,7 +226,7 @@ class HttpApiClient {
                 qs: this.query || {},
                 headers: this.headers,
                 jar: this.cookieJar,
-                followRedirect: this.followRedirect
+                followRedirect: this.followRedirect,
             }
 
             const fullUri = `${baseUrl}${path}`
@@ -251,7 +251,7 @@ class HttpApiClient {
             }
 
             if (this.cookieJar !== null) {
-                this.cookies.forEach(cookie => {
+                this.cookies.forEach((cookie) => {
                     if (_.isPlainObject(cookie)) {
                         this.cookieJar.setCookie(new Cookie(cookie), fullUri)
                     } else if (_.isString(cookie)) {
@@ -270,7 +270,7 @@ class HttpApiClient {
 
                 if (this.cookieJar !== null) {
                     this.responseCookies = {}
-                    this.cookieJar.getCookies(fullUri).forEach(cookie => {
+                    this.cookieJar.getCookies(fullUri).forEach((cookie) => {
                         this.responseCookies[cookie.key] = cookie
                     })
                 }
@@ -285,7 +285,7 @@ class HttpApiClient {
  * Create a new isolated http api client
  * @return {HttpApiClient}
  */
-module.exports = function(...args) {
+module.exports = function (...args) {
     return new HttpApiClient(...args)
 }
 

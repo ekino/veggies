@@ -134,15 +134,9 @@ test('check if stdout or stderr is empty', () => {
 
     const getOutput = sinon.stub()
     getOutput.withArgs('stdout').returns('not empty stdout')
-    getOutput
-        .withArgs('stdout')
-        .onSecondCall()
-        .returns('')
+    getOutput.withArgs('stdout').onSecondCall().returns('')
     getOutput.withArgs('stderr').returns('not empty stderr')
-    getOutput
-        .withArgs('stderr')
-        .onSecondCall()
-        .returns('')
+    getOutput.withArgs('stderr').onSecondCall().returns('')
 
     const cliMock = { cli: { getOutput: getOutput } }
 
@@ -171,15 +165,9 @@ test('check if stdout or stderr contains something', () => {
 
     const getOutput = sinon.stub()
     getOutput.withArgs('stdout').returns('nothing on stdout')
-    getOutput
-        .withArgs('stdout')
-        .onSecondCall()
-        .returns('something on stdout')
+    getOutput.withArgs('stdout').onSecondCall().returns('something on stdout')
     getOutput.withArgs('stderr').returns('nothing on stderr')
-    getOutput
-        .withArgs('stderr')
-        .onSecondCall()
-        .returns('something on stderr')
+    getOutput.withArgs('stderr').onSecondCall().returns('something on stderr')
     const cliMock = { cli: { getOutput: getOutput } }
 
     expect(() => {
@@ -207,15 +195,9 @@ test('check if stdout or stderr does not contain something', () => {
 
     const getOutput = sinon.stub()
     getOutput.withArgs('stdout').returns('something on stdout')
-    getOutput
-        .withArgs('stdout')
-        .onSecondCall()
-        .returns('nothing on stdout')
+    getOutput.withArgs('stdout').onSecondCall().returns('nothing on stdout')
     getOutput.withArgs('stderr').returns('something on stderr')
-    getOutput
-        .withArgs('stderr')
-        .onSecondCall()
-        .returns('nothing on stderr')
+    getOutput.withArgs('stderr').onSecondCall().returns('nothing on stderr')
     const cliMock = { cli: { getOutput: getOutput } }
 
     expect(() => {
@@ -243,15 +225,9 @@ test('check if stdout or stderr matches a regular expression', () => {
 
     const getOutput = sinon.stub()
     getOutput.withArgs('stdout').returns('nothing on stdout')
-    getOutput
-        .withArgs('stdout')
-        .onSecondCall()
-        .returns('something on stdout')
+    getOutput.withArgs('stdout').onSecondCall().returns('something on stdout')
     getOutput.withArgs('stderr').returns('nothing on stderr')
-    getOutput
-        .withArgs('stderr')
-        .onSecondCall()
-        .returns('something on stderr')
+    getOutput.withArgs('stderr').onSecondCall().returns('something on stderr')
     const cliMock = { cli: { getOutput: getOutput } }
 
     expect(() => {
@@ -279,15 +255,9 @@ test('check if stdout or stderr does not match a regular expression', () => {
 
     const getOutput = sinon.stub()
     getOutput.withArgs('stdout').returns('something on stdout')
-    getOutput
-        .withArgs('stdout')
-        .onSecondCall()
-        .returns('nothing on stdout')
+    getOutput.withArgs('stdout').onSecondCall().returns('nothing on stdout')
     getOutput.withArgs('stderr').returns('something on stderr')
-    getOutput
-        .withArgs('stderr')
-        .onSecondCall()
-        .returns('nothing on stderr')
+    getOutput.withArgs('stderr').onSecondCall().returns('nothing on stderr')
     const cliMock = { cli: { getOutput: getOutput } }
 
     expect(() => {
