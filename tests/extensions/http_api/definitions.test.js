@@ -72,6 +72,36 @@ test('set a single request header', () => {
     expect(clientMock.httpApiClient.setHeader).toHaveBeenCalledWith('Accept', 'test')
 })
 
+test('set a single request header with a dash', () => {
+    const context = helper.getContext() // Extension context
+
+    const def = context.getDefinitionByMatcher('request header to')
+    def.shouldMatch('I set X-Custom request header to test', ['X-Custom', 'test'])
+    def.shouldMatch('set X-Custom request header to test', ['X-Custom', 'test'])
+
+    const clientMock = {
+        httpApiClient: { setHeader: jest.fn() },
+        state: { populate: (v) => v },
+    }
+    def.exec(clientMock, 'X-Custom', 'test')
+    expect(clientMock.httpApiClient.setHeader).toHaveBeenCalledWith('X-Custom', 'test')
+})
+
+test('set a single request header with an underscore', () => {
+    const context = helper.getContext() // Extension context
+
+    const def = context.getDefinitionByMatcher('request header to')
+    def.shouldMatch('I set X_Custom request header to test', ['X_Custom', 'test'])
+    def.shouldMatch('set X_Custom request header to test', ['X_Custom', 'test'])
+
+    const clientMock = {
+        httpApiClient: { setHeader: jest.fn() },
+        state: { populate: (v) => v },
+    }
+    def.exec(clientMock, 'X_Custom', 'test')
+    expect(clientMock.httpApiClient.setHeader).toHaveBeenCalledWith('X_Custom', 'test')
+})
+
 test('clear request headers', () => {
     const context = helper.getContext() // Extension context
 

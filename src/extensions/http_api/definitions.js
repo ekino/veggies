@@ -58,7 +58,7 @@ exports.install = ({ baseUrl = '' } = {}) => {
     /**
      * Setting a single http header
      */
-    Given(/^(?:I )?set ([a-zA-Z0-9-]+) request header to (.+)$/, function (key, value) {
+    Given(/^(?:I )?set ([a-zA-Z0-9-_]+) request header to (.+)$/, function (key, value) {
         this.httpApiClient.setHeader(key, Cast.value(this.state.populate(value)))
     })
 
