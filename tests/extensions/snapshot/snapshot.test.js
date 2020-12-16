@@ -3,7 +3,9 @@
 const snapshot = require('../../../src/extensions/snapshot/snapshot')
 const fileSystem = require('../../../src/extensions/snapshot/fs')
 const dedent = require('../../../src/extensions/snapshot/dedent')
-var fs = require('fs')
+
+const diff = require('jest-diff')
+const diffConstants = require('jest-diff/build/constants')
 
 test('parseSnapshotFile should parse snapshot file content', () => {
     const content = dedent`
@@ -85,47 +87,121 @@ test('formatSnapshotFile should normalize new lines', () => {
     expect(snapshot.formatSnapshotFile(content)).toEqual(expected)
 })
 
-test('diff should show multiples diff', () => {
-    const snapshotContent = `
-        Object {
-            "key1": "value1",
-            "key2": "value2",
-            "key3": "value3",
-            "key4": "value4",
-            "key5": "value5",
-        }
-    `
+describe('diff', () => {
+    const diffDefaultSpy = jest.spyOn(diff, 'default')
 
-    const expectedContent = `
-        Object {
-            "key1": "value1",
-            "key2": "value6",
-            "key3": "value3",
-            "key4": "value7",
-            "key5": "value5",
-        }
-    `
+    afterEach(() => {
+        diffDefaultSpy.mockReset()
+    })
 
-    const expectedDiff = dedent`
-        """
-        
-        \u001b[32m- Snapshot\u001b[39m
-        \u001b[31m+ Received\u001b[39m
-        
-        
-        \u001b[2m          Object {\u001b[22m
-        \u001b[2m              "key1": "value1",\u001b[22m
-        \u001b[32m-             "key2": "value2",\u001b[39m
-        \u001b[31m+             "key2": "value6",\u001b[39m
-        \u001b[2m              "key3": "value3",\u001b[22m
-        \u001b[32m-             "key4": "value4",\u001b[39m
-        \u001b[31m+             "key4": "value7",\u001b[39m
-        \u001b[2m              "key5": "value5",\u001b[22m
-        \u001b[2m          }\u001b[22m
-        \u001b[2m      \u001b[22m
-        """
-    `
-    expect(snapshot.diff(snapshotContent, expectedContent)).toEqual(expectedDiff)
+    afterAll(() => {
+        diffDefaultSpy.mockRestore()
+    })
+
+    const diffOptions = {
+        expand: false,
+        colors: true,
+        aAnnotation: 'Snapshot',
+        bAnnotation: 'Received',
+    }
+
+    test('return null when the diff message contains the NO_DIFF_MESSAGE value', () => {
+        const expectedContent = `
+            Object {
+                "key1": "value1",
+            }
+        `
+
+        const snapshotContent = `
+            Object {
+                "key1": "value1",
+            }
+        `
+
+        const diffResult = `This         
+             has
+             nothing to do with the 
+             result!
+             -> ${diffConstants.NO_DIFF_MESSAGE} ¯\\_(ツ)_/¯
+         `
+
+        diffDefaultSpy.mockReturnValue(diffResult)
+
+        const diffMessage = snapshot.diff(snapshotContent, expectedContent)
+
+        expect(diffMessage).toBeNull()
+
+        expect(diffDefaultSpy).toHaveBeenNthCalledWith(
+            1,
+            snapshotContent,
+            expectedContent,
+            diffOptions
+        )
+    })
+
+    test('return a custom diff message when the diff message is not defined', () => {
+        const expectedContent = 'a'
+
+        const snapshotContent = 'b'
+
+        diffDefaultSpy.mockReturnValue(undefined)
+
+        const diffMessage = snapshot.diff(snapshotContent, expectedContent)
+
+        const expectedDiffMessage = '\n\u001b[32m- a\u001b[39m \n \u001b[31m+ b\u001b[39m'
+
+        expect(diffMessage).toEqual(expectedDiffMessage)
+    })
+
+    test('return the diff message', () => {
+        const snapshotContent = `
+            Object {
+                "key1": "value1",
+                "key2": "value2",
+                "key3": "value3",
+                "key4": "value4",
+                "key5": "value5",
+            }
+        `
+
+        const expectedContent = `
+            Object {
+                "key1": "value1",
+                "key2": "value6",
+                "key3": "value3",
+                "key4": "value7",
+                "key5": "value5",
+            }
+        `
+
+        const diffResult = `
+            """
+
+            \u001b[32m- Snapshot\u001b[39m
+            \u001b[31m+ Received\u001b[39m
+
+
+            \u001b[2m          Object {\u001b[22m
+            \u001b[2m              "key1": "value1",\u001b[22m
+            \u001b[32m-             "key2": "value2",\u001b[39m
+            \u001b[31m+             "key2": "value6",\u001b[39m
+            \u001b[2m              "key3": "value3",\u001b[22m
+            \u001b[32m-             "key4": "value4",\u001b[39m
+            \u001b[31m+             "key4": "value7",\u001b[39m
+            \u001b[2m              "key5": "value5",\u001b[22m
+            \u001b[2m          }\u001b[22m
+            \u001b[2m      \u001b[22m
+            """
+        `
+
+        diffDefaultSpy.mockReturnValue(diffResult)
+
+        const expectedDiffMessage = `\n${diffResult}`
+
+        const diffMessage = snapshot.diff(snapshotContent, expectedContent)
+
+        expect(diffMessage).toEqual(expectedDiffMessage)
+    })
 })
 
 test('snapshotsPath returns snapshot path', () => {
