@@ -148,7 +148,7 @@ exports.diff = (snapshot, expected) => {
     diffMessage =
         diffMessage ||
         `${EXPECTED_COLOR('- ' + (expected || ''))} \n ${RECEIVED_COLOR('+ ' + snapshot)}`
-    if (diffMessage === `\u001b[2m${jestDiffConstants.NO_DIFF_MESSAGE}\u001b[22m`) return null
+    if (diffMessage.indexOf(jestDiffConstants.NO_DIFF_MESSAGE) !== -1) return null
     return `\n${diffMessage}`
 }
 
