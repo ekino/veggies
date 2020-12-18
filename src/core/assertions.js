@@ -28,41 +28,59 @@ const RuleName = Object.freeze({
 })
 
 /**
- * Count object properties including nested objects ones.
- * If a property is an object, its key is ignored.
+ * Acts as `Object.keys()`, but runs recursively,
+ * another difference is that when one of the key refers to
+ * a non-empty object, it's gonna be ignored.
+ *
+ * Keys for nested objects are prefixed with their parent key.
+ *
+ * Also note that this is not fully interoperable with `lodash.get`
+ * for example as keys themselves can contain dots or special characters.
  *
  * @example
- * Assertions.countNestedProperties({
+ * Assertions.objectKeysDeep({
  *     a: true,
  *     b: true,
  *     c: true,
  * })
- * // => 3
- * Assertions.countNestedProperties({
+ * // => ["a", "b", "c"]
+ * Assertions.objectKeysDeep({
  *     a: true,
  *     b: true,
  *     c: {
- *         a: true,
- *         b: true,
+ *         d: true,
+ *         e: {},
+ *         f: {
+ *              g: true
+ *          }
  *     },
  * })
- * // => 4 (c is ignored because it's a nested object)
+ * // =>  ["a", "b", "c.d", "c.e", "c.f.g"] (c and c.f are ignored as non empty nested objects)
  *
  * @param {Object} object
- * @return {number}
+ * @param {Array} [keysAccumulator = []]
+ * @param {string} [parentPath = ""]
+ * @return {Array}
  */
-exports.countNestedProperties = (object) => {
-    let propertiesCount = 0
-    Object.keys(object).forEach((key) => {
-        if (!_.isEmpty(object[key]) && typeof object[key] === 'object') {
-            const count = exports.countNestedProperties(object[key])
-            propertiesCount += count
-        } else {
-            propertiesCount++
-        }
-    })
+exports.objectKeysDeep = (object, keysAccumulator = [], parentPath = '') => {
+    if (_.isPlainObject(object) || Array.isArray(object)) {
+        Object.keys(object).forEach((key) => {
+            if (
+                !_.isEmpty(object[key]) &&
+                (_.isPlainObject(object[key]) || Array.isArray(object[key]))
+            ) {
+                keysAccumulator = exports.objectKeysDeep(
+                    object[key],
+                    keysAccumulator,
+                    `${parentPath}${key}.`
+                )
+            } else {
+                keysAccumulator.push(`${parentPath}${key}`)
+            }
+        })
+    }
 
-    return propertiesCount
+    return keysAccumulator
 }
 
 /**
@@ -106,10 +124,13 @@ exports.countNestedProperties = (object) => {
  * @param {boolean}           [exact=false] - if `true`, specification must match all object's properties
  */
 exports.assertObjectMatchSpec = (object, spec, exact = false) => {
+    expect(_.isPlainObject(object), 'Expected json response to be a valid object, but it is not').to
+        .be.true
+    const specPath = new Set()
     spec.forEach(({ field, matcher, value }) => {
         const currentValue = _.get(object, field)
         const expectedValue = Cast.value(value)
-
+        specPath.add(field)
         const rule = exports.getMatchingRule(matcher)
 
         switch (rule.name) {
@@ -208,11 +229,12 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
 
     // We check we have exactly the same number of properties as expected
     if (exact === true) {
-        const propertiesCount = exports.countNestedProperties(object)
+        const objectKeys = exports.objectKeysDeep(object)
+        const specObjectKeys = Array.from(specPath)
         expect(
-            propertiesCount,
+            objectKeys,
             'Expected json response to fully match spec, but it does not'
-        ).to.be.equal(spec.length)
+        ).to.be.deep.equal(specObjectKeys)
     }
 }
 
@@ -261,7 +283,10 @@ exports.getMatchingRule = (matcher) => {
 
     const relativeDateGroups = relativeDateRegex.exec(matcher)
     if (relativeDateGroups) {
-        return { name: RuleName.RelativeDate, isNegated: !!relativeDateGroups[1] }
+        return {
+            name: RuleName.RelativeDate,
+            isNegated: !!relativeDateGroups[1],
+        }
     }
 
     expect.fail(`Matcher "${matcher}" did not match any supported assertions`)

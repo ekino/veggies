@@ -744,7 +744,7 @@ test('check json response fully matches spec', () => {
 
     expect(() => def.exec(clientMock, 'fully ', { hashes: () => spec })).not.toThrow()
     expect(() => def.exec(clientMock, 'fully ', { hashes: () => spec })).toThrow(
-        `Expected json response to fully match spec, but it does not: expected 3 to equal 2`
+        `Expected json response to fully match spec, but it does not: expected [ 'first_name', 'last_name', 'gender' ] to deeply equal [ 'first_name', 'last_name' ]`
     )
     expect(() => def.exec(clientMock, 'fully ', { hashes: () => spec })).toThrow(
         `Property 'last_name' (be) does not match 'ben': expected 'be' to match /ben/`
