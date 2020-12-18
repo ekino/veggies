@@ -41,10 +41,10 @@
     "tough-cookie": "4.0"
   },
   "devDependencies": {
-    "@commitlint/config-conventional": "9.x",
+    "@commitlint/config-conventional": "11.x",
     "babylon": "6.x",
     "chalk": "4.x",
-    "commitlint": "9.x",
+    "commitlint": "11.x",
     "conventional-changelog-cli": "2.x",
     "coveralls": "3.x",
     "cucumber": "6.x",
@@ -69,7 +69,6 @@
     "coverage": "cat ./coverage/lcov.info | coveralls",
     "fmt": "prettier --print-width 100 --tab-width=4 --single-quote --bracket-spacing --no-semi --color --write \"{src,tests,scripts}/**/*.js\"",
     "check-fmt": "prettier --print-width 100 --tab-width=4 --single-quote --bracket-spacing --no-semi --list-different \"{src,tests,scripts}/**/*.js\"",
-    "version": "echo ${npm_package_version}",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "readme": "node scripts/generate_readme",
