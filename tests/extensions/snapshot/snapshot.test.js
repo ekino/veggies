@@ -4,8 +4,10 @@ const snapshot = require('../../../src/extensions/snapshot/snapshot')
 const fileSystem = require('../../../src/extensions/snapshot/fs')
 const dedent = require('../../../src/extensions/snapshot/dedent')
 
-const diff = require('jest-diff')
+const { diff } = require('jest-diff')
 const diffConstants = require('jest-diff/build/constants')
+
+jest.mock('jest-diff', () => ({ diff: jest.fn() }))
 
 test('parseSnapshotFile should parse snapshot file content', () => {
     const content = dedent`
@@ -88,14 +90,12 @@ test('formatSnapshotFile should normalize new lines', () => {
 })
 
 describe('diff', () => {
-    const diffDefaultSpy = jest.spyOn(diff, 'default')
-
     afterEach(() => {
-        diffDefaultSpy.mockReset()
+        diff.mockReset()
     })
 
     afterAll(() => {
-        diffDefaultSpy.mockRestore()
+        diff.mockRestore()
     })
 
     const diffOptions = {
@@ -125,18 +125,13 @@ describe('diff', () => {
              -> ${diffConstants.NO_DIFF_MESSAGE} ¯\\_(ツ)_/¯
          `
 
-        diffDefaultSpy.mockReturnValue(diffResult)
+        diff.mockReturnValue(diffResult)
 
         const diffMessage = snapshot.diff(snapshotContent, expectedContent)
 
         expect(diffMessage).toBeNull()
 
-        expect(diffDefaultSpy).toHaveBeenNthCalledWith(
-            1,
-            snapshotContent,
-            expectedContent,
-            diffOptions
-        )
+        expect(diff).toHaveBeenNthCalledWith(1, snapshotContent, expectedContent, diffOptions)
     })
 
     test('return a custom diff message when the diff message is not defined', () => {
@@ -144,7 +139,7 @@ describe('diff', () => {
 
         const snapshotContent = 'b'
 
-        diffDefaultSpy.mockReturnValue(undefined)
+        diff.mockReturnValue(undefined)
 
         const diffMessage = snapshot.diff(snapshotContent, expectedContent)
 
@@ -194,7 +189,7 @@ describe('diff', () => {
             """
         `
 
-        diffDefaultSpy.mockReturnValue(diffResult)
+        diff.mockReturnValue(diffResult)
 
         const expectedDiffMessage = `\n${diffResult}`
 

@@ -6,7 +6,7 @@
 
 const _ = require('lodash')
 const path = require('path')
-const diff = require('jest-diff')
+const { diff } = require('jest-diff')
 const jestDiffConstants = require('jest-diff/build/constants')
 const naturalCompare = require('natural-compare')
 const chalk = require('chalk')
@@ -137,7 +137,7 @@ exports.snapshotsPath = (featureFile, opts) => {
  * @returns {string} Diff message
  */
 exports.diff = (snapshot, expected) => {
-    let diffMessage = diff.default(snapshot, expected, {
+    let diffMessage = diff(snapshot, expected, {
         expand: false,
         colors: true,
         //contextLines: -1, // Forces to use default from Jest
