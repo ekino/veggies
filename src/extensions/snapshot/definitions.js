@@ -1,6 +1,6 @@
 'use strict'
 
-const { Then } = require('cucumber')
+const { Then } = require('@cucumber/cucumber')
 const _ = require('lodash')
 
 exports.install = () => {

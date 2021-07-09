@@ -16,7 +16,7 @@ jobs:
         strategy:
             matrix:
                 node-version: [10.x, 12.x, 14.x]
-                cucumber-version: [4.x, 5.x, 6.x]
+                cucumber-version: [7.x]
 
         steps:
             - uses: actions/checkout@v2
@@ -24,7 +24,7 @@ jobs:
               uses: actions/setup-node@v1
               with:
                   node-version: ${{ matrix.node-version }}
-            - run: yarn add -P cucumber@${{ matrix.cucumber-version }}
+            - run: yarn add -P @cucumber/cucumber@${{ matrix.cucumber-version }}
             - run: yarn run lint
             - run: yarn run check-fmt
             - run: yarn run test-cover

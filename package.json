@@ -42,12 +42,12 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "11.x",
+    "@cucumber/cucumber": "7.x",
     "babylon": "6.x",
     "chalk": "4.x",
     "commitlint": "11.x",
     "conventional-changelog-cli": "2.x",
     "coveralls": "3.x",
-    "cucumber": "6.x",
     "eslint": "7.x",
     "gh-pages": "3.x",
     "husky": "4.x",
@@ -61,7 +61,7 @@
     "sinon": "9.x"
   },
   "peerDependencies": {
-    "cucumber": ">=4.0.0 <7.0.0"
+    "@cucumber/cucumber": ">=7.0.0"
   },
   "scripts": {
     "test": "jest --verbose --colors tests",

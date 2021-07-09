@@ -1,11 +1,19 @@
 'use strict'
 
-const { Before, BeforeAll, AfterAll } = require('cucumber')
+const { Before, BeforeAll, AfterAll } = require('@cucumber/cucumber')
 const _ = require('lodash')
 
 const clean = require('./clean')
 const cmdOptions = require('./cmdOptions')
 const statistics = require('./statistics')
+
+function getCurrentScenarioLineNumber({ gherkinDocument, pickle }) {
+    const currentScenarioId = pickle.astNodeIds[0]
+    const { scenario } = gherkinDocument.feature.children.find(
+        ({ scenario: { id } }) => id === currentScenarioId
+    )
+    return scenario.location.line
+}
 
 /**
  * Registers hooks for the fixtures extension.
@@ -15,8 +23,8 @@ const statistics = require('./statistics')
 
 exports.install = () => {
     Before(function (scenarioInfos) {
-        const file = scenarioInfos.sourceLocation.uri
-        const line = scenarioInfos.sourceLocation.line
+        const file = scenarioInfos.gherkinDocument.uri
+        const line = getCurrentScenarioLineNumber(scenarioInfos)
 
         this.snapshot.featureFile = file
         this.snapshot.scenarioLine = line

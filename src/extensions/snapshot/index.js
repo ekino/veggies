@@ -14,7 +14,7 @@ const hooks = require('./hooks')
  * @example
  * // /support/world.js
  *
- * const { setWorldConstructor } = require('cucumber')
+ * const { setWorldConstructor } = require('@cucumber/cucumber')
  * const { snapshot } = require('@ekino/veggies')
  *
  * setWorldConstructor(function() {
@@ -32,7 +32,7 @@ exports.extendWorld = require('./extend_world')
  * @example
  * // /support/world.js
  *
- * const { setWorldConstructor } = require('cucumber')
+ * const { setWorldConstructor } = require('@cucumber/cucumber')
  * const { snapshot } = require('@ekino/veggies')
  *
  * setWorldConstructor(function() {

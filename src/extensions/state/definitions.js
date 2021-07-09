@@ -1,6 +1,6 @@
 'use strict'
 
-const { Given, When } = require('cucumber')
+const { Given, When } = require('@cucumber/cucumber')
 const Cast = require('../../core/cast')
 
 exports.install = () => {

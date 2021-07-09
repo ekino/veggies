@@ -1,9 +1,9 @@
 'use strict'
 
-const { setWorldConstructor } = require('cucumber')
+const { setWorldConstructor } = require('@cucumber/cucumber')
 const { state, fixtures, httpApi, cli, fileSystem, snapshot } = require('../../src')
 
-setWorldConstructor(function() {
+setWorldConstructor(function () {
     state.extendWorld(this)
     fixtures.extendWorld(this)
     httpApi.extendWorld(this)
