@@ -464,6 +464,9 @@ In case you need to remove unused snapshots, you can use the option `--cleanSnap
 :warning: You shouldn't use this option with tags. It may result in used snapshots removed.
 :information_source: Snapshot files related to feature files with no snapshots anymore won't get removed. You need to do it manually.
 
+Sometimes, it could be useful to prevent the creation of snapshots, for instance in a CI environment. To do this,
+you can use the `--preventSnapshotsCreation` flag. An error will be thrown if the snapshot is missing and this option is present. 
+
 #### API Snapshot testing
 
 In order to check an api response against a snapshot, you have the following gherkin expression available:
@@ -720,7 +723,7 @@ Given:
   - /^(?:I )?do not follow redirect$/
   - /^(?:I )?follow redirect$/
   - /^(?:I )?assign request headers$/
-  - /^(?:I )?set ([a-zA-Z0-9-]+) request header to (.+)$/
+  - /^(?:I )?set ([a-zA-Z0-9-_]+) request header to (.+)$/
   - /^(?:I )?clear request headers/
   - /^(?:I )?set request json body$/
   - /^(?:I )?set request json body from (.+)$/
