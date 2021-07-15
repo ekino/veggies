@@ -48,7 +48,7 @@ It's also the perfect companion for testing CLI applications built with commande
     
 ## Requirements
     
-- Node.js `>=8.12.0`
+- Node.js `>=12.0.0`
 - cucumber `>=7.0.0`
     
 ## Installation
@@ -720,7 +720,7 @@ Given:
   - /^(?:I )?do not follow redirect$/
   - /^(?:I )?follow redirect$/
   - /^(?:I )?assign request headers$/
-  - /^(?:I )?set ([a-zA-Z0-9-]+) request header to (.+)$/
+  - /^(?:I )?set ([a-zA-Z0-9-_]+) request header to (.+)$/
   - /^(?:I )?clear request headers/
   - /^(?:I )?set request json body$/
   - /^(?:I )?set request json body from (.+)$/

@@ -48,7 +48,7 @@ It's also the perfect companion for testing CLI applications built with commande
     
 ## Requirements
     
-- Node.js `>=8.12.0`
+- Node.js `>=12.0.0`
 - cucumber `>=7.0.0`
     
 ## Installation
