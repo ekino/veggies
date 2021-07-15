@@ -37,7 +37,7 @@ beforeAll(() => {
         throw new Error(`Unexpected call to readFileSync with file ${file}`)
     })
 
-    fs.writeFileSync.mockImplementation((file) => {})
+    fs.writeFileSync.mockImplementation(() => {})
 
     fs.statSync.mockImplementation((file) => {
         if (file === fixtures.snapshotFile1) return {}
@@ -107,6 +107,17 @@ test("expectToMatch should write a snapshot if it doesn't exists", () => {
         fixtures.snapshotFileContent1And2
     )
     expect(fs.writeFileSync.mock.calls.length).toBe(1)
+})
+
+test('expectToMatch should not write a snapshot and throw a diff error when preventSnapshotsCreation is true', () => {
+    const snapshot = Snapshot({ preventSnapshotsCreation: true })
+    snapshot.featureFile = fixtures.featureFile1
+    snapshot.scenarioLine = 6
+
+    expect(() => snapshot.expectToMatch(fixtures.value2)).toThrow(
+        "The snapshot does not exist and won't be created."
+    )
+    expect(fs.writeFileSync).not.toHaveBeenCalled()
 })
 
 test("expectToMatch should write a snapshot file if it doesn't exists", () => {
@@ -253,7 +264,7 @@ test('expectToMatchJson should throw an error if a property matcher changes', ()
     )
 })
 
-test('expectToMatch should handle multline content correctly', () => {
+test('expectToMatch should handle multiline content correctly', () => {
     const snapshot = Snapshot({ cleanSnapshots: true })
 
     snapshot.featureFile = fixtures.featureFileMultilineString

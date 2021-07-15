@@ -22,11 +22,13 @@ class Snapshot {
      * @param {Object} options - Options
      * @param {boolean} [options.updateSnapshots=false] - Should we update the snapshots
      * @param {boolean} [options.cleanSnapshots=false] - Should we clean the snapshot to remove unused snapshots
+     * @param {boolean} [options.preventSnapshotsCreation=false] - Should we avoid creating missing snapshots
      */
     constructor(options) {
         this.options = options || {}
         this.shouldUpdate = this.options.updateSnapshots
         this.cleanSnapshots = this.options.cleanSnapshots
+        this.preventSnapshotsCreation = this.options.preventSnapshotsCreation
 
         this.featureFile = null
         this.scenarioLine = -1
@@ -88,6 +90,9 @@ class Snapshot {
 
         const snapshotsContents = snapshot.readSnapshotFile(snapshotsFile)
         let snapshotContent = snapshotsContents[snapshotName]
+
+        if (this.preventSnapshotsCreation && !snapshotContent)
+            throw new Error("The snapshot does not exist and won't be created.")
 
         if (!snapshotContent) {
             statistics.created.push({ file: this.featureFile, name: snapshotName })
