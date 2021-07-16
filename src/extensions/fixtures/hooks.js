@@ -1,6 +1,6 @@
 'use strict'
 
-const { Before } = require('cucumber')
+const { Before } = require('@cucumber/cucumber')
 
 /**
  * Registers hooks for the fixtures extension.
@@ -10,6 +10,6 @@ const { Before } = require('cucumber')
 
 exports.install = () => {
     Before(function (scenarioInfos) {
-        this.fixtures.setFeatureUri(scenarioInfos.sourceLocation.uri)
+        this.fixtures.setFeatureUri(scenarioInfos.gherkinDocument.uri)
     })
 }

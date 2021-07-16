@@ -4,7 +4,7 @@
  * @module extensions/snapshot/Snapshot
  */
 
-const prettyFormat = require('pretty-format')
+const { format: prettyFormat } = require('pretty-format')
 const _ = require('lodash')
 
 const snapshot = require('./snapshot')

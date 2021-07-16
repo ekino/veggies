@@ -1,6 +1,6 @@
 'use strict'
 
-const { Given, Then } = require('cucumber')
+const { Given, Then } = require('@cucumber/cucumber')
 const { expect } = require('chai')
 
 exports.install = () => {

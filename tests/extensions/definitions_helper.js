@@ -1,8 +1,8 @@
 'use strict'
 
-jest.mock('cucumber')
+jest.mock('@cucumber/cucumber')
 const _ = require('lodash')
-const cucumber = require('cucumber')
+const cucumber = require('@cucumber/cucumber')
 
 /**
  * Tests a step definition against given string.

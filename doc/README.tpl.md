@@ -32,9 +32,9 @@ It's also the perfect companion for testing CLI applications built with commande
     - [File System testing](#file-system-testing)   
        - [Testing file content](#testing-file-content)
     - [Snapshot testing](#snapshot-testing)   
-       - [API Snapshot testing](api-snapshot-testing)
-       - [CLI Snapshot testing](cli-snapshot-testing)
-       - [File Snapshot testing](file-snapshot-testing)
+       - [API Snapshot testing](#api-snapshot-testing)
+       - [CLI Snapshot testing](#cli-snapshot-testing)
+       - [File Snapshot testing](#file-snapshot-testing)
 - [Extensions](#extensions)
     - [**state**](#state-extension) [install](#state-installation) | [gherkin expressions](#state-gherkin-expressions) | [low level API](#state-low-level-api)
     - [**fixtures**](#fixtures-extension) [install](#fixtures-installation) | [low level API](#fixtures-low-level-api)
@@ -48,8 +48,8 @@ It's also the perfect companion for testing CLI applications built with commande
     
 ## Requirements
     
-- Node.js `>=8.12.0`
-- cucumber `>=4.0.0`
+- Node.js `>=12.0.0`
+- cucumber `>=7.0.0`
     
 ## Installation
 
@@ -70,7 +70,7 @@ Then all you have to do is installing the provided extensions:
 ```javascript
 // /support/world.js
 
-const { setWorldConstructor } = require('cucumber')
+const { setWorldConstructor } = require('@cucumber/cucumber')
 const { state, fixtures, httpApi, cli } = require('@ekino/veggies')
 
 setWorldConstructor(function() {
@@ -605,7 +605,7 @@ To install the extension, you should add the following snippet to your `world` f
 ```javascript
 // /support/world.js
 
-const { setWorldConstructor } = require('cucumber')
+const { setWorldConstructor } = require('@cucumber/cucumber')
 const { state } = require('@ekino/veggies')
 
 setWorldConstructor(function() {
@@ -629,7 +629,7 @@ For available methods on the state, please refer to its own
 [documentation](https://ekino.github.io/veggies/module-extensions_state_State.html).
 
 ```javascript
-const { When } = require('cucumber')
+const { When } = require('@cucumber/cucumber')
     
 When(/^I do something useful$/, function() {
     const stateValue = this.state.get('whatever')
@@ -656,7 +656,7 @@ To install the extension, you should add the following snippet to your `world` f
 ```javascript
 // /support/world.js
 
-const { setWorldConstructor } = require('cucumber')
+const { setWorldConstructor } = require('@cucumber/cucumber')
 const { fixtures } = require('@ekino/veggies')
 
 setWorldConstructor(function() {
@@ -673,14 +673,14 @@ For available methods on the fixtures loader, please refer to its own
 [documentation](https://ekino.github.io/veggies/module-extensions_fixtures_FixturesLoader.html).
 
 ```javascript
-const { When } = require('cucumber')
+const { When } = require('@cucumber/cucumber')
 
 When(/^I do something useful with fixtures$/, function() {
     return this.fixtures.load('whatever')
         .then(fixture => {
             // …
         })
-
+})
 ```
 
 ### http API extension 
@@ -697,7 +697,7 @@ to your `world` file:
 ```javascript
 // /support/world.js
 
-const { setWorldConstructor } = require('cucumber')
+const { setWorldConstructor } = require('@cucumber/cucumber')
 const { state, fixtures, httpApi } = require('@ekino/veggies')
 
 setWorldConstructor(function() {
@@ -726,7 +726,7 @@ For available methods on the client, please refer to its own
 [documentation](https://ekino.github.io/veggies/module-extensions_httpApi_client.html).
 
 ```javascript
-const { When } = require('cucumber')
+const { When } = require('@cucumber/cucumber')
 
 When(/^I do something useful$/, function() {
     return this.httpApiClient.makeRequest(/* … */)
@@ -747,7 +747,7 @@ to your `world` file:
 ```javascript
 // /support/world.js
 
-const { setWorldConstructor } = require('cucumber')
+const { setWorldConstructor } = require('@cucumber/cucumber')
 const { state, fixtures, cli } = require('@ekino/veggies')
 
 setWorldConstructor(function() {
@@ -775,7 +775,7 @@ For available methods on the client, please refer to its own
 [documentation](https://ekino.github.io/veggies/module-extensions_Cli_Cli.html).
 
 ```javascript
-const { When } = require('cucumber')
+const { When } = require('@cucumber/cucumber')
 
 Then(/^I check something from the CLI output$/, function() {
     const out = this.cli.getOutput()
@@ -796,7 +796,7 @@ to your `world` file:
 ```javascript
 // /support/world.js
 
-const { setWorldConstructor } = require('cucumber')
+const { setWorldConstructor } = require('@cucumber/cucumber')
 const { state, fixtures, cli, fileSystem } = require('@ekino/veggies')
 
 setWorldConstructor(function() {
@@ -826,7 +826,7 @@ For available methods on the fileSystem, please refer to its own
 [documentation](https://ekino.github.io/veggies/module-extensions_FileSystem_FileSystem.html).
 
 ```javascript
-const { Then } = require('cucumber')
+const { Then } = require('@cucumber/cucumber')
 
 Then(/^I check something using file system$/, function() {
     return this.fileSystem.getFileContent('whatever')
@@ -849,7 +849,7 @@ to your `world` file:
 ```javascript
 // /support/world.js
 
-const { setWorldConstructor } = require('cucumber')
+const { setWorldConstructor } = require('@cucumber/cucumber')
 const { state, fixtures, cli, fileSystem, snapshot } = require('@ekino/veggies')
 
 setWorldConstructor(function() {
@@ -874,12 +874,12 @@ For available methods on the snapshot, please refer to its own
 [documentation](https://ekino.github.io/veggies/module-extensions_snapshot_Snapshot.html).
 
 ```javascript
-const { Then } = require('cucumber')
+const { Then } = require('@cucumber/cucumber')
 
 Then(/^Some content should match snapshot$/, function() {
     this.snapshot.expectToMatch('whatever')
-
-``
+})
+```
 
 ## Helpers
 
@@ -900,7 +900,7 @@ For example:
 
 ```javascript
 const { cast } = require('@ekino/veggies')
-const { Given, When, Then } = require('cucumber')
+const { Given, When, Then } = require('@cucumber/cucumber')
 
 Then(/^User data should be$/, (step) => {
     const userData = this.userData

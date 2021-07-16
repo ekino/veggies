@@ -70,7 +70,7 @@ class FixturesLoader {
     loadYaml(file) {
         return this.loadText(file).then((content) => {
             try {
-                const data = yaml.safeLoad(content)
+                const data = yaml.load(content)
                 if (data === undefined) {
                     return Promise.reject(
                         new Error(

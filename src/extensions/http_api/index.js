@@ -13,7 +13,7 @@ const definitions = require('./definitions')
  * @example
  * // /support/world.js
  *
- * const { setWorldConstructor } = require('cucumber')
+ * const { setWorldConstructor } = require('@cucumber/cucumber')
  * const { state, httpApi } = require('@ekino/veggies')
  *
  * setWorldConstructor(function() {
@@ -39,7 +39,7 @@ exports.extendWorld = require('./extend_world')
  * @example
  * // /support/world.js
  *
- * const { setWorldConstructor } = require('cucumber')
+ * const { setWorldConstructor } = require('@cucumber/cucumber')
  * const { state, httpApi } = require('@ekino/veggies')
  *
  * setWorldConstructor(function() {

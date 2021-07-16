@@ -1,6 +1,6 @@
 README.tpl.md:
   - yarn readme
-  - git add
+  - git add .
 
 "*.feature":
   - yarn examples --tags @offline
@@ -8,5 +8,5 @@ README.tpl.md:
 "*.js":
   - yarn lint-fix
   - yarn fmt
-  - git add
+  - git add .
   - jest --bail --findRelatedTests

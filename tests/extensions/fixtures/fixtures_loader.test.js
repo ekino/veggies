@@ -142,23 +142,10 @@ test('load valid .js fixture file', () => {
 
 test('load non existing .js fixture file', () => {
     expect.assertions(1)
-    const cwd = process.cwd()
+
     return fixturesLoader.loadModule('noent.js').catch((err) => {
-        expect(err.message).toEqual(
-            [
-                'An error occurred while loading fixture file: noent.js',
-                'error: Qualified path resolution failed - none of the candidates can be found on the disk.',
-                '',
-                `Source path: ${cwd}/noent.js`,
-                `Rejected candidate: ${cwd}/noent.js`,
-                `Rejected candidate: ${cwd}/noent.js.js`,
-                `Rejected candidate: ${cwd}/noent.js.json`,
-                `Rejected candidate: ${cwd}/noent.js.jsx`,
-                `Rejected candidate: ${cwd}/noent.js.ts`,
-                `Rejected candidate: ${cwd}/noent.js.tsx`,
-                `Rejected candidate: ${cwd}/noent.js.node`,
-                '',
-            ].join('\n')
+        expect(err.message).toMatch(
+            /An error occurred while loading fixture file: noent.js\nerror: Cannot find module '..\/..\/..\/noent\.js' from '.+src\/extensions\/fixtures'/
         )
     })
 })
