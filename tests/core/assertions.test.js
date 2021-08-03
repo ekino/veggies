@@ -91,9 +91,18 @@ test('object property is defined', () => {
             field: 'gender',
             matcher: 'present',
         },
+        {
+            field: 'age',
+            matcher: '?',
+        },
     ]
 
-    expect(() => assertObjectMatchSpec({ name: 'john', gender: 'male' }, spec)).not.toThrow()
+    expect(() =>
+        assertObjectMatchSpec({ name: 'john', gender: 'male', age: 31 }, spec)
+    ).not.toThrow()
+    expect(() => assertObjectMatchSpec({ name: 'john', gender: 'male' }, spec)).toThrow(
+        `Property 'age' is undefined: expected undefined not to be undefined`
+    )
     expect(() => assertObjectMatchSpec({ name: 'john' }, spec)).toThrow(
         `Property 'gender' is undefined: expected undefined not to be undefined`
     )
@@ -123,6 +132,10 @@ test('object property is not defined', () => {
             field: 'street',
             matcher: `isn't defined`,
         },
+        {
+            field: 'age',
+            matcher: `!?`,
+        },
     ]
 
     expect(() => assertObjectMatchSpec({}, spec)).not.toThrow()
@@ -137,6 +150,9 @@ test('object property is not defined', () => {
     )
     expect(() => assertObjectMatchSpec({ street: 'rue du chat qui pêche' }, spec)).toThrow(
         `Property 'street' is defined: expected 'rue du chat qui pêche' to be undefined`
+    )
+    expect(() => assertObjectMatchSpec({ age: 31 }, spec)).toThrow(
+        `Property 'age' is defined: expected 31 to be undefined`
     )
     expect(() =>
         assertObjectMatchSpec(
@@ -153,11 +169,19 @@ test('check object property equals expected value', () => {
             matcher: 'equals',
             value: 'john',
         },
+        {
+            field: 'city',
+            matcher: '=',
+            value: 'Bordeaux',
+        },
     ]
 
-    expect(() => assertObjectMatchSpec({ name: 'john' }, spec)).not.toThrow()
+    expect(() => assertObjectMatchSpec({ name: 'john', city: 'Bordeaux' }, spec)).not.toThrow()
     expect(() => assertObjectMatchSpec({ name: 'plouc' }, spec)).toThrow(
         `Expected property 'name' to equal 'john', but found 'plouc': expected 'plouc' to deeply equal 'john'`
+    )
+    expect(() => assertObjectMatchSpec({ name: 'john', city: 'Paris' }, spec)).toThrow(
+        `Expected property 'city' to equal 'Bordeaux', but found 'Paris': expected 'Paris' to deeply equal 'Bordeaux'`
     )
 })
 
@@ -168,11 +192,19 @@ test('check object property does not equal expected value', () => {
             matcher: 'does not equal',
             value: 'john',
         },
+        {
+            field: 'city',
+            matcher: '!=',
+            value: 'Paris',
+        },
     ]
 
-    expect(() => assertObjectMatchSpec({ name: 'plouc' }, spec)).not.toThrow()
+    expect(() => assertObjectMatchSpec({ name: 'plouc', city: 'Bordeaux' }, spec)).not.toThrow()
+    expect(() => assertObjectMatchSpec({ name: 'plouc', city: 'Paris' }, spec)).toThrow(
+        `Expected property 'city' to not equal 'Paris', but found 'Paris': expected 'Paris' to not deeply equal 'Paris`
+    )
     expect(() => assertObjectMatchSpec({ name: 'john' }, spec)).toThrow(
-        `Expected property 'name' to not equal 'john', but found 'john': expected 'john' to not deeply equal 'john'`
+        `Expected property 'name' to not equal 'john', but found 'john': expected 'john' to not deeply equal 'john`
     )
 })
 
@@ -188,11 +220,19 @@ test('check object property contains value', () => {
             matcher: 'contains',
             value: 'doe',
         },
+        {
+            field: 'city',
+            matcher: '*=',
+            value: 'ord',
+        },
     ]
 
     expect(() =>
-        assertObjectMatchSpec({ first_name: 'johnny', last_name: 'doet' }, spec)
+        assertObjectMatchSpec({ first_name: 'johnny', last_name: 'doet', city: 'Bordeaux' }, spec)
     ).not.toThrow()
+    expect(() =>
+        assertObjectMatchSpec({ first_name: 'johnny', last_name: 'doe', city: 'Paris' }, spec)
+    ).toThrow(`Property 'city' (Paris) does not contain 'ord': expected 'Paris' to include 'ord'`)
     expect(() => assertObjectMatchSpec({ first_name: 'john', last_name: 'john' }, spec)).toThrow(
         `Property 'last_name' (john) does not contain 'doe': expected 'john' to include 'doe'`
     )
@@ -223,14 +263,39 @@ test('check object property does not contain value', () => {
             matcher: 'does not contains',
             value: 'avenue',
         },
+        {
+            field: 'postal_code',
+            matcher: '!*=',
+            value: '44',
+        },
     ]
 
     expect(() =>
         assertObjectMatchSpec(
-            { first_name: 'foo', last_name: 'bar', city: 'miami', street: 'calle ocho' },
+            {
+                first_name: 'foo',
+                last_name: 'bar',
+                city: 'miami',
+                street: 'calle ocho',
+                postal_code: 'FL 33135',
+            },
             spec
         )
     ).not.toThrow()
+    expect(() =>
+        assertObjectMatchSpec(
+            {
+                first_name: 'foo',
+                last_name: 'bar',
+                city: 'miami',
+                street: 'calle ocho',
+                postal_code: 'FL 44135',
+            },
+            spec
+        )
+    ).toThrow(
+        `Property 'postal_code' (FL 44135) contains '44': expected 'FL 44135' to not include '44'`
+    )
     expect(() =>
         assertObjectMatchSpec(
             { first_name: 'johnny', last_name: 'bar', city: 'miami', street: 'calle ocho' },
@@ -263,6 +328,106 @@ test('check object property does not contain value', () => {
     )
 })
 
+test('check object property starts with value', () => {
+    const spec = [
+        {
+            field: 'first_name',
+            matcher: 'starts with',
+            value: 'john',
+        },
+        {
+            field: 'last_name',
+            matcher: '^=',
+            value: 'do',
+        },
+    ]
+
+    expect(() =>
+        assertObjectMatchSpec({ first_name: 'johnny', last_name: 'doe' }, spec)
+    ).not.toThrow()
+    expect(() => assertObjectMatchSpec({ first_name: 'john', last_name: 'john' }, spec)).toThrow(
+        `Property 'last_name' (john) does not start with 'do': expected 'john' to start with 'do'`
+    )
+    expect(() => assertObjectMatchSpec({ first_name: 'doe', last_name: 'doe' }, spec)).toThrow(
+        `Property 'first_name' (doe) does not start with 'john': expected 'doe' to start with 'john'`
+    )
+})
+
+test('check object property does not start with value', () => {
+    const spec = [
+        {
+            field: 'first_name',
+            matcher: 'does not start with',
+            value: 'john',
+        },
+        {
+            field: 'last_name',
+            matcher: '!^=',
+            value: 'do',
+        },
+    ]
+
+    expect(() =>
+        assertObjectMatchSpec({ first_name: 'bob', last_name: 'dylan' }, spec)
+    ).not.toThrow()
+    expect(() => assertObjectMatchSpec({ first_name: 'bod', last_name: 'doe' }, spec)).toThrow(
+        `Property 'last_name' (doe) starts with 'do': expected 'doe' not to start with 'do'`
+    )
+    expect(() => assertObjectMatchSpec({ first_name: 'johnny', last_name: 'dylan' }, spec)).toThrow(
+        `Property 'first_name' (johnny) starts with 'john': expected 'johnny' not to start with 'john'`
+    )
+})
+
+test('check object property ends with value', () => {
+    const spec = [
+        {
+            field: 'first_name',
+            matcher: 'ends with',
+            value: 'ny',
+        },
+        {
+            field: 'last_name',
+            matcher: '$=',
+            value: 'oe',
+        },
+    ]
+
+    expect(() =>
+        assertObjectMatchSpec({ first_name: 'johnny', last_name: 'doe' }, spec)
+    ).not.toThrow()
+    expect(() => assertObjectMatchSpec({ first_name: 'johnny', last_name: 'john' }, spec)).toThrow(
+        `Property 'last_name' (john) does not end with 'oe': expected 'john' to end with 'oe'`
+    )
+    expect(() => assertObjectMatchSpec({ first_name: 'doe', last_name: 'doe' }, spec)).toThrow(
+        `Property 'first_name' (doe) does not end with 'ny': expected 'doe' to end with 'ny'`
+    )
+})
+
+test('check object property does not end with value', () => {
+    const spec = [
+        {
+            field: 'first_name',
+            matcher: 'does not end with',
+            value: 'ny',
+        },
+        {
+            field: 'last_name',
+            matcher: '!$=',
+            value: 'oe',
+        },
+    ]
+
+    expect(() =>
+        assertObjectMatchSpec({ first_name: 'bob', last_name: 'dylan' }, spec)
+    ).not.toThrow()
+    expect(() => assertObjectMatchSpec({ first_name: 'bob', last_name: 'doe' }, spec)).toThrow(
+        `Property 'last_name' (doe) ends with 'oe': expected 'doe' not to end with 'oe'`
+    )
+    expect(() => assertObjectMatchSpec({ first_name: 'johnny', last_name: 'dylan' }, spec)).toThrow(
+        `Property 'first_name' (johnny) ends with 'ny': expected 'johnny' not to end with 'ny'`
+    )
+})
+
 test('check object property matches regexp', () => {
     const spec = [
         {
@@ -275,17 +440,36 @@ test('check object property matches regexp', () => {
             matcher: 'match',
             value: '^doe',
         },
+        {
+            field: 'city',
+            matcher: '~=',
+            value: '(.+-){3}.+',
+        },
     ]
 
     expect(() =>
-        assertObjectMatchSpec({ first_name: 'johnny', last_name: 'doet' }, spec)
+        assertObjectMatchSpec(
+            { first_name: 'johnny', last_name: 'doet', city: 'Saint-Pée-sur-Nivelle' },
+            spec
+        )
     ).not.toThrow()
-    expect(() => assertObjectMatchSpec({ first_name: 'john', last_name: 'john' }, spec)).toThrow(
-        `Property 'last_name' (john) does not match '^doe': expected 'john' to match /^doe/`
+    expect(() =>
+        assertObjectMatchSpec({ first_name: 'johnny', last_name: 'doet', city: 'Bordeaux' }, spec)
+    ).toThrow(
+        `Property 'city' (Bordeaux) does not match '(.+-){3}.+': expected 'Bordeaux' to match /(.+-){3}.+/`
     )
-    expect(() => assertObjectMatchSpec({ first_name: 'doe', last_name: 'doe' }, spec)).toThrow(
-        `Property 'first_name' (doe) does not match '^john': expected 'doe' to match /^john/`
-    )
+    expect(() =>
+        assertObjectMatchSpec(
+            { first_name: 'johnny', last_name: 'john', city: 'Saint-Pée-sur-Nivelle' },
+            spec
+        )
+    ).toThrow(`Property 'last_name' (john) does not match '^doe': expected 'john' to match /^doe/`)
+    expect(() =>
+        assertObjectMatchSpec(
+            { first_name: 'doe', last_name: 'doe', city: 'Saint-Pée-sur-Nivelle' },
+            spec
+        )
+    ).toThrow(`Property 'first_name' (doe) does not match '^john': expected 'doe' to match /^john/`)
 })
 
 test('check object property does not match regexp', () => {
@@ -295,10 +479,20 @@ test('check object property does not match regexp', () => {
             matcher: `doesn't match`,
             value: '^john',
         },
+        {
+            field: 'last_name',
+            matcher: '!~=',
+            value: '^[a-z]{3}$',
+        },
     ]
 
-    expect(() => assertObjectMatchSpec({ first_name: 'bob' }, spec)).not.toThrow()
-    expect(() => assertObjectMatchSpec({ first_name: 'john' }, spec)).toThrow(
+    expect(() =>
+        assertObjectMatchSpec({ first_name: 'bob', last_name: 'dylan' }, spec)
+    ).not.toThrow()
+    expect(() => assertObjectMatchSpec({ first_name: 'bob', last_name: 'doe' }, spec)).toThrow(
+        `Property 'last_name' (doe) matches '^[a-z]{3}$': expected 'doe' not to match /^[a-z]{3}$/`
+    )
+    expect(() => assertObjectMatchSpec({ first_name: 'john', last_name: 'doe' }, spec)).toThrow(
         `Property 'first_name' (john) matches '^john': expected 'john' not to match /^john/`
     )
 })
@@ -342,7 +536,7 @@ test('check object property type', () => {
         },
         {
             field: 'last_name',
-            matcher: 'type',
+            matcher: '#=',
             value: 'string',
         },
         {
@@ -371,6 +565,11 @@ test('check object property type does not match', () => {
         {
             field: 'first_name',
             matcher: 'not type',
+            value: 'string',
+        },
+        {
+            field: 'first_name',
+            matcher: '!#=',
             value: 'string',
         },
     ]

@@ -706,6 +706,138 @@ test('check json response property matches regexp', () => {
     )
 })
 
+test('check json response property matches expressions', () => {
+    const context = helper.getContext()
+
+    const def = context.getDefinitionByMatcher('json response should (fully )?match')
+
+    const getResponse = sinon.stub()
+    getResponse.onFirstCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: { first_name: 'Johnny' },
+    })
+    getResponse.onSecondCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: { first_name: 'Bob' },
+    })
+    getResponse.onThirdCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: { first_name: 'John' },
+    })
+    const clientMock = {
+        state: { populate: (v) => v },
+        httpApiClient: { getResponse: getResponse },
+    }
+
+    const spec = [
+        {
+            expression: 'first_name ?',
+        },
+        {
+            expression: 'first_name #= string',
+        },
+        {
+            expression: 'first_name ^= Jo',
+        },
+        {
+            expression: 'first_name *= hn',
+        },
+        {
+            expression: 'first_name $= ny',
+        },
+        {
+            expression: 'first_name ~= ^Johnny$',
+        },
+    ]
+
+    expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).not.toThrow()
+    expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
+        `Property 'first_name' (Bob) does not start with 'Jo': expected 'Bob' to start with 'Jo'`
+    )
+    expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
+        `Property 'first_name' (John) does not end with 'ny': expected 'John' to end with 'ny'`
+    )
+})
+
+test('check json response property matches negated expressions', () => {
+    const context = helper.getContext()
+
+    const def = context.getDefinitionByMatcher('json response should (fully )?match')
+
+    const getResponse = sinon.stub()
+    getResponse.onFirstCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: { first_name: 'Bob' },
+    })
+    getResponse.onSecondCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: { first_name: 'Johnny' },
+    })
+    const clientMock = {
+        state: { populate: (v) => v },
+        httpApiClient: { getResponse: getResponse },
+    }
+
+    const spec = [
+        {
+            expression: 'last_name !?',
+        },
+        {
+            expression: 'first_name !#= number',
+        },
+        {
+            expression: 'first_name !^= Jo',
+        },
+        {
+            expression: 'first_name !*= hn',
+        },
+        {
+            expression: 'first_name !$= ny',
+        },
+        {
+            expression: 'first_name !~= ^Johnny$',
+        },
+    ]
+
+    expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).not.toThrow()
+    expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
+        `Property 'first_name' (Johnny) starts with 'Jo': expected 'Johnny' not to start with 'Jo'`
+    )
+})
+
+test('check json response property matches padded expressions', () => {
+    const context = helper.getContext()
+
+    const def = context.getDefinitionByMatcher('json response should (fully )?match')
+
+    const getResponse = sinon.stub()
+    getResponse.onFirstCall().returns({
+        headers: { 'content-type': 'application/json' },
+        body: { first_name: 'John', note: "I'm a geek!" },
+    })
+    const clientMock = {
+        state: { populate: (v) => v },
+        httpApiClient: { getResponse: getResponse },
+    }
+
+    const spec = [
+        {
+            expression: 'first_name          ?  ',
+        },
+        {
+            expression: 'first_name         #=        string',
+        },
+        {
+            expression: 'first_name        !~=      ^Bob$',
+        },
+        {
+            expression: "note        =      I'm a geek!",
+        },
+    ]
+
+    expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).not.toThrow()
+})
+
 test('check json response fully matches spec', () => {
     const context = helper.getContext() // Extension context
 

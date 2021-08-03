@@ -9,6 +9,7 @@ const Cast = require('../../core/cast')
 const { assertObjectMatchSpec } = require('../../core/assertions')
 
 const { STATUS_CODES } = require('http')
+const { parseMatchExpression } = require('./utils')
 const STATUS_MESSAGES = _.values(STATUS_CODES).map(_.lowerCase)
 
 /**
@@ -302,13 +303,16 @@ exports.install = ({ baseUrl = '' } = {}) => {
         expect(response.headers['content-type']).to.contain('application/json')
 
         // First we populate spec values if it contains some placeholder
-        const spec = table.hashes().map((fieldSpec) =>
-            _.assign({}, fieldSpec, {
-                value: this.state.populate(fieldSpec.value),
+        const specifications = table.hashes().map((fieldSpec) => {
+            const spec = fieldSpec.expression
+                ? parseMatchExpression(fieldSpec.expression)
+                : fieldSpec
+            return _.assign({}, spec, {
+                value: this.state.populate(spec.value),
             })
-        )
+        })
 
-        assertObjectMatchSpec(body, spec, !!fully)
+        assertObjectMatchSpec(body, specifications, !!fully)
     })
 
     /**

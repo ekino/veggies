@@ -5,22 +5,29 @@
  */
 
 const _ = require('lodash')
-const { expect } = require('chai')
+const { expect, use } = require('chai')
 const moment = require('moment-timezone')
 const Cast = require('./cast')
+const { registerChaiAssertion } = require('./custom_chai_assertions')
+
+use(registerChaiAssertion)
 
 const negationRegex = `!|! |not |does not |doesn't |is not |isn't `
-const matchRegex = new RegExp(`^(${negationRegex})?(match|matches)$`)
-const containRegex = new RegExp(`^(${negationRegex})?(contain|contains)$`)
-const presentRegex = new RegExp(`^(${negationRegex})?(defined|present)$`)
-const equalRegex = new RegExp(`^(${negationRegex})?(equal|equals)$`)
-const typeRegex = new RegExp(`^(${negationRegex})?(type)$`)
+const matchRegex = new RegExp(`^(${negationRegex})?(match|matches|~=)$`)
+const containRegex = new RegExp(`^(${negationRegex})?(contains?|\\*=)$`)
+const startWithRegex = new RegExp(`^(${negationRegex})?(starts? with|\\^=)$`)
+const endWithRegex = new RegExp(`^(${negationRegex})?(ends? with|\\$=)$`)
+const presentRegex = new RegExp(`^(${negationRegex})?(defined|present|\\?)$`)
+const equalRegex = new RegExp(`^(${negationRegex})?(equals?|=)$`)
+const typeRegex = new RegExp(`^(${negationRegex})?(type|#=)$`)
 const relativeDateRegex = new RegExp(`^(${negationRegex})?(equalRelativeDate)$`)
 const relativeDateValueRegex = /^(\+?\d|-?\d),([A-Za-z]+),([A-Za-z-]{2,5}),(.+)$/
 
 const RuleName = Object.freeze({
     Match: Symbol('match'),
     Contain: Symbol('contain'),
+    StartWith: Symbol('startWith'),
+    EndWith: Symbol('endWith'),
     Present: Symbol('present'),
     Equal: Symbol('equal'),
     Type: Symbol('type'),
@@ -141,6 +148,34 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
                 }
                 break
             }
+            case RuleName.StartWith: {
+                const baseExpect = expect(
+                    currentValue,
+                    `Property '${field}' (${currentValue}) ${
+                        rule.isNegated ? 'starts with' : 'does not start with'
+                    } '${expectedValue}'`
+                )
+                if (rule.isNegated) {
+                    baseExpect.to.not.startWith(expectedValue)
+                } else {
+                    baseExpect.to.startWith(expectedValue)
+                }
+                break
+            }
+            case RuleName.EndWith: {
+                const baseExpect = expect(
+                    currentValue,
+                    `Property '${field}' (${currentValue}) ${
+                        rule.isNegated ? 'ends with' : 'does not end with'
+                    } '${expectedValue}'`
+                )
+                if (rule.isNegated) {
+                    baseExpect.to.not.endWith(expectedValue)
+                } else {
+                    baseExpect.to.endWith(expectedValue)
+                }
+                break
+            }
             case RuleName.Present: {
                 const baseExpect = expect(
                     currentValue,
@@ -242,6 +277,16 @@ exports.getMatchingRule = (matcher) => {
     const containGroups = containRegex.exec(matcher)
     if (containGroups) {
         return { name: RuleName.Contain, isNegated: !!containGroups[1] }
+    }
+
+    const startWithGroups = startWithRegex.exec(matcher)
+    if (startWithGroups) {
+        return { name: RuleName.StartWith, isNegated: !!startWithGroups[1] }
+    }
+
+    const endWithGroups = endWithRegex.exec(matcher)
+    if (endWithGroups) {
+        return { name: RuleName.EndWith, isNegated: !!endWithGroups[1] }
     }
 
     const presentGroups = presentRegex.exec(matcher)

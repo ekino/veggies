@@ -237,6 +237,17 @@ Scenario: Fetching some json response from the internets
       | address.country | equal   | Japan |
 ``` 
 
+Checking json response properties start with value:
+ 
+```gherkin
+Scenario: Fetching some json response from the internets
+    When I GET http://whatever.io/things/1
+    Then json response should match
+      | field           | matcher     | value |
+      | name            | start with  | ing   |
+      | address.country | starts with | Jap   |
+``` 
+
 Checking json response properties contain value:
  
 ```gherkin
@@ -246,6 +257,17 @@ Scenario: Fetching some json response from the internets
       | field           | matcher | value |
       | name            | contain | ing   |
       | address.country | contain | Jap   |
+``` 
+
+Checking json response properties end with value:
+
+```gherkin
+Scenario: Fetching some json response from the internets
+    When I GET http://whatever.io/things/1
+    Then json response should match
+      | field           | matcher   | value |
+      | name            | end with  | ing   |
+      | address.country | ends with | pan   |
 ``` 
 
 Checking json response properties match value:
@@ -286,20 +308,51 @@ Now if the json contains extra properties, the test will fail.
 
 Available matchers are:
 
-| matcher                   | description                                       |
-|-------------------------- |---------------------------------------------------|
-| `match`                   | property must match given regexp                  |
-| `matches`                 | see `match`                                       |
-| `contain`                 | property must contain given value                 |
-| `contains`                | see `contain`                                     |
-| `defined`                 | property must not be `undefined`                  |
-| `present`                 | see `defined`                                     |
-| `equal`                   | property must equal given value                   |
-| `equals`                  | see `equal`                                       |
-| `type`                    | property must be of the given type                |
-| `equalRelativeDate`       | property must be equal to the computed date       |
+| matcher                   | short matcher             | description                                       |
+|-------------------------- |-------------------------- |---------------------------------------------------|
+| `match`                   | `~=`                      | property must match given regexp                  |
+| `matches`                 | see `match`               | see `match`                                       |
+| `start with`              | `^=`                      | property must start with given value              |
+| `starts with`             | see `start with`          | see `startWith`                                   |
+| `contain`                 | `*=`                      | property must contain given value                 |
+| `contains`                | see `contain`             | see `contain`                                     |
+| `end with`                | `$=`                      | property must end with given value                |
+| `ends with`               | see `end with`            | see `endWith`                                     |
+| `defined`                 | `?`                       | property must not be `undefined`                  |
+| `present`                 | see `defined`             | see `defined`                                     |
+| `equal`                   | `=`                       | property must equal given value                   |
+| `equals`                  | see `equal`               | see `equal`                                       |
+| `type`                    | `#=`                      | property must be of the given type                |
+| `equalRelativeDate`       | n/a                       | property must be equal to the computed date       |
 
 **Any** of these matchers can be negated when preceded by these : `!`, `not`, `does not`, `doesn't`, `is not` and `isn't`.
+
+The short version of each matcher is intended to be used that way:
+
+```gherkin
+Scenario: Fetching some json response from the internets
+    When I GET http://whatever.io/things/1
+    Then json response should fully match
+      | expression                   |
+      | name ~= ^(.+)ing$            |
+      | address.country = Japan      |
+      | address.city ?               |
+      | address.postalCode #= string |
+```
+
+If it eases the reading, you can also pad your expressions:
+
+```gherkin
+Scenario: Fetching some json response from the internets
+    When I GET http://whatever.io/things/1
+    Then json response should fully match
+      | expression                      |
+      | name               ~= ^(.+)ing$ |
+      | address.country    =      Japan |
+      | address.city       ?            |
+      | address.postalCode #=    string |
+```
+
 #### Testing response headers
 
 In order to check response headers, you have the following gherkin expression available:
