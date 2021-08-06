@@ -171,7 +171,7 @@ exports.install = ({ baseUrl = '' } = {}) => {
     /**
      * Performing a request
      */
-    When(/^(?:I )?(GET|POST|PUT|DELETE) (.+)$/, function (method, path) {
+    When(/^(?:I )?(GET|POST|PUT|DELETE|PATCH) (.+)$/, function (method, path) {
         return this.httpApiClient.makeRequest(method, this.state.populate(path), baseUrl)
     })
 

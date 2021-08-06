@@ -466,16 +466,18 @@ test('reset http client', () => {
 test('perform a request', () => {
     const context = helper.getContext() // Extension context
 
-    const def = context.getDefinitionByMatcher('GET|POST|PUT|DELETE')
+    const def = context.getDefinitionByMatcher('GET|POST|PUT|DELETE|PATCH')
     def.shouldNotMatch('I GET ')
     def.shouldMatch('I GET /', ['GET', '/'])
     def.shouldMatch('I POST /create', ['POST', '/create'])
     def.shouldMatch('I PUT /update', ['PUT', '/update'])
     def.shouldMatch('I DELETE /delete', ['DELETE', '/delete'])
+    def.shouldMatch('I PATCH /updatePartial', ['PATCH', '/updatePartial'])
     def.shouldMatch('GET /', ['GET', '/'])
     def.shouldMatch('POST /create', ['POST', '/create'])
     def.shouldMatch('PUT /update', ['PUT', '/update'])
     def.shouldMatch('DELETE /delete', ['DELETE', '/delete'])
+    def.shouldMatch('PATCH /updatePartial', ['PATCH', '/updatePartial'])
 })
 
 test('dump response body', () => {
