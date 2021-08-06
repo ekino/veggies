@@ -6,10 +6,16 @@
  * from extensions' definition files.
  */
 
+const assert = require('assert')
 const fs = require('fs')
 const chalk = require('chalk')
 const { parse } = require('babylon')
 const Mustache = require('mustache')
+
+/**
+ * Flag allowing to only check if README was generated
+ */
+const isCheck = process.argv[2] === '--check'
 
 /**
  * README template file path.
@@ -222,27 +228,41 @@ const getDefinitionsFromFile = (file) => {
     return getFileContent(file).then((code) => parseDefinitions(file, code))
 }
 
-Promise.all(extensions.map((extensionId) => getDefinitionsFromFile(definitionFiles[extensionId])))
-    .then((definitions) => {
+const generateReadme = async () => {
+    try {
+        const definitions = await Promise.all(
+            extensions.map((extensionId) => getDefinitionsFromFile(definitionFiles[extensionId]))
+        )
+
         const definitionsByExtension = {}
         definitions.forEach((defs, index) => {
             definitionsByExtension[extensions[index]] = defs
         })
 
-        return getFileContent(readmeTemplatePath).then((readmeTemplateContent) => {
-            return writeFile(
-                readmePath,
-                Mustache.render(
-                    readmeTemplateContent,
-                    {
-                        definitions: definitionsByExtension,
-                    },
-                    partials
-                )
+        const readmeTemplateContent = await getFileContent(readmeTemplatePath)
+
+        const renderedReadme = Mustache.render(
+            readmeTemplateContent,
+            {
+                definitions: definitionsByExtension,
+            },
+            partials
+        )
+
+        if (isCheck) {
+            const readmeContent = await getFileContent(readmePath)
+            assert.strictEqual(
+                renderedReadme,
+                readmeContent,
+                'README.md was not generated: Use `yarn readme`.'
             )
-        })
-    })
-    .catch((err) => {
+        } else {
+            return writeFile(readmePath, renderedReadme)
+        }
+    } catch (err) {
         console.error(err)
         process.exit(1)
-    })
+    }
+}
+
+generateReadme()
