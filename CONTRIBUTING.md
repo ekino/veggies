@@ -28,4 +28,12 @@ Generally always have a related issue with discussions for whatever you are incl
 
 Please also provide a **test plan**, i.e. specify how you verified that your addition works.
 
+## Updating README.md
 
+`README.md` is meant to be generated from `doc/README.tpl.md` and the various Gherkin definitions in this project.
+
+You should never update it directly, and should instead :
+
+1. Edit `doc/README.tpl.md`
+
+2. Run `yarn readme` to generate `README.md`
