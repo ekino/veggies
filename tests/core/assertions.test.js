@@ -1,6 +1,6 @@
 'use strict'
 
-const { countNestedProperties, assertObjectMatchSpec } = require('../../src/core/assertions')
+const { assertObjectMatchSpec, objectKeysDeep } = require('../../src/core/assertions')
 
 beforeAll(() => {
     const MockDate = (lastDate) => () => new lastDate(2018, 4, 1)
@@ -13,17 +13,17 @@ afterAll(() => {
 
 beforeEach(() => {})
 
-test('should allow to count object properties', () => {
+test('should allow to build an array of object properties', () => {
     expect(
-        countNestedProperties({
+        objectKeysDeep({
             a: true,
             b: true,
             c: true,
         })
-    ).toBe(3)
+    ).toStrictEqual(['a', 'b', 'c'])
 
     expect(
-        countNestedProperties({
+        objectKeysDeep({
             a: true,
             b: true,
             c: true,
@@ -32,12 +32,12 @@ test('should allow to count object properties', () => {
                 b: true,
             },
         })
-    ).toBe(5)
+    ).toStrictEqual(['a', 'b', 'c', 'd.a', 'd.b'])
 })
 
-test('should allow to count nested objects properties', () => {
+test('should allow to build an array of object properties with nested objects properties', () => {
     expect(
-        countNestedProperties({
+        objectKeysDeep({
             a: true,
             b: true,
             c: {
@@ -45,32 +45,32 @@ test('should allow to count nested objects properties', () => {
                 e: 'value2',
             },
         })
-    ).toBe(4)
+    ).toStrictEqual(['a', 'b', 'c.d', 'c.e'])
 })
 
-test('should allow to count object properties with null, undefined properties ', () => {
+test('should allow to build an array of object properties with null, undefined properties ', () => {
     expect(
-        countNestedProperties({
+        objectKeysDeep({
             a: null,
             b: undefined,
             c: 'value3',
         })
-    ).toBe(3)
+    ).toStrictEqual(['a', 'b', 'c'])
 })
 
-test('should allow to count object with properties array property', () => {
+test('should allow to build an array of object properties with properties array property', () => {
     expect(
-        countNestedProperties({
+        objectKeysDeep({
             a: [1, 2],
             b: true,
             c: true,
         })
-    ).toBe(4)
+    ).toStrictEqual(['a.0', 'a.1', 'b', 'c'])
 })
 
-test('should allow to count object properties with empty array property', () => {
+test('should allow to build an array of object properties with empty array property', () => {
     expect(
-        countNestedProperties({
+        objectKeysDeep({
             a: true,
             b: true,
             c: {
@@ -78,7 +78,21 @@ test('should allow to count object properties with empty array property', () => 
                 e: [],
             },
         })
-    ).toBe(4)
+    ).toStrictEqual(['a', 'b', 'c.d', 'c.e'])
+})
+
+test('should allow to build an array of object properties from nested object', () => {
+    expect(
+        objectKeysDeep({
+            a: true,
+            b: {
+                b1: true,
+                b2: true,
+                b3: {},
+            },
+            c: true,
+        })
+    ).toStrictEqual(['a', 'b.b1', 'b.b2', 'b.b3', 'c'])
 })
 
 test('object property is defined', () => {
@@ -140,7 +154,12 @@ test('object property is not defined', () => {
     )
     expect(() =>
         assertObjectMatchSpec(
-            { name: 'john', gender: 'male', city: 'paris', street: 'rue du chat qui pêche' },
+            {
+                name: 'john',
+                gender: 'male',
+                city: 'paris',
+                street: 'rue du chat qui pêche',
+            },
             spec
         )
     ).toThrow(`Property 'name' is defined: expected 'john' to be undefined`)
@@ -227,13 +246,23 @@ test('check object property does not contain value', () => {
 
     expect(() =>
         assertObjectMatchSpec(
-            { first_name: 'foo', last_name: 'bar', city: 'miami', street: 'calle ocho' },
+            {
+                first_name: 'foo',
+                last_name: 'bar',
+                city: 'miami',
+                street: 'calle ocho',
+            },
             spec
         )
     ).not.toThrow()
     expect(() =>
         assertObjectMatchSpec(
-            { first_name: 'johnny', last_name: 'bar', city: 'miami', street: 'calle ocho' },
+            {
+                first_name: 'johnny',
+                last_name: 'bar',
+                city: 'miami',
+                street: 'calle ocho',
+            },
             spec
         )
     ).toThrow(
@@ -241,13 +270,23 @@ test('check object property does not contain value', () => {
     )
     expect(() =>
         assertObjectMatchSpec(
-            { first_name: 'foo', last_name: 'doet', city: 'miami', street: 'calle ocho' },
+            {
+                first_name: 'foo',
+                last_name: 'doet',
+                city: 'miami',
+                street: 'calle ocho',
+            },
             spec
         )
     ).toThrow(`Property 'last_name' (doet) contains 'doe': expected 'doet' to not include 'doe'`)
     expect(() =>
         assertObjectMatchSpec(
-            { first_name: 'foo', last_name: 'bar', city: 'new york', street: 'calle ocho' },
+            {
+                first_name: 'foo',
+                last_name: 'bar',
+                city: 'new york',
+                street: 'calle ocho',
+            },
             spec
         )
     ).toThrow(
@@ -255,7 +294,12 @@ test('check object property does not contain value', () => {
     )
     expect(() =>
         assertObjectMatchSpec(
-            { first_name: 'foo', last_name: 'bar', city: 'miami', street: 'krome avenue' },
+            {
+                first_name: 'foo',
+                last_name: 'bar',
+                city: 'miami',
+                street: 'krome avenue',
+            },
             spec
         )
     ).toThrow(
@@ -300,36 +344,6 @@ test('check object property does not match regexp', () => {
     expect(() => assertObjectMatchSpec({ first_name: 'bob' }, spec)).not.toThrow()
     expect(() => assertObjectMatchSpec({ first_name: 'john' }, spec)).toThrow(
         `Property 'first_name' (john) matches '^john': expected 'john' not to match /^john/`
-    )
-})
-
-test('check object fully matches spec', () => {
-    const spec = [
-        {
-            field: 'first_name',
-            matcher: 'equal',
-            value: 'john',
-        },
-        {
-            field: 'last_name',
-            matcher: 'match',
-            value: '^doe',
-        },
-    ]
-
-    expect(() =>
-        assertObjectMatchSpec({ first_name: 'john', last_name: 'doet' }, spec, true)
-    ).not.toThrow()
-    expect(() =>
-        assertObjectMatchSpec({ first_name: 'john', last_name: 'doet', gender: 'male' }, spec, true)
-    ).toThrow(`Expected json response to fully match spec, but it does not: expected 3 to equal 2`)
-    expect(() =>
-        assertObjectMatchSpec({ first_name: 'john', last_name: 'john' }, spec, true)
-    ).toThrow(`Property 'last_name' (john) does not match '^doe': expected 'john' to match /^doe/`)
-    expect(() =>
-        assertObjectMatchSpec({ first_name: 'doe', last_name: 'doe' }, spec, true)
-    ).toThrow(
-        `Expected property 'first_name' to equal 'john', but found 'doe': expected 'doe' to deeply equal 'john'`
     )
 })
 
@@ -529,5 +543,94 @@ test('check unsupported matcher should fail', () => {
 
     expect(() => assertObjectMatchSpec({ name: 'john' }, spec)).toThrow(
         `Matcher "unknown" did not match any supported assertions`
+    )
+})
+
+test('check object fully matches spec', () => {
+    const spec = [
+        {
+            field: 'first_name',
+            matcher: 'equal',
+            value: 'john',
+        },
+        {
+            field: 'last_name',
+            matcher: 'match',
+            value: '^doe',
+        },
+        {
+            field: 'address',
+            matcher: 'type',
+            value: 'object',
+        },
+        {
+            field: 'phone.mobile',
+            matcher: 'match',
+            value: '^06',
+        },
+        {
+            field: 'phone.mobile',
+            matcher: 'type',
+            value: 'string',
+        },
+    ]
+
+    const specNonObject = [
+        {
+            field: 'first_name',
+            matcher: 'type',
+            value: 'undefined',
+        },
+    ]
+
+    expect(() =>
+        assertObjectMatchSpec(
+            {
+                first_name: 'john',
+                last_name: 'doet',
+                address: {},
+                phone: { mobile: '0600000000' },
+            },
+            spec,
+            true
+        )
+    ).not.toThrow()
+    expect(() =>
+        assertObjectMatchSpec(
+            {
+                first_name: 'john',
+                last_name: 'doet',
+                gender: 'male',
+                address: {},
+                phone: { mobile: '0600000000' },
+            },
+            spec,
+            true
+        )
+    ).toThrow(
+        `Expected json response to fully match spec, but it does not: expected [ Array(5) ] to deeply equal [ Array(4) ]`
+    )
+    expect(() =>
+        assertObjectMatchSpec({ first_name: 'john', last_name: 'john' }, spec, true)
+    ).toThrow(`Property 'last_name' (john) does not match '^doe': expected 'john' to match /^doe/`)
+    expect(() =>
+        assertObjectMatchSpec({ first_name: 'doe', last_name: 'doe' }, spec, true)
+    ).toThrow(
+        `Expected property 'first_name' to equal 'john', but found 'doe': expected 'doe' to deeply equal 'john'`
+    )
+    expect(() => assertObjectMatchSpec(undefined, specNonObject, true)).toThrow(
+        `Expected json response to be a valid object, but it is not: expected false to be true`
+    )
+    expect(() => assertObjectMatchSpec(null, specNonObject, true)).toThrow(
+        `Expected json response to be a valid object, but it is not: expected false to be true`
+    )
+    expect(() => assertObjectMatchSpec('undef', specNonObject, true)).toThrow(
+        `Expected json response to be a valid object, but it is not: expected false to be true`
+    )
+    expect(() => assertObjectMatchSpec([], specNonObject, true)).toThrow(
+        `Expected json response to be a valid object, but it is not: expected false to be true`
+    )
+    expect(() => assertObjectMatchSpec([{ first_name: 'doe' }], specNonObject, true)).toThrow(
+        `Expected json response to be a valid object, but it is not: expected false to be true`
     )
 })
