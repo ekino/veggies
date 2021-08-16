@@ -1,3 +1,19 @@
+## 1.0.0 (2021-08-16)
+
+* ci(build): check readme has been generated ([0b4fa7d](https://github.com/ekino/veggies/commit/0b4fa7d))
+* docs(contributing): add readme update instructions ([da16497](https://github.com/ekino/veggies/commit/da16497))
+* feat(http_api): allow patch method ([a6b3423](https://github.com/ekino/veggies/commit/a6b3423))
+* feat(http): allow headers with underscores ([c91ef51](https://github.com/ekino/veggies/commit/c91ef51))
+* feat(httpApi): add startWith, endWith matchers as well as concise matcher expressions ([0619cad](https://github.com/ekino/veggies/commit/0619cad))
+* feat(snapshots): add a flag to prevent snapshots creation ([4e64869](https://github.com/ekino/veggies/commit/4e64869))
+* chore(cucumber): upgrade to latest version ([d778171](https://github.com/ekino/veggies/commit/d778171))
+* chore(dependencies): upgrade all dependencies ([3fcbfe8](https://github.com/ekino/veggies/commit/3fcbfe8))
+* chore(deps): upgrade deps to up-to-date versions and yarn to 2.4.O ([c7e94d2](https://github.com/ekino/veggies/commit/c7e94d2))
+* chore(node): now supports Node 12 at least and add tests on Node 16 ([179dbed](https://github.com/ekino/veggies/commit/179dbed))
+* fix(snapshot): ignore color tags when looking for the no diff message ([c482124](https://github.com/ekino/veggies/commit/c482124))
+
+
+
 ## 0.8.0 (2020-08-21)
 
 * chore(ci): move github actions to the right folder ([b02af56](https://github.com/ekino/veggies/commit/b02af56))
@@ -5,6 +21,7 @@
 * chore(deps): upgrade deps to up-to-date versions, BREAKING CHANGE: Must use Node.js 10+ ([4d385e7](https://github.com/ekino/veggies/commit/4d385e7))
 * chore(release): change way we get current version when releasing ([62ad976](https://github.com/ekino/veggies/commit/62ad976))
 * chore(v0.7.2): bump version to 0.7.2 ([79b23df](https://github.com/ekino/veggies/commit/79b23df))
+* chore(v0.8.0): bump version to 0.8.0 ([d6953b3](https://github.com/ekino/veggies/commit/d6953b3))
 * chore(yarn): migrate to yarn 2 ([b02b498](https://github.com/ekino/veggies/commit/b02b498))
 * docs(readme): update ci badge ([a17ca78](https://github.com/ekino/veggies/commit/a17ca78))
 * Create ci.yml ([311f4d1](https://github.com/ekino/veggies/commit/311f4d1))
