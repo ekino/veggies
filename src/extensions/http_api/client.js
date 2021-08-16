@@ -14,7 +14,7 @@ const BODY_TYPE_JSON = 'json'
 const BODY_TYPE_FORM = 'form'
 const BODY_TYPE_MULTIPART = 'form-data'
 
-const verbsAcceptingBody = ['POST', 'PUT', 'DELETE']
+const verbsAcceptingBody = ['POST', 'PUT', 'DELETE', 'PATCH']
 
 /**
  * Http Api Client extension.

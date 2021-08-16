@@ -740,7 +740,7 @@ Given:
 
 When:
   - /^(?:I )?reset http client$/
-  - /^(?:I )?(GET|POST|PUT|DELETE) (.+)$/
+  - /^(?:I )?(GET|POST|PUT|DELETE|PATCH) (.+)$/
   - /^(?:I )?dump response body$/
   - /^(?:I )?dump response headers$/
   - /^(?:I )?dump response cookies$/
