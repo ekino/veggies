@@ -16,6 +16,7 @@
     "url": "https://github.com/ekino/veggies.git"
   },
   "main": "src/index.js",
+  "bin": "./bin/veggies.js",
   "author": "plouc <https://github.com/plouc>",
   "maintainers": [
     {
@@ -38,7 +39,8 @@
     "natural-compare": "1.4",
     "pretty-format": "27.0",
     "request": "2.88",
-    "tough-cookie": "4.0"
+    "tough-cookie": "4.0",
+    "yargs": "17.1.1"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "12.x",

@@ -963,8 +963,11 @@ __metadata:
     request: 2.88
     sinon: 11.x
     tough-cookie: 4.0
+    yargs: 17.1.1
   peerDependencies:
     "@cucumber/cucumber": ">=7.0.0"
+  bin:
+    veggies: ./bin/veggies.js
   languageName: unknown
   linkType: soft
 
@@ -7908,6 +7911,21 @@ fsevents@^2.3.2:
   version: 20.2.9
   resolution: "yargs-parser@npm:20.2.9"
   checksum: 3c58da6f6142f93c5207e309764bd90f723b9d7ed43f2e8aad0da1cefab83ee8ebf311dee2e81102646b74450c899e35b35053800b91fac23e6f433056f4c4cf
+  languageName: node
+  linkType: hard
+
+"yargs@npm:17.1.1":
+  version: 17.1.1
+  resolution: "yargs@npm:17.1.1"
+  dependencies:
+    cliui: ^7.0.2
+    escalade: ^3.1.1
+    get-caller-file: ^2.0.5
+    require-directory: ^2.1.1
+    string-width: ^4.2.0
+    y18n: ^5.0.5
+    yargs-parser: ^20.2.2
+  checksum: c2a16b61eb0db8882becd0aa382a5c59b87afcd17b35dd7077b3c9d83f77a3ad3de1526e4f1cf940f9481d7ce537e883af7c16879c33258724a09bc43a04e8ea
   languageName: node
   linkType: hard
 
