@@ -29,6 +29,7 @@ jobs:
             - run: yarn run check-fmt
             - run: yarn run check-readme
             - run: yarn run test-cover
+            - run: yarn run test-cli
             - run: yarn run examples --tags @offline
             - name: Coveralls Parallel
               env:

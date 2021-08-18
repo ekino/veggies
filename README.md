@@ -15,6 +15,7 @@ It's also the perfect companion for testing CLI applications built with commande
 
 - [Requirements](#requirements)
 - [Installation](#installation)
+- [CLI](#cli)   
 - [Features](#features)
     - [API testing](#api-testing)
         - [Making a simple request](#making-a-simple-request-and-testing-its-status-code)
@@ -87,6 +88,33 @@ httpApi.install({
 })
 cli.install()
 ```
+
+## CLI
+
+Veggies provides a simple CLI allowing the use of custom options to configure the feature it provides.
+
+As `cucumber-js` **no longer supports custom options**, it's the safest way to use Veggies in full without problem.
+
+To make use of it, you can use either of these commands:
+
+```shell
+$ yarn veggies
+
+$ npx veggies
+
+$ ./node_modules/.bin/veggies.js
+```
+
+The available options are:
+
+| Option                      | Description                                                                                |
+|-----------------------------|--------------------------------------------------------------------------------------------|
+| --cleanSnapshots            | removes unused snapshots (not recommended while matching tags)                             |
+| -u, --updateSnapshots       | updates current snapshots if required                                                      |
+| --preventSnapshotsCreation  | a snapshot related step that would create one will fail instead (useful on CI environment) |
+| --help                      | prints the veggies CLI help then the cucumber-js CLI help                                  |
+
+Please refer to the [CucumberJS CLI documentation](https://github.com/cucumber/cucumber-js/blob/master/docs/cli.md) to see native Cucumber options (or use `veggies --help`).
 
 ## Features
 
@@ -180,7 +208,7 @@ Scenario: Using GitHub API
 It's even possible to mix this approach with scenario outline to have more concise tests
 (at the cost of clarity thought).
 
-The following example will generates 3 scenario at runtime
+The following example will generate 3 scenario at runtime
 using different response values for second request.
 
 ```gherkin
@@ -204,7 +232,7 @@ Scenario Outline: Fetching <key> API endpoint from root endpoint
 Cookies are disabled by default, but you've got the ability to enable/disable the feature using a gherkin `Given` expression.
 Be warned that cookies do not persist across scenarios in order to ensure they're autonomous.
 If you really need to keep a cookie for multiple scenarios, you should consider using a custom step definition
-and/or using the [state extention](#state-extension) to store it.
+and/or using the [state extension](#state-extension) to store it.
 
 ```gherkin
 Scenario: Enabling cookies
@@ -292,7 +320,7 @@ Scenario: Fetching some json response from the internets
       | beginDate       | equalRelativeDate  | -1,week,fr,[Aujourd'hui] YYYY-MM-DD hh[h]mm  |
 ``` 
 
-By default this assertion does not check for full match.
+By default, this assertion does not check for full match.
 Properties not listed will just be ignored, if you want a full match:
 
 ```gherkin
@@ -410,9 +438,9 @@ The following directives are available:
 | `<value>((boolean))` | `boolean`   | `true((boolean))`        | `true`                    |
 | `<value>((array))`   | `Array`     | `one,two,three((array))` | `['one', 'two', 'three']` |     
 
-You can now use those directive for most of step definitions accepting data tables.
+You can now use those directive for most of the step definitions accepting data tables.
 
-For example you can use it to post typed json data:
+For example, you can use it to post typed json data:
 
 ```gherkin
 Scenario: Creating a resource using typed json payload
@@ -489,7 +517,7 @@ If the file does not exist, the test will fail.
 
 ### Snapshot testing
 
-Snapshot testing test a response / content against a saved snapshot.
+Snapshot testing compare a response / content against a saved snapshot.
 Snapshots are stored in a file with same name as the feature file with the extension `.snap`
 in a folder __snapshots__ in the same folder as the feature file.
 
@@ -506,16 +534,16 @@ features/
 
 In a snapshot file, snapshot name follow the pattern: 
 SNAPSHOT_NAME NUMBER_OF_TIME_THIS_NAME_WAS_ENCOUNTERED_IN_CURRENT_FILE.NUMBER_OF_TIME_WE_HAD_A_SNAPSHOT_IN_THIS_SCENARIO.
-For example, this would give: Scnenario 1 1.1
+For example, this would give: Scenario 1 1.1
 
-If a snapshot doesn't exists, it will be created the first time.
+If a snapshot doesn't exist, it will be created the first time.
 
 To update snapshot use the cucumber command line option '-u'. If you narrowed the tests with tags, only the snapshots 
 related to the tagged scenarios will be updated.
 
 In case you need to remove unused snapshots, you can use the option `--cleanSnapshots`.
 :warning: You shouldn't use this option with tags. It may result in used snapshots removed.
-:information_source: Snapshot files related to feature files with no snapshots anymore won't get removed. You need to do it manually.
+:information_source: Snapshot files related to feature files with no snapshots won't get removed. You need to do it manually.
 
 Sometimes, it could be useful to prevent the creation of snapshots, for instance in a CI environment. To do this,
 you can use the `--preventSnapshotsCreation` flag. An error will be thrown if the snapshot is missing and this option is present. 
@@ -1064,7 +1092,7 @@ There is a special tag which only runs examples not requiring network access:
 yarn run examples -- --tags @offline
 ```
 
-Due to public API rate limit (eg. GitHub API), this tag is used when running on CI.
+Due to public API rate limit (e.g. GitHub API), this tag is used when running on CI.
 
 [npm-image]: https://img.shields.io/npm/v/@ekino/veggies.svg?longCache=true&style=for-the-badge
 [npm-url]: https://www.npmjs.com/package/@ekino/veggies

@@ -1,12 +1,5 @@
 
 
-exports[`Setting json body from .yaml fixture file 1.1`] = `Object {
-  "first_name": "Raphaël",
-  "gender": "male",
-  "id": 1,
-  "last_name": "Benitte",
-}`;
-
 exports[`Snapshot testing on a cli with json output 1.1`] = `Object {
   "gender": "equal(male)",
   "name": "john",
