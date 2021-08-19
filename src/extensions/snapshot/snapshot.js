@@ -7,7 +7,6 @@
 const _ = require('lodash')
 const path = require('path')
 const { diff } = require('jest-diff')
-const jestDiffConstants = require('jest-diff/build/constants')
 const naturalCompare = require('natural-compare')
 const chalk = require('chalk')
 
@@ -15,6 +14,7 @@ const fileSystem = require('./fs')
 
 const EXPECTED_COLOR = chalk.green
 const RECEIVED_COLOR = chalk.red
+const JEST_NO_DIFF_MESSAGE = 'Compared values have no visual difference.'
 
 exports.scenarioRegex = /^[\s]*Scenario:[\s]*(.*[^\s])[\s]*$/
 
@@ -148,7 +148,7 @@ exports.diff = (snapshot, expected) => {
     diffMessage =
         diffMessage ||
         `${EXPECTED_COLOR('- ' + (expected || ''))} \n ${RECEIVED_COLOR('+ ' + snapshot)}`
-    if (diffMessage.indexOf(jestDiffConstants.NO_DIFF_MESSAGE) !== -1) return null
+    if (diffMessage.indexOf(JEST_NO_DIFF_MESSAGE) !== -1) return null
     return `\n${diffMessage}`
 }
 

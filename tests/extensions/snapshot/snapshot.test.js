@@ -5,7 +5,6 @@ const fileSystem = require('../../../src/extensions/snapshot/fs')
 const dedent = require('../../../src/extensions/snapshot/dedent')
 
 const { diff } = require('jest-diff')
-const diffConstants = require('jest-diff/build/constants')
 
 jest.mock('jest-diff', () => ({ diff: jest.fn() }))
 
@@ -122,7 +121,7 @@ describe('diff', () => {
              has
              nothing to do with the 
              result!
-             -> ${diffConstants.NO_DIFF_MESSAGE} ¯\\_(ツ)_/¯
+             -> Compared values have no visual difference. ¯\\_(ツ)_/¯
          `
 
         diff.mockReturnValue(diffResult)
