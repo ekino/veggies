@@ -39,35 +39,34 @@ exports.install = () => {
     /**
      * Checking file content.
      */
-    Then(/^file (.+) content should (not )?(equal|contain|match) (.+)$/, function (
-        file,
-        flag,
-        comparator,
-        expectedValue
-    ) {
-        return this.fileSystem
-            .getFileContent(this.cli.getCwd(), file)
-            .then((content) => {
-                let expectFn = expect(
-                    content,
-                    `Expected file '${file}' to ${
-                        flag ? flag : ''
-                    }${comparator} '${expectedValue}', but found '${content}' which does${
-                        flag ? '' : ' not'
-                    }`
-                ).to
-                if (flag != undefined) {
-                    expectFn = expectFn.not
-                }
+    Then(
+        /^file (.+) content should (not )?(equal|contain|match) (.+)$/,
+        function (file, flag, comparator, expectedValue) {
+            return this.fileSystem
+                .getFileContent(this.cli.getCwd(), file)
+                .then((content) => {
+                    let expectFn = expect(
+                        content,
+                        `Expected file '${file}' to ${
+                            flag ? flag : ''
+                        }${comparator} '${expectedValue}', but found '${content}' which does${
+                            flag ? '' : ' not'
+                        }`
+                    ).to
+                    if (flag != undefined) {
+                        expectFn = expectFn.not
+                    }
 
-                expectFn[comparator](
-                    comparator === 'match' ? new RegExp(expectedValue) : expectedValue
-                )
-            })
-            .catch((err) => {
-                if (err.code === 'ENOENT') return expect.fail('', '', `File '${file}' should exist`)
+                    expectFn[comparator](
+                        comparator === 'match' ? new RegExp(expectedValue) : expectedValue
+                    )
+                })
+                .catch((err) => {
+                    if (err.code === 'ENOENT')
+                        return expect.fail('', '', `File '${file}' should exist`)
 
-                return Promise.reject(err)
-            })
-    })
+                    return Promise.reject(err)
+                })
+        }
+    )
 }

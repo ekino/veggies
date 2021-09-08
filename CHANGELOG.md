@@ -212,6 +212,3 @@
 * docs(post): add documentation about posting data ([fe2625e](https://github.com/ekino/veggies/commit/fe2625e))
 * docs(toc): improve README TOC ([b8c11c9](https://github.com/ekino/veggies/commit/b8c11c9))
 * docs(type system): add documentation about type system ([e854a25](https://github.com/ekino/veggies/commit/e854a25))
-
-
-

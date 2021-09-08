@@ -8,12 +8,12 @@ exports.install = () => {
         this.cli.setCwd(cwd)
     })
 
-    Given(/^(?:I )?set ([^ ]+) (?:env|environment) (?:var|variable) to (.+)$/, function (
-        name,
-        value
-    ) {
-        this.cli.setEnvironmentVariable(name, value)
-    })
+    Given(
+        /^(?:I )?set ([^ ]+) (?:env|environment) (?:var|variable) to (.+)$/,
+        function (name, value) {
+            this.cli.setEnvironmentVariable(name, value)
+        }
+    )
 
     Given(/^(?:I )?set (?:env|environment) (?:vars|variables)$/, function (step) {
         this.cli.setEnvironmentVariables(step.rowsHash())

@@ -48,6 +48,7 @@
     "babylon": "6.x",
     "chalk": "4.x",
     "commitlint": "12.x",
+    "conventional-changelog": "^3.1.24",
     "conventional-changelog-cli": "2.x",
     "coveralls": "3.x",
     "eslint": "7.x",
@@ -69,7 +70,6 @@
     "test": "jest --verbose --colors tests",
     "test-cover": "jest --verbose --colors --coverage",
     "test-cli": "veggies --require tests/cli/support tests/cli/features",
-    "coverage": "cat ./coverage/lcov.info | coveralls",
     "fmt": "prettier --print-width 100 --tab-width=4 --single-quote --bracket-spacing --no-semi --color --write \"{src,tests,scripts}/**/*.js\"",
     "check-fmt": "prettier --print-width 100 --tab-width=4 --single-quote --bracket-spacing --no-semi --list-different \"{src,tests,scripts}/**/*.js\"",
     "lint": "eslint .",
@@ -78,7 +78,6 @@
     "check-readme": "node scripts/generate_readme --check",
     "doc": "jsdoc -c .jsdoc.json --verbose",
     "doc-pub": "yarn run readme && yarn run doc && gh-pages -d _doc",
-    "examples": "veggies --require examples/support examples/features",
-    "changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s"
+    "examples": "veggies --require examples/support examples/features"
   }
 }

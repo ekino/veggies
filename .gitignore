@@ -45,6 +45,7 @@ _doc
 
 # yarn 
 .yarn/*
+!.yarn/patches
 !.yarn/releases
 !.yarn/plugins
 !.yarn/sdks
@@ -52,3 +53,4 @@ _doc
 .pnp.*
 
 !bin/veggies.js
+events.json

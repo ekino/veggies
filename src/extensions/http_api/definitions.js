@@ -318,17 +318,17 @@ exports.install = ({ baseUrl = '' } = {}) => {
     /**
      * This definition verify that an array for a given path has the expected length
      */
-    Then(/^(?:I )?should receive a collection of ([0-9]+) items?(?: for path )?(.+)?$/, function (
-        size,
-        path
-    ) {
-        const response = mustGetResponse(this.httpApiClient)
-        const { body } = response
+    Then(
+        /^(?:I )?should receive a collection of ([0-9]+) items?(?: for path )?(.+)?$/,
+        function (size, path) {
+            const response = mustGetResponse(this.httpApiClient)
+            const { body } = response
 
-        const array = path != undefined ? _.get(body, path) : body
+            const array = path != undefined ? _.get(body, path) : body
 
-        expect(array.length).to.be.equal(Number(size))
-    })
+            expect(array.length).to.be.equal(Number(size))
+        }
+    )
 
     /**
      * Verifies that response matches a fixture.
@@ -344,28 +344,26 @@ exports.install = ({ baseUrl = '' } = {}) => {
     /**
      * Checking response header.
      */
-    Then(/^response header (.+) should (not )?(equal|contain|match) (.+)$/, function (
-        key,
-        flag,
-        comparator,
-        expectedValue
-    ) {
-        const response = mustGetResponse(this.httpApiClient)
-        const header = response.headers[key.toLowerCase()]
+    Then(
+        /^response header (.+) should (not )?(equal|contain|match) (.+)$/,
+        function (key, flag, comparator, expectedValue) {
+            const response = mustGetResponse(this.httpApiClient)
+            const header = response.headers[key.toLowerCase()]
 
-        expect(header, `Header '${key}' does not exist`).to.not.be.undefined
+            expect(header, `Header '${key}' does not exist`).to.not.be.undefined
 
-        let expectFn = expect(
-            header,
-            `Expected header '${key}' to ${
-                flag ? flag : ''
-            }${comparator} '${expectedValue}', but found '${header}' which does${
-                flag ? '' : ' not'
-            }`
-        ).to
-        if (flag != undefined) {
-            expectFn = expectFn.not
+            let expectFn = expect(
+                header,
+                `Expected header '${key}' to ${
+                    flag ? flag : ''
+                }${comparator} '${expectedValue}', but found '${header}' which does${
+                    flag ? '' : ' not'
+                }`
+            ).to
+            if (flag != undefined) {
+                expectFn = expectFn.not
+            }
+            expectFn[comparator](comparator === 'match' ? new RegExp(expectedValue) : expectedValue)
         }
-        expectFn[comparator](comparator === 'match' ? new RegExp(expectedValue) : expectedValue)
-    })
+    )
 }
