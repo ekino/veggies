@@ -1,7 +1,7 @@
 'use strict'
 
 const arg = require('arg')
-const CucumberCli = require('@cucumber/cucumber/lib/cli').default
+const CucumberCli = require('@cucumber/cucumber/lib/cli/index').default
 
 const veggiesArgsDefinitions = {
     '--cleanSnapshots': Boolean,
