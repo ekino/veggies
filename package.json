@@ -79,6 +79,6 @@
     "doc": "jsdoc -c .jsdoc.json --verbose",
     "doc-pub": "yarn run readme && yarn run doc && gh-pages -d _doc",
     "examples": "veggies --require examples/support examples/features",
-    "changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s -r 0"
+    "changelog": "conventional-changelog -p conventionalcommits -i CHANGELOG.md -s"
   }
 }
