@@ -1,3 +1,11 @@
+## 1.1.0 (2021-11-26)
+
+* chore: changelog script should not override previous versions ([8012b47](https://github.com/ekino/veggies/commit/8012b47))
+* chore(yarn): update Yarn version ([c3dba4c](https://github.com/ekino/veggies/commit/c3dba4c))
+* feat(cucumber): explicit import of the index file for the CLI ([b3ad0e6](https://github.com/ekino/veggies/commit/b3ad0e6))
+
+
+
 ## 1.0.1 (2021-09-16)
 
 * feat(cliWrapper): wrap the cucumber CLI to keep the use of custom options ([e0fa4f9](https://github.com/ekino/veggies/commit/e0fa4f9))
