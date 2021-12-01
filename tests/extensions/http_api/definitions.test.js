@@ -264,13 +264,15 @@ test('do not follow redirect', () => {
     expect(clientMock.httpApiClient.setFollowRedirect).toHaveBeenCalledWith(false)
 })
 
-test('pick response json property', () => {
+test('pick response json|header property', () => {
     const context = helper.getContext() // Extension context
 
-    const def = context.getDefinitionByMatcher('pick response json')
+    const def = context.getDefinitionByMatcher('pick response (json|header) (.+) as (.+)')
     def.shouldNotMatch('I pick response json  as ')
-    def.shouldMatch('I pick response json key as value', ['key', 'value'])
-    def.shouldMatch('pick response json key as value', ['key', 'value'])
+    def.shouldMatch('I pick response json key as value', ['json', 'key', 'value'])
+    def.shouldMatch('pick response json key as value', ['json', 'key', 'value'])
+    def.shouldMatch('I pick response header key as value', ['header', 'key', 'value'])
+    def.shouldMatch('pick response header key as value', ['header', 'key', 'value'])
 })
 
 test('enable cookies', () => {

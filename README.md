@@ -227,6 +227,19 @@ Scenario Outline: Fetching <key> API endpoint from root endpoint
     | public_gists_url |
 ```
 
+You can also pick a field from response headers.
+
+```gherkin
+Scenario: Setting json body from .json fixture file
+    And set request json body from json_file
+    When I POST https://examples.com/users
+    Then response status code should be 201
+    And I pick response header location as location
+    And I clear request body
+    And I GET {{location}}
+    And response status code should be 200
+```
+
 #### Using cookies
 
 Cookies are disabled by default, but you've got the ability to enable/disable the feature using a gherkin `Given` expression.
@@ -813,7 +826,7 @@ Given:
   - /^(?:I )?set request multipart body from (.+)$/
   - /^(?:I )?clear request body$/
   - /^(?:I )?set request query$/
-  - /^(?:I )?pick response json (.+) as (.+)$/
+  - /^(?:I )?pick response (json|header) (.+) as (.+)$/
   - /^(?:I )?enable cookies$/
   - /^(?:I )?disable cookies$/
   - /^(?:I )?set cookie from (.+)$/
