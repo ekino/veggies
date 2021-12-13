@@ -1,0 +1,25 @@
+
+
+{
+    "compilerOptions": {
+        "incremental": true,
+        "noImplicitAny": true,
+        "outDir": "./build",
+        "allowJs": true,
+        "target": "es2019",
+        "module": "commonjs",
+        "lib": ["es2020"],
+        "alwaysStrict": true,
+        "sourceMap": true,
+        "skipLibCheck": true,
+        "noUnusedParameters": false,
+        "noUnusedLocals": false,
+        "strictNullChecks": true,
+        "noUncheckedIndexedAccess": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+    },
+    "includes": ["**/*"],
+    "exclude": ["./node_modules", "./build", "./coverage"]
+}
