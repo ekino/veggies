@@ -1,0 +1,17 @@
+# .prettierrc
+arrowParens: always
+printWidth: 100
+semi: false
+singleQuote: true
+tabWidth: 4
+overrides:
+  - files:
+    - "*.yml"
+    - "*.yaml"
+    options:
+      bracketSpacing: false
+      tabWidth: 2
+  - files: "*.json"
+    options:
+      trailingComma: all
+      tabWidth: 4

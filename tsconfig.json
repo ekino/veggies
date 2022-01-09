@@ -1,7 +1,7 @@
-
-
 {
     "compilerOptions": {
+        "typeRoots": ["./node_modules/@types", "src/@types"],
+        "types": ["node","jest","chai"],
         "incremental": true,
         "noImplicitAny": true,
         "outDir": "./build",
@@ -20,6 +20,7 @@
         "allowSyntheticDefaultImports": true,
         "forceConsistentCasingInFileNames": true,
     },
-    "includes": ["**/*"],
-    "exclude": ["./node_modules", "./build", "./coverage"]
+    "include": ["src","tests","bin","scripts"],
+    "exclude": ["./node_modules", "./build", "./coverage","examples"],
+    "files": ["src/@types/chai.d.ts"]
 }
