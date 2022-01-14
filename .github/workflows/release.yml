@@ -50,6 +50,12 @@ jobs:
           tag_name: v${{ steps.package-version.outputs.current-version }}
           name: Release v${{ steps.package-version.outputs.current-version }}
 
+      - name: Setup npmrc
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16.x'
+          registry-url: 'https://registry.npmjs.org'
+          
       - name: Publish to NPM
         run: npm publish --access public
         env:
