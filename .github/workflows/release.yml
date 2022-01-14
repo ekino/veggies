@@ -55,7 +55,7 @@ jobs:
         with:
           body: ${{ steps.changelog.outputs.body }}
           tag_name: v${{ steps.package-version.outputs.current-version }}
-          name: Release v${{ steps.package-version.outputs.current-version }}
+          name: v${{ steps.package-version.outputs.current-version }}
 
       - name: Setup npmrc
         uses: actions/setup-node@v2
