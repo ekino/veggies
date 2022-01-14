@@ -27,8 +27,15 @@ jobs:
           CHANGELOG=$(yarn conventional-changelog -p conventionalcommits -r -u 0)
           echo -e "${CHANGELOG}\n\n\n\n$(cat CHANGELOG.md)" > CHANGELOG.md
           BODY=$(echo -e "${CHANGELOG}" | sed -e "1,2d")
-          echo "::set-output name=body::$(echo -e "${BODY}")"
+          BODY="${BODY//'%'/'%25'}"
+          BODY="${BODY//$'\n'/'%0A'}"
+          BODY="${BODY//$'\r'/'%0D'}"
+          echo "::set-output name=body::${BODY}"
 
+      - name: Log changes
+        run: |
+          echo "The changelog will be : ${{ steps.changelog.outputs.body }}"
+            
       - name: Get version
         id: package-version
         uses: martinbeentjes/npm-get-version-action@v1.1.0
