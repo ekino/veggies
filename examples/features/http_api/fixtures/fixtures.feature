@@ -70,3 +70,15 @@ Feature: Using fixtures with http API extension
     And set request form body from json_00
     When I POST http://fake.io/users/json
     Then response status code should be 200
+
+    @json @header
+    Scenario: Setting json body from .json fixture file
+        Given I mock http call to forward request body for path /users
+        And set request json body from json_00
+        When I POST http://fake.io/users
+        Then response status code should be 200
+        And I pick response header location as location
+        And I clear request body
+        Given I mock GET http call to forward request body for path /users/1
+        And I GET {{location}}
+        And response status code should be 200

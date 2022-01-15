@@ -125,11 +125,14 @@ exports.install = ({ baseUrl = '' } = {}) => {
         this.httpApiClient.setQuery(Cast.object(this.state.populateObject(step.rowsHash())))
     })
 
-    Given(/^(?:I )?pick response json (.+) as (.+)$/, function (path, key) {
+    /**
+     * Pick a value from previous json response or header and set it to state
+     */
+    Given(/^(?:I )?pick response (json|header) (.+) as (.+)$/, function (dataSource, path, key) {
         const response = this.httpApiClient.getResponse()
-        const body = response.body
+        let data = dataSource !== 'header' ? response.body : response.headers
 
-        this.state.set(key, _.get(body, path))
+        this.state.set(key, _.get(data, path))
     })
 
     /**

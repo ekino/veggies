@@ -219,6 +219,12 @@ class HttpApiClient {
      */
     makeRequest(method, path, baseUrl) {
         return new Promise((resolve, reject) => {
+            if (/https?:\/\//.test(path)) {
+                const url = new URL(path)
+                path = path.replace(url.origin, '')
+                baseUrl = url.origin
+            }
+
             const options = {
                 baseUrl: baseUrl,
                 uri: path,
