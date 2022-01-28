@@ -1,3 +1,9 @@
+## 1.2.0 (2022-01-28)
+
+* feat(httpApi): minor improve for httpDefinitions and fix uri for makeRequest ([27fabae](https://github.com/ekino/veggies/commit/27fabae))
+
+
+
 ## <small>1.1.2 (2022-01-14)</small>
 
 * fix(release): fix changelog output to be multiline ([c510aa4](https://github.com/ekino/veggies/commit/c510aa4))
