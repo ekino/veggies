@@ -275,6 +275,46 @@ test('pick response json|header property', () => {
     def.shouldMatch('pick response header key as value', ['header', 'key', 'value'])
 })
 
+test('replace value of state key', () => {
+    const context = helper.getContext() // Extension context
+
+    const def = context.getDefinitionByMatcher(
+        'replace(?: placeholder)? (.+) in (.+) to ([^\\s]+)(?: with regex options? (.+)?)?'
+    )
+    def.shouldNotMatch('replace key {token} in URLPage to')
+    def.shouldNotMatch('I replace {token} in URLPage to   ')
+    def.shouldMatch('replace {token} in URLPage to abcd', ['{token}', 'URLPage', 'abcd'])
+    def.shouldMatch('I replace placeholder {token} in URLPage to abcd', [
+        '{token}',
+        'URLPage',
+        'abcd',
+    ])
+    def.shouldMatch('I replace placeholder {token} in URLPage to abcd with regex option gi', [
+        '{token}',
+        'URLPage',
+        'abcd',
+        'gi',
+    ])
+    def.shouldMatch('I replace {token} in URLPage to abcd with regex options gi', [
+        '{token}',
+        'URLPage',
+        'abcd',
+        'gi',
+    ])
+    const URLPage = 'http://localhost:300/api/{token}/page'
+    const newURLPage = 'http://localhost:300/api/abcd/page'
+    const stateMock = {
+        state: {
+            get: jest.fn().mockImplementation(() => URLPage),
+            set: jest.fn().mockImplementation(() => newURLPage),
+        },
+    }
+
+    def.exec(stateMock, '{token}', 'URLPage', 'abcd', 'gi')
+    expect(stateMock.state.get).toHaveBeenCalledWith('URLPage')
+    expect(stateMock.state.set).toHaveBeenCalledWith('URLPage', newURLPage)
+})
+
 test('enable cookies', () => {
     const context = helper.getContext() // Extension context
 

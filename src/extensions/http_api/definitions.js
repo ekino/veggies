@@ -136,6 +136,19 @@ exports.install = ({ baseUrl = '' } = {}) => {
     })
 
     /**
+     * Pick a value from previous json response or header and set it to state
+     */
+    Given(
+        /^(?:I )?replace(?: placeholder)? (.+) in (.+) to ([^\s]+)(?: with regex options? (.+)?)?$/,
+        function (search, key, replaceValue, option) {
+            let newValue = this.state
+                .get(key)
+                .replace(new RegExp(search, option || undefined), replaceValue)
+            this.state.set(key, newValue)
+        }
+    )
+
+    /**
      * Enabling cookies
      */
     Given(/^(?:I )?enable cookies$/, function () {
