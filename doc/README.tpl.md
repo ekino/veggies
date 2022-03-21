@@ -231,7 +231,15 @@ Scenario Outline: Fetching <key> API endpoint from root endpoint
 ```
 <%={{ }}=%>
 
-You can also pick a field from response headers.
+
+Pick a value from response header
+
+Syntax:
+```
+I pick response header <key> as <key>
+```
+
+Example:
 
 {{=<% %>=}}
 ```gherkin
@@ -245,6 +253,23 @@ Scenario: Setting json body from .json fixture file
     And response status code should be 200
 ```
 <%={{ }}=%>
+
+
+
+#### Replace placeholder in key of state:
+
+Syntax:
+```
+I replace (placeholder) <search> in <key> to <value> with regex option <flags>
+```
+- `placeholder` and `with regex option <flags>` are optional
+- `<value>` does not support spaces
+
+Example: 
+```
+And I replace {token} in URLPage to e1c401d5c
+And I replace placeholder {stateUpMode} in URLPage to live with regex option gi
+```
 
 #### Using cookies
 
