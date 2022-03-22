@@ -1,3 +1,9 @@
+## 1.3.0 (2022-03-22)
+
+* feat(httpApi): add definition to replace placeholder in key of state ([b2b96c2](https://github.com/ekino/veggies/commit/b2b96c2))
+
+
+
 ## 1.2.0 (2022-01-28)
 
 * feat(httpApi): minor improve for httpDefinitions and fix uri for makeRequest ([27fabae](https://github.com/ekino/veggies/commit/27fabae))
