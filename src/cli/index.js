@@ -35,6 +35,8 @@ exports.run = async (argv) => {
             argv: cucumberArgs,
             cwd: process.cwd(),
             stdout: process.stdout,
+            stderr: process.stderr,
+            env: process.env,
         }).run()
 
         process.exit(result.success ? 0 : 1)

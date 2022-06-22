@@ -44,7 +44,7 @@
     },
     "devDependencies": {
         "@commitlint/config-conventional": "12.x",
-        "@cucumber/cucumber": "7.x",
+        "@cucumber/cucumber": "8.x",
         "babylon": "6.x",
         "chalk": "4.x",
         "commitlint": "12.x",
@@ -64,7 +64,7 @@
         "sinon": "11.x"
     },
     "peerDependencies": {
-        "@cucumber/cucumber": ">=7.0.0"
+        "@cucumber/cucumber": ">=8.0.0"
     },
     "scripts": {
         "test": "jest --verbose --colors tests",
