@@ -1,3 +1,10 @@
+## 1.4.0 (2022-06-22)
+
+* chore(deps): upgrade cucumber v8 ([163ea41](https://github.com/ekino/veggies/commit/163ea41))
+* chore(lint): add linter for json,yaml ([834ca12](https://github.com/ekino/veggies/commit/834ca12))
+
+
+
 ## 1.3.0 (2022-03-22)
 
 * feat(httpApi): add definition to replace placeholder in key of state ([b2b96c2](https://github.com/ekino/veggies/commit/b2b96c2))
