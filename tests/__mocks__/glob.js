@@ -1,6 +1,6 @@
 'use strict'
 
-const glob = jest.genMockFromModule('glob')
+jest.genMockFromModule('glob')
 
 let mockedResults = {}
 

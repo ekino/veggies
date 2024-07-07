@@ -34,7 +34,7 @@ exports.install = () => {
 
     When(/^(?:I )?dump (stderr|stdout)$/, function (type) {
         const output = this.cli.getOutput(type)
-        console.log(output) // eslint-disable-line no-console
+        console.log(output)  
     })
 
     Then(/^(?:the )?(?:command )?exit code should be (\d+)$/, function (expectedExitCode) {

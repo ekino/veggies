@@ -197,7 +197,7 @@ exports.install = ({ baseUrl = '' } = {}) => {
      */
     When(/^(?:I )?dump response body$/, function () {
         const response = mustGetResponse(this.httpApiClient)
-        console.log(inspect(response.body, { colors: true, depth: null })) // eslint-disable-line no-console
+        console.log(inspect(response.body, { colors: true, depth: null }))  
     })
 
     /**
@@ -205,7 +205,7 @@ exports.install = ({ baseUrl = '' } = {}) => {
      */
     When(/^(?:I )?dump response headers$/, function () {
         const response = mustGetResponse(this.httpApiClient)
-        console.log(response.headers) // eslint-disable-line no-console
+        console.log(response.headers)  
     })
 
     /**
@@ -213,7 +213,7 @@ exports.install = ({ baseUrl = '' } = {}) => {
      */
     When(/^(?:I )?dump response cookies$/, function () {
         mustGetResponse(this.httpApiClient)
-        console.log(this.httpApiClient.getCookies()) // eslint-disable-line no-console
+        console.log(this.httpApiClient.getCookies())  
     })
 
     /**

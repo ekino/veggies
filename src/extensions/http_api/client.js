@@ -268,7 +268,7 @@ class HttpApiClient {
 
             request(options, (_error, _response, _body) => {
                 if (_error) {
-                    console.error(_error, options) // eslint-disable-line no-console
+                    console.error(_error, options)  
                     reject()
                 }
 

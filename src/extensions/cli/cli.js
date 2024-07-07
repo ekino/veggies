@@ -161,7 +161,7 @@ class Cli {
             // otherwise, we can have problem with PATH
             const cmd = spawn(command, args, {
                 cwd: this.cwd,
-                env: Object.assign({}, process.env, this.env),
+                env: { ...process.env, ...this.env},
             })
 
             let killer

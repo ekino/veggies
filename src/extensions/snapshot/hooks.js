@@ -1,7 +1,6 @@
 'use strict'
 
 const { Before, BeforeAll, AfterAll } = require('@cucumber/cucumber')
-const _ = require('lodash')
 
 const clean = require('./clean')
 const cmdOptions = require('./cmdOptions')
