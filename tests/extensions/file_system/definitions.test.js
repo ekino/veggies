@@ -116,10 +116,10 @@ test('file should not exist', () => {
 
     return Promise.all([
         expect(def.exec(world, 'file', 'file_exist', 'not ')).rejects.toThrow(
-            `file 'file_exist' exists: expected { isFile: [Function: isFile] } to be null`,
+            `file 'file_exist' exists: expected { isFile: [Function isFile] } to be null`,
         ),
         expect(def.exec(world, 'file', 'a_directory', 'not ')).rejects.toThrow(
-            `file 'a_directory' exists: expected { isFile: [Function: isFile] } to be null`,
+            `file 'a_directory' exists: expected { isFile: [Function isFile] } to be null`,
         ),
         expect(def.exec(world, 'file', 'file_dont_exist', 'not ')).resolves.toBe(),
     ])
@@ -172,10 +172,10 @@ test('directory should not exist', () => {
 
     return Promise.all([
         expect(def.exec(world, 'directory', 'directory_exist', 'not ')).rejects.toThrow(
-            `directory_exist' exists: expected { Object (isDirectory) } to be null`,
+            `directory 'directory_exist' exists: expected { isDirectory: [Function isDirectory] } to be null`,
         ),
         expect(def.exec(world, 'directory', 'a_file', 'not ')).rejects.toThrow(
-            `directory 'a_file' exists: expected { Object (isDirectory) } to be null`,
+            `directory 'a_file' exists: expected { isDirectory: [Function isDirectory] } to be null`,
         ),
         expect(def.exec(world, 'directory', 'directory_dont_exist', 'not ')).resolves.toBe(),
     ])
