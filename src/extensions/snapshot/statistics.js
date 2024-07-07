@@ -39,6 +39,6 @@ exports.printReport = () => {
         if (exports.removed.length > 0) result += chalk.red(`${exports.removed.length} removed, `)
         result += `${total} total\n`
 
-        console.log(result)  
+        console.log(result)
     }
 }

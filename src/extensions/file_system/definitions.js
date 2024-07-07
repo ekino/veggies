@@ -51,14 +51,14 @@ exports.install = () => {
                             flag ? flag : ''
                         }${comparator} '${expectedValue}', but found '${content}' which does${
                             flag ? '' : ' not'
-                        }`
+                        }`,
                     ).to
                     if (flag != undefined) {
                         expectFn = expectFn.not
                     }
 
                     expectFn[comparator](
-                        comparator === 'match' ? new RegExp(expectedValue) : expectedValue
+                        comparator === 'match' ? new RegExp(expectedValue) : expectedValue,
                     )
                 })
                 .catch((err) => {
@@ -67,6 +67,6 @@ exports.install = () => {
 
                     return Promise.reject(err)
                 })
-        }
+        },
     )
 }

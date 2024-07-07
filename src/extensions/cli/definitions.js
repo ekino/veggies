@@ -12,7 +12,7 @@ exports.install = () => {
         /^(?:I )?set ([^ ]+) (?:env|environment) (?:var|variable) to (.+)$/,
         function (name, value) {
             this.cli.setEnvironmentVariable(name, value)
-        }
+        },
     )
 
     Given(/^(?:I )?set (?:env|environment) (?:vars|variables)$/, function (step) {
@@ -34,7 +34,7 @@ exports.install = () => {
 
     When(/^(?:I )?dump (stderr|stdout)$/, function (type) {
         const output = this.cli.getOutput(type)
-        console.log(output)  
+        console.log(output)
     })
 
     Then(/^(?:the )?(?:command )?exit code should be (\d+)$/, function (expectedExitCode) {
@@ -42,7 +42,7 @@ exports.install = () => {
 
         expect(
             exitCode,
-            `The command exit code doesn't match expected ${expectedExitCode}, found: ${exitCode}`
+            `The command exit code doesn't match expected ${expectedExitCode}, found: ${exitCode}`,
         ).to.equal(Number(expectedExitCode))
     })
 

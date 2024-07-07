@@ -24,7 +24,7 @@ test('should print to console snapshot statistics with data in created', () => {
     statistics.printReport()
     expect(logSpy).toHaveBeenCalledTimes(1)
     expect(logSpy).toHaveBeenLastCalledWith(
-        '`\n\nSnapshots:   \u001b[32m1 created, \u001b[39m1 total\n'
+        '`\n\nSnapshots:   \u001b[32m1 created, \u001b[39m1 total\n',
     )
 })
 
@@ -33,7 +33,7 @@ test('should print to console snapshot statistics with data in updated', () => {
     statistics.printReport()
     expect(logSpy).toHaveBeenCalledTimes(1)
     expect(logSpy).toHaveBeenLastCalledWith(
-        '`\n\nSnapshots:   \u001b[33m1 updated, \u001b[39m1 total\n'
+        '`\n\nSnapshots:   \u001b[33m1 updated, \u001b[39m1 total\n',
     )
 })
 
@@ -42,6 +42,6 @@ test('should print to console snapshot statistics with data in removed', () => {
     statistics.printReport()
     expect(logSpy).toHaveBeenCalledTimes(1)
     expect(logSpy).toHaveBeenLastCalledWith(
-        '`\n\nSnapshots:   \u001b[31m1 removed, \u001b[39m1 total\n'
+        '`\n\nSnapshots:   \u001b[31m1 removed, \u001b[39m1 total\n',
     )
 })

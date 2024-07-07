@@ -6,7 +6,7 @@ test('parseMatchExpression should throw when expression is undefined', () => {
 
 test('parseMatchExpression should throw when expression does not match', () => {
     expect(() => parseMatchExpression('does not match')).toThrow(
-        "'does not match' is not a valid expression"
+        "'does not match' is not a valid expression",
     )
 })
 

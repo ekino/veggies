@@ -13,6 +13,6 @@ exports.install = () => {
     })
 
     When(/^(?:I )?dump state$/, function () {
-        console.log(this.state.dump())  
+        console.log(this.state.dump())
     })
 }

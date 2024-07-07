@@ -82,7 +82,7 @@ test('expectToMatch should throw an error if scenario not found in file', () => 
     snapshot.scenarioLine = 4
 
     expect(() => snapshot.expectToMatch(fixtures.value2)).toThrow(
-        'Can not do a snapshot. Scenario not found in file ./snapshot1.feature on line 4'
+        'Can not do a snapshot. Scenario not found in file ./snapshot1.feature on line 4',
     )
     expect(fs.readFileSync.mock.calls.length).toBe(1)
 })
@@ -104,7 +104,7 @@ test("expectToMatch should write a snapshot if it doesn't exists", () => {
     snapshot.expectToMatch(fixtures.value2)
     expect(fs.writeFileSync).toHaveBeenCalledWith(
         fixtures.snapshotFile1,
-        fixtures.snapshotFileContent1And2
+        fixtures.snapshotFileContent1And2,
     )
     expect(fs.writeFileSync.mock.calls.length).toBe(1)
 })
@@ -115,7 +115,7 @@ test('expectToMatch should not write a snapshot and throw a diff error when prev
     snapshot.scenarioLine = 6
 
     expect(() => snapshot.expectToMatch(fixtures.value2)).toThrow(
-        "The snapshot does not exist and won't be created."
+        "The snapshot does not exist and won't be created.",
     )
     expect(fs.writeFileSync).not.toHaveBeenCalled()
 })
@@ -128,7 +128,7 @@ test("expectToMatch should write a snapshot file if it doesn't exists", () => {
     snapshot.expectToMatch(fixtures.value1)
     expect(fs.writeFileSync).toHaveBeenCalledWith(
         fixtures.snapshotFile1NotExists,
-        fixtures.snapshotFileContent1
+        fixtures.snapshotFileContent1,
     )
     expect(fs.writeFileSync.mock.calls.length).toBe(1)
 })
@@ -142,7 +142,7 @@ test('expectToMatch should work even if two scenarios have the same name', () =>
 
     expect(fs.writeFileSync).toHaveBeenCalledWith(
         fixtures.snapshotFile1And2,
-        fixtures.snapshotFileContent1And2And3
+        fixtures.snapshotFileContent1And2And3,
     )
     expect(fs.writeFileSync.mock.calls.length).toBe(1)
 })
@@ -157,7 +157,7 @@ test('expectToMatch should work even if there is multiple snapshots in a scenari
 
     expect(fs.writeFileSync).toHaveBeenCalledWith(
         fixtures.snapshotFile1With2SnapshotsInAScenario,
-        fixtures.snapshotFileContent1With2SnapshotsInAScenario
+        fixtures.snapshotFileContent1With2SnapshotsInAScenario,
     )
     expect(fs.writeFileSync.mock.calls.length).toBe(1)
 })
@@ -171,7 +171,7 @@ test('expectToMatch should update snapshot if given update option', () => {
 
     expect(fs.writeFileSync).toHaveBeenCalledWith(
         fixtures.snapshotFile1,
-        fixtures.snapshotFileContent1WithValue2
+        fixtures.snapshotFileContent1WithValue2,
     )
     expect(fs.writeFileSync.mock.calls.length).toBe(1)
 })
@@ -186,7 +186,7 @@ test("expectToMatch should notify played scenarios snapshots so they don't get r
 
     expect(fs.writeFileSync).toHaveBeenCalledWith(
         fixtures.snapshotFile1And2,
-        fixtures.snapshotFileContent1
+        fixtures.snapshotFileContent1,
     )
     expect(fs.writeFileSync.mock.calls.length).toBe(1)
 })
@@ -202,7 +202,7 @@ test("expectToMatch should notify all played snapshots in scenarios so they don'
 
     expect(fs.writeFileSync).toHaveBeenCalledWith(
         fixtures.snapshotFile1With3SnapshotsInAScenario,
-        fixtures.snapshotFileContent1With2SnapshotsInAScenario
+        fixtures.snapshotFileContent1With2SnapshotsInAScenario,
     )
     expect(fs.writeFileSync.mock.calls.length).toBe(1)
 })
@@ -248,7 +248,7 @@ test("expectToMatchJson should throw an error if a field doesn't match it's matc
     const propertiesMatchers = [{ field: 'key2', matcher: 'type', value: 'string' }]
 
     expect(() =>
-        snapshot.expectToMatchJson(fixtures.value1WithError, propertiesMatchers)
+        snapshot.expectToMatchJson(fixtures.value1WithError, propertiesMatchers),
     ).toThrowError("Property 'key2' (2) type is not 'string': expected 2 to be a string")
 })
 
@@ -260,7 +260,7 @@ test('expectToMatchJson should throw an error if a property matcher changes', ()
     const propertiesMatchers = [{ field: 'key2', matcher: 'type', value: 'number' }]
 
     expect(() => snapshot.expectToMatchJson(fixtures.value1WithError, propertiesMatchers)).toThrow(
-        fixtures.diffErrorFile1WithPropertyMatchers
+        fixtures.diffErrorFile1WithPropertyMatchers,
     )
 })
 

@@ -84,7 +84,6 @@ const partial =
 
 const structuredClone = (obj) => JSON.parse(JSON.stringify(obj))
 
-
 module.exports = {
     isNumber,
     isEmpty,
@@ -100,5 +99,5 @@ module.exports = {
     pick,
     omit,
     partial,
-    structuredClone
+    structuredClone,
 }

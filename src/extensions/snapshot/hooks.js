@@ -9,7 +9,7 @@ const statistics = require('./statistics')
 function getCurrentScenarioLineNumber({ gherkinDocument, pickle }) {
     const currentScenarioId = pickle.astNodeIds[0]
     const { scenario } = gherkinDocument.feature.children.find(
-        ({ scenario: { id } }) => id === currentScenarioId
+        ({ scenario: { id } }) => id === currentScenarioId,
     )
     return scenario.location.line
 }

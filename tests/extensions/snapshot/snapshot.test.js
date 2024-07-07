@@ -327,7 +327,7 @@ test("readSnapshotFile should give an empty object if file doesn't exists", () =
 
 test('readSnapshotFile throw an error if no file', () => {
     expect(snapshot.readSnapshotFile).toThrowError(
-        /Missing snapshot file undefined to read snapshots/
+        /Missing snapshot file undefined to read snapshots/,
     )
 })
 

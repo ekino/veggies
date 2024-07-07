@@ -61,7 +61,7 @@
         "minami": "1.x",
         "mustache": "4.x",
         "nock": "13.x",
-        "prettier": "2.x",
+        "prettier": "^3.3.2",
         "sinon": "11.x"
     },
     "peerDependencies": {

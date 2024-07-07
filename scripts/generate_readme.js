@@ -139,7 +139,7 @@ const extractModuleExportBody = (file, node) => {
     module.exports = module.exports = ({ Given, When, Then }) => {
         // definitions
     }
-`)
+`),
         )
         process.exit(1)
     }
@@ -174,7 +174,7 @@ const extractDefinitionInfo = (file, node) => {
     const [regex] = node.expression.arguments
     if (!regex || regex.type !== 'RegExpLiteral') {
         console.error(
-            chalk.red(`! Found invalid definition in: '${file}' at line ${node.loc.start.line}`)
+            chalk.red(`! Found invalid definition in: '${file}' at line ${node.loc.start.line}`),
         )
         process.exit(1)
     }
@@ -231,7 +231,7 @@ const getDefinitionsFromFile = (file) => {
 const generateReadme = async () => {
     try {
         const definitions = await Promise.all(
-            extensions.map((extensionId) => getDefinitionsFromFile(definitionFiles[extensionId]))
+            extensions.map((extensionId) => getDefinitionsFromFile(definitionFiles[extensionId])),
         )
 
         const definitionsByExtension = {}
@@ -246,7 +246,7 @@ const generateReadme = async () => {
             {
                 definitions: definitionsByExtension,
             },
-            partials
+            partials,
         )
 
         if (isCheck) {
@@ -254,7 +254,7 @@ const generateReadme = async () => {
             assert.strictEqual(
                 renderedReadme,
                 readmeContent,
-                'README.md was not generated: Use `yarn readme`.'
+                'README.md was not generated: Use `yarn readme`.',
             )
         } else {
             return writeFile(readmePath, renderedReadme)

@@ -161,7 +161,7 @@ class Cli {
             // otherwise, we can have problem with PATH
             const cmd = spawn(command, args, {
                 cwd: this.cwd,
-                env: { ...process.env, ...this.env},
+                env: { ...process.env, ...this.env },
             })
 
             let killer
@@ -186,8 +186,8 @@ class Cli {
 
                         return reject(
                             new Error(
-                                `process.kill('${this.killSignal}') scheduled but process exited (delay: ${this.killDelay}ms)`
-                            )
+                                `process.kill('${this.killSignal}') scheduled but process exited (delay: ${this.killDelay}ms)`,
+                            ),
                         )
                     }
                 }

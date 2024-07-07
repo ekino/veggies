@@ -62,7 +62,7 @@ test('cast array of values', () => {
 
 test('cast array of objects', () => {
     expect(
-        Cast.objects([{ a: '1((number))' }, { b: 'true((boolean))' }, { c: 'a,b,c((array))' }])
+        Cast.objects([{ a: '1((number))' }, { b: 'true((boolean))' }, { c: 'a,b,c((array))' }]),
     ).toEqual([{ a: 1 }, { b: true }, { c: ['a', 'b', 'c'] }])
 })
 

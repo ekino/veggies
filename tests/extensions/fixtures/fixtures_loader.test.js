@@ -13,7 +13,7 @@ jest.mock(
         // `jest.mock()` is not allowed to reference any out-of-scope variables
         return () => ({ type: 'javascript module', testing: true })
     },
-    { virtual: true }
+    { virtual: true },
 )
 
 jest.mock('../../../fixture.js.no_default_function', () => ({}), {
@@ -81,8 +81,8 @@ test('load empty .yaml fixture file', () => {
         .loadYaml('fixture.yaml.empty')
         .catch((err) =>
             expect(err.message).toMatch(
-                'Fixture file is invalid, yaml parsing resulted in undefined data for file: fixture.yaml.empty'
-            )
+                'Fixture file is invalid, yaml parsing resulted in undefined data for file: fixture.yaml.empty',
+            ),
         )
 })
 
@@ -145,7 +145,7 @@ test('load non existing .js fixture file', () => {
 
     return fixturesLoader.loadModule('noent.js').catch((err) => {
         expect(err.message).toEqual(
-           "An error occurred while loading fixture file: noent.js\nerror: Cannot find module '../../../noent.js' from 'src/extensions/fixtures/fixtures_loader.js'"
+            "An error occurred while loading fixture file: noent.js\nerror: Cannot find module '../../../noent.js' from 'src/extensions/fixtures/fixtures_loader.js'",
         )
     })
 })
@@ -158,7 +158,7 @@ test('load .js without default exported function', () => {
             [
                 'javascript fixture file should export default function.',
                 `Make sure you declared 'module.exports = <function>' in fixture.js.no_default_function`,
-            ].join('\n')
+            ].join('\n'),
         )
     })
 })
@@ -196,7 +196,7 @@ test('load invalid .json fixture file', () => {
     return fixturesLoader
         .loadJson('fixture.json.invalid')
         .catch((err) =>
-            expect(err.message).toMatch('Unable to parse json fixture file: fixture.json.invalid')
+            expect(err.message).toMatch('Unable to parse json fixture file: fixture.json.invalid'),
         )
 })
 
@@ -229,7 +229,7 @@ test('generic load with no matching fixture file', () => {
 
     return fixturesLoader.load('fixture').catch((err) => {
         expect(err.message).toEqual(
-            'No fixture found for: fixture (./none/fixture.@(yaml|yml|js|json|txt))'
+            'No fixture found for: fixture (./none/fixture.@(yaml|yml|js|json|txt))',
         )
     })
 })
@@ -246,7 +246,7 @@ test('generic load with multiple matching fixture files', () => {
                 `Found 2 matching fixture files, you should have only one matching 'fixture', matches:`,
                 '  - fixture.json',
                 '  - fixture.yaml',
-            ].join('\n')
+            ].join('\n'),
         )
     })
 })

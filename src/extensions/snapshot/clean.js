@@ -38,17 +38,17 @@ exports.resetReferences = function () {
 exports.cleanSnapshots = function () {
     Object.entries(exports._snapshots).forEach(([file, snapshotNames]) => {
         if (isEmpty(snapshotNames)) {
-            fileSystem.remove(file);
-            return true;
+            fileSystem.remove(file)
+            return true
         }
 
-        const content = snapshot.readSnapshotFile(file);
-        const newContent = pick(content, snapshotNames);
-        snapshot.writeSnapshotFile(file, newContent);
+        const content = snapshot.readSnapshotFile(file)
+        const newContent = pick(content, snapshotNames)
+        snapshot.writeSnapshotFile(file, newContent)
 
-        const omittedContent = omit(content, snapshotNames);
+        const omittedContent = omit(content, snapshotNames)
         Object.entries(omittedContent).forEach(([snapshotName, _snapshotContent]) => {
-            statistics.removed.push({ file, name: snapshotName });
-        });
-    });
+            statistics.removed.push({ file, name: snapshotName })
+        })
+    })
 }

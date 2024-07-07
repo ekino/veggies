@@ -89,10 +89,10 @@ test('file should exist', () => {
     return Promise.all([
         expect(def.exec(world, 'file', 'file_exist', undefined)).resolves.toBe(),
         expect(def.exec(world, 'file', 'a_directory', undefined)).rejects.toThrow(
-            "'a_directory' is not a file: expected false to be true"
+            "'a_directory' is not a file: expected false to be true",
         ),
         expect(def.exec(world, 'file', 'file_dont_exist', undefined)).rejects.toThrow(
-            "file 'file_dont_exist' does not exist: expected null not to be null"
+            "file 'file_dont_exist' does not exist: expected null not to be null",
         ),
     ])
 })
@@ -116,10 +116,10 @@ test('file should not exist', () => {
 
     return Promise.all([
         expect(def.exec(world, 'file', 'file_exist', 'not ')).rejects.toThrow(
-            `file 'file_exist' exists: expected { isFile: [Function: isFile] } to be null`
+            `file 'file_exist' exists: expected { isFile: [Function: isFile] } to be null`,
         ),
         expect(def.exec(world, 'file', 'a_directory', 'not ')).rejects.toThrow(
-            `file 'a_directory' exists: expected { isFile: [Function: isFile] } to be null`
+            `file 'a_directory' exists: expected { isFile: [Function: isFile] } to be null`,
         ),
         expect(def.exec(world, 'file', 'file_dont_exist', 'not ')).resolves.toBe(),
     ])
@@ -145,10 +145,10 @@ test('directory should exist', () => {
     return Promise.all([
         expect(def.exec(world, 'directory', 'directory_exist', undefined)).resolves.toBe(),
         expect(def.exec(world, 'directory', 'a_file', undefined)).rejects.toThrow(
-            `'a_file' is not a directory: expected false to be true`
+            `'a_file' is not a directory: expected false to be true`,
         ),
         expect(def.exec(world, 'directory', 'directory_dont_exist', undefined)).rejects.toThrow(
-            `directory 'directory_dont_exist' does not exist: expected null not to be null`
+            `directory 'directory_dont_exist' does not exist: expected null not to be null`,
         ),
     ])
 })
@@ -172,10 +172,10 @@ test('directory should not exist', () => {
 
     return Promise.all([
         expect(def.exec(world, 'directory', 'directory_exist', 'not ')).rejects.toThrow(
-            `directory_exist' exists: expected { Object (isDirectory) } to be null`
+            `directory_exist' exists: expected { Object (isDirectory) } to be null`,
         ),
         expect(def.exec(world, 'directory', 'a_file', 'not ')).rejects.toThrow(
-            `directory 'a_file' exists: expected { Object (isDirectory) } to be null`
+            `directory 'a_file' exists: expected { Object (isDirectory) } to be null`,
         ),
         expect(def.exec(world, 'directory', 'directory_dont_exist', 'not ')).resolves.toBe(),
     ])
@@ -185,7 +185,7 @@ test('file content matcher without file existing', () => {
     const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher(
-        'file (.+) content should (not )?(equal|contain|match)'
+        'file (.+) content should (not )?(equal|contain|match)',
     )
 
     const error = new Error()
@@ -203,10 +203,10 @@ test('file content matcher without file existing', () => {
     expect.assertions(2)
     return Promise.all([
         expect(
-            def.exec(world, 'file_exists', undefined, 'equal', 'expected content')
+            def.exec(world, 'file_exists', undefined, 'equal', 'expected content'),
         ).resolves.toBe(),
         expect(
-            def.exec(world, 'file_dont_exist', undefined, 'equal', 'expected content')
+            def.exec(world, 'file_dont_exist', undefined, 'equal', 'expected content'),
         ).rejects.toThrow(`File 'file_dont_exist' should exist`),
     ])
 })
@@ -215,7 +215,7 @@ test('file content should equal', () => {
     const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher(
-        'file (.+) content should (not )?(equal|contain|match)'
+        'file (.+) content should (not )?(equal|contain|match)',
     )
 
     const getFileContent = sinon.stub()
@@ -230,12 +230,12 @@ test('file content should equal', () => {
     expect.assertions(2)
     return Promise.all([
         expect(
-            def.exec(world, 'file_some_content', undefined, 'equal', 'some content')
+            def.exec(world, 'file_some_content', undefined, 'equal', 'some content'),
         ).resolves.toBe(),
         expect(
-            def.exec(world, 'file_another_content', undefined, 'equal', 'some content')
+            def.exec(world, 'file_another_content', undefined, 'equal', 'some content'),
         ).rejects.toThrow(
-            `Expected file 'file_another_content' to equal 'some content', but found 'another content' which does not: expected 'another content' to equal 'some content'`
+            `Expected file 'file_another_content' to equal 'some content', but found 'another content' which does not: expected 'another content' to equal 'some content'`,
         ),
     ])
 })
@@ -244,7 +244,7 @@ test('file content should not equal', () => {
     const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher(
-        'file (.+) content should (not )?(equal|contain|match)'
+        'file (.+) content should (not )?(equal|contain|match)',
     )
 
     const getFileContent = sinon.stub()
@@ -260,12 +260,12 @@ test('file content should not equal', () => {
 
     return Promise.all([
         expect(
-            def.exec(world, 'file_some_content', 'not ', 'equal', 'some content')
+            def.exec(world, 'file_some_content', 'not ', 'equal', 'some content'),
         ).rejects.toThrow(
-            `Expected file 'file_some_content' to not equal 'some content', but found 'some content' which does: expected 'some content' to not equal 'some content'`
+            `Expected file 'file_some_content' to not equal 'some content', but found 'some content' which does: expected 'some content' to not equal 'some content'`,
         ),
         expect(
-            def.exec(world, 'file_another_content', 'not ', 'equal', 'some content')
+            def.exec(world, 'file_another_content', 'not ', 'equal', 'some content'),
         ).resolves.toBe(),
     ])
 })
@@ -274,7 +274,7 @@ test('file content should contain', () => {
     const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher(
-        'file (.+) content should (not )?(equal|contain|match)'
+        'file (.+) content should (not )?(equal|contain|match)',
     )
 
     const getFileContent = sinon.stub()
@@ -290,9 +290,9 @@ test('file content should contain', () => {
     return Promise.all([
         expect(def.exec(world, 'file_some_content', undefined, 'contain', 'some')).resolves.toBe(),
         expect(
-            def.exec(world, 'file_another_content', undefined, 'contain', 'some')
+            def.exec(world, 'file_another_content', undefined, 'contain', 'some'),
         ).rejects.toThrow(
-            `Expected file 'file_another_content' to contain 'some', but found 'another content' which does not: expected 'another content' to include 'some'`
+            `Expected file 'file_another_content' to contain 'some', but found 'another content' which does not: expected 'another content' to include 'some'`,
         ),
     ])
 })
@@ -301,7 +301,7 @@ test('file content should not contain', () => {
     const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher(
-        'file (.+) content should (not )?(equal|contain|match)'
+        'file (.+) content should (not )?(equal|contain|match)',
     )
 
     const getFileContent = sinon.stub()
@@ -317,7 +317,7 @@ test('file content should not contain', () => {
 
     return Promise.all([
         expect(def.exec(world, 'file_some_content', 'not ', 'contain', 'some')).rejects.toThrow(
-            `Expected file 'file_some_content' to not contain 'some', but found 'some content' which does: expected 'some content' to not include 'some'`
+            `Expected file 'file_some_content' to not contain 'some', but found 'some content' which does: expected 'some content' to not include 'some'`,
         ),
         expect(def.exec(world, 'file_another_content', 'not ', 'contain', 'some')).resolves.toBe(),
     ])
@@ -327,7 +327,7 @@ test('file content should match', () => {
     const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher(
-        'file (.+) content should (not )?(equal|contain|match)'
+        'file (.+) content should (not )?(equal|contain|match)',
     )
 
     const getFileContent = sinon.stub()
@@ -343,12 +343,12 @@ test('file content should match', () => {
 
     return Promise.all([
         expect(
-            def.exec(world, 'file_some_content', undefined, 'match', '^some.*$')
+            def.exec(world, 'file_some_content', undefined, 'match', '^some.*$'),
         ).resolves.toBe(),
         expect(
-            def.exec(world, 'file_not_some_content', undefined, 'match', '^some.*$')
+            def.exec(world, 'file_not_some_content', undefined, 'match', '^some.*$'),
         ).rejects.toThrow(
-            `Expected file 'file_not_some_content' to match '^some.*$', but found 'not some content' which does not: expected 'not some content' to match /^some.*$/`
+            `Expected file 'file_not_some_content' to match '^some.*$', but found 'not some content' which does not: expected 'not some content' to match /^some.*$/`,
         ),
     ])
 })
@@ -357,7 +357,7 @@ test('file content should not match', () => {
     const context = helper.getContext()
 
     const def = context.getDefinitionByMatcher(
-        'file (.+) content should (not )?(equal|contain|match)'
+        'file (.+) content should (not )?(equal|contain|match)',
     )
 
     const getFileContent = sinon.stub()
@@ -373,10 +373,10 @@ test('file content should not match', () => {
 
     return Promise.all([
         expect(def.exec(world, 'file_some_content', 'not ', 'match', '^some.*$')).rejects.toThrow(
-            `Expected file 'file_some_content' to not match '^some.*$', but found 'some content' which does: expected 'some content' not to match /^some.*$/`
+            `Expected file 'file_some_content' to not match '^some.*$', but found 'some content' which does: expected 'some content' not to match /^some.*$/`,
         ),
         expect(
-            def.exec(world, 'file_not_some_content', 'not ', 'match', '^some.*$')
+            def.exec(world, 'file_not_some_content', 'not ', 'match', '^some.*$'),
         ).resolves.toBe(),
     ])
 })
