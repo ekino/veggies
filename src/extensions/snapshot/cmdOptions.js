@@ -1,6 +1,6 @@
 'use strict'
 
-const { hasArg, hasOneArgOf } = require('../../utils/commandLine')
+import { hasArg, hasOneArgOf } from '../../utils/commandLine.js'
 
 /**
  * @module extensions/snapshot/cmdOptions
@@ -10,28 +10,28 @@ const { hasArg, hasOneArgOf } = require('../../utils/commandLine')
  * Read command line option. If there is --cleanSnapshots, then we should clean snapshots
  * @type {boolean}
  */
-exports.cleanSnapshots = false
+export let cleanSnapshots = false
 
 /**
  * Read command line option. If there is --updateSnapshots or -u, then we should update snapshots
  * @type {boolean}
  */
-exports.updateSnapshots = false
+export let updateSnapshots = false
 
 /**
  * Read command line option. If there is --preventSnapshotsCreation, then we should not create missing snapshots
  * @type {boolean}
  */
-exports.preventSnapshotsCreation = false
+export let preventSnapshotsCreation = false
 
 if (hasOneArgOf(['--updateSnapshots', '-u'])) {
-    exports.updateSnapshots = true
+    updateSnapshots = true
 }
 
 if (hasArg('--cleanSnapshots')) {
-    exports.cleanSnapshots = true
+    cleanSnapshots = true
 }
 
 if (hasArg('--preventSnapshotsCreation')) {
-    exports.preventSnapshotsCreation = true
+    preventSnapshotsCreation = true
 }

@@ -1,26 +1,26 @@
-const isNumber = (n) => Number.isFinite(n)
+export const isNumber = (n) => Number.isFinite(n)
 
-const isEmpty = (val) =>
+export const isEmpty = (val) =>
     (!val && !isNumber(val)) || (typeof val === 'object' && Object.keys(val).length === 0)
 
-const isDefined = (val) => !!val
+export const isDefined = (val) => !!val
 
-const isString = (val) => typeof val === 'string'
+export const isString = (val) => typeof val === 'string'
 
-const isFunction = (func) => typeof func === 'function'
+export const isFunction = (func) => typeof func === 'function'
 
-const getValue = (obj, path, defaultValue = undefined) => {
+export const getValue = (obj, path, defaultValue = undefined) => {
     const pathArray = Array.isArray(path) ? path : path.match(/([^[.\]])+/g)
 
     return pathArray.reduce((acc, key) => {
-        if (acc && typeof acc === 'object' && key in acc) {
-            return acc[key]
+        if (acc == null || !(key in acc)) {
+            return defaultValue
         }
-        return defaultValue
+        return acc[key]
     }, obj)
 }
 
-const setValue = (obj, path, value) => {
+export const setValue = (obj, path, value) => {
     if (!obj || typeof obj !== 'object') return obj
 
     const pathArray = Array.isArray(path) ? path : path.match(/([^[.\]])+/g)
@@ -38,11 +38,11 @@ const setValue = (obj, path, value) => {
     return obj
 }
 
-const isPlainObject = (value) =>
+export const isPlainObject = (value) =>
     value?.constructor === Object &&
     (Object.getPrototypeOf(value) === null || Object.getPrototypeOf(value) === Object.prototype)
 
-const template = (tpl, options = {}) => {
+export const template = (tpl, options = {}) => {
     const defaultPattern = /\${(.*?)}/g
     const pattern = options.interpolate || defaultPattern
 
@@ -53,51 +53,38 @@ const template = (tpl, options = {}) => {
         })
 }
 
-const mapValues = (obj, fn) =>
+export const mapValues = (obj, fn) =>
     Object.entries(obj).reduce((acc, [key, value]) => {
         acc[key] = fn(value)
         return acc
     }, {})
 
-const findKey = (obj, predicate) => Object.keys(obj).find((key) => predicate(obj[key]))
+export const findKey = (obj, predicate) => Object.keys(obj).find((key) => predicate(obj[key]))
 
-const pick = (obj, keys) =>
-    Object.entries(obj)
-        .filter(([key]) => keys.includes(key))
-        .reduce((acc, [key, value]) => {
-            acc[key] = value
+export const pick = (obj, keys) => {
+    if (obj == null) return {}
+    return keys.reduce((acc, key) => {
+        if (Object.prototype.hasOwnProperty.call(obj, key)) {
+            acc[key] = obj[key]
+        }
+        return acc
+    }, {})
+}
+
+export const omit = (obj, keys) => {
+    if (obj == null) return {}
+
+    return Object.keys(obj)
+        .filter((key) => !keys.includes(key))
+        .reduce((acc, key) => {
+            acc[key] = obj[key]
             return acc
         }, {})
+}
 
-const omit = (obj, keys) =>
-    Object.entries(obj)
-        .filter(([key]) => !keys.includes(key))
-        .reduce((acc, [key, value]) => {
-            acc[key] = value
-            return acc
-        }, {})
-
-const partial =
+export const partial =
     (fn, ...partials) =>
     (...args) =>
         fn(...partials, ...args)
 
-const structuredClone = (obj) => JSON.parse(JSON.stringify(obj))
-
-module.exports = {
-    isNumber,
-    isEmpty,
-    isDefined,
-    isString,
-    isFunction,
-    getValue,
-    setValue,
-    isPlainObject,
-    template,
-    mapValues,
-    findKey,
-    pick,
-    omit,
-    partial,
-    structuredClone,
-}
+export const structuredClone = (obj) => JSON.parse(JSON.stringify(obj))

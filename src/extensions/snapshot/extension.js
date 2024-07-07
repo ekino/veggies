@@ -4,13 +4,13 @@
  * @module extensions/snapshot/Snapshot
  */
 
-const { format: prettyFormat } = require('pretty-format')
+import { format as prettyFormat } from 'pretty-format'
 
-const snapshot = require('./snapshot')
-const clean = require('./clean')
-const statistics = require('./statistics')
-const assertions = require('../../core/assertions')
-const { setValue, structuredClone } = require('../../utils/index')
+import * as snapshot from './snapshot.js'
+import * as clean from './clean.js'
+import * as statistics from './statistics.js'
+import * as assertions from '../../core/assertions.js'
+import { setValue, structuredClone } from '../../utils/index.js'
 
 /**
  * Snapshot extension.
@@ -115,7 +115,7 @@ class Snapshot {
  * Create a new isolated Snapshot module
  * @return {Snapshot}
  */
-module.exports = function (...args) {
+export default function (...args) {
     return new Snapshot(...args)
 }
 
@@ -123,4 +123,4 @@ module.exports = function (...args) {
  * Snapshot extension.
  * @type {Snapshot}
  */
-module.exports.Snapshot = Snapshot
+export { Snapshot }

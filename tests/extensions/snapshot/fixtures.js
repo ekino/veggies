@@ -1,6 +1,6 @@
-const dedent = require('../../../src/extensions/snapshot/dedent')
+import dedent from '../../../src/extensions/snapshot/dedent.js'
 
-exports.featureFileContent1 = dedent`
+export const featureFileContent1 = dedent`
     """
     Feature: Snapshot test
 
@@ -15,7 +15,7 @@ exports.featureFileContent1 = dedent`
     """
 `
 
-exports.snapshotContent1 = dedent`
+export const snapshotContent1 = dedent`
     Object {
       "key1": "value1",
       "key2": "value2",
@@ -25,7 +25,7 @@ exports.snapshotContent1 = dedent`
     }
 `
 
-exports.snapshotContent2 = dedent`
+export const snapshotContent2 = dedent`
     Object {
       "key1": "value1",
       "key2": "value2",
@@ -35,7 +35,7 @@ exports.snapshotContent2 = dedent`
     }
 `
 
-exports.snapshotContent3 = dedent`
+export const snapshotContent3 = dedent`
     Object {
       "key1": "value1",
       "key2": "value2",
@@ -45,7 +45,7 @@ exports.snapshotContent3 = dedent`
     }
 `
 
-exports.snapshotContent1WithPropertyMatchers = dedent`
+export const snapshotContent1WithPropertyMatchers = dedent`
     Object {
       "key1": "value1",
       "key2": "type(string)",
@@ -55,7 +55,7 @@ exports.snapshotContent1WithPropertyMatchers = dedent`
     }
 `
 
-exports.snapshotContentMultilineString = dedent`
+export const snapshotContentMultilineString = dedent`
     Object {
       "content": Object {
         "long text": "I
@@ -68,60 +68,60 @@ exports.snapshotContentMultilineString = dedent`
     }
 `
 
-exports.snapshotFileContent1 = `
+export const snapshotFileContent1 = `
 
-exports[\`scenario 1 1.1\`] = \`${exports.snapshotContent1}\`;
+exports[\`scenario 1 1.1\`] = \`${snapshotContent1}\`;
 `
 
-exports.snapshotFileContent1WithPropertyMatchers = `
+export const snapshotFileContent1WithPropertyMatchers = `
 
-exports[\`scenario 1 1.1\`] = \`${exports.snapshotContent1WithPropertyMatchers}\`;
+exports[\`scenario 1 1.1\`] = \`${snapshotContent1WithPropertyMatchers}\`;
 `
 
-exports.snapshotFileContent1And2 = `
+export const snapshotFileContent1And2 = `
 
-exports[\`scenario 1 1.1\`] = \`${exports.snapshotContent1}\`;
+exports[\`scenario 1 1.1\`] = \`${snapshotContent1}\`;
 
-exports[\`scenario 2 1.1\`] = \`${exports.snapshotContent2}\`;
+exports[\`scenario 2 1.1\`] = \`${snapshotContent2}\`;
 `
 
-exports.snapshotFileContent1And2And3 = `
+export const snapshotFileContent1And2And3 = `
 
-exports[\`scenario 1 1.1\`] = \`${exports.snapshotContent1}\`;
+exports[\`scenario 1 1.1\`] = \`${snapshotContent1}\`;
 
-exports[\`scenario 1 2.1\`] = \`${exports.snapshotContent3}\`;
+exports[\`scenario 1 2.1\`] = \`${snapshotContent3}\`;
 
-exports[\`scenario 2 1.1\`] = \`${exports.snapshotContent2}\`;
+exports[\`scenario 2 1.1\`] = \`${snapshotContent2}\`;
 `
 
-exports.snapshotFileContent1With2SnapshotsInAScenario = `
+export const snapshotFileContent1With2SnapshotsInAScenario = `
 
-exports[\`scenario 1 1.1\`] = \`${exports.snapshotContent1}\`;
+exports[\`scenario 1 1.1\`] = \`${snapshotContent1}\`;
 
-exports[\`scenario 1 1.2\`] = \`${exports.snapshotContent2}\`;
+exports[\`scenario 1 1.2\`] = \`${snapshotContent2}\`;
 `
 
-exports.snapshotFileContent1With3SnapshotsInAScenario = `
+export const snapshotFileContent1With3SnapshotsInAScenario = `
 
-exports[\`scenario 1 1.1\`] = \`${exports.snapshotContent1}\`;
+exports[\`scenario 1 1.1\`] = \`${snapshotContent1}\`;
 
-exports[\`scenario 1 1.2\`] = \`${exports.snapshotContent2}\`;
+exports[\`scenario 1 1.2\`] = \`${snapshotContent2}\`;
 
-exports[\`scenario 1 1.3\`] = \`${exports.snapshotContent3}\`;
+exports[\`scenario 1 1.3\`] = \`${snapshotContent3}\`;
 `
 
-exports.snapshotFileContent1WithValue2 = `
+export const snapshotFileContent1WithValue2 = `
 
-exports[\`scenario 1 1.1\`] = \`${exports.snapshotContent2}\`;
+exports[\`scenario 1 1.1\`] = \`${snapshotContent2}\`;
 `
 
-exports.snapshotFileContentMultilineString = `
+export const snapshotFileContentMultilineString = `
 
-exports[\`scenario 1 1.1\`] = \`${exports.snapshotContentMultilineString}\`;
+exports[\`scenario 1 1.1\`] = \`${snapshotContentMultilineString}\`;
 
 `
 
-exports.diffErrorValue1VsValue2 = dedent`
+export const diffErrorValue1VsValue2 = dedent`
     \u001b[32m- Snapshot\u001b[39m
     \u001b[31m+ Received\u001b[39m
     
@@ -135,7 +135,7 @@ exports.diffErrorValue1VsValue2 = dedent`
     \u001b[2m  }\u001b[22m
 `
 
-exports.diffErrorFile1WithPropertyMatchers = dedent`
+export const diffErrorFile1WithPropertyMatchers = dedent`
     
     \u001b[32m- Snapshot\u001b[39m
     \u001b[31m+ Received\u001b[39m
@@ -150,36 +150,54 @@ exports.diffErrorFile1WithPropertyMatchers = dedent`
     \u001b[2m  }\u001b[22m
 `
 
-exports.value1 = { key1: 'value1', key2: 'value2', key3: 'value3', key4: 'value4', key5: 'value5' }
-exports.value1WithError = {
+export const value1 = {
+    key1: 'value1',
+    key2: 'value2',
+    key3: 'value3',
+    key4: 'value4',
+    key5: 'value5',
+}
+export const value1WithError = {
     key1: 'value1',
     key2: 2,
     key3: 'value3',
     key4: 'value4',
     key5: 'value5',
 }
-exports.value2 = { key1: 'value1', key2: 'value2', key3: 'value8', key4: 'value4', key5: 'value5' }
-exports.value3 = { key1: 'value1', key2: 'value2', key3: 'value9', key4: 'value4', key5: 'value5' }
-exports.multilineValue = {
+export const value2 = {
+    key1: 'value1',
+    key2: 'value2',
+    key3: 'value8',
+    key4: 'value4',
+    key5: 'value5',
+}
+export const value3 = {
+    key1: 'value1',
+    key2: 'value2',
+    key3: 'value9',
+    key4: 'value4',
+    key5: 'value5',
+}
+export const multilineValue = {
     content: { text: 'i am a text', 'long text': 'I\r\n am \r\n a\r\n long\r\n text' },
 }
 
-exports.featureFile1 = './snapshot1.feature'
-exports.featureFile1WithPropertyMatchers = './snapshot1WithPropertyMatchers.feature'
-exports.featureFile1And2 = './snapshot1And2.feature'
-exports.featureFile1NotExists = './snapshot1NotExists.feature'
-exports.featureFile1With2SnapshotsInAScenario = './snapshot1With2SnapshotsInAScenario.feature'
-exports.featureFile1With3SnapshotsInAScenario = './snapshot1With3SnapshotsInAScenario.feature'
-exports.featureFileMultilineString = './snapshotMultilineString.feature'
+export const featureFile1 = './snapshot1.feature'
+export const featureFile1WithPropertyMatchers = './snapshot1WithPropertyMatchers.feature'
+export const featureFile1And2 = './snapshot1And2.feature'
+export const featureFile1NotExists = './snapshot1NotExists.feature'
+export const featureFile1With2SnapshotsInAScenario = './snapshot1With2SnapshotsInAScenario.feature'
+export const featureFile1With3SnapshotsInAScenario = './snapshot1With3SnapshotsInAScenario.feature'
+export const featureFileMultilineString = './snapshotMultilineString.feature'
 
-exports.snapshotFile1 = '__snapshots__/snapshot1.feature.snap'
-exports.snapshotFile1WithPropertyMatchers =
+export const snapshotFile1 = '__snapshots__/snapshot1.feature.snap'
+export const snapshotFile1WithPropertyMatchers =
     '__snapshots__/snapshot1WithPropertyMatchers.feature.snap'
-exports.snapshotFile1NotExists = '__snapshots__/snapshot1NotExists.feature.snap'
-exports.snapshotFile1And2 = '__snapshots__/snapshot1And2.feature.snap'
-exports.snapshotFile1With2SnapshotsInAScenario =
+export const snapshotFile1NotExists = '__snapshots__/snapshot1NotExists.feature.snap'
+export const snapshotFile1And2 = '__snapshots__/snapshot1And2.feature.snap'
+export const snapshotFile1With2SnapshotsInAScenario =
     '__snapshots__/snapshot1With2SnapshotsInAScenario.feature.snap'
-exports.snapshotFile1With3SnapshotsInAScenario =
+export const snapshotFile1With3SnapshotsInAScenario =
     '__snapshots__/snapshot1With3SnapshotsInAScenario.feature.snap'
 
-exports.snapshotFileMultilineString = '__snapshots__/snapshotMultilineString.feature.snap'
+export const snapshotFileMultilineString = '__snapshots__/snapshotMultilineString.feature.snap'

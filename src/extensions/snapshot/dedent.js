@@ -57,7 +57,7 @@ const getSpacesLength = (text) => {
  * @param {string} text
  * @return {string}
  */
-module.exports = (text) => {
+const dedent = (text) => {
     if (typeof text !== 'string') text = text[0]
 
     let lines = text.split('\n')
@@ -86,3 +86,5 @@ module.exports = (text) => {
 
     return resultLines.join('\n')
 }
+
+export default dedent

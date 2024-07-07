@@ -1,6 +1,7 @@
 'use strict'
 
-const statistics = require('../../../src/extensions/snapshot/statistics')
+import { jest } from '@jest/globals'
+import statistics from '../../../src/extensions/snapshot/statistics.js'
 
 let logSpy
 beforeEach(() => {

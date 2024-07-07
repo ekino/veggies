@@ -6,10 +6,11 @@
  * @module extensions/httpApi/client
  */
 
-const request = require('request').defaults({ json: true })
-const { Cookie } = require('tough-cookie')
-const { isPlainObject, isString } = require('../../utils/index')
+import requestLib from 'request'
+import { Cookie } from 'tough-cookie'
+import { isPlainObject, isString } from '../../utils/index.js'
 
+const request = requestLib.defaults({ json: true })
 const BODY_TYPE_JSON = 'json'
 const BODY_TYPE_FORM = 'form'
 const BODY_TYPE_MULTIPART = 'form-data'
@@ -162,7 +163,7 @@ class HttpApiClient {
      * @param {string|Object} cookie - Cookie string or Object
      */
     setCookie(cookie) {
-        if (isPlainObject(cookie) && !isString(cookie)) {
+        if (!isPlainObject(cookie) && !isString(cookie)) {
             throw new TypeError(`"cookie" must be a string or a cookie object`)
         }
 
@@ -291,7 +292,7 @@ class HttpApiClient {
  * Create a new isolated http api client
  * @return {HttpApiClient}
  */
-module.exports = function (...args) {
+export default function (...args) {
     return new HttpApiClient(...args)
 }
 
@@ -299,4 +300,4 @@ module.exports = function (...args) {
  * Http api client extension.
  * @type {HttpApiClient}
  */
-module.exports.HttpApiClient = HttpApiClient
+export { HttpApiClient }

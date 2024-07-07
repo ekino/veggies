@@ -1,6 +1,6 @@
 'use strict'
 
-const Registry = require('../../src/core/registry')
+import * as Registry from '../../src/core/registry.js'
 
 test('should register an extension', () => {
     const world = {}

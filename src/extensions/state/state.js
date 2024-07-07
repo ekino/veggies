@@ -1,6 +1,6 @@
 'use strict'
 
-const { setValue, getValue, template, isPlainObject, mapValues } = require('../../utils/index')
+import { setValue, getValue, template, isPlainObject, mapValues } from '../../utils/index.js'
 
 /**
  * @module extensions/state/State
@@ -71,7 +71,7 @@ class State {
  * Create a new isolated state
  * @return {State}
  */
-module.exports = function (...args) {
+export default function (...args) {
     return new State(...args)
 }
 
@@ -79,4 +79,4 @@ module.exports = function (...args) {
  * State extension.
  * @type {State}
  */
-module.exports.State = State
+export { State }

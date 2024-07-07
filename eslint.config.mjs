@@ -2,18 +2,6 @@ import globals from 'globals'
 import eslintJs from '@eslint/js'
 
 const commonConfig = {
-    ...eslintJs.configs.recommended,
-    ignores: [
-        'coverage/*',
-        'doc/*',
-        '_doc/*',
-        'lib/*',
-        'examples/*',
-        '.yarn/*',
-        'bin/*',
-        'lib/*',
-        '**/*.config.js',
-    ],
     languageOptions: {
         globals: {
             ...globals.node,
@@ -40,19 +28,28 @@ const commonConfig = {
 
 export default [
     {
-        files: ['{src,tests,scripts}/**/*.{js,cjs}'],
-        ...commonConfig,
+        ignores: [
+            'coverage/*',
+            'doc/*',
+            '_doc/*',
+            'lib/*',
+            '.yarn/*',
+            'bin/*',
+            'lib/*',
+            '**/*.config.js',
+        ],
     },
+    eslintJs.configs.recommended,
     {
-        files: ['{src,tests,scripts}/**/*.mjs'],
+        files: ['{src,tests,scripts,examples}/**/*.cjs'],
         ...commonConfig,
         languageOptions: {
-            globals: {
-                ...globals.node,
-                ...globals.jest,
-            },
-            ecmaVersion: 2023,
-            sourceType: 'module',
+            ...commonConfig.languageOptions,
+            sourceType: 'commonjs',
         },
+    },
+    {
+        files: ['{src,tests,scripts,examples}/**/*.{js,mjs}'],
+        ...commonConfig,
     },
 ]

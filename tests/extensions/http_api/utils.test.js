@@ -1,4 +1,4 @@
-const { parseMatchExpression } = require('../../../src/extensions/http_api/utils')
+import { parseMatchExpression } from '../../../src/extensions/http_api/utils.js'
 
 test('parseMatchExpression should throw when expression is undefined', () => {
     expect(() => parseMatchExpression()).toThrow("'undefined' is not a valid expression")

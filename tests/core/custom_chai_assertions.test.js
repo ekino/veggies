@@ -1,6 +1,6 @@
-const chai = require('chai')
-const sinon = require('sinon')
-const { registerChaiAssertion } = require('../../src/core/custom_chai_assertions')
+import * as chai from 'chai'
+import sinon from 'sinon'
+import { registerChaiAssertion } from '../../src/core/custom_chai_assertions.js'
 
 beforeAll(() => {
     chai.use(registerChaiAssertion)

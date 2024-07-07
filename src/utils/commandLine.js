@@ -1,4 +1,4 @@
-module.exports.hasArg = (arg) => process.argv.includes(arg)
+export const hasArg = (arg) => process.argv.includes(arg)
 
-module.exports.hasOneArgOf = (args) =>
+export const hasOneArgOf = (args) =>
     Array.isArray(args) ? args.some((arg) => process.argv.includes(arg)) : false

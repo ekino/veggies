@@ -1,8 +1,7 @@
 'use strict'
 
-const sinon = require('sinon')
-
-const { hasArg, hasOneArgOf } = require('../../src/utils/commandLine')
+import sinon from 'sinon'
+import { hasArg, hasOneArgOf } from '../../src/utils/commandLine.js'
 
 const argvStub = sinon.stub(process, 'argv')
 

@@ -1,4 +1,4 @@
-exports.registerChaiAssertion = (chai, utils) => {
+export const registerChaiAssertion = (chai, utils) => {
     chai.Assertion.addMethod('startWith', function (expected) {
         return this.assert(
             typeof this._obj === 'string' && this._obj.startsWith(expected),

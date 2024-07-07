@@ -1,10 +1,10 @@
 'use strict'
 
-const fs = require('fs-extra')
-
-const Snapshot = require('../../../src/extensions/snapshot/extension')
-const clean = require('../../../src/extensions/snapshot/clean')
-const fixtures = require('./fixtures')
+import { jest } from '@jest/globals'
+import fs from 'fs'
+import Snapshot from '../../../src/extensions/snapshot/extension.js'
+import * as clean from '../../../src/extensions/snapshot/clean.js'
+import * as fixtures from './fixtures.js'
 
 beforeAll(() => {
     //
@@ -12,7 +12,7 @@ beforeAll(() => {
     fs.statSync = jest.fn()
     fs.readFileSync = jest.fn()
     fs.writeFileSync = jest.fn()
-    fs.mkdirsSync = jest.fn()
+    fs.mkdirSync = jest.fn()
 
     fs.readFileSync.mockImplementation((file) => {
         if (file === fixtures.featureFile1) return fixtures.featureFileContent1
@@ -55,7 +55,7 @@ afterEach(() => {
     fs.statSync.mockClear()
     fs.readFileSync.mockClear()
     fs.writeFileSync.mockClear()
-    fs.mkdirsSync.mockClear()
+    fs.mkdirSync.mockClear()
 
     clean.resetReferences()
 })

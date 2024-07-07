@@ -42,6 +42,7 @@ _doc
 /examples/features/file_system/files/generated
 /examples/features/file_system/files/deeply
 .vscode
+.eslintcache
 
 # yarn 
 .yarn/*

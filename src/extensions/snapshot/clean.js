@@ -4,12 +4,12 @@
  * @module extensions/snapshot/cleanup
  */
 
-const snapshot = require('./snapshot')
-const fileSystem = require('./fs')
-const statistics = require('./statistics')
-const { isEmpty, pick, omit } = require('../../utils/index')
+import * as snapshot from './snapshot.js'
+import * as fileSystem from './fs.js'
+import * as statistics from './statistics.js'
+import { isEmpty, pick, omit } from '../../utils/index.js'
 
-exports._snapshots = {}
+export let _snapshots = {}
 
 /**
  * Store a snapshot name for a snapshot file
@@ -17,17 +17,17 @@ exports._snapshots = {}
  * @param {string} file - File path
  * @param {string} snapshotName - Snapshot name
  */
-exports.referenceSnapshot = function (file, snapshotName) {
-    exports._snapshots[file] = exports._snapshots[file] || []
-    exports._snapshots[file].push(snapshotName)
+export const referenceSnapshot = function (file, snapshotName) {
+    _snapshots[file] = _snapshots[file] || []
+    _snapshots[file].push(snapshotName)
 }
 
 /**
  * Clean snapshots names and files
  * Used after tests to clear entries
  */
-exports.resetReferences = function () {
-    exports._snapshots = {}
+export const resetReferences = function () {
+    _snapshots = {}
 }
 
 /**
@@ -35,8 +35,8 @@ exports.resetReferences = function () {
  * If a snapshot file is empty, it's deleted
  * Only files that have been referenced will be cleaned
  */
-exports.cleanSnapshots = function () {
-    Object.entries(exports._snapshots).forEach(([file, snapshotNames]) => {
+export const cleanSnapshots = function () {
+    Object.entries(_snapshots).forEach(([file, snapshotNames]) => {
         if (isEmpty(snapshotNames)) {
             fileSystem.remove(file)
             return true

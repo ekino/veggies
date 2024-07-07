@@ -1,17 +1,19 @@
 'use strict'
+import * as state from './extensions/state/index.js'
+import * as fixtures from './extensions/fixtures/index.js'
+import * as httpApi from './extensions/http_api/index.js'
+import * as cli from './extensions/cli/index.js'
+import * as fileSystem from './extensions/file_system/index.js'
+import * as snapshot from './extensions/snapshot/index.js'
+import * as cast from './core/cast.js'
+import * as assertions from './core/assertions.js'
 
 //**********************************************************************************************************************
 // Extensions
 //**********************************************************************************************************************
-exports.state = require('./extensions/state')
-exports.fixtures = require('./extensions/fixtures')
-exports.httpApi = require('./extensions/http_api')
-exports.cli = require('./extensions/cli')
-exports.fileSystem = require('./extensions/file_system')
-exports.snapshot = require('./extensions/snapshot')
+export { state, fixtures, httpApi, cli, fileSystem, snapshot }
 
 //**********************************************************************************************************************
 // Core
 //**********************************************************************************************************************
-exports.cast = require('./core/cast')
-exports.assertions = require('./core/assertions')
+export { cast, assertions }

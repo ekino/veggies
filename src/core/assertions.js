@@ -4,11 +4,11 @@
  * @module Assertions
  */
 
-const { expect, use } = require('chai')
-const moment = require('moment-timezone')
-const Cast = require('./cast')
-const { registerChaiAssertion } = require('./custom_chai_assertions')
-const { isEmpty, getValue } = require('../utils/index')
+import { expect, use } from 'chai'
+import moment from 'moment-timezone'
+import * as Cast from './cast.js'
+import { registerChaiAssertion } from './custom_chai_assertions.js'
+import { isEmpty, getValue } from '../utils/index.js'
 
 use(registerChaiAssertion)
 
@@ -58,11 +58,11 @@ const RuleName = Object.freeze({
  * @param {Object} object
  * @return {number}
  */
-exports.countNestedProperties = (object) => {
+export const countNestedProperties = (object) => {
     let propertiesCount = 0
     Object.keys(object).forEach((key) => {
         if (!isEmpty(object[key]) && typeof object[key] === 'object') {
-            const count = exports.countNestedProperties(object[key])
+            const count = countNestedProperties(object[key])
             propertiesCount += count
         } else {
             propertiesCount++
@@ -112,12 +112,12 @@ exports.countNestedProperties = (object) => {
  * @param {ObjectFieldSpec[]} spec          - specification
  * @param {boolean}           [exact=false] - if `true`, specification must match all object's properties
  */
-exports.assertObjectMatchSpec = (object, spec, exact = false) => {
+export const assertObjectMatchSpec = (object, spec, exact = false) => {
     spec.forEach(({ field, matcher, value }) => {
         const currentValue = getValue(object, field)
-        const expectedValue = Cast.value(value)
+        const expectedValue = Cast.getCastedValue(value)
 
-        const rule = exports.getMatchingRule(matcher)
+        const rule = getMatchingRule(matcher)
 
         switch (rule.name) {
             case RuleName.Match: {
@@ -243,7 +243,7 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
 
     // We check we have exactly the same number of properties as expected
     if (exact === true) {
-        const propertiesCount = exports.countNestedProperties(object)
+        const propertiesCount = countNestedProperties(object)
         expect(
             propertiesCount,
             'Expected json response to fully match spec, but it does not',
@@ -268,7 +268,7 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
  * @param {string} matcher
  * @return {Rule} the result of the matching
  */
-exports.getMatchingRule = (matcher) => {
+export const getMatchingRule = (matcher) => {
     const matchGroups = matchRegex.exec(matcher)
     if (matchGroups) {
         return { name: RuleName.Match, isNegated: !!matchGroups[1] }

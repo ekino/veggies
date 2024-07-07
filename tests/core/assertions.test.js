@@ -1,6 +1,6 @@
 'use strict'
-
-const { countNestedProperties, assertObjectMatchSpec } = require('../../src/core/assertions')
+import { jest } from '@jest/globals'
+import { countNestedProperties, assertObjectMatchSpec } from '../../src/core/assertions.js'
 
 beforeAll(() => {
     const MockDate = (lastDate) => () => new lastDate(2018, 4, 1)

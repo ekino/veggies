@@ -1,6 +1,13 @@
 'use strict'
 
+import { jest } from '@jest/globals'
+import yaml from 'js-yaml'
+import { __setMockFiles } from 'fs'
+import * as glob from 'glob'
+import FixturesLoader from '../../../src/extensions/fixtures/fixtures_loader.js'
+
 jest.mock('fs')
+jest.mock('glob')
 
 const yamlContent = { type: 'yaml', testing: true }
 const textContent = 'This data were loaded from mocked text file'
@@ -20,8 +27,6 @@ jest.mock('../../../fixture.js.no_default_function', () => ({}), {
     virtual: true,
 })
 
-const yaml = require('js-yaml')
-const FixturesLoader = require('../../../src/extensions/fixtures/fixtures_loader')
 const fixturesLoader = FixturesLoader()
 
 const MOCK_FILES = {
@@ -42,8 +47,8 @@ const MOCK_GLOBS = {
 }
 
 beforeEach(() => {
-    require('fs').__setMockFiles(MOCK_FILES)
-    require('glob')('__defineMocks', MOCK_GLOBS)
+    __setMockFiles(MOCK_FILES)
+    glob('__defineMocks', MOCK_GLOBS)
 })
 
 afterEach(() => {

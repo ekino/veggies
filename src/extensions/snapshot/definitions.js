@@ -1,8 +1,8 @@
 'use strict'
 
-const { Then } = require('@cucumber/cucumber')
+import { Then } from '@cucumber/cucumber'
 
-exports.install = () => {
+export const install = () => {
     /**
      * Checking if an http response body match a snapshot
      */

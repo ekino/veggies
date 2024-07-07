@@ -1,5 +1,5 @@
 #!/usr/bin/env node
 
-const { run } = require('../src/cli')
+import { run } from '../src/cli/index.cjs'
 
 run(process.argv)

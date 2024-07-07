@@ -1,9 +1,9 @@
 'use strict'
 
-const Registry = require('../../core/registry')
-const fileSystem = require('./file_system')
+import Registry from '../../core/registry.js'
+import * as fileSystem from './file_system.js'
 
-module.exports = (world) => {
+const extendWord = (world) => {
     if (!Registry.hasExtension(world, 'cli')) {
         throw new Error(
             `Unable to init "file_system" extension as it requires "cli" extension which is not installed`,
@@ -13,3 +13,5 @@ module.exports = (world) => {
     world.fileSystem = fileSystem
     Registry.registerExtension(world, 'file_system')
 }
+
+export default extendWord

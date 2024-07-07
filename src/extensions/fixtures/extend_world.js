@@ -1,9 +1,11 @@
 'use strict'
 
-const Registry = require('../../core/registry')
-const Loader = require('./fixtures_loader')
+import Registry from '../../core/registry.js'
+import Loader from './fixtures_loader.js'
 
-module.exports = (world, options) => {
+const extendWorld = (world, options) => {
     world.fixtures = Loader(options)
     Registry.registerExtension(world, 'fixtures')
 }
+
+export default extendWorld

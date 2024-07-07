@@ -1,9 +1,9 @@
 'use strict'
 
-const sinon = require('sinon')
-
-const helper = require('../definitions_helper')
-const definitions = require('../../../src/extensions/cli/definitions')
+import { jest } from '@jest/globals'
+import sinon from 'sinon'
+import * as helper from '../definitions_helper.js'
+import * as definitions from '../../../src/extensions/cli/definitions.js'
 
 beforeEach(() => {
     definitions.install()

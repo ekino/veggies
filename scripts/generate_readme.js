@@ -6,11 +6,11 @@
  * from extensions' definition files.
  */
 
-const assert = require('assert')
-const fs = require('fs')
-const chalk = require('chalk')
-const { parse } = require('babylon')
-const Mustache = require('mustache')
+import assert from 'assert'
+import fs from 'fs'
+import chalk from 'chalk'
+import { parse } from 'babylon'
+import Mustache from 'mustache'
 
 /**
  * Flag allowing to only check if README was generated

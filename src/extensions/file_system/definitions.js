@@ -1,9 +1,9 @@
 'use strict'
 
-const { Given, Then } = require('@cucumber/cucumber')
-const { expect } = require('chai')
+import { Given, Then } from '@cucumber/cucumber'
+import { expect } from 'chai'
 
-exports.install = () => {
+export const install = () => {
     /**
      * Creating a directory.
      */

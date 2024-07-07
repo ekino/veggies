@@ -4,7 +4,8 @@
  * @module extensions/httpApi
  */
 
-const definitions = require('./definitions')
+import * as definitions from './definitions.js'
+import extendWorld from './extend_world.js'
 
 /**
  * Extends cucumber world object.
@@ -24,7 +25,7 @@ const definitions = require('./definitions')
  * @function
  * @param {Object} world - The cucumber world object
  */
-exports.extendWorld = require('./extend_world')
+export { extendWorld }
 
 /**
  * The http API configuration object.
@@ -52,6 +53,6 @@ exports.extendWorld = require('./extend_world')
  *
  * @param {HttpApiConfig} config - Http global conf
  */
-exports.install = ({ baseUrl = '' } = {}) => {
+export const install = ({ baseUrl = '' } = {}) => {
     definitions.install({ baseUrl })
 }

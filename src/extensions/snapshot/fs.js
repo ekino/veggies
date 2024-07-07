@@ -6,8 +6,8 @@
  * @module extensions/snapshot/FileSystem
  */
 
-const path = require('path')
-const fs = require('fs-extra')
+import path from 'path'
+import fs from 'fs'
 
 /**
  * Loads file content.
@@ -16,7 +16,7 @@ const fs = require('fs-extra')
  * @param {string} [encoding='utf8'] - Content encoding
  * @return {string} File content
  */
-exports.getFileContent = (file, encoding = 'utf8') => {
+export const getFileContent = (file, encoding = 'utf8') => {
     const data = fs.readFileSync(file)
     return data.toString(encoding)
 }
@@ -28,8 +28,8 @@ exports.getFileContent = (file, encoding = 'utf8') => {
  * @param {object} [options]                        - Options
  * @param {boolean} [options.createDir = true]      - Create path dir if it doesn't exists
  */
-exports.writeFileContent = (file, content, { createDir = true } = {}) => {
-    if (createDir) exports.createDirectory(path.dirname(file))
+export const writeFileContent = (file, content, { createDir = true } = {}) => {
+    if (createDir) createDirectory(path.dirname(file))
     return fs.writeFileSync(file, content)
 }
 
@@ -39,7 +39,7 @@ exports.writeFileContent = (file, content, { createDir = true } = {}) => {
  * @param {string} file - File path
  * @return {fs.Stat|null} File/directory info or null if file/directory does not exist
  */
-exports.getFileInfo = (file) => {
+export const getFileInfo = (file) => {
     let result = null
     try {
         result = fs.statSync(file)
@@ -56,8 +56,8 @@ exports.getFileInfo = (file) => {
  * @param {string} dir - directory path
  * @return {boolean}
  */
-exports.createDirectory = (dir) => {
-    return fs.mkdirsSync(dir)
+export const createDirectory = (dir) => {
+    return fs.mkdirSync(dir, { recursive: true })
 }
 
 /**
@@ -66,6 +66,6 @@ exports.createDirectory = (dir) => {
  * @param {string} fileOrDirectory - File or directory path
  * @return {boolean}
  */
-exports.remove = (fileOrDir) => {
-    return fs.removeSync(fileOrDir)
+export const remove = (fileOrDir) => {
+    return fs.rmSync(fileOrDir, { recursive: true, force: true })
 }

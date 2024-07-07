@@ -1,12 +1,12 @@
 'use strict'
 
-const { Before, BeforeAll, AfterAll } = require('@cucumber/cucumber')
+import { Before, BeforeAll, AfterAll } from '@cucumber/cucumber'
 
-const clean = require('./clean')
-const cmdOptions = require('./cmdOptions')
-const statistics = require('./statistics')
+import * as clean from './clean.js'
+import * as cmdOptions from './cmdOptions.js'
+import * as statistics from './statistics.js'
 
-function getCurrentScenarioLineNumber({ gherkinDocument, pickle }) {
+const getCurrentScenarioLineNumber = ({ gherkinDocument, pickle }) => {
     const currentScenarioId = pickle.astNodeIds[0]
     const { scenario } = gherkinDocument.feature.children.find(
         ({ scenario: { id } }) => id === currentScenarioId,
@@ -20,7 +20,7 @@ function getCurrentScenarioLineNumber({ gherkinDocument, pickle }) {
  * @module extensions/fixtures/hooks
  */
 
-exports.install = () => {
+export const install = () => {
     Before(function (scenarioInfos) {
         const file = scenarioInfos.gherkinDocument.uri
         const line = getCurrentScenarioLineNumber(scenarioInfos)

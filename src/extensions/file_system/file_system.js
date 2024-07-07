@@ -6,8 +6,8 @@
  * @module extensions/FileSystem/FileSystem
  */
 
-const path = require('path')
-const fs = require('fs-extra')
+import path from 'node:path'
+import fs from 'node:fs'
 
 /**
  * Loads file content.
@@ -17,7 +17,7 @@ const fs = require('fs-extra')
  * @param {string} [encoding='utf8'] - Content encoding
  * @return {Promise.<string>} File content
  */
-exports.getFileContent = (cwd, file, encoding = 'utf8') =>
+export const getFileContent = (cwd, file, encoding = 'utf8') =>
     new Promise((resolve, reject) => {
         fs.readFile(path.join(cwd, file), (err, data) => {
             if (err) return reject(err)
@@ -32,7 +32,7 @@ exports.getFileContent = (cwd, file, encoding = 'utf8') =>
  * @param {string} file - File name
  * @return {Promise.<fs.Stat|null>} File/directory info or null if file/directory does not exist
  */
-exports.getFileInfo = (cwd, file) =>
+export const getFileInfo = (cwd, file) =>
     new Promise((resolve, reject) => {
         fs.stat(path.join(cwd, file), (err, stat) => {
             if (err) {
@@ -51,7 +51,8 @@ exports.getFileInfo = (cwd, file) =>
  * @param {string} directory - Directory name
  * @return {Promise.<boolean>}
  */
-exports.createDirectory = (cwd, directory) => fs.mkdirs(path.join(cwd, directory))
+export const createDirectory = (cwd, directory) =>
+    fs.mkdirSync(path.join(cwd, directory), { recursive: true })
 
 /**
  * Removes a file or directory.
@@ -60,4 +61,5 @@ exports.createDirectory = (cwd, directory) => fs.mkdirs(path.join(cwd, directory
  * @param {string} fileOrDirectory - File or directory name
  * @return {Promise.<boolean>}
  */
-exports.remove = (cwd, fileOrDirectory) => fs.remove(path.join(cwd, fileOrDirectory))
+export const remove = (cwd, fileOrDirectory) =>
+    fs.rmSync(path.join(cwd, fileOrDirectory), { recursive: true, force: true })

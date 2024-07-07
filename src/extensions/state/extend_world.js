@@ -1,9 +1,11 @@
 'use strict'
 
-const Registry = require('../../core/registry')
-const State = require('./state')
+import Registry from '../../core/registry.js'
+import State from './state.js'
 
-module.exports = (world) => {
+const extendWorld = (world) => {
     world.state = State()
     Registry.registerExtension(world, 'state')
 }
+
+export default extendWorld

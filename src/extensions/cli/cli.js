@@ -6,8 +6,8 @@
  * @module extensions/Cli/Cli
  */
 
-const { spawn } = require('child_process')
-const path = require('path')
+import { spawn } from 'child_process'
+import path from 'path'
 
 /**
  * Cli extension.
@@ -207,7 +207,7 @@ class Cli {
  * Create a new isolated Cli
  * @return {Cli}
  */
-module.exports = function (...args) {
+export default function (...args) {
     return new Cli(...args)
 }
 
@@ -215,4 +215,4 @@ module.exports = function (...args) {
  * Cli extension.
  * @type {Cli}
  */
-module.exports.Cli = Cli
+export { Cli }

@@ -1,9 +1,9 @@
 'use strict'
 
-const Registry = require('../../core/registry')
-const Cli = require('./cli')
+import Registry from '../../core/registry.js'
+import Cli from './cli.js'
 
-module.exports = (world) => {
+const extendWorld = (world) => {
     if (!Registry.hasExtension(world, 'state')) {
         throw new Error(
             `Unable to init "cli" extension as it requires "state" extension which is not installed`,
@@ -13,3 +13,5 @@ module.exports = (world) => {
     world.cli = Cli()
     Registry.registerExtension(world, 'cli')
 }
+
+export default extendWorld

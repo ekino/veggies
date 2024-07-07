@@ -1,6 +1,6 @@
 'use strict'
 
-const { isFunction, isString, setValue } = require('../utils/index')
+import { isFunction, isString, setValue } from '../utils/index.js'
 
 /**
  * @module Cast
@@ -59,7 +59,7 @@ castFunctions['boolean'] = (value) => {
  * @return {Array}
  */
 castFunctions['array'] = (value) => {
-    return value ? value.replace(/\s/g, '').split(',').map(exports.value) : []
+    return value ? value.replace(/\s/g, '').split(',').map(getCastedValue) : []
 }
 
 /**
@@ -94,7 +94,7 @@ castFunctions['string'] = (value) => {
  * @param {string} typeName - New type name to add. It will be used in the "(( ))"
  * @param {CastFunction} castFunction
  */
-exports.addType = (typeName, castFunction) => {
+export const addType = (typeName, castFunction) => {
     if (!isFunction(castFunction))
         throw new TypeError(
             `Invalid cast function provided, must be a function (${typeof castFunction})`,
@@ -114,10 +114,10 @@ exports.addType = (typeName, castFunction) => {
  * - string
  *
  * @example
- * Cast.value('2((number))')
- * Cast.value('true((boolean))')
- * Cast.value('((null))')
- * Cast.value('raw')
+ * Cast.getCastedValue('2((number))')
+ * Cast.getCastedValue('true((boolean))')
+ * Cast.getCastedValue('((null))')
+ * Cast.getCastedValue('raw')
  * // output
  * // > 2
  * // > true
@@ -127,7 +127,7 @@ exports.addType = (typeName, castFunction) => {
  * @param {string} value - The value to cast
  * @return {*} The casted value or untouched value if no casting directive found
  */
-exports.value = (value) => {
+export const getCastedValue = (value) => {
     if (!isString(value)) return value
 
     const matchResult = value.match(/^(.*)\(\((\w+)\)\)$/)
@@ -148,10 +148,10 @@ exports.value = (value) => {
  * @param {Object} object - The object containing values to cast
  * @return {Object} The object with casted values
  */
-exports.object = (object) => {
+export const getCastedObject = (object) => {
     const castedObject = {}
     Object.keys(object).forEach((key) => {
-        setValue(castedObject, key, exports.value(object[key]))
+        setValue(castedObject, key, getCastedValue(object[key]))
     })
 
     return castedObject
@@ -173,11 +173,11 @@ exports.object = (object) => {
  *
  * @param {Array.<Object>} objects
  */
-exports.objects = (objects) => objects.map((object) => exports.object(object))
+export const getCastedObjects = (objects) => objects.map((object) => getCastedObject(object))
 
 /**
  * Casts an array of values.
  *
  * @param {Array.<*>} array
  */
-exports.array = (array) => array.map((value) => exports.value(value))
+export const getCastedArray = (array) => array.map((value) => getCastedValue(value))

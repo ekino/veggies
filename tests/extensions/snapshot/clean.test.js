@@ -1,10 +1,15 @@
 'use strict'
 
-const clean = require('../../../src/extensions/snapshot/clean')
-const snapshot = require('../../../src/extensions/snapshot/snapshot')
+import { jest } from '@jest/globals'
+import * as clean from '../../../src/extensions/snapshot/clean.js'
+import * as snapshot from '../../../src/extensions/snapshot/snapshot.js'
 
 beforeEach(() => {
     clean.resetReferences()
+    jest.mock('../../../src/extensions/snapshot/snapshot.js', () => ({
+        readSnapshotFile: jest.fn(),
+        writeSnapshotFile: jest.fn(),
+    }))
 })
 
 test('referenceSnapshot should add snapshot file and name to internal list', () => {
@@ -35,9 +40,6 @@ test('cleanSnapshots should remove unreferenced snapshots from file', () => {
 
     clean.referenceSnapshot(file, snapshotName)
 
-    snapshot.readSnapshotFile = jest.fn()
-    snapshot.writeSnapshotFile = jest.fn()
-
     snapshot.readSnapshotFile.mockReturnValueOnce(snapshotContent)
 
     clean.cleanSnapshots()
@@ -61,9 +63,6 @@ test('cleanSnapshots should remove unreferenced snapshots from multiple files', 
 
     clean.referenceSnapshot(file1, snapshot1Name)
     clean.referenceSnapshot(file2, snapshot2Name)
-
-    snapshot.readSnapshotFile = jest.fn()
-    snapshot.writeSnapshotFile = jest.fn()
 
     snapshot.readSnapshotFile.mockReturnValueOnce(snapshot1Content)
     snapshot.readSnapshotFile.mockReturnValueOnce(snapshot2Content)

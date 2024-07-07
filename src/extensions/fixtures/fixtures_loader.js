@@ -4,11 +4,11 @@
  * @module extensions/fixtures/FixturesLoader
  */
 
-const fs = require('fs')
-const path = require('path')
-const glob = require('glob')
-const yaml = require('js-yaml')
-const { isFunction } = require('../../utils/index')
+import fs from 'fs'
+import path from 'path'
+import * as glob from 'glob'
+import yaml from 'js-yaml'
+import { isFunction } from '../../utils/index.js'
 
 /**
  * Fixtures loader extension.
@@ -162,7 +162,7 @@ class FixturesLoader {
         const pattern = `${featureDir}/${this.fixturesDir}/${fixture}.@(yaml|yml|js|json|txt)`
 
         return new Promise((resolve, reject) => {
-            glob(pattern, (err, files) => {
+            glob.glob(pattern, (err, files) => {
                 const fixturesCount = files.length
 
                 if (fixturesCount === 0)
@@ -180,7 +180,7 @@ class FixturesLoader {
                 }
 
                 const fixtureFile = files[0]
-                const ext = path.extname(fixtureFile).substr(1)
+                const ext = path.extname(fixtureFile).substring(1)
 
                 switch (ext) {
                     case 'yml':
@@ -212,7 +212,7 @@ class FixturesLoader {
  * Create a new isolated fixtures loader
  * @return {FixturesLoader}
  */
-module.exports = function (...args) {
+export default function (...args) {
     return new FixturesLoader(...args)
 }
 
@@ -220,4 +220,4 @@ module.exports = function (...args) {
  * fixtures loader extension.
  * @type {FixturesLoader}
  */
-module.exports.Fixture = FixturesLoader
+export { FixturesLoader as Fixture }

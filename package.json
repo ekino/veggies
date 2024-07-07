@@ -27,12 +27,12 @@
     "engines": {
         "node": ">=20"
     },
+    "type": "module",
     "engineStrict": true,
     "dependencies": {
         "arg": "5.0.2",
-        "chai": "4.4.1",
-        "fs-extra": "11.2.0",
-        "glob": "10.4.3",
+        "chai": "5.1.1",
+        "glob": "11.0.0",
         "jest-diff": "29.7.0",
         "js-yaml": "4.1.0",
         "moment-timezone": "0.5.45",
@@ -43,43 +43,43 @@
     },
     "devDependencies": {
         "@commitlint/config-conventional": "^19.2.2",
-        "@cucumber/cucumber": "8.x",
-        "@eslint/js": "^9.6.0",
+        "@cucumber/cucumber": "^10.8.0",
+        "@eslint/js": "^9.7.0",
         "babylon": "^6.18.0",
-        "chalk": "^4.1.2",
+        "chalk": "^5.3.0",
         "commitlint": "^19.3.0",
         "conventional-changelog": "^6.0.0",
         "conventional-changelog-cli": "^5.0.0",
         "coveralls": "^3.1.1",
-        "eslint": "^9.6.0",
+        "eslint": "^9.7.0",
         "gh-pages": "^6.1.1",
         "globals": "^15.8.0",
-        "husky": "^9.0.11",
+        "husky": "^9.1.1",
         "jest": "^29.7.0",
         "jsdoc": "^4.0.3",
         "lint-staged": "^15.2.7",
         "minami": "^1.2.3",
         "mustache": "^4.2.0",
         "nock": "^13.5.4",
-        "prettier": "^3.3.2",
+        "prettier": "^3.3.3",
         "sinon": "^18.0.0"
     },
     "peerDependencies": {
         "@cucumber/cucumber": ">=8.0.0"
     },
     "scripts": {
-        "test": "jest --verbose --colors tests",
+        "test": "NODE_NO_WARNINGS=1 NODE_OPTIONS=\"--experimental-vm-modules\" jest --verbose --colors tests",
         "test-cover": "jest --verbose --colors --coverage",
-        "test-cli": "veggies --require tests/cli/support tests/cli/features",
-        "fmt": "prettier --color --write \"{src,tests,scripts}/**/*.js\" \"*.{yml,yaml,json}\"",
-        "check-fmt": "prettier --list-different \"{src,tests,scripts}/**/*.js\" \"*.{yml,yaml,json}\"",
-        "lint": "eslint .",
-        "lint-fix": "eslint --fix .",
+        "test-cli": "veggies --import tests/cli/support tests/cli/features",
+        "fmt": "prettier --cache --color --write \"{src,tests,scripts}/**/*.js\" \"*.{yml,yaml,json}\"",
+        "check-fmt": "prettier --cache --list-different \"{src,tests,scripts}/**/*.js\" \"*.{yml,yaml,json}\"",
+        "lint": "eslint --quiet --cache \"{src,tests,scripts,examples}/**/*.{js,mjs,cjs}\"",
+        "lint-fix": "eslint --quiet --cache --fix \"{src,tests,scripts,examples}/**/*.{js,mjs,cjs}\"",
         "readme": "node scripts/generate_readme",
         "check-readme": "node scripts/generate_readme --check",
         "doc": "jsdoc -c .jsdoc.json --verbose",
         "doc-pub": "yarn run readme && yarn run doc && gh-pages -d _doc",
-        "examples": "veggies --require examples/support examples/features"
+        "examples": "veggies --import examples/support examples/features --tags @snapshot"
     },
     "packageManager": "yarn@4.3.1"
 }

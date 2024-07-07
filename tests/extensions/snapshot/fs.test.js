@@ -1,7 +1,8 @@
 'use strict'
 
-const fileSystem = require('../../../src/extensions/snapshot/fs')
-const fs = require('fs-extra')
+import { jest } from '@jest/globals'
+import fs from 'fs'
+import * as fileSystem from '../../../src/extensions/snapshot/fs.js'
 
 test('getFileContent read and decode a file sync', () => {
     const filename = 'test.json'
@@ -20,6 +21,7 @@ test("writeFileContent create directory if it doesn't exists", () => {
     const folder = 'folder1/folder2'
     const content = 'test'
 
+    // eslint-disable-next-line no-import-assign
     fileSystem.createDirectory = jest.fn()
     fs.writeFileSync = jest.fn()
 
@@ -35,6 +37,7 @@ test("writeFileContent don't create directory if explicitly not asked to", () =>
     const file = 'folder1/folder2/test.json'
     const content = 'test'
 
+    // eslint-disable-next-line no-import-assign
     fileSystem.createDirectory = jest.fn()
     fs.writeFileSync = jest.fn()
 

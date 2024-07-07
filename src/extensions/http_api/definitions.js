@@ -1,17 +1,18 @@
 'use strict'
 
-const { Given, Then, When } = require('@cucumber/cucumber')
-const { inspect } = require('util')
-const { expect } = require('chai')
+import { Given, Then, When } from '@cucumber/cucumber'
+import { inspect } from 'util'
+import { expect } from 'chai'
+import { STATUS_CODES } from 'http'
 
-const Cast = require('../../core/cast')
-const { assertObjectMatchSpec } = require('../../core/assertions')
+import * as Cast from '../../core/cast.js'
+import { assertObjectMatchSpec } from '../../core/assertions.js'
+import { parseMatchExpression } from './utils.js'
+import { getValue, findKey } from '../../utils/index.js'
 
-const { STATUS_CODES } = require('http')
-const { parseMatchExpression } = require('./utils')
-const { getValue, findKey } = require('../../utils/index')
-
-const STATUS_MESSAGES = Object.values(STATUS_CODES).map((code) => code.toLowerCase())
+const STATUS_MESSAGES = Object.values(STATUS_CODES)
+    .map((code) => (code ? code.toLowerCase() : undefined))
+    .filter((code) => !!code)
 
 /**
  * Ensures there's a response available and returns it.
@@ -25,7 +26,7 @@ const mustGetResponse = (client) => {
     return response
 }
 
-exports.install = ({ baseUrl = '' } = {}) => {
+export const install = ({ baseUrl = '' } = {}) => {
     /**
      * Setting http headers
      */
@@ -63,7 +64,7 @@ exports.install = ({ baseUrl = '' } = {}) => {
      * Setting a single http header
      */
     Given(/^(?:I )?set ([a-zA-Z0-9-_]+) request header to (.+)$/, function (key, value) {
-        this.httpApiClient.setHeader(key, Cast.value(this.state.populate(value)))
+        this.httpApiClient.setHeader(key, Cast.getCastedValue(this.state.populate(value)))
     })
 
     /**

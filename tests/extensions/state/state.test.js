@@ -1,6 +1,6 @@
 'use strict'
 
-const State = require('../../../src/extensions/state/state')
+import State from '../../../src/extensions/state/state.js'
 
 const state = State()
 

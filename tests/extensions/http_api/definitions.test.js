@@ -1,12 +1,12 @@
 'use strict'
 
-const sinon = require('sinon')
+import { jest } from '@jest/globals'
+import sinon from 'sinon'
+import fs from 'fs'
+import * as helper from '../definitions_helper.js'
+import * as definitions from '../../../src/extensions/http_api/definitions.js'
 
 jest.mock('fs')
-const fs = require('fs')
-
-const helper = require('../definitions_helper')
-const definitions = require('../../../src/extensions/http_api/definitions')
 
 beforeEach(() => {
     definitions.install()

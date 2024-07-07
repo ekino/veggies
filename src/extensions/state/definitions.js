@@ -1,11 +1,11 @@
 'use strict'
 
-const { Given, When } = require('@cucumber/cucumber')
-const Cast = require('../../core/cast')
+import { Given, When } from '@cucumber/cucumber'
+import * as Cast from '../../core/cast.js'
 
-exports.install = () => {
+export const install = () => {
     Given(/^(?:I )?set state (.+) to (.+)$/, function (key, value) {
-        this.state.set(key, Cast.value(value))
+        this.state.set(key, Cast.getCastedValue(value))
     })
 
     When(/^(?:I )?clear state$/, function () {

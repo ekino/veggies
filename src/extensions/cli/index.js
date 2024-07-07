@@ -4,7 +4,8 @@
  * @module extensions/Cli
  */
 
-const definitions = require('./definitions')
+import * as definitions from './definitions.js'
+import extendWorld from './extend_world.js'
 
 /**
  * Extends cucumber world object.
@@ -24,7 +25,7 @@ const definitions = require('./definitions')
  * @function
  * @param {Object} world - The cucumber world object
  */
-exports.extendWorld = require('./extend_world')
+export { extendWorld }
 
 /**
  * Installs the extension.
@@ -43,6 +44,6 @@ exports.extendWorld = require('./extend_world')
  * state.install()
  * cli.install()
  */
-exports.install = () => {
+export const install = () => {
     definitions.install()
 }

@@ -4,8 +4,9 @@
  * @module extensions/snapshot
  */
 
-const definitions = require('./definitions')
-const hooks = require('./hooks')
+import * as definitions from './definitions.js'
+import * as hooks from './hooks.js'
+import extendWorld from './extend_world.js'
 
 /**
  * Extends cucumber world object.
@@ -24,7 +25,7 @@ const hooks = require('./hooks')
  * @function
  * @param {Object} world - The cucumber world object
  */
-exports.extendWorld = require('./extend_world')
+export { extendWorld }
 
 /**
  * Installs the extension.
@@ -41,7 +42,7 @@ exports.extendWorld = require('./extend_world')
  *
  * snapshot.install()
  */
-exports.install = () => {
+export const install = () => {
     hooks.install()
     definitions.install()
 }

@@ -1,12 +1,14 @@
 'use strict'
 
-const Registry = require('../../core/registry')
-const snapshot = require('./extension')
-const cmdOptions = require('./cmdOptions')
+import Registry from '../../core/registry.js'
+import snapshot from './extension.js'
+import * as cmdOptions from './cmdOptions.js'
 
-module.exports = (world, options) => {
+const extendWorld = (world, options) => {
     options = { ...cmdOptions, ...options }
 
     world.snapshot = snapshot(options)
     Registry.registerExtension(world, 'snapshot')
 }
+
+export default extendWorld

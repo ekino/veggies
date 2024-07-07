@@ -1,9 +1,9 @@
 'use strict'
 
-const { Given, Then, When } = require('@cucumber/cucumber')
-const { expect } = require('chai')
+import { Given, Then, When } from '@cucumber/cucumber'
+import { expect } from 'chai'
 
-exports.install = () => {
+export const install = () => {
     Given(/^(?:I )?set (?:working directory|cwd) to (.+)$/, function (cwd) {
         this.cli.setCwd(cwd)
     })
