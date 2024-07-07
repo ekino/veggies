@@ -3,14 +3,15 @@
 const { Given, Then, When } = require('@cucumber/cucumber')
 const { inspect } = require('util')
 const { expect } = require('chai')
-const _ = require('lodash')
 
 const Cast = require('../../core/cast')
 const { assertObjectMatchSpec } = require('../../core/assertions')
 
 const { STATUS_CODES } = require('http')
 const { parseMatchExpression } = require('./utils')
-const STATUS_MESSAGES = _.values(STATUS_CODES).map(_.lowerCase)
+const { getValue, findKey } = require('../../utils/index')
+
+const STATUS_MESSAGES = Object.values(STATUS_CODES).map((code) => code.toLowerCase())
 
 /**
  * Ensures there's a response available and returns it.
@@ -53,7 +54,9 @@ exports.install = ({ baseUrl = '' } = {}) => {
      */
     Given(/^(?:I )?assign request headers$/, function (step) {
         const headers = Cast.object(this.state.populateObject(step.rowsHash()))
-        _.each(headers, (value, key) => this.httpApiClient.setHeader(key, value))
+        Object.entries(headers).forEach(([key, value]) => {
+            this.httpApiClient.setHeader(key, value)
+        })
     })
 
     /**
@@ -132,7 +135,7 @@ exports.install = ({ baseUrl = '' } = {}) => {
         const response = this.httpApiClient.getResponse()
         let data = dataSource !== 'header' ? response.body : response.headers
 
-        this.state.set(key, _.get(data, path))
+        this.state.set(key, getValue(data, path))
     })
 
     /**
@@ -145,7 +148,7 @@ exports.install = ({ baseUrl = '' } = {}) => {
                 .get(key)
                 .replace(new RegExp(search, option || undefined), replaceValue)
             this.state.set(key, newValue)
-        }
+        },
     )
 
     /**
@@ -197,7 +200,7 @@ exports.install = ({ baseUrl = '' } = {}) => {
      */
     When(/^(?:I )?dump response body$/, function () {
         const response = mustGetResponse(this.httpApiClient)
-        console.log(inspect(response.body, { colors: true, depth: null }))  
+        console.log(inspect(response.body, { colors: true, depth: null }))
     })
 
     /**
@@ -205,7 +208,7 @@ exports.install = ({ baseUrl = '' } = {}) => {
      */
     When(/^(?:I )?dump response headers$/, function () {
         const response = mustGetResponse(this.httpApiClient)
-        console.log(response.headers)  
+        console.log(response.headers)
     })
 
     /**
@@ -213,7 +216,7 @@ exports.install = ({ baseUrl = '' } = {}) => {
      */
     When(/^(?:I )?dump response cookies$/, function () {
         mustGetResponse(this.httpApiClient)
-        console.log(this.httpApiClient.getCookies())  
+        console.log(this.httpApiClient.getCookies())
     })
 
     /**
@@ -223,7 +226,7 @@ exports.install = ({ baseUrl = '' } = {}) => {
         const response = mustGetResponse(this.httpApiClient)
         expect(
             response.statusCode,
-            `Expected status code to be: ${statusCode}, but found: ${response.statusCode}`
+            `Expected status code to be: ${statusCode}, but found: ${response.statusCode}`,
         ).to.equal(Number(statusCode))
     })
 
@@ -231,19 +234,17 @@ exports.install = ({ baseUrl = '' } = {}) => {
      * Checking response status by message
      */
     Then(/^response status should be (.+)$/, function (statusMessage) {
-        if (!STATUS_MESSAGES.includes(_.lowerCase(statusMessage))) {
+        if (!STATUS_MESSAGES.includes(statusMessage.toLowerCase())) {
             throw new TypeError(`'${statusMessage}' is not a valid status message`)
         }
 
         const response = mustGetResponse(this.httpApiClient)
-        const statusCode = _.findKey(STATUS_CODES, (msg) => _.lowerCase(msg) === statusMessage)
+        const statusCode = findKey(STATUS_CODES, (msg) => msg.toLowerCase() === statusMessage)
         const currentStatusMessage = STATUS_CODES[`${response.statusCode}`] || response.statusCode
 
         expect(
             response.statusCode,
-            `Expected status to be: '${statusMessage}', but found: '${_.lowerCase(
-                currentStatusMessage
-            )}'`
+            `Expected status to be: '${statusMessage}', but found: '${currentStatusMessage.toLowerCase()}'`,
         ).to.equal(Number(statusCode))
     })
 
@@ -298,7 +299,7 @@ exports.install = ({ baseUrl = '' } = {}) => {
         if (flag == undefined) {
             expect(
                 cookie.domain,
-                `Expected cookie '${key}' domain to be '${domain}', found '${cookie.domain}'`
+                `Expected cookie '${key}' domain to be '${domain}', found '${cookie.domain}'`,
             ).to.equal(domain)
         } else {
             expect(cookie.domain, `Cookie '${key}' domain is '${domain}'`).to.not.equal(domain)
@@ -323,9 +324,10 @@ exports.install = ({ baseUrl = '' } = {}) => {
             const spec = fieldSpec.expression
                 ? parseMatchExpression(fieldSpec.expression)
                 : fieldSpec
-            return _.assign({}, spec, {
+            return {
+                ...spec,
                 value: this.state.populate(spec.value),
-            })
+            }
         })
 
         assertObjectMatchSpec(body, specifications, !!fully)
@@ -340,10 +342,10 @@ exports.install = ({ baseUrl = '' } = {}) => {
             const response = mustGetResponse(this.httpApiClient)
             const { body } = response
 
-            const array = path != undefined ? _.get(body, path) : body
+            const array = path != undefined ? getValue(body, path) : body
 
             expect(array.length).to.be.equal(Number(size))
-        }
+        },
     )
 
     /**
@@ -374,12 +376,12 @@ exports.install = ({ baseUrl = '' } = {}) => {
                     flag ? flag : ''
                 }${comparator} '${expectedValue}', but found '${header}' which does${
                     flag ? '' : ' not'
-                }`
+                }`,
             ).to
             if (flag != undefined) {
                 expectFn = expectFn.not
             }
             expectFn[comparator](comparator === 'match' ? new RegExp(expectedValue) : expectedValue)
-        }
+        },
     )
 }

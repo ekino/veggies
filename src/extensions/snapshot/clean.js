@@ -4,11 +4,10 @@
  * @module extensions/snapshot/cleanup
  */
 
-const _ = require('lodash')
-
 const snapshot = require('./snapshot')
 const fileSystem = require('./fs')
 const statistics = require('./statistics')
+const { isEmpty, pick, omit } = require('../../utils/index')
 
 exports._snapshots = {}
 
@@ -37,19 +36,19 @@ exports.resetReferences = function () {
  * Only files that have been referenced will be cleaned
  */
 exports.cleanSnapshots = function () {
-    _.forOwn(exports._snapshots, (snapshotNames, file) => {
-        if (_.isEmpty(snapshotNames)) {
-            fileSystem.remove(file)
-            return true
+    Object.entries(exports._snapshots).forEach(([file, snapshotNames]) => {
+        if (isEmpty(snapshotNames)) {
+            fileSystem.remove(file);
+            return true;
         }
 
-        const content = snapshot.readSnapshotFile(file)
-        const newContent = _.pick(content, snapshotNames)
-        snapshot.writeSnapshotFile(file, newContent)
+        const content = snapshot.readSnapshotFile(file);
+        const newContent = pick(content, snapshotNames);
+        snapshot.writeSnapshotFile(file, newContent);
 
-        const omitedContent = _.omit(content, snapshotNames)
-        _.forOwn(omitedContent, (snapshotContent, snapshotName) => {
-            statistics.removed.push({ file: file, name: snapshotName })
-        })
-    })
+        const omittedContent = omit(content, snapshotNames);
+        Object.entries(omittedContent).forEach(([snapshotName, _snapshotContent]) => {
+            statistics.removed.push({ file, name: snapshotName });
+        });
+    });
 }

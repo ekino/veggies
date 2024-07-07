@@ -1,7 +1,6 @@
 'use strict'
 
 const { Then } = require('@cucumber/cucumber')
-const _ = require('lodash')
 
 exports.install = () => {
     /**
@@ -18,11 +17,10 @@ exports.install = () => {
     Then(/^response json body should match snapshot$/, function (table) {
         let spec = []
         if (table) {
-            spec = table.hashes().map((fieldSpec) =>
-                _.assign({}, fieldSpec, {
-                    value: this.state.populate(fieldSpec.value),
-                })
-            )
+            spec = table.hashes().map((fieldSpec) => ({
+                ...fieldSpec,
+                value: this.state.populate(fieldSpec.value),
+            }))
         }
 
         this.snapshot.expectToMatchJson(this.httpApiClient.getResponse().body, spec)
@@ -42,11 +40,10 @@ exports.install = () => {
     Then(/^(stderr|stdout) json output should match snapshot$/, function (type, table) {
         let spec = []
         if (table) {
-            spec = table.hashes().map((fieldSpec) =>
-                _.assign({}, fieldSpec, {
-                    value: this.state.populate(fieldSpec.value),
-                })
-            )
+            spec = table.hashes().map((fieldSpec) => ({
+                ...fieldSpec,
+                value: this.state.populate(fieldSpec.value),
+            }))
         }
 
         const output = JSON.parse(this.cli.getOutput(type))
@@ -69,11 +66,10 @@ exports.install = () => {
     Then(/^json file (.+) content should match snapshot$/, function (file, table) {
         let spec = []
         if (table) {
-            spec = table.hashes().map((fieldSpec) =>
-                _.assign({}, fieldSpec, {
-                    value: this.state.populate(fieldSpec.value),
-                })
-            )
+            spec = table.hashes().map((fieldSpec) => ({
+                ...fieldSpec,
+                value: this.state.populate(fieldSpec.value),
+            }))
         }
 
         return this.fileSystem.getFileContent(this.cli.getCwd(), file).then((content) => {

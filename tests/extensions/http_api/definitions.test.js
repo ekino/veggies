@@ -279,7 +279,7 @@ test('replace value of state key', () => {
     const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher(
-        'replace(?: placeholder)? (.+) in (.+) to ([^\\s]+)(?: with regex options? (.+)?)?'
+        'replace(?: placeholder)? (.+) in (.+) to ([^\\s]+)(?: with regex options? (.+)?)?',
     )
     def.shouldNotMatch('replace key {token} in URLPage to')
     def.shouldNotMatch('I replace {token} in URLPage to   ')
@@ -356,7 +356,7 @@ test('test cookie is present', () => {
 
     expect(() => def.exec(clientMock, undefined, 'cookie_exist')).not.toThrow()
     expect(() => def.exec(clientMock, undefined, 'cookie_dont_exist')).toThrow(
-        "No cookie found for key 'cookie_dont_exist': expected null not to be null"
+        "No cookie found for key 'cookie_dont_exist': expected null not to be null",
     )
 })
 
@@ -378,7 +378,7 @@ test('test cookie is absent', () => {
     const clientMock = { httpApiClient: { getCookie: getCookie } }
 
     expect(() => def.exec(clientMock, 'not ', 'cookie_exist')).toThrow(
-        "A cookie exists for key 'cookie_exist': expected 'some content' to be null"
+        "A cookie exists for key 'cookie_exist': expected 'some content' to be null",
     )
     expect(() => def.exec(clientMock, 'not ', 'cookie_dont_exist')).not.toThrow()
 })
@@ -397,7 +397,7 @@ test('test cookie is secure', () => {
 
     expect(() => def.exec(clientMock, 'secure_cookie', undefined)).not.toThrow()
     expect(() => def.exec(clientMock, 'not_secure_cookie', undefined)).toThrow(
-        "Cookie 'not_secure_cookie' is not secure: expected false to be true"
+        "Cookie 'not_secure_cookie' is not secure: expected false to be true",
     )
 })
 
@@ -414,7 +414,7 @@ test('test cookie is not secure', () => {
     const clientMock = { httpApiClient: { getCookie: getCookie } }
 
     expect(() => def.exec(clientMock, 'secure_cookie', 'not ')).toThrow(
-        "Cookie 'secure_cookie' is secure: expected true to be false"
+        "Cookie 'secure_cookie' is secure: expected true to be false",
     )
     expect(() => def.exec(clientMock, 'not_secure_cookie', 'not ')).not.toThrow()
 })
@@ -433,7 +433,7 @@ test('test cookie is http only', () => {
 
     expect(() => def.exec(clientMock, 'http_only', undefined)).not.toThrow()
     expect(() => def.exec(clientMock, 'not_http_only', undefined)).toThrow(
-        "Cookie 'not_http_only' is not http only: expected false to be true"
+        "Cookie 'not_http_only' is not http only: expected false to be true",
     )
 })
 
@@ -450,7 +450,7 @@ test('test cookie is not http only', () => {
     const clientMock = { httpApiClient: { getCookie: getCookie } }
 
     expect(() => def.exec(clientMock, 'http_only', 'not ')).toThrow(
-        "Cookie 'http_only' is http only: expected true to be false"
+        "Cookie 'http_only' is http only: expected true to be false",
     )
     expect(() => def.exec(clientMock, 'not_http_only', 'not ')).not.toThrow()
 })
@@ -470,7 +470,7 @@ test('test cookie domain equals given value', () => {
 
     expect(() => def.exec(clientMock, 'domain1', undefined, 'domain1')).not.toThrow()
     expect(() => def.exec(clientMock, 'domain2', undefined, 'domain1')).toThrow(
-        `Expected cookie 'domain2' domain to be 'domain1', found 'domain2': expected 'domain2' to equal 'domain1'`
+        `Expected cookie 'domain2' domain to be 'domain1', found 'domain2': expected 'domain2' to equal 'domain1'`,
     )
 })
 
@@ -488,7 +488,7 @@ test('test cookie domain does not equal given value', () => {
     const clientMock = { httpApiClient: { getCookie: getCookie } }
 
     expect(() => def.exec(clientMock, 'domain1', 'not ', 'domain1')).toThrow(
-        `Cookie 'domain1' domain is 'domain1': expected 'domain1' to not equal 'domain1'`
+        `Cookie 'domain1' domain is 'domain1': expected 'domain1' to not equal 'domain1'`,
     )
     expect(() => def.exec(clientMock, 'domain2', 'not ', 'domain1')).not.toThrow()
 })
@@ -553,7 +553,7 @@ test('check response HTTP status code', () => {
 
     expect(() => def.exec(clientMock, '200')).not.toThrow()
     expect(() => def.exec(clientMock, '200')).toThrow(
-        `Expected status code to be: 200, but found: 400: expected 400 to equal 200`
+        `Expected status code to be: 200, but found: 400: expected 400 to equal 200`,
     )
 })
 
@@ -572,7 +572,7 @@ test('check response HTTP status by message', () => {
 
     expect(() => def.exec(clientMock, 'ok')).not.toThrow()
     expect(() => def.exec(clientMock, 'ok')).toThrow(
-        `Expected status to be: 'ok', but found: 'internal server error': expected 500 to equal 200`
+        `Expected status to be: 'ok', but found: 'internal server error': expected 500 to equal 200`,
     )
     expect(() => def.exec(clientMock, 'invalid')).toThrow(`'invalid' is not a valid status message`)
 })
@@ -620,10 +620,10 @@ test('check json response property is defined', () => {
 
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).not.toThrow()
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
-        `Property 'gender' is undefined: expected undefined not to be undefined`
+        `Property 'gender' is undefined: expected undefined not to be undefined`,
     )
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
-        `Property 'name' is undefined: expected undefined not to be undefined`
+        `Property 'name' is undefined: expected undefined not to be undefined`,
     )
 })
 
@@ -656,7 +656,7 @@ test('check json response property equals expected value', () => {
 
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).not.toThrow()
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
-        `Expected property 'name' to equal 'plouc', but found 'john': expected 'john' to deeply equal 'plouc'`
+        `Expected property 'name' to equal 'plouc', but found 'john': expected 'john' to deeply equal 'plouc'`,
     )
 })
 
@@ -698,10 +698,10 @@ test('check json response property contains value', () => {
 
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).not.toThrow()
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
-        `Property 'last_name' (be) does not contain 'ben': expected 'be' to include 'ben'`
+        `Property 'last_name' (be) does not contain 'ben': expected 'be' to include 'ben'`,
     )
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
-        `Property 'first_name' (rap) does not contain 'raph': expected 'rap' to include 'raph'`
+        `Property 'first_name' (rap) does not contain 'raph': expected 'rap' to include 'raph'`,
     )
 })
 
@@ -743,10 +743,10 @@ test('check json response property matches regexp', () => {
 
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).not.toThrow()
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
-        `Property 'last_name' (be) does not match 'ben': expected 'be' to match /ben/`
+        `Property 'last_name' (be) does not match 'ben': expected 'be' to match /ben/`,
     )
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
-        `Property 'first_name' (rap) does not match 'raph': expected 'rap' to match /raph/`
+        `Property 'first_name' (rap) does not match 'raph': expected 'rap' to match /raph/`,
     )
 })
 
@@ -796,10 +796,10 @@ test('check json response property matches expressions', () => {
 
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).not.toThrow()
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
-        `Property 'first_name' (Bob) does not start with 'Jo': expected 'Bob' to start with 'Jo'`
+        `Property 'first_name' (Bob) does not start with 'Jo': expected 'Bob' to start with 'Jo'`,
     )
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
-        `Property 'first_name' (John) does not end with 'ny': expected 'John' to end with 'ny'`
+        `Property 'first_name' (John) does not end with 'ny': expected 'John' to end with 'ny'`,
     )
 })
 
@@ -845,7 +845,7 @@ test('check json response property matches negated expressions', () => {
 
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).not.toThrow()
     expect(() => def.exec(clientMock, undefined, { hashes: () => spec })).toThrow(
-        `Property 'first_name' (Johnny) starts with 'Jo': expected 'Johnny' not to start with 'Jo'`
+        `Property 'first_name' (Johnny) starts with 'Jo': expected 'Johnny' not to start with 'Jo'`,
     )
 })
 
@@ -920,10 +920,10 @@ test('check json response fully matches spec', () => {
 
     expect(() => def.exec(clientMock, 'fully ', { hashes: () => spec })).not.toThrow()
     expect(() => def.exec(clientMock, 'fully ', { hashes: () => spec })).toThrow(
-        `Expected json response to fully match spec, but it does not: expected 3 to equal 2`
+        `Expected json response to fully match spec, but it does not: expected 3 to equal 2`,
     )
     expect(() => def.exec(clientMock, 'fully ', { hashes: () => spec })).toThrow(
-        `Property 'last_name' (be) does not match 'ben': expected 'be' to match /ben/`
+        `Property 'last_name' (be) does not match 'ben': expected 'be' to match /ben/`,
     )
 })
 
@@ -967,7 +967,7 @@ test('response match fixture', () => {
     return Promise.all([
         expect(def.exec(worldMock, 'snapshot')).resolves.toBe(),
         expect(def.exec(worldMock, 'snapshot')).rejects.toThrow(
-            `expected { app: true } to deeply equal { testing: true }`
+            `expected { app: true } to deeply equal { testing: true }`,
         ),
     ])
 })
@@ -976,7 +976,7 @@ test('check response header value', () => {
     const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher(
-        'response header (.+) should (not )?(equal|contain|match)'
+        'response header (.+) should (not )?(equal|contain|match)',
     )
     def.shouldNotMatch('response header  should match pattern ')
     def.shouldNotMatch('response header Content-Type should match ')
@@ -987,7 +987,7 @@ test('check response header equals expected value', () => {
     const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher(
-        'response header (.+) should (not )?(equal|contain|match)'
+        'response header (.+) should (not )?(equal|contain|match)',
     )
 
     def.shouldMatch('response header Content-Type should equal application/json', [
@@ -1007,15 +1007,15 @@ test('check response header equals expected value', () => {
     }
 
     expect(() =>
-        def.exec(clientMock, 'Content-Type', undefined, 'equal', 'application/json')
+        def.exec(clientMock, 'Content-Type', undefined, 'equal', 'application/json'),
     ).not.toThrow()
     expect(() =>
-        def.exec(clientMock, 'Content-Type', undefined, 'equal', 'application/json')
+        def.exec(clientMock, 'Content-Type', undefined, 'equal', 'application/json'),
     ).toThrow(
-        `Expected header 'Content-Type' to equal 'application/json', but found 'application/xml' which does not: expected 'application/xml' to equal 'application/json'`
+        `Expected header 'Content-Type' to equal 'application/json', but found 'application/xml' which does not: expected 'application/xml' to equal 'application/json'`,
     )
     expect(() =>
-        def.exec(clientMock, 'Content-Type', undefined, 'equal', 'application/json')
+        def.exec(clientMock, 'Content-Type', undefined, 'equal', 'application/json'),
     ).toThrow(`Header 'Content-Type' does not exist: expected undefined not to be undefined`)
 })
 
@@ -1023,7 +1023,7 @@ test('check response header does not equal expected value', () => {
     const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher(
-        'response header (.+) should (not )?(equal|contain|match)'
+        'response header (.+) should (not )?(equal|contain|match)',
     )
 
     def.shouldMatch('response header Content-Type should not equal application/json', [
@@ -1043,13 +1043,13 @@ test('check response header does not equal expected value', () => {
     }
 
     expect(() => def.exec(clientMock, 'Content-Type', 'not ', 'equal', 'application/json')).toThrow(
-        `Expected header 'Content-Type' to not equal 'application/json', but found 'application/json' which does: expected 'application/json' to not equal 'application/json'`
+        `Expected header 'Content-Type' to not equal 'application/json', but found 'application/json' which does: expected 'application/json' to not equal 'application/json'`,
     )
     expect(() =>
-        def.exec(clientMock, 'Content-Type', 'not ', 'equal', 'application/json')
+        def.exec(clientMock, 'Content-Type', 'not ', 'equal', 'application/json'),
     ).not.toThrow()
     expect(() => def.exec(clientMock, 'Content-Type', 'not ', 'equal', 'application/json')).toThrow(
-        `Header 'Content-Type' does not exist: expected undefined not to be undefined`
+        `Header 'Content-Type' does not exist: expected undefined not to be undefined`,
     )
 })
 
@@ -1057,7 +1057,7 @@ test('check response header contains value', () => {
     const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher(
-        'response header (.+) should (not )?(equal|contain|match)'
+        'response header (.+) should (not )?(equal|contain|match)',
     )
 
     def.shouldMatch('response header Content-Type should contain application/json', [
@@ -1078,10 +1078,10 @@ test('check response header contains value', () => {
 
     expect(() => def.exec(clientMock, 'Content-Type', undefined, 'contain', 'json')).not.toThrow()
     expect(() => def.exec(clientMock, 'Content-Type', undefined, 'contain', 'json')).toThrow(
-        `Expected header 'Content-Type' to contain 'json', but found 'application/xml' which does not: expected 'application/xml' to include 'json'`
+        `Expected header 'Content-Type' to contain 'json', but found 'application/xml' which does not: expected 'application/xml' to include 'json'`,
     )
     expect(() => def.exec(clientMock, 'Content-Type', undefined, 'contain', 'json')).toThrow(
-        `Header 'Content-Type' does not exist: expected undefined not to be undefined`
+        `Header 'Content-Type' does not exist: expected undefined not to be undefined`,
     )
 })
 
@@ -1089,7 +1089,7 @@ test('check response header does not contain value', () => {
     const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher(
-        'response header (.+) should (not )?(equal|contain|match)'
+        'response header (.+) should (not )?(equal|contain|match)',
     )
 
     def.shouldMatch('response header Content-Type should not contain application/json', [
@@ -1109,11 +1109,11 @@ test('check response header does not contain value', () => {
     }
 
     expect(() => def.exec(clientMock, 'Content-Type', 'not ', 'contain', 'json')).toThrow(
-        `Expected header 'Content-Type' to not contain 'json', but found 'application/json' which does: expected 'application/json' to not include 'json'`
+        `Expected header 'Content-Type' to not contain 'json', but found 'application/json' which does: expected 'application/json' to not include 'json'`,
     )
     expect(() => def.exec(clientMock, 'Content-Type', 'not ', 'contain', 'json')).not.toThrow()
     expect(() => def.exec(clientMock, 'Content-Type', 'not ', 'contain', 'json')).toThrow(
-        `Header 'Content-Type' does not exist: expected undefined not to be undefined`
+        `Header 'Content-Type' does not exist: expected undefined not to be undefined`,
     )
 })
 
@@ -1121,7 +1121,7 @@ test('check response header matches regexp', () => {
     const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher(
-        'response header (.+) should (not )?(equal|contain|match)'
+        'response header (.+) should (not )?(equal|contain|match)',
     )
 
     def.shouldMatch('response header Content-Type should match ^application/json$', [
@@ -1141,15 +1141,15 @@ test('check response header matches regexp', () => {
     }
 
     expect(() =>
-        def.exec(clientMock, 'Content-Type', undefined, 'match', '^application/json$')
+        def.exec(clientMock, 'Content-Type', undefined, 'match', '^application/json$'),
     ).not.toThrow()
     expect(() =>
-        def.exec(clientMock, 'Content-Type', undefined, 'match', '^application/json$')
+        def.exec(clientMock, 'Content-Type', undefined, 'match', '^application/json$'),
     ).toThrow(
-        `Expected header 'Content-Type' to match '^application/json$', but found 'application/xml' which does not: expected 'application/xml' to match /^application\\/json$/`
+        `Expected header 'Content-Type' to match '^application/json$', but found 'application/xml' which does not: expected 'application/xml' to match /^application\\/json$/`,
     )
     expect(() =>
-        def.exec(clientMock, 'Content-Type', undefined, 'match', '^application/json$')
+        def.exec(clientMock, 'Content-Type', undefined, 'match', '^application/json$'),
     ).toThrow(`Header 'Content-Type' does not exist: expected undefined not to be undefined`)
 })
 
@@ -1157,7 +1157,7 @@ test('check response header does not match regexp', () => {
     const context = helper.getContext() // Extension context
 
     const def = context.getDefinitionByMatcher(
-        'response header (.+) should (not )?(equal|contain|match)'
+        'response header (.+) should (not )?(equal|contain|match)',
     )
 
     def.shouldMatch('response header Content-Type should not match ^application/json$', [
@@ -1177,14 +1177,14 @@ test('check response header does not match regexp', () => {
     }
 
     expect(() =>
-        def.exec(clientMock, 'Content-Type', 'not ', 'match', '^application/json$')
+        def.exec(clientMock, 'Content-Type', 'not ', 'match', '^application/json$'),
     ).toThrow(
-        `Expected header 'Content-Type' to not match '^application/json$', but found 'application/json' which does: expected 'application/json' not to match /^application\\/json$/`
+        `Expected header 'Content-Type' to not match '^application/json$', but found 'application/json' which does: expected 'application/json' not to match /^application\\/json$/`,
     )
     expect(() =>
-        def.exec(clientMock, 'Content-Type', 'not ', 'match', '^application/json$')
+        def.exec(clientMock, 'Content-Type', 'not ', 'match', '^application/json$'),
     ).not.toThrow()
     expect(() =>
-        def.exec(clientMock, 'Content-Type', 'not ', 'match', '^application/json$')
+        def.exec(clientMock, 'Content-Type', 'not ', 'match', '^application/json$'),
     ).toThrow(`Header 'Content-Type' does not exist: expected undefined not to be undefined`)
 })

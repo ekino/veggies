@@ -8,7 +8,7 @@ const fs = require('fs')
 const path = require('path')
 const glob = require('glob')
 const yaml = require('js-yaml')
-const _ = require('lodash')
+const { isFunction } = require('../../utils/index')
 
 /**
  * Fixtures loader extension.
@@ -74,15 +74,15 @@ class FixturesLoader {
                 if (data === undefined) {
                     return Promise.reject(
                         new Error(
-                            `Fixture file is invalid, yaml parsing resulted in undefined data for file: ${file}`
-                        )
+                            `Fixture file is invalid, yaml parsing resulted in undefined data for file: ${file}`,
+                        ),
                     )
                 }
 
                 return data
             } catch (err) {
                 return Promise.reject(
-                    new Error(`Unable to parse yaml fixture file: ${file}.\nerror: ${err.message}`)
+                    new Error(`Unable to parse yaml fixture file: ${file}.\nerror: ${err.message}`),
                 )
             }
         })
@@ -102,7 +102,7 @@ class FixturesLoader {
                 return data
             } catch (err) {
                 return Promise.reject(
-                    new Error(`Unable to parse json fixture file: ${file}.\nerror: ${err.message}`)
+                    new Error(`Unable to parse json fixture file: ${file}.\nerror: ${err.message}`),
                 )
             }
         })
@@ -119,14 +119,14 @@ class FixturesLoader {
             const relativePath = path.relative(__dirname, file)
             const mod = require(relativePath)
 
-            if (!_.isFunction(mod)) {
+            if (!isFunction(mod)) {
                 return Promise.reject(
                     new Error(
                         [
                             `javascript fixture file should export default function.\n`,
                             `Make sure you declared 'module.exports = <function>' in ${file}`,
-                        ].join('')
-                    )
+                        ].join(''),
+                    ),
                 )
             }
 
@@ -134,8 +134,8 @@ class FixturesLoader {
         } catch (err) {
             return Promise.reject(
                 new Error(
-                    `An error occurred while loading fixture file: ${file}\nerror: ${err.message}`
-                )
+                    `An error occurred while loading fixture file: ${file}\nerror: ${err.message}`,
+                ),
             )
         }
     }
@@ -155,7 +155,7 @@ class FixturesLoader {
     load(fixture) {
         if (this.featureUri === undefined)
             return Promise.reject(
-                new Error(`Cannot load fixture: ${fixture}, no feature uri defined`)
+                new Error(`Cannot load fixture: ${fixture}, no feature uri defined`),
             )
 
         const featureDir = path.dirname(this.featureUri)
@@ -174,8 +174,8 @@ class FixturesLoader {
                                 `Found ${fixturesCount} matching fixture files, `,
                                 `you should have only one matching '${fixture}', matches:\n  `,
                                 `- ${files.join('\n  - ')}`,
-                            ].join('')
-                        )
+                            ].join(''),
+                        ),
                     )
                 }
 

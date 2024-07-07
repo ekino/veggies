@@ -4,7 +4,6 @@
  * @module extensions/snapshot/snapshot
  */
 
-const _ = require('lodash')
 const path = require('path')
 const { diff } = require('jest-diff')
 const naturalCompare = require('natural-compare')
@@ -24,21 +23,23 @@ exports.scenarioRegex = /^[\s]*Scenario:[\s]*(.*[^\s])[\s]*$/
  * @return {Array<string>} - Scenarios names
  */
 exports.extractScenarios = (file) => {
-    if (_.isNil(file)) {
+    if (!file) {
         throw new TypeError(`Invalid feature file ${file}`)
     }
 
     const content = fileSystem.getFileContent(file)
-    const linesContent = _.split(content, '\n')
+    const linesContent = content.split('\n')
 
-    let result = []
-    _.forEach(linesContent, (lineContent, idx) => {
-        const line = idx + 1
-        const scenarioInfos = this.scenarioRegex.exec(lineContent)
-        if (scenarioInfos) result.push({ line, name: scenarioInfos[1] })
-    })
-
-    return result
+    return linesContent
+        .map((lineContent, idx) => {
+            const line = idx + 1
+            const scenarioInfos = this.scenarioRegex.exec(lineContent)
+            if (scenarioInfos) {
+                return { line, name: scenarioInfos[1] }
+            }
+            return undefined
+        })
+        .filter((item) => !!item)
 }
 
 /**
@@ -66,23 +67,20 @@ exports.extractScenarios = (file) => {
  * @return {Object} - Read above for result format
  */
 exports.prefixSnapshots = (scenarios) => {
-    if (_.isNil(scenarios)) {
+    if (!scenarios) {
         throw new Error(`Scenarios are required to prefix snapshots`)
     }
 
-    const nameCount = {}
-    const result = {}
+    const nameCount = new Map()
+    return scenarios.reduce((acc, scenario) => {
+        const count = nameCount.get(scenario.name) || 0
+        nameCount.set(scenario.name, count + 1)
 
-    _.forEach(scenarios, (scenario) => {
-        nameCount[scenario.name] = nameCount[scenario.name] | 0
-        nameCount[scenario.name]++
+        const prefix = `${scenario.name} ${count + 1}`
 
-        const prefix = `${scenario.name} ${nameCount[scenario.name]}`
-
-        result[scenario.line] = { name: scenario.name, line: scenario.line, prefix: prefix }
-    })
-
-    return result
+        acc[scenario.line] = { name: scenario.name, line: scenario.line, prefix: prefix }
+        return acc
+    }, {})
 }
 
 /**
@@ -92,7 +90,7 @@ exports.prefixSnapshots = (scenarios) => {
  * @return {Object} - Return follows the pattern : {snapshot_name: snapshot_content}
  */
 exports.readSnapshotFile = (file) => {
-    if (_.isNil(file)) {
+    if (!file) {
         throw new Error(`Missing snapshot file ${file} to read snapshots`)
     }
 
@@ -183,7 +181,7 @@ exports.formatSnapshotFile = (content) => {
                 exports.wrapWithBacktick(key) +
                 '] = ' +
                 exports.wrapWithBacktick(exports.normalizeNewlines(content[key])) +
-                ';'
+                ';',
         )
     return '\n\n' + snapshots.join('\n\n') + '\n'
 }

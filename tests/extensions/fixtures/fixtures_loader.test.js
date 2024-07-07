@@ -144,8 +144,8 @@ test('load non existing .js fixture file', () => {
     expect.assertions(1)
 
     return fixturesLoader.loadModule('noent.js').catch((err) => {
-        expect(err.message).toMatch(
-            /An error occurred while loading fixture file: noent.js\nerror: Cannot find module '..\/..\/..\/noent\.js' from '.+src\/extensions\/fixtures'/
+        expect(err.message).toEqual(
+           "An error occurred while loading fixture file: noent.js\nerror: Cannot find module '../../../noent.js' from 'src/extensions/fixtures/fixtures_loader.js'"
         )
     })
 })

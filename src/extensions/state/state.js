@@ -1,10 +1,10 @@
 'use strict'
 
+const { setValue, getValue, template, isPlainObject, mapValues } = require('../../utils/index')
+
 /**
  * @module extensions/state/State
  */
-
-const _ = require('lodash')
 
 /**
  * State extension.
@@ -27,7 +27,7 @@ class State {
      * @param {*}      value - The value
      */
     set(key, value) {
-        return _.set(this.state, key, value)
+        return setValue(this.state, key, value)
     }
 
     /**
@@ -37,7 +37,7 @@ class State {
      * @return {*}
      */
     get(key) {
-        return _.get(this.state, key)
+        return getValue(this.state, key)
     }
 
     /**
@@ -56,12 +56,12 @@ class State {
     }
 
     populate(value) {
-        return _.template(value, { interpolate: /{{([\s\S]+?)}}/g })(this.state)
+        return template(value, { interpolate: /{{([\s\S]+?)}}/g })(this.state)
     }
 
     populateObject(object) {
-        return _.mapValues(object, (value) => {
-            if (_.isPlainObject(value)) return this.populateObject(value)
+        return mapValues(object, (value) => {
+            if (isPlainObject(value)) return this.populateObject(value)
             return this.populate(value)
         })
     }

@@ -6,9 +6,9 @@
  * @module extensions/httpApi/client
  */
 
-const _ = require('lodash')
 const request = require('request').defaults({ json: true })
 const { Cookie } = require('tough-cookie')
+const { isPlainObject, isString } = require('../../utils/index')
 
 const BODY_TYPE_JSON = 'json'
 const BODY_TYPE_FORM = 'form'
@@ -162,7 +162,7 @@ class HttpApiClient {
      * @param {string|Object} cookie - Cookie string or Object
      */
     setCookie(cookie) {
-        if (!_.isPlainObject(cookie) && !_.isString(cookie)) {
+        if (isPlainObject(cookie) && !isString(cookie)) {
             throw new TypeError(`"cookie" must be a string or a cookie object`)
         }
 
@@ -241,8 +241,8 @@ class HttpApiClient {
                 if (!verbsAcceptingBody.includes(method)) {
                     throw new Error(
                         `You can only provide a body for ${verbsAcceptingBody.join(
-                            ', '
-                        )} HTTP methods, found: ${method}`
+                            ', ',
+                        )} HTTP methods, found: ${method}`,
                     )
                 }
 
@@ -258,9 +258,9 @@ class HttpApiClient {
 
             if (this.cookieJar !== null) {
                 this.cookies.forEach((cookie) => {
-                    if (_.isPlainObject(cookie)) {
+                    if (isPlainObject(cookie)) {
                         this.cookieJar.setCookie(new Cookie(cookie), fullUri)
-                    } else if (_.isString(cookie)) {
+                    } else if (isString(cookie)) {
                         this.cookieJar.setCookie(cookie, fullUri)
                     }
                 })
@@ -268,7 +268,7 @@ class HttpApiClient {
 
             request(options, (_error, _response, _body) => {
                 if (_error) {
-                    console.error(_error, options)  
+                    console.error(_error, options)
                     reject()
                 }
 

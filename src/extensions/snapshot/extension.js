@@ -5,12 +5,12 @@
  */
 
 const { format: prettyFormat } = require('pretty-format')
-const _ = require('lodash')
 
 const snapshot = require('./snapshot')
 const clean = require('./clean')
 const statistics = require('./statistics')
 const assertions = require('../../core/assertions')
+const { setValue, structuredClone } = require('../../utils/index')
 
 /**
  * Snapshot extension.
@@ -47,10 +47,10 @@ class Snapshot {
     expectToMatchJson(expectedContent, spec) {
         assertions.assertObjectMatchSpec(expectedContent, spec) // Check optional fields
 
-        const copy = _.cloneDeep(expectedContent)
+        const copy = structuredClone(expectedContent)
         spec.forEach(({ field, matcher, value }) => {
             // Replace value with generic one
-            _.set(copy, field, `${matcher}(${value})`)
+            setValue(copy, field, `${matcher}(${value})`)
         })
 
         this.expectToMatch(copy)
@@ -81,7 +81,7 @@ class Snapshot {
 
         if (!snapshotsPrefix)
             throw new Error(
-                `Can not do a snapshot. Scenario not found in file ${this.featureFile} on line ${this.scenarioLine}`
+                `Can not do a snapshot. Scenario not found in file ${this.featureFile} on line ${this.scenarioLine}`,
             )
 
         this._snapshotsCount += 1

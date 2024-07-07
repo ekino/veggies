@@ -1,10 +1,10 @@
 'use strict'
 
+const { isFunction, isString, setValue } = require('../utils/index')
+
 /**
  * @module Cast
  */
-
-const _ = require('lodash')
 
 /**
  * @name CastFunction
@@ -38,7 +38,7 @@ castFunctions['null'] = () => {
  */
 castFunctions['number'] = (value) => {
     const result = Number(value)
-    if (_.isNaN(result)) {
+    if (Number.isNaN(result)) {
         throw new TypeError(`Unable to cast value to number '${value}'`)
     }
     return result
@@ -95,9 +95,9 @@ castFunctions['string'] = (value) => {
  * @param {CastFunction} castFunction
  */
 exports.addType = (typeName, castFunction) => {
-    if (!_.isFunction(castFunction))
+    if (!isFunction(castFunction))
         throw new TypeError(
-            `Invalid cast function provided, must be a function (${typeof castFunction})`
+            `Invalid cast function provided, must be a function (${typeof castFunction})`,
         )
     castFunctions[typeName] = castFunction
 }
@@ -128,7 +128,7 @@ exports.addType = (typeName, castFunction) => {
  * @return {*} The casted value or untouched value if no casting directive found
  */
 exports.value = (value) => {
-    if (!_.isString(value)) return value
+    if (!isString(value)) return value
 
     const matchResult = value.match(/^(.*)\(\((\w+)\)\)$/)
 
@@ -151,7 +151,7 @@ exports.value = (value) => {
 exports.object = (object) => {
     const castedObject = {}
     Object.keys(object).forEach((key) => {
-        _.set(castedObject, key, exports.value(object[key]))
+        setValue(castedObject, key, exports.value(object[key]))
     })
 
     return castedObject

@@ -4,11 +4,11 @@
  * @module Assertions
  */
 
-const _ = require('lodash')
 const { expect, use } = require('chai')
 const moment = require('moment-timezone')
 const Cast = require('./cast')
 const { registerChaiAssertion } = require('./custom_chai_assertions')
+const { isEmpty, getValue } = require('../utils/index')
 
 use(registerChaiAssertion)
 
@@ -61,7 +61,7 @@ const RuleName = Object.freeze({
 exports.countNestedProperties = (object) => {
     let propertiesCount = 0
     Object.keys(object).forEach((key) => {
-        if (!_.isEmpty(object[key]) && typeof object[key] === 'object') {
+        if (!isEmpty(object[key]) && typeof object[key] === 'object') {
             const count = exports.countNestedProperties(object[key])
             propertiesCount += count
         } else {
@@ -114,7 +114,7 @@ exports.countNestedProperties = (object) => {
  */
 exports.assertObjectMatchSpec = (object, spec, exact = false) => {
     spec.forEach(({ field, matcher, value }) => {
-        const currentValue = _.get(object, field)
+        const currentValue = getValue(object, field)
         const expectedValue = Cast.value(value)
 
         const rule = exports.getMatchingRule(matcher)
@@ -125,7 +125,7 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
                     currentValue,
                     `Property '${field}' (${currentValue}) ${
                         rule.isNegated ? 'matches' : 'does not match'
-                    } '${expectedValue}'`
+                    } '${expectedValue}'`,
                 )
                 if (rule.isNegated) {
                     baseExpect.to.not.match(new RegExp(expectedValue))
@@ -139,7 +139,7 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
                     currentValue,
                     `Property '${field}' (${currentValue}) ${
                         rule.isNegated ? 'contains' : 'does not contain'
-                    } '${expectedValue}'`
+                    } '${expectedValue}'`,
                 )
                 if (rule.isNegated) {
                     baseExpect.to.not.contain(expectedValue)
@@ -153,7 +153,7 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
                     currentValue,
                     `Property '${field}' (${currentValue}) ${
                         rule.isNegated ? 'starts with' : 'does not start with'
-                    } '${expectedValue}'`
+                    } '${expectedValue}'`,
                 )
                 if (rule.isNegated) {
                     baseExpect.to.not.startWith(expectedValue)
@@ -167,7 +167,7 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
                     currentValue,
                     `Property '${field}' (${currentValue}) ${
                         rule.isNegated ? 'ends with' : 'does not end with'
-                    } '${expectedValue}'`
+                    } '${expectedValue}'`,
                 )
                 if (rule.isNegated) {
                     baseExpect.to.not.endWith(expectedValue)
@@ -179,7 +179,7 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
             case RuleName.Present: {
                 const baseExpect = expect(
                     currentValue,
-                    `Property '${field}' is ${rule.isNegated ? 'defined' : 'undefined'}`
+                    `Property '${field}' is ${rule.isNegated ? 'defined' : 'undefined'}`,
                 )
                 if (rule.isNegated) {
                     baseExpect.to.be.undefined
@@ -201,7 +201,7 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
                     currentValue,
                     `Expected property '${field}' to ${
                         rule.isNegated ? 'not ' : ''
-                    }equal '${expectedDate}', but found '${currentValue}'`
+                    }equal '${expectedDate}', but found '${currentValue}'`,
                 )
                 if (rule.isNegated) {
                     baseExpect.to.not.be.deep.equal(expectedDate)
@@ -215,7 +215,7 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
                     currentValue,
                     `Property '${field}' (${currentValue}) type is${
                         rule.isNegated ? '' : ' not'
-                    } '${expectedValue}'`
+                    } '${expectedValue}'`,
                 )
                 if (rule.isNegated) {
                     baseExpect.to.not.be.a(expectedValue)
@@ -229,7 +229,7 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
                     currentValue,
                     `Expected property '${field}' to${
                         rule.isNegated ? ' not' : ''
-                    } equal '${value}', but found '${currentValue}'`
+                    } equal '${value}', but found '${currentValue}'`,
                 )
                 if (rule.isNegated) {
                     baseExpect.to.not.be.deep.equal(expectedValue)
@@ -246,7 +246,7 @@ exports.assertObjectMatchSpec = (object, spec, exact = false) => {
         const propertiesCount = exports.countNestedProperties(object)
         expect(
             propertiesCount,
-            'Expected json response to fully match spec, but it does not'
+            'Expected json response to fully match spec, but it does not',
         ).to.be.equal(spec.length)
     }
 }

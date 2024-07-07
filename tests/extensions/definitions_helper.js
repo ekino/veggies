@@ -1,8 +1,9 @@
 'use strict'
 
 jest.mock('@cucumber/cucumber')
-const _ = require('lodash')
 const cucumber = require('@cucumber/cucumber')
+
+const { partial } = require('../../src/utils/index')
 
 /**
  * Tests a step definition against given string.
@@ -42,9 +43,9 @@ const execDef = (execFn, thisContext, ...args) => execFn.bind(thisContext)(...ar
 exports.getContext = () => {
     const registeredDefinitions = cucumber.defineStep.mock.calls.map((def) => ({
         matcher: def[0], // The step definition regex
-        exec: _.partial(execDef, def[1]), // The step definition logic
-        shouldMatch: _.partial(defShouldMatch, def[0]),
-        shouldNotMatch: _.partial(defShouldNotMatch, def[0]),
+        exec: partial(execDef, def[1]), // The step definition logic
+        shouldMatch: partial(defShouldMatch, def[0]),
+        shouldNotMatch: partial(defShouldNotMatch, def[0]),
     }))
 
     const matchers = registeredDefinitions.map(({ matcher }) => matcher.toString())
@@ -53,13 +54,13 @@ exports.getContext = () => {
         definitions: registeredDefinitions,
         getDefinitionByMatcher: (pattern) => {
             const found = registeredDefinitions.filter(({ matcher }) =>
-                matcher.toString().includes(pattern)
+                matcher.toString().includes(pattern),
             )
             if (found.length === 0) {
                 throw new TypeError(
                     `No definition found for pattern: '${pattern}', available definition matchers:\n  - ${matchers.join(
-                        '\n  - '
-                    )}`
+                        '\n  - ',
+                    )}`,
                 )
             }
 
@@ -69,7 +70,7 @@ exports.getContext = () => {
                         found.length
                     } definitions:\n  - ${found
                         .map(({ matcher }) => matcher.toString())
-                        .join('\n  - ')}`
+                        .join('\n  - ')}`,
                 )
             }
 
