@@ -79,5 +79,6 @@
         "doc": "jsdoc -c .jsdoc.json --verbose",
         "doc-pub": "yarn run readme && yarn run doc && gh-pages -d _doc",
         "examples": "veggies --require examples/support examples/features"
-    }
+    },
+    "packageManager": "yarn@4.3.1"
 }
