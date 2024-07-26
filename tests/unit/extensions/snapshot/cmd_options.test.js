@@ -1,7 +1,7 @@
 'use strict'
 
 import { jest } from '@jest/globals'
-import * as cmdOptions from '../../../src/extensions/snapshot/cmdOptions.js'
+import * as cmdOptions from '../../../src/extensions/snapshot/cmd_options.js'
 
 beforeEach(() => {
     jest.resetModules()

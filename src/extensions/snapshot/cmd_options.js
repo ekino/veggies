@@ -1,6 +1,6 @@
 'use strict'
 
-import { hasArg, hasOneArgOf } from '../../utils/commandLine.js'
+import { hasArg, hasOneArgOf } from '../../utils/command_line.js'
 
 /**
  * @module extensions/snapshot/cmdOptions

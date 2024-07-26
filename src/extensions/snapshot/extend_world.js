@@ -2,7 +2,7 @@
 
 import Registry from '../../core/registry.js'
 import snapshot from './extension.js'
-import * as cmdOptions from './cmdOptions.js'
+import * as cmdOptions from './cmd_options.js'
 
 const extendWorld = (world, options) => {
     options = { ...cmdOptions, ...options }

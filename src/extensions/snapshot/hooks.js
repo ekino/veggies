@@ -3,7 +3,7 @@
 import { Before, BeforeAll, AfterAll } from '@cucumber/cucumber'
 
 import * as clean from './clean.js'
-import * as cmdOptions from './cmdOptions.js'
+import * as cmdOptions from './cmd_options.js'
 import * as statistics from './statistics.js'
 
 const getCurrentScenarioLineNumber = ({ gherkinDocument, pickle }) => {

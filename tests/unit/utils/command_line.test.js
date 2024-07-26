@@ -3,7 +3,7 @@ import { hasArg, hasOneArgOf } from '../../../src/utils/command_line.js'
 
 const argvStub = stub(process, 'argv')
 
-describe.only('utils > commandLine', () => {
+describe('utils > command_line', () => {
     beforeAll(() => {
         argvStub.value(['--argOne', '-t', '--three'])
     })
