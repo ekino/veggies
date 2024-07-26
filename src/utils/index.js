@@ -1,3 +1,6 @@
+import { fileURLToPath } from 'node:url'
+import { dirname } from 'node:path'
+
 export const isNumber = (n) => Number.isFinite(n)
 
 export const isEmpty = (val) =>
@@ -88,3 +91,6 @@ export const partial =
         fn(...partials, ...args)
 
 export const structuredClone = (obj) => JSON.parse(JSON.stringify(obj))
+
+export const __filename = fileURLToPath(import.meta.url)
+export const __dirname = dirname(__filename)

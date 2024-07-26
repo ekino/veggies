@@ -1,7 +1,7 @@
 'use strict'
 
 import { Given, Then, When } from '@cucumber/cucumber'
-import { inspect } from 'util'
+import { inspect } from 'node:util'
 import { expect } from 'chai'
 import { STATUS_CODES } from 'http'
 

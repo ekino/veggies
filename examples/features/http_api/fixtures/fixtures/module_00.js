@@ -1,5 +1,7 @@
 'use strict'
 
-module.exports = () => ({
-    data: 'fixture loaded from javascript module'
-})
+export default function () {
+    return {
+        data: 'fixture loaded from javascript module',
+    }
+}

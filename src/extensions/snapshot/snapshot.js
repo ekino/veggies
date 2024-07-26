@@ -4,7 +4,7 @@
  * @module extensions/snapshot/snapshot
  */
 
-import path from 'path'
+import path from 'node:path'
 import { diff as jestDiff } from 'jest-diff'
 import naturalCompare from 'natural-compare'
 import chalk from 'chalk'

@@ -7,7 +7,7 @@
  */
 
 import { spawn } from 'child_process'
-import path from 'path'
+import path from 'node:path'
 
 /**
  * Cli extension.
