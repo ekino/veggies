@@ -6,7 +6,7 @@
  * @module extensions/Cli/Cli
  */
 
-import { spawn } from 'child_process'
+import { spawn } from 'node:child_process'
 import path from 'node:path'
 
 /**

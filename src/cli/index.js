@@ -1,6 +1,9 @@
 'use strict'
 
-const arg = require('arg')
+import arg from 'arg'
+import { createRequire } from 'module'
+const require = createRequire(import.meta.url)
+
 const CucumberCli = require('@cucumber/cucumber/lib/cli/index').default
 
 const veggiesArgsDefinitions = {
@@ -23,7 +26,7 @@ For more details please visit https://github.com/ekino/veggies/blob/master/READM
     console.log('cucumber-js help\n')
 }
 
-exports.run = async (argv) => {
+export const run = async (argv) => {
     const { _: cucumberArgs } = arg(veggiesArgsDefinitions, { argv, permissive: true })
 
     try {
