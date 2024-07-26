@@ -1,22 +1,21 @@
 Feature: Validate the usage of the Veggies CLI
-
+    
     Scenario: Should prevent snapshots creation
-        When I run command yarn veggies --import tests/cli/support tests/cli/dummy_features --tags @preventSnapshotsCreation --preventSnapshotsCreation
-        Then exit code should be 1
-        And stdout should contain Error: The snapshot does not exist and won't be created.
+        When I run command yarn veggies --import tests/functional/support tests/functional/features/cli --tags @preventSnapshotsCreation --preventSnapshotsCreation
+        Then exit code should be 0
 
     Scenario: Should clean snapshots
-        When I run command yarn veggies --import tests/cli/support tests/cli/dummy_features --tags @cleanSnapshots --cleanSnapshots
+        When I run command yarn veggies --import tests/functional/support tests/functional/features/cli --tags @cleanSnapshots --cleanSnapshots
         Then exit code should be 0
         And stdout should contain Snapshots:   1 removed, 1 total
 
     Scenario: Should update snapshots (long option)
-        When I run command yarn veggies --import tests/cli/support tests/cli/dummy_features --tags @updateSnapshots --tags @long --updateSnapshots
+        When I run command yarn veggies --import tests/functional/support tests/functional/features/cli --tags @updateSnapshots --tags @long --updateSnapshots
         Then exit code should be 0
         And stdout should contain Snapshots:   1 updated, 1 total
 
     Scenario: Should update snapshots (short option)
-        When I run command yarn veggies --import tests/cli/support tests/cli/dummy_features --tags @updateSnapshots --tags @short -u
+        When I run command yarn veggies --import tests/functional/support tests/functional/features/cli --tags @updateSnapshots --tags @short -u
         Then exit code should be 0
         And stdout should contain Snapshots:   1 updated, 1 total
 

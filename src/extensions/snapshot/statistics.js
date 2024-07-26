@@ -41,3 +41,5 @@ export const printReport = () => {
         console.log(result)
     }
 }
+
+export default { created, updated, removed, printReport }

@@ -1,7 +1,7 @@
 'use strict'
 
 import sinon from 'sinon'
-import { hasArg, hasOneArgOf } from '../../src/utils/commandLine.js'
+import { hasArg, hasOneArgOf } from '../../../src/utils/commandLine.js'
 
 const argvStub = sinon.stub(process, 'argv')
 

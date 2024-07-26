@@ -1,6 +1,6 @@
 'use strict'
 
-import * as Cast from '../../src/core/cast.js'
+import * as Cast from '../../../src/core/cast.js'
 
 test('cast nulls', () => {
     expect(Cast.getCastedValue('((null))')).toBe(null)

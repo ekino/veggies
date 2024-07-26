@@ -71,7 +71,7 @@
     "scripts": {
         "test": "NODE_NO_WARNINGS=1 NODE_OPTIONS=\"--experimental-vm-modules\" jest --verbose --colors tests",
         "test-cover": "jest --verbose --colors --coverage",
-        "test-cli": "veggies --import tests/cli/support tests/cli/features",
+        "test-cli": "veggies --import tests/functional/support tests/functional/features",
         "fmt": "prettier --cache --color --write \"{src,tests,scripts}/**/*.js\" \"*.{yml,yaml,json}\"",
         "check-fmt": "prettier --cache --list-different \"{src,tests,scripts}/**/*.js\" \"*.{yml,yaml,json}\"",
         "lint": "eslint --quiet --cache \"{src,tests,scripts,examples}/**/*.{js,mjs,cjs}\"",

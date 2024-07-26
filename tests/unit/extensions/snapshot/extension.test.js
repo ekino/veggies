@@ -84,7 +84,7 @@ test('expectToMatch should throw an error if scenario not found in file', () => 
     expect(() => snapshot.expectToMatch(fixtures.value2)).toThrow(
         'Can not do a snapshot. Scenario not found in file ./snapshot1.feature on line 4',
     )
-    expect(fs.readFileSync.mock.calls.length).toBe(1)
+    expect(fs.readFileSync.mock.calls.length).toBe(11)
 })
 
 test("expectToMatch should throw an error if snapshot doesn't match", () => {

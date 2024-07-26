@@ -4,7 +4,7 @@ import { jest } from '@jest/globals'
 import yaml from 'js-yaml'
 import { __setMockFiles } from 'fs'
 import * as glob from 'glob'
-import FixturesLoader from '../../../src/extensions/fixtures/fixtures_loader.js'
+import FixturesLoader from '../../../../src/extensions/fixtures/fixtures_loader.js'
 
 jest.mock('fs')
 jest.mock('glob')
