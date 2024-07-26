@@ -10,7 +10,7 @@ import * as snapshot from './snapshot.js'
 import * as clean from './clean.js'
 import * as statistics from './statistics.js'
 import * as assertions from '../../core/assertions.js'
-import { setValue, structuredClone } from '../../utils/index.js'
+import { setValue } from '../../utils/index.js'
 
 /**
  * Snapshot extension.
