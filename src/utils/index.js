@@ -1,7 +1,11 @@
 export const isNumber = (n) => Number.isFinite(n)
 
-export const isEmpty = (val) =>
-    (!val && !isNumber(val)) || (typeof val === 'object' && Object.keys(val).length === 0)
+export const isEmpty = (val) => {
+    if (val == null) return true
+    if (typeof val === 'string' || Array.isArray(val)) return val.length === 0
+    if (typeof val === 'object') return Object.keys(val).length === 0
+    return false
+}
 
 export const isDefined = (val) => !!val
 
@@ -10,6 +14,8 @@ export const isString = (val) => typeof val === 'string'
 export const isFunction = (func) => typeof func === 'function'
 
 export const getValue = (obj, path, defaultValue = undefined) => {
+    if (obj == null) return defaultValue
+
     const pathArray = Array.isArray(path) ? path : path.match(/([^[.\]])+/g)
 
     return pathArray.reduce((acc, key) => {
@@ -38,9 +44,14 @@ export const setValue = (obj, path, value) => {
     return obj
 }
 
-export const isPlainObject = (value) =>
-    value?.constructor === Object &&
-    (Object.getPrototypeOf(value) === null || Object.getPrototypeOf(value) === Object.prototype)
+export const isPlainObject = (value) => {
+    if (value === null || typeof value !== 'object') {
+        return false
+    }
+
+    const proto = Object.getPrototypeOf(value)
+    return proto === null || proto === Object.prototype
+}
 
 export const template = (tpl, options = {}) => {
     const defaultPattern = /\${(.*?)}/g
