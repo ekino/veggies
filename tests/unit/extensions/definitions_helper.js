@@ -1,8 +1,8 @@
 'use strict'
 
-import cucumber from '@cucumber/cucumber'
-import { partial } from '../../src/utils/index.js'
+import { partial } from '../../../src/utils/index.js'
 import { jest } from '@jest/globals'
+import * as cucumber from '@cucumber/cucumber'
 
 jest.mock('@cucumber/cucumber')
 

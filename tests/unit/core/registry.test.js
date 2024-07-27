@@ -1,6 +1,6 @@
 'use strict'
 
-import * as Registry from '../../src/core/registry.js'
+import * as Registry from '../../../src/core/registry.js'
 
 test('should register an extension', () => {
     const world = {}

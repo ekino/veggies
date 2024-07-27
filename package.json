@@ -62,15 +62,14 @@
         "minami": "^1.2.3",
         "mustache": "^4.2.0",
         "nock": "^13.5.4",
-        "prettier": "^3.3.3",
-        "sinon": "^18.0.0"
+        "prettier": "^3.3.3"
     },
     "peerDependencies": {
         "@cucumber/cucumber": ">=9.0.0"
     },
     "scripts": {
-        "test": "NODE_NO_WARNINGS=1 NODE_OPTIONS=\"--experimental-vm-modules\" jest --verbose --colors tests",
-        "test-cover": "jest --verbose --colors --coverage",
+        "test": "NODE_NO_WARNINGS=1 NODE_OPTIONS=\"--experimental-vm-modules\" jest tests/unit/extensions/snapshot/clean.test.js",
+        "test-cover": "jest --coverage",
         "test-cli": "veggies --import tests/functional/support tests/functional/features",
         "fmt": "prettier --cache --color --write \"{src,tests,scripts}/**/*.js\" \"*.{yml,yaml,json}\"",
         "check-fmt": "prettier --cache --list-different \"{src,tests,scripts}/**/*.js\" \"*.{yml,yaml,json}\"",

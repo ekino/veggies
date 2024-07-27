@@ -1,4 +1,6 @@
 export default {
     coveragePathIgnorePatterns: ['/node_modules/', '/tests/'],
-    transform: {},
+    transform: {
+        '^.+\\.[t|j|cj|mj]sx?$': 'babel-jest',
+    },
 }

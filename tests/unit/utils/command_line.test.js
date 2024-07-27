@@ -1,15 +1,16 @@
-import { stub } from 'sinon'
 import { hasArg, hasOneArgOf } from '../../../src/utils/command_line.js'
 
-const argvStub = stub(process, 'argv')
-
 describe('utils > command_line', () => {
+    let originalArgv
+
     beforeAll(() => {
-        argvStub.value(['--argOne', '-t', '--three'])
+        originalArgv = process.argv
+        process.argv = ['node', 'script.js', '--argOne', '-t', '--three']
     })
 
-    afterEach(() => argvStub.resetHistory())
-    afterAll(() => argvStub.restore())
+    afterAll(() => {
+        process.argv = originalArgv
+    })
 
     test('hasArg should return true when the arg is found', () => {
         expect(hasArg('-t')).toBe(true)
@@ -20,6 +21,7 @@ describe('utils > command_line', () => {
     })
 
     test('hasOneArgOf should return true when at least an arg is found', () => {
+        console.log(process.argv)
         expect(hasOneArgOf(['--argOne', '--notFound'])).toBe(true)
     })
 

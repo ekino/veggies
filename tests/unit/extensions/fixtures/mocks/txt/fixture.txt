@@ -1,0 +1,1 @@
+This data were loaded from mocked text file

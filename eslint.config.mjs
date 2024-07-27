@@ -37,6 +37,7 @@ export default [
             'bin/*',
             'lib/*',
             '**/*.config.js',
+            '__mocks__/*',
         ],
     },
     eslintJs.configs.recommended,

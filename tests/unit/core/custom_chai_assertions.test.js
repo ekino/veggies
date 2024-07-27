@@ -1,24 +1,24 @@
+import { jest } from '@jest/globals'
 import * as chai from 'chai'
-import sinon from 'sinon'
-import { registerChaiAssertion } from '../../src/core/custom_chai_assertions.js'
+import { registerChaiAssertion } from '../../../src/core/custom_chai_assertions.js'
 
 beforeAll(() => {
     chai.use(registerChaiAssertion)
 })
 
 test('registerChaiAssertion should add startWith and endWith assertion methods', () => {
-    const addMethodSpy = sinon.spy()
+    const addMethodMock = jest.fn()
     const fakeChai = {
         Assertion: {
-            addMethod: addMethodSpy,
+            addMethod: addMethodMock,
         },
     }
 
     registerChaiAssertion(fakeChai, undefined)
 
-    expect(addMethodSpy.calledTwice).toBeTruthy()
-    expect(addMethodSpy.calledWith('startWith', sinon.match.func)).toBeTruthy()
-    expect(addMethodSpy.calledWith('endWith', sinon.match.func)).toBeTruthy()
+    expect(addMethodMock).toHaveBeenCalledTimes(2)
+    expect(addMethodMock).toHaveBeenCalledWith('startWith', expect.any(Function))
+    expect(addMethodMock).toHaveBeenCalledWith('endWith', expect.any(Function))
 })
 
 test('chai startWith should pass', () => {

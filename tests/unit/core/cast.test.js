@@ -57,7 +57,7 @@ test('throw when type is invalid', () => {
 })
 
 test('cast array of values', () => {
-    expect(Cast.array(['1((number))', 'true((boolean))', 'a,b,c((array))'])).toEqual([
+    expect(Cast.getCastedArray(['1((number))', 'true((boolean))', 'a,b,c((array))'])).toEqual([
         1,
         true,
         ['a', 'b', 'c'],
@@ -66,7 +66,11 @@ test('cast array of values', () => {
 
 test('cast array of objects', () => {
     expect(
-        Cast.objects([{ a: '1((number))' }, { b: 'true((boolean))' }, { c: 'a,b,c((array))' }]),
+        Cast.getCastedObjects([
+            { a: '1((number))' },
+            { b: 'true((boolean))' },
+            { c: 'a,b,c((array))' },
+        ]),
     ).toEqual([{ a: 1 }, { b: true }, { c: ['a', 'b', 'c'] }])
 })
 
