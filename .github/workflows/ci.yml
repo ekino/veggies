@@ -11,7 +11,7 @@ jobs:
     strategy:
       matrix:
         node-version: [20.x, 22.x]
-        cucumber-version: [9.x, 10.x]
+        cucumber-version: [10.x]
 
     steps:
       - uses: actions/checkout@v4
@@ -31,7 +31,7 @@ jobs:
         run: yarn check-fmt
 
       - name: Tests
-        run: yarn test-cli
+        run: yarn test-func
 
       - name: Coverage
         run: yarn test-cover
