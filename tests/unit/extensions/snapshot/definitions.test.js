@@ -1,8 +1,7 @@
 'use strict'
 
-import { jest } from '@jest/globals'
-import * as helper from '../definitions_helper.js'
-import * as definitions from '../../../src/extensions/snapshot/definitions.js'
+const helper = require('../definitions_helper.cjs')
+const definitions = require('../../../../lib/cjs/extensions/snapshot/definitions.js')
 
 beforeEach(() => {
     definitions.install()

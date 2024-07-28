@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../../src/extensions/state/extend_world.js"],
-  "sourcesContent": ["'use strict'\n\nimport Registry from '../../core/registry.js'\nimport State from './state.js'\n\nconst extendWorld = (world) => {\n    world.state = State()\n    Registry.registerExtension(world, 'state')\n}\n\nexport default extendWorld\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA,sBAAqB;AACrB,mBAAkB;AAElB,MAAM,cAAc,CAAC,UAAU;AAC3B,QAAM,YAAQ,aAAAA,SAAM;AACpB,kBAAAC,QAAS,kBAAkB,OAAO,OAAO;AAC7C;AAEA,IAAO,uBAAQ;",
-  "names": ["State", "Registry"]
-}

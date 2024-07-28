@@ -1,12 +1,17 @@
 'use strict'
 
-import { jest } from '@jest/globals'
-import { diff } from 'jest-diff'
-import * as snapshot from '../../../src/extensions/snapshot/snapshot.js'
-import * as fileSystem from '../../../src/extensions/snapshot/fs.js'
-import dedent from '../../../src/extensions/snapshot/dedent.js'
+const { diff } = require('jest-diff')
+const snapshot = require('../../../../lib/cjs/extensions/snapshot/snapshot.js')
+const fileSystem = require('../../../../lib/cjs/extensions/snapshot/fs.js')
+const { dedent } = require('../../../../lib/cjs/extensions/snapshot/dedent.js')
+const { GREEN, RED, RESET } = require('../../../../lib/cjs/utils/colors.js')
 
 jest.mock('jest-diff', () => ({ diff: jest.fn() }))
+jest.mock('../../../../lib/cjs/extensions/snapshot/fs.js', () => ({
+    getFileInfo: jest.fn(),
+    getFileContent: jest.fn(),
+    writeFileContent: jest.fn(),
+}))
 
 test('parseSnapshotFile should parse snapshot file content', () => {
     const content = dedent`
@@ -135,15 +140,12 @@ describe('diff', () => {
 
     test('return a custom diff message when the diff message is not defined', () => {
         const expectedContent = 'a'
-
         const snapshotContent = 'b'
 
         diff.mockReturnValue(undefined)
 
         const diffMessage = snapshot.diff(snapshotContent, expectedContent)
-
-        const expectedDiffMessage = '\n\u001b[32m- a\u001b[39m \n \u001b[31m+ b\u001b[39m'
-
+        const expectedDiffMessage = `\n${GREEN}- ${expectedContent}${RESET} \n ${RED}+ ${snapshotContent}${RESET}`
         expect(diffMessage).toEqual(expectedDiffMessage)
     })
 
@@ -246,7 +248,6 @@ test('writeSnapshotFile should format and write snapshot file', () => {
         """
     `
 
-    // eslint-disable-next-line no-import-assign
     fileSystem.writeFileContent = jest.fn()
 
     snapshot.writeSnapshotFile(file, contentToWrite)
@@ -287,10 +288,8 @@ test('readSnapshotFile should read and parse snapshot file', () => {
 
     const expectedContent = { 'scenario 1 1.1': snapshotContent }
 
-    /* eslint-disable no-import-assign */
     fileSystem.getFileInfo = jest.fn()
     fileSystem.getFileContent = jest.fn()
-    /* eslint-enable no-import-assign */
 
     fileSystem.getFileInfo.mockImplementationOnce(() => {
         return {}
@@ -313,10 +312,8 @@ test("readSnapshotFile should give an empty object if file doesn't exists", () =
 
     const expectedContent = {}
 
-    /* eslint-disable no-import-assign */
     fileSystem.getFileInfo = jest.fn()
     fileSystem.getFileContent = jest.fn()
-    /* eslint-enable no-import-assign */
 
     fileSystem.getFileInfo.mockImplementationOnce(() => {
         null
@@ -400,7 +397,6 @@ test('extractScenarios read scenarios names from a file', () => {
         { name: 'Running an invalid command', line: 16 },
     ]
 
-    // eslint-disable-next-line no-import-assign
     fileSystem.getFileContent = jest.fn()
     fileSystem.getFileContent.mockImplementationOnce(() => {
         return fileContent

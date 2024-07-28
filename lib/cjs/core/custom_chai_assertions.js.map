@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../src/core/custom_chai_assertions.js"],
-  "sourcesContent": ["export const registerChaiAssertion = (chai, utils) => {\n    chai.Assertion.addMethod('startWith', function (expected) {\n        return this.assert(\n            typeof this._obj === 'string' && this._obj.startsWith(expected),\n            `expected #{this} to start with #{exp}`,\n            `expected #{this} not to start with #{exp}`,\n            expected,\n        )\n    })\n    chai.Assertion.addMethod('endWith', function (expected) {\n        return this.assert(\n            typeof this._obj === 'string' && this._obj.endsWith(expected),\n            `expected #{this} to end with #{exp}`,\n            `expected #{this} not to end with #{exp}`,\n            expected,\n        )\n    })\n}\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAO,MAAM,wBAAwB,CAAC,MAAM,UAAU;AAClD,OAAK,UAAU,UAAU,aAAa,SAAU,UAAU;AACtD,WAAO,KAAK;AAAA,MACR,OAAO,KAAK,SAAS,YAAY,KAAK,KAAK,WAAW,QAAQ;AAAA,MAC9D;AAAA,MACA;AAAA,MACA;AAAA,IACJ;AAAA,EACJ,CAAC;AACD,OAAK,UAAU,UAAU,WAAW,SAAU,UAAU;AACpD,WAAO,KAAK;AAAA,MACR,OAAO,KAAK,SAAS,YAAY,KAAK,KAAK,SAAS,QAAQ;AAAA,MAC5D;AAAA,MACA;AAAA,MACA;AAAA,IACJ;AAAA,EACJ,CAAC;AACL;",
-  "names": []
-}

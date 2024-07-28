@@ -9,10 +9,10 @@ await esbuild.build({
     entryPoints,
     outdir: 'lib/cjs',
     platform: 'node',
-    sourcemap: true,
+    sourcemap: false,
     target: 'es2023',
     format: 'cjs',
-    logLevel: 'info',
+    logLevel: 'error',
     logOverride: {
         'empty-import-meta': 'silent',
     },

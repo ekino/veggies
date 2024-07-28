@@ -1,7 +1,12 @@
 'use strict'
 
-const clean = require('../../../../lib/cjs/extensions/snapshot/clean')
-const snapshot = require('../../../../lib/cjs/extensions/snapshot/snapshot')
+const clean = require('../../../../lib/cjs/extensions/snapshot/clean.js')
+const snapshot = require('../../../../lib/cjs/extensions/snapshot/snapshot.js')
+
+jest.mock('../../../../lib/cjs/extensions/snapshot/snapshot.js', () => ({
+    readSnapshotFile: jest.fn(),
+    writeSnapshotFile: jest.fn(),
+}))
 
 beforeEach(() => {
     clean.resetReferences()

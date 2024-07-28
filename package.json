@@ -87,7 +87,7 @@
     },
     "scripts": {
         "build-cjs": "node scripts/build.js",
-        "test": "NODE_NO_WARNINGS=1 NODE_OPTIONS=\"--experimental-vm-modules\" jest tests/unit/extensions/snapshot/clean.test.js",
+        "test": "NODE_NO_WARNINGS=1 NODE_OPTIONS=\"--experimental-vm-modules\" jest tests/unit/extensions/snapshot/extension.test.js",
         "test-cover": "jest --coverage",
         "test-func": "veggies --import tests/functional/support tests/functional/features",
         "fmt": "prettier --cache --color --write \"{src,tests,scripts}/**/*.js\" \"*.{yml,yaml,json}\"",

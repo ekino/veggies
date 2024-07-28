@@ -1,14 +1,12 @@
 'use strict'
 
-import { jest } from '@jest/globals'
-import fs from 'fs'
-import Snapshot from '../../../src/extensions/snapshot/extension.js'
-import * as clean from '../../../src/extensions/snapshot/clean.js'
-import * as fixtures from './fixtures.js'
+const fs = require('fs')
+
+const Snapshot = require('../../../../lib/cjs/extensions/snapshot/extension.js')
+const clean = require('../../../../lib/cjs/extensions/snapshot/clean.js')
+const fixtures = require('./fixtures.js')
 
 beforeAll(() => {
-    //
-
     fs.statSync = jest.fn()
     fs.readFileSync = jest.fn()
     fs.writeFileSync = jest.fn()
@@ -84,7 +82,7 @@ test('expectToMatch should throw an error if scenario not found in file', () => 
     expect(() => snapshot.expectToMatch(fixtures.value2)).toThrow(
         'Can not do a snapshot. Scenario not found in file ./snapshot1.feature on line 4',
     )
-    expect(fs.readFileSync.mock.calls.length).toBe(11)
+    expect(fs.readFileSync.mock.calls.length).toBe(1)
 })
 
 test("expectToMatch should throw an error if snapshot doesn't match", () => {

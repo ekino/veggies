@@ -1,8 +1,7 @@
 'use strict'
 
-import { partial } from '../../../src/utils/index.js'
-import { jest } from '@jest/globals'
-import * as cucumber from '@cucumber/cucumber'
+const { partial } = require('../../../lib/cjs/utils/index.js')
+const cucumber = require('@cucumber/cucumber')
 
 jest.mock('@cucumber/cucumber')
 
@@ -41,7 +40,7 @@ const defShouldNotMatch = (regex, str) => {
  */
 const execDef = (execFn, thisContext, ...args) => execFn.bind(thisContext)(...args)
 
-export const getContext = () => {
+exports.getContext = () => {
     const registeredDefinitions = cucumber.defineStep.mock.calls.map((def) => ({
         matcher: def[0], // The step definition regex
         exec: partial(execDef, def[1]), // The step definition logic
@@ -80,6 +79,6 @@ export const getContext = () => {
     }
 }
 
-export const clearContext = () => {
+exports.clearContext = () => {
     cucumber.defineStep.mockReset()
 }

@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../../src/extensions/state/definitions.js"],
-  "sourcesContent": ["'use strict'\n\nimport { Given, When } from '@cucumber/cucumber'\nimport * as Cast from '../../core/cast.js'\n\nexport const install = () => {\n    Given(/^(?:I )?set state (.+) to (.+)$/, function (key, value) {\n        this.state.set(key, Cast.getCastedValue(value))\n    })\n\n    When(/^(?:I )?clear state$/, function () {\n        this.state.clear()\n    })\n\n    When(/^(?:I )?dump state$/, function () {\n        console.log(this.state.dump())\n    })\n}\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA,sBAA4B;AAC5B,WAAsB;AAEf,MAAM,UAAU,MAAM;AACzB,6BAAM,mCAAmC,SAAU,KAAK,OAAO;AAC3D,SAAK,MAAM,IAAI,KAAK,KAAK,eAAe,KAAK,CAAC;AAAA,EAClD,CAAC;AAED,4BAAK,wBAAwB,WAAY;AACrC,SAAK,MAAM,MAAM;AAAA,EACrB,CAAC;AAED,4BAAK,uBAAuB,WAAY;AACpC,YAAQ,IAAI,KAAK,MAAM,KAAK,CAAC;AAAA,EACjC,CAAC;AACL;",
-  "names": []
-}

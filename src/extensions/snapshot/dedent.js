@@ -57,7 +57,7 @@ const getSpacesLength = (text) => {
  * @param {string} text
  * @return {string}
  */
-const dedent = (text) => {
+export const dedent = (text) => {
     if (typeof text !== 'string') text = text[0]
 
     let lines = text.split('\n')
@@ -68,8 +68,8 @@ const dedent = (text) => {
     let skipLength = getSpacesLength(lines[0])
 
     if (
-        lines[0].substr(skipLength, 3) === '"""' &&
-        lines[lines.length - 1].substr(skipLength, 3) === '"""'
+        lines[0].substring(skipLength, skipLength + 3) === '"""' &&
+        lines[lines.length - 1].substring(skipLength, skipLength + 3) === '"""'
     ) {
         lines = lines.slice(1, lines.length - 1)
     } else {

@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../../src/extensions/snapshot/extend_world.js"],
-  "sourcesContent": ["'use strict'\n\nimport Registry from '../../core/registry.js'\nimport snapshot from './extension.js'\nimport * as cmdOptions from './cmd_options.js'\n\nconst extendWorld = (world, options) => {\n    options = { ...cmdOptions, ...options }\n\n    world.snapshot = snapshot(options)\n    Registry.registerExtension(world, 'snapshot')\n}\n\nexport default extendWorld\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA,sBAAqB;AACrB,uBAAqB;AACrB,iBAA4B;AAE5B,MAAM,cAAc,CAAC,OAAO,YAAY;AACpC,YAAU,EAAE,GAAG,YAAY,GAAG,QAAQ;AAEtC,QAAM,eAAW,iBAAAA,SAAS,OAAO;AACjC,kBAAAC,QAAS,kBAAkB,OAAO,UAAU;AAChD;AAEA,IAAO,uBAAQ;",
-  "names": ["snapshot", "Registry"]
-}

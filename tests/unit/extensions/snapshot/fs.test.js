@@ -1,8 +1,7 @@
 'use strict'
 
-import { jest } from '@jest/globals'
-import fs from 'fs'
-import * as fileSystem from '../../../src/extensions/snapshot/fs.js'
+const fs = require('fs')
+const fileSystem = require('../../../../lib/cjs/extensions/snapshot/fs.js')
 
 test('getFileContent read and decode a file sync', () => {
     const filename = 'test.json'
@@ -21,13 +20,12 @@ test("writeFileContent create directory if it doesn't exists", () => {
     const folder = 'folder1/folder2'
     const content = 'test'
 
-    // eslint-disable-next-line no-import-assign
-    fileSystem.createDirectory = jest.fn()
+    fs.mkdirSync = jest.fn()
     fs.writeFileSync = jest.fn()
 
     fileSystem.writeFileContent(file, content)
-    expect(fileSystem.createDirectory.mock.calls.length).toBe(1)
-    expect(fileSystem.createDirectory).toHaveBeenCalledWith(folder)
+    expect(fs.mkdirSync.mock.calls.length).toBe(1)
+    expect(fs.mkdirSync).toHaveBeenCalledWith(folder, { recursive: true })
 
     expect(fs.writeFileSync.mock.calls.length).toBe(1)
     expect(fs.writeFileSync).toHaveBeenCalledWith(file, content)
@@ -37,12 +35,11 @@ test("writeFileContent don't create directory if explicitly not asked to", () =>
     const file = 'folder1/folder2/test.json'
     const content = 'test'
 
-    // eslint-disable-next-line no-import-assign
-    fileSystem.createDirectory = jest.fn()
+    fs.mkdirSync = jest.fn()
     fs.writeFileSync = jest.fn()
 
     fileSystem.writeFileContent(file, content, { createDir: false })
-    expect(fileSystem.createDirectory.mock.calls.length).toBe(0)
+    expect(fs.mkdirSync.mock.calls.length).toBe(0)
 
     expect(fs.writeFileSync.mock.calls.length).toBe(1)
     expect(fs.writeFileSync).toHaveBeenCalledWith(file, content)

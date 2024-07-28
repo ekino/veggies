@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../src/core/registry.js"],
-  "sourcesContent": ["'use strict'\n\nconst VEGGIES_NAMESPACE = '_registredExtensions'\n\n/**\n * Registers an extension.\n *\n * @param {Object} world       - Cucumber world object\n * @param {string} extensionId - Unique veggies extension identifier\n */\nexport const registerExtension = (world, extensionId) => {\n    world._registredExtensions = world[VEGGIES_NAMESPACE] || []\n    world._registredExtensions.push(extensionId)\n}\n\n/**\n * Checks if an extension were registered.\n *\n * @param {Object} world       - Cucumber world object\n * @param {string} extensionId - Unique veggies extension identifier\n * @return {boolean}\n */\nexport const hasExtension = (world, extensionId) => {\n    if (!world[VEGGIES_NAMESPACE]) return false\n    if (!world[VEGGIES_NAMESPACE].includes(extensionId)) return false\n\n    return true\n}\n\nexport default {\n    registerExtension,\n    hasExtension,\n}\n"],
-  "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA,MAAM,oBAAoB;AAQnB,MAAM,oBAAoB,CAAC,OAAO,gBAAgB;AACrD,QAAM,uBAAuB,MAAM,iBAAiB,KAAK,CAAC;AAC1D,QAAM,qBAAqB,KAAK,WAAW;AAC/C;AASO,MAAM,eAAe,CAAC,OAAO,gBAAgB;AAChD,MAAI,CAAC,MAAM,iBAAiB,EAAG,QAAO;AACtC,MAAI,CAAC,MAAM,iBAAiB,EAAE,SAAS,WAAW,EAAG,QAAO;AAE5D,SAAO;AACX;AAEA,IAAO,mBAAQ;AAAA,EACX;AAAA,EACA;AACJ;",
-  "names": []
-}

@@ -7,12 +7,9 @@
 import path from 'node:path'
 import { diff as jestDiff } from 'jest-diff'
 import naturalCompare from 'natural-compare'
-
+import { GREEN, RED, RESET } from '../../utils/colors.js'
 import * as fileSystem from './fs.js'
 
-const GREEN = '\x1b[32m'
-const RED = '\x1b[31m'
-const RESET = '\x1b[0m'
 const JEST_NO_DIFF_MESSAGE = 'Compared values have no visual difference.'
 
 export const scenarioRegex = /^[\s]*Scenario:[\s]*(.*[^\s])[\s]*$/

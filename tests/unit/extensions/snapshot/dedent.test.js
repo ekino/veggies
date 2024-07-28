@@ -1,6 +1,6 @@
 'use strict'
 
-import dedent from '../../../src/extensions/snapshot/dedent.js'
+const { dedent } = require('../../../../lib/cjs/extensions/snapshot/dedent.js')
 
 test('dedent align to first character', () => {
     const test = dedent(`
