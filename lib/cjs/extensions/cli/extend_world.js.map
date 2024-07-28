@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../src/extensions/cli/extend_world.js"],
+  "sourcesContent": ["'use strict'\n\nimport Registry from '../../core/registry.js'\nimport Cli from './cli.js'\n\nconst extendWorld = (world) => {\n    if (!Registry.hasExtension(world, 'state')) {\n        throw new Error(\n            `Unable to init \"cli\" extension as it requires \"state\" extension which is not installed`,\n        )\n    }\n\n    world.cli = Cli()\n    Registry.registerExtension(world, 'cli')\n}\n\nexport default extendWorld\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA,sBAAqB;AACrB,iBAAgB;AAEhB,MAAM,cAAc,CAAC,UAAU;AAC3B,MAAI,CAAC,gBAAAA,QAAS,aAAa,OAAO,OAAO,GAAG;AACxC,UAAM,IAAI;AAAA,MACN;AAAA,IACJ;AAAA,EACJ;AAEA,QAAM,UAAM,WAAAC,SAAI;AAChB,kBAAAD,QAAS,kBAAkB,OAAO,KAAK;AAC3C;AAEA,IAAO,uBAAQ;",
+  "names": ["Registry", "Cli"]
+}

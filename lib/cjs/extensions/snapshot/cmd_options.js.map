@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../src/extensions/snapshot/cmd_options.js"],
+  "sourcesContent": ["'use strict'\n\nimport { hasArg, hasOneArgOf } from '../../utils/command_line.js'\n\n/**\n * @module extensions/snapshot/cmdOptions\n */\n\n/**\n * Read command line option. If there is --cleanSnapshots, then we should clean snapshots\n * @type {boolean}\n */\nexport let cleanSnapshots = false\n\n/**\n * Read command line option. If there is --updateSnapshots or -u, then we should update snapshots\n * @type {boolean}\n */\nexport let updateSnapshots = false\n\n/**\n * Read command line option. If there is --preventSnapshotsCreation, then we should not create missing snapshots\n * @type {boolean}\n */\nexport let preventSnapshotsCreation = false\n\nif (hasOneArgOf(['--updateSnapshots', '-u'])) {\n    updateSnapshots = true\n}\n\nif (hasArg('--cleanSnapshots')) {\n    cleanSnapshots = true\n}\n\nif (hasArg('--preventSnapshotsCreation')) {\n    preventSnapshotsCreation = true\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA,0BAAoC;AAU7B,IAAI,iBAAiB;AAMrB,IAAI,kBAAkB;AAMtB,IAAI,2BAA2B;AAEtC,QAAI,iCAAY,CAAC,qBAAqB,IAAI,CAAC,GAAG;AAC1C,oBAAkB;AACtB;AAEA,QAAI,4BAAO,kBAAkB,GAAG;AAC5B,mBAAiB;AACrB;AAEA,QAAI,4BAAO,4BAA4B,GAAG;AACtC,6BAA2B;AAC/B;",
+  "names": []
+}

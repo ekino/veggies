@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../src/extensions/cli/index.js"],
+  "sourcesContent": ["'use strict'\n\n/**\n * @module extensions/Cli\n */\n\nimport * as definitions from './definitions.js'\nimport extendWorld from './extend_world.js'\n\n/**\n * Extends cucumber world object.\n * Must be used inside customWorldConstructor.\n *\n * @example\n * // /support/world.js\n *\n * const { setWorldConstructor } = require('@cucumber/cucumber')\n * const { state, cli } = require('@ekino/veggies')\n *\n * setWorldConstructor(function() {\n *     state.extendWorld(this) // cli extension requires state extension\n *     cli.extendWorld(this)\n * })\n *\n * @function\n * @param {Object} world - The cucumber world object\n */\nexport { extendWorld }\n\n/**\n * Installs the extension.\n *\n * @example\n * // /support/world.js\n *\n * const { setWorldConstructor } = require('@cucumber/cucumber')\n * const { state, cli } = require('@ekino/veggies')\n *\n * setWorldConstructor(function() {\n *     state.extendWorld(this) // cli extension requires state extension\n *     cli.extendWorld(this)\n * })\n *\n * state.install()\n * cli.install()\n */\nexport const install = () => {\n    definitions.install()\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA,yCAAAA;AAAA,EAAA;AAAA;AAAA;AAMA,kBAA6B;AAC7B,0BAAwB;AAuCjB,MAAM,UAAU,MAAM;AACzB,cAAY,QAAQ;AACxB;",
+  "names": ["extendWorld"]
+}

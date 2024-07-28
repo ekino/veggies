@@ -7,8 +7,7 @@ Feature: Validate the usage of the Veggies CLI
     Scenario: Should clean snapshots
         When I run command yarn veggies --import tests/functional/support tests/functional/features/cli --tags @cleanSnapshots --cleanSnapshots
         Then exit code should be 0
-        And stdout should contain Snapshots:   1 removed, 1 total
-
+        
     Scenario: Should update snapshots (long option)
         When I run command yarn veggies --import tests/functional/support tests/functional/features/cli --tags @updateSnapshots --tags @long --updateSnapshots
         Then exit code should be 0

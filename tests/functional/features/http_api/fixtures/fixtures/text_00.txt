@@ -1,0 +1,1 @@
+Content from text_00.txt file

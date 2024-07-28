@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../src/extensions/fixtures/extend_world.js"],
+  "sourcesContent": ["'use strict'\n\nimport Registry from '../../core/registry.js'\nimport Loader from './fixtures_loader.js'\n\nconst extendWorld = (world, options) => {\n    world.fixtures = Loader(options)\n    Registry.registerExtension(world, 'fixtures')\n}\n\nexport default extendWorld\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA,sBAAqB;AACrB,6BAAmB;AAEnB,MAAM,cAAc,CAAC,OAAO,YAAY;AACpC,QAAM,eAAW,uBAAAA,SAAO,OAAO;AAC/B,kBAAAC,QAAS,kBAAkB,OAAO,UAAU;AAChD;AAEA,IAAO,uBAAQ;",
+  "names": ["Loader", "Registry"]
+}

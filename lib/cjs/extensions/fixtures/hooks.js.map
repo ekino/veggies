@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../src/extensions/fixtures/hooks.js"],
+  "sourcesContent": ["'use strict'\n\nimport { Before } from '@cucumber/cucumber'\n\n/**\n * Registers hooks for the fixtures extension.\n *\n * @module extensions/fixtures/hooks\n */\n\nexport const install = () => {\n    Before(function (scenarioInfos) {\n        this.fixtures.setFeatureUri(scenarioInfos.gherkinDocument.uri)\n    })\n}\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA,sBAAuB;AAQhB,MAAM,UAAU,MAAM;AACzB,8BAAO,SAAU,eAAe;AAC5B,SAAK,SAAS,cAAc,cAAc,gBAAgB,GAAG;AAAA,EACjE,CAAC;AACL;",
+  "names": []
+}

@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../src/extensions/http_api/extend_world.js"],
+  "sourcesContent": ["'use strict'\n\nimport Registry from '../../core/registry.js'\nimport Client from './client.js'\n\nconst extendWorld = (world) => {\n    if (!Registry.hasExtension(world, 'state')) {\n        throw new Error(\n            `Unable to init \"http_api\" extension as it requires \"state\" extension which is not installed`,\n        )\n    }\n\n    world.httpApiClient = Client()\n    Registry.registerExtension(world, 'http_api')\n}\n\nexport default extendWorld\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA,sBAAqB;AACrB,oBAAmB;AAEnB,MAAM,cAAc,CAAC,UAAU;AAC3B,MAAI,CAAC,gBAAAA,QAAS,aAAa,OAAO,OAAO,GAAG;AACxC,UAAM,IAAI;AAAA,MACN;AAAA,IACJ;AAAA,EACJ;AAEA,QAAM,oBAAgB,cAAAC,SAAO;AAC7B,kBAAAD,QAAS,kBAAkB,OAAO,UAAU;AAChD;AAEA,IAAO,uBAAQ;",
+  "names": ["Registry", "Client"]
+}

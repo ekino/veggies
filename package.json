@@ -15,8 +15,6 @@
         "type": "git",
         "url": "https://github.com/ekino/veggies.git"
     },
-    "main": "src/index.js",
-    "bin": "./bin/veggies.js",
     "author": "plouc <https://github.com/plouc>",
     "maintainers": [
         {
@@ -28,6 +26,26 @@
         "node": ">=20"
     },
     "type": "module",
+    "files": [
+        "/src",
+        "/lib/cjs",
+        "/bin"
+    ],
+    "main": "./src/index.js",
+    "bin": {
+        "veggies": "./bin/veggies.js",
+        "veggies-cjs": "./bin/cjs/veggies.js"
+    },
+    "exports": {
+        ".": {
+            "import": "./src/index.js",
+            "require": "./lib/cjs/index.js"
+        },
+        "./bin/veggies": {
+            "import": "./bin/veggies.js",
+            "require": "./bin/cjs/veggies.js"
+        }
+    },
     "engineStrict": true,
     "dependencies": {
         "arg": "5.0.2",
@@ -52,6 +70,7 @@
         "conventional-changelog": "^6.0.0",
         "conventional-changelog-cli": "^5.0.0",
         "coveralls": "^3.1.1",
+        "esbuild": "^0.23.0",
         "eslint": "^9.7.0",
         "gh-pages": "^6.1.1",
         "globals": "^15.8.0",
@@ -68,9 +87,10 @@
         "@cucumber/cucumber": ">=9.0.0"
     },
     "scripts": {
+        "build-cjs": "node scripts/build.js",
         "test": "NODE_NO_WARNINGS=1 NODE_OPTIONS=\"--experimental-vm-modules\" jest tests/unit/extensions/snapshot/clean.test.js",
         "test-cover": "jest --coverage",
-        "test-cli": "veggies --import tests/functional/support tests/functional/features",
+        "test-func": "veggies --import tests/functional/support tests/functional/features",
         "fmt": "prettier --cache --color --write \"{src,tests,scripts}/**/*.js\" \"*.{yml,yaml,json}\"",
         "check-fmt": "prettier --cache --list-different \"{src,tests,scripts}/**/*.js\" \"*.{yml,yaml,json}\"",
         "lint": "eslint --quiet --cache \"{src,tests,scripts,examples}/**/*.{js,mjs,cjs}\"",

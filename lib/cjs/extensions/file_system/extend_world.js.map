@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../src/extensions/file_system/extend_world.js"],
+  "sourcesContent": ["'use strict'\n\nimport Registry from '../../core/registry.js'\nimport * as fileSystem from './file_system.js'\n\nconst extendWord = (world) => {\n    if (!Registry.hasExtension(world, 'cli')) {\n        throw new Error(\n            `Unable to init \"file_system\" extension as it requires \"cli\" extension which is not installed`,\n        )\n    }\n\n    world.fileSystem = fileSystem\n    Registry.registerExtension(world, 'file_system')\n}\n\nexport default extendWord\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAEA,sBAAqB;AACrB,iBAA4B;AAE5B,MAAM,aAAa,CAAC,UAAU;AAC1B,MAAI,CAAC,gBAAAA,QAAS,aAAa,OAAO,KAAK,GAAG;AACtC,UAAM,IAAI;AAAA,MACN;AAAA,IACJ;AAAA,EACJ;AAEA,QAAM,aAAa;AACnB,kBAAAA,QAAS,kBAAkB,OAAO,aAAa;AACnD;AAEA,IAAO,uBAAQ;",
+  "names": ["Registry"]
+}

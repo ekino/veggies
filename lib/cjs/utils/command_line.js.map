@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../src/utils/command_line.js"],
+  "sourcesContent": ["export const hasArg = (arg) => process.argv.includes(arg)\n\nexport const hasOneArgOf = (args) =>\n    Array.isArray(args) ? args.some((arg) => process.argv.includes(arg)) : false\n"],
+  "mappings": ";;;;;;;;;;;;;;;;;AAAA;AAAA;AAAA;AAAA;AAAA;AAAA;AAAO,MAAM,SAAS,CAAC,QAAQ,QAAQ,KAAK,SAAS,GAAG;AAEjD,MAAM,cAAc,CAAC,SACxB,MAAM,QAAQ,IAAI,IAAI,KAAK,KAAK,CAAC,QAAQ,QAAQ,KAAK,SAAS,GAAG,CAAC,IAAI;",
+  "names": []
+}

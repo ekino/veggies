@@ -2,9 +2,8 @@
 
 import arg from 'arg'
 import { createRequire } from 'module'
-const require = createRequire(import.meta.url)
 
-const CucumberCli = require('@cucumber/cucumber/lib/cli/index').default
+const CucumberCli = createRequire(import.meta.url)('@cucumber/cucumber/lib/cli/index').default
 
 const veggiesArgsDefinitions = {
     '--cleanSnapshots': Boolean,
