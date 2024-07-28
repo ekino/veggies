@@ -7,12 +7,12 @@
 import path from 'node:path'
 import { diff as jestDiff } from 'jest-diff'
 import naturalCompare from 'natural-compare'
-import chalk from 'chalk'
 
 import * as fileSystem from './fs.js'
 
-const EXPECTED_COLOR = chalk.green
-const RECEIVED_COLOR = chalk.red
+const GREEN = '\x1b[32m'
+const RED = '\x1b[31m'
+const RESET = '\x1b[0m'
 const JEST_NO_DIFF_MESSAGE = 'Compared values have no visual difference.'
 
 export const scenarioRegex = /^[\s]*Scenario:[\s]*(.*[^\s])[\s]*$/
@@ -144,8 +144,7 @@ export const diff = (snapshot, expected) => {
     })
 
     diffMessage =
-        diffMessage ||
-        `${EXPECTED_COLOR('- ' + (expected || ''))} \n ${RECEIVED_COLOR('+ ' + snapshot)}`
+        diffMessage || `${GREEN}- ${expected || ''}${RESET} \n ${RED}+ ${snapshot}${RESET}`
     if (diffMessage.indexOf(JEST_NO_DIFF_MESSAGE) !== -1) return null
     return `\n${diffMessage}`
 }

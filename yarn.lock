@@ -868,7 +868,6 @@ __metadata:
     arg: "npm:5.0.2"
     babylon: "npm:^6.18.0"
     chai: "npm:5.1.1"
-    chalk: "npm:^5.3.0"
     commitlint: "npm:^19.3.0"
     conventional-changelog: "npm:^6.0.0"
     conventional-changelog-cli: "npm:^5.0.0"

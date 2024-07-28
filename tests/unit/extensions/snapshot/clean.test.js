@@ -1,20 +1,10 @@
 'use strict'
 
-import { jest } from '@jest/globals'
-import * as clean from '../../../../src/extensions/snapshot/clean.js'
-
-const readSnapshotFileMock = jest.fn()
-const writeSnapshotFileMock = jest.fn()
-beforeAll(() => {
-    jest.unstable_mockModule('../../../../src/extensions/snapshot/snapshot.js', () => ({
-        readSnapshotFile: readSnapshotFileMock,
-        writeSnapshotFile: writeSnapshotFileMock,
-    }))
-})
+const clean = require('../../../../lib/cjs/extensions/snapshot/clean')
+const snapshot = require('../../../../lib/cjs/extensions/snapshot/snapshot')
 
 beforeEach(() => {
     clean.resetReferences()
-    jest.clearAllMocks()
 })
 
 test('referenceSnapshot should add snapshot file and name to internal list', () => {
@@ -45,15 +35,18 @@ test('cleanSnapshots should remove unreferenced snapshots from file', () => {
 
     clean.referenceSnapshot(file, snapshotName)
 
-    readSnapshotFileMock.mockReturnValueOnce(snapshotContent)
+    snapshot.readSnapshotFile = jest.fn()
+    snapshot.writeSnapshotFile = jest.fn()
+
+    snapshot.readSnapshotFile.mockReturnValueOnce(snapshotContent)
 
     clean.cleanSnapshots()
 
-    expect(readSnapshotFileMock.mock.calls.length).toBe(1)
-    expect(readSnapshotFileMock).toHaveBeenCalledWith(file)
+    expect(snapshot.readSnapshotFile.mock.calls.length).toBe(1)
+    expect(snapshot.readSnapshotFile).toHaveBeenCalledWith(file)
 
-    expect(writeSnapshotFileMock.mock.calls.length).toBe(1)
-    expect(writeSnapshotFileMock).toHaveBeenCalledWith(file, expectedContent)
+    expect(snapshot.writeSnapshotFile.mock.calls.length).toBe(1)
+    expect(snapshot.writeSnapshotFile).toHaveBeenCalledWith(file, expectedContent)
 })
 
 test('cleanSnapshots should remove unreferenced snapshots from multiple files', () => {
@@ -69,16 +62,19 @@ test('cleanSnapshots should remove unreferenced snapshots from multiple files', 
     clean.referenceSnapshot(file1, snapshot1Name)
     clean.referenceSnapshot(file2, snapshot2Name)
 
-    readSnapshotFileMock.mockReturnValueOnce(snapshot1Content)
-    readSnapshotFileMock.mockReturnValueOnce(snapshot2Content)
+    snapshot.readSnapshotFile = jest.fn()
+    snapshot.writeSnapshotFile = jest.fn()
+
+    snapshot.readSnapshotFile.mockReturnValueOnce(snapshot1Content)
+    snapshot.readSnapshotFile.mockReturnValueOnce(snapshot2Content)
 
     clean.cleanSnapshots()
 
-    expect(readSnapshotFileMock.mock.calls.length).toBe(2)
-    expect(readSnapshotFileMock).toHaveBeenCalledWith(file1)
-    expect(readSnapshotFileMock).toHaveBeenCalledWith(file2)
+    expect(snapshot.readSnapshotFile.mock.calls.length).toBe(2)
+    expect(snapshot.readSnapshotFile).toHaveBeenCalledWith(file1)
+    expect(snapshot.readSnapshotFile).toHaveBeenCalledWith(file2)
 
-    expect(writeSnapshotFileMock.mock.calls.length).toBe(2)
-    expect(writeSnapshotFileMock).toHaveBeenCalledWith(file1, expectedContent1)
-    expect(writeSnapshotFileMock).toHaveBeenCalledWith(file2, expectedContent2)
+    expect(snapshot.writeSnapshotFile.mock.calls.length).toBe(2)
+    expect(snapshot.writeSnapshotFile).toHaveBeenCalledWith(file1, expectedContent1)
+    expect(snapshot.writeSnapshotFile).toHaveBeenCalledWith(file2, expectedContent2)
 })

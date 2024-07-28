@@ -1,5 +1,4 @@
 'use strict'
-import chalk from 'chalk'
 
 /**
  * @module extensions/snapshot/statistics
@@ -29,13 +28,18 @@ export const updated = []
  */
 export const removed = []
 
+const GREEN = '\x1b[32m'
+const YELLOW = '\x1b[33m'
+const RED = '\x1b[31m'
+const RESET = '\x1b[0m'
+
 export const printReport = () => {
     const total = created.length + updated.length + removed.length
     if (total) {
         let result = '`\n\nSnapshots:   '
-        if (created.length > 0) result += chalk.green(`${created.length} created, `)
-        if (updated.length > 0) result += chalk.yellow(`${updated.length} updated, `)
-        if (removed.length > 0) result += chalk.red(`${removed.length} removed, `)
+        if (created.length > 0) result += `${GREEN}${created.length} created, ${RESET}`
+        if (updated.length > 0) result += `${YELLOW}${updated.length} updated, ${RESET}`
+        if (removed.length > 0) result += `${RED}${removed.length} removed, ${RESET}`
         result += `${total} total\n`
 
         console.log(result)

@@ -8,9 +8,14 @@
 
 import assert from 'assert'
 import fs from 'fs'
-import chalk from 'chalk'
 import { parse } from 'babylon'
 import Mustache from 'mustache'
+
+const GREEN = '\x1b[32m'
+const WHITE = '\x1b[37m'
+const YELLOW = '\x1b[33m'
+const RED = '\x1b[31m'
+const RESET = '\x1b[0m'
 
 /**
  * Flag allowing to only check if README was generated
@@ -83,12 +88,12 @@ const extensions = Object.keys(definitionFiles)
  */
 const getFileContent = (file) =>
     new Promise((resolve, reject) => {
-        console.log(chalk.yellow(`- loading file: ${chalk.white(file)}`))
+        console.log(`${YELLOW}- loading file: ${WHITE}${file}${RESET}`)
 
         fs.readFile(file, (err, data) => {
             if (err) return reject(err)
 
-            console.log(chalk.green(`- loaded file: ${chalk.white(file)}`))
+            console.log(`${GREEN}- loaded file: ${WHITE}${file}${RESET}`)
             resolve(data.toString('utf8'))
         })
     })
@@ -132,16 +137,16 @@ const extractModuleExportBody = (file, node) => {
         !['BlockStatement', 'ArrowFunctionExpression'].includes(node.body.type)
     ) {
         console.error(
-            chalk.red(`
+            `${RED}
 ! Unable to find definitions body for: ${file},
   definitions file should export definitions using:
 
     module.exports = module.exports = ({ Given, When, Then }) => {
         // definitions
     }
-`),
-        )
-        process.exit(1)
+${RESET}`,
+        ),
+            process.exit(1)
     }
 
     if (node.body.type === 'BlockStatement') return node.body.body
@@ -174,9 +179,9 @@ const extractDefinitionInfo = (file, node) => {
     const [regex] = node.expression.arguments
     if (!regex || regex.type !== 'RegExpLiteral') {
         console.error(
-            chalk.red(`! Found invalid definition in: '${file}' at line ${node.loc.start.line}`),
-        )
-        process.exit(1)
+            `${RED}! Found invalid definition in: '${file}' at line ${node.loc.start.line}${RESET}`,
+        ),
+            process.exit(1)
     }
 
     return {
@@ -192,7 +197,7 @@ const extractDefinitionInfo = (file, node) => {
  * @param {string} code - Definitions raw code
  */
 const parseDefinitions = (file, code) => {
-    console.log(chalk.yellow(`- parsing definitions file: ${chalk.white(file)}`))
+    console.log(`${YELLOW}- parsing definitions file: ${WHITE}${file}${RESET}`)
 
     const parsed = parse(code, {
         ranges: false,
@@ -201,7 +206,7 @@ const parseDefinitions = (file, code) => {
 
     const [exportStatement] = parsed.program.body.filter(isExportInstall)
     if (!exportStatement) {
-        console.error(chalk.red(`! No 'module.exports' found in '${chalk.white(file)}'`))
+        console.error(`${RED}! No 'module.exports' found in '${WHITE}${file}${RESET}'`)
         process.exit(1)
     }
 
