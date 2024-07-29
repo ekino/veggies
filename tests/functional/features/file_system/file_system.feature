@@ -1,4 +1,4 @@
-@file_system @offline
+@file_system
 Feature: File system extension
 
   Scenario: Checking file content equals something

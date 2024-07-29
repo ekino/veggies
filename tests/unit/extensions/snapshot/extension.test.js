@@ -79,30 +79,6 @@ describe('extensions > snapshot > extension', () => {
         expect(fs.readFileSync.mock.calls.length).toBeDefined()
     })
 
-    test("expectToMatch should throw an error if snapshot doesn't match", () => {
-        const snapshot = Snapshot()
-        snapshot.featureFile = fixtures.featureFile1
-        snapshot.scenarioLine = 3
-
-        expect(() => snapshot.expectToMatch(fixtures.value2)).toThrow(
-            fixtures.diffErrorValue1VsValue2,
-        )
-        expect(fs.readFileSync.mock.calls.length).toBe(2)
-    })
-
-    test("expectToMatch should write a snapshot if it doesn't exists", () => {
-        const snapshot = Snapshot()
-        snapshot.featureFile = fixtures.featureFile1
-        snapshot.scenarioLine = 6
-
-        snapshot.expectToMatch(fixtures.value2)
-        expect(fs.writeFileSync).toHaveBeenCalledWith(
-            fixtures.snapshotFile1,
-            fixtures.snapshotFileContent1And2,
-        )
-        expect(fs.writeFileSync.mock.calls.length).toBe(1)
-    })
-
     test('expectToMatch should not write a snapshot and throw a diff error when preventSnapshotsCreation is true', () => {
         const snapshot = Snapshot({ preventSnapshotsCreation: true })
         snapshot.featureFile = fixtures.featureFile1

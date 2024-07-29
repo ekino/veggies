@@ -31,7 +31,9 @@ export const install = ({ baseUrl = '' } = {}) => {
      * Setting http headers
      */
     Given(/^(?:I )?set request headers$/, (step) => {
-        world.httpApiClient.setHeaders(Cast.object(world.state.populateObject(step.rowsHash())))
+        world.httpApiClient.setHeaders(
+            Cast.getCastedObject(world.state.populateObject(step.rowsHash())),
+        )
     })
 
     /**
@@ -54,7 +56,7 @@ export const install = ({ baseUrl = '' } = {}) => {
      * "assign" replace or set the given headers, keeping untouched the ones already set
      */
     Given(/^(?:I )?assign request headers$/, (step) => {
-        const headers = Cast.object(world.state.populateObject(step.rowsHash()))
+        const headers = Cast.getCastedObject(world.state.populateObject(step.rowsHash()))
         Object.entries(headers).forEach(([key, value]) => {
             world.httpApiClient.setHeader(key, value)
         })
@@ -78,7 +80,9 @@ export const install = ({ baseUrl = '' } = {}) => {
      * Setting json payload
      */
     Given(/^(?:I )?set request json body$/, (step) => {
-        world.httpApiClient.setJsonBody(Cast.object(world.state.populateObject(step.rowsHash())))
+        world.httpApiClient.setJsonBody(
+            Cast.getCastedObject(world.state.populateObject(step.rowsHash())),
+        )
     })
 
     /**
@@ -94,7 +98,9 @@ export const install = ({ baseUrl = '' } = {}) => {
      * Setting form data
      */
     Given(/^(?:I )?set request form body$/, (step) => {
-        world.httpApiClient.setFormBody(Cast.object(world.state.populateObject(step.rowsHash())))
+        world.httpApiClient.setFormBody(
+            Cast.getCastedObject(world.state.populateObject(step.rowsHash())),
+        )
     })
 
     /**
@@ -126,7 +132,9 @@ export const install = ({ baseUrl = '' } = {}) => {
      * Setting query parameters
      */
     Given(/^(?:I )?set request query$/, (step) => {
-        world.httpApiClient.setQuery(Cast.object(world.state.populateObject(step.rowsHash())))
+        world.httpApiClient.setQuery(
+            Cast.getCastedObject(world.state.populateObject(step.rowsHash())),
+        )
     })
 
     /**

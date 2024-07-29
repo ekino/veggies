@@ -1,3 +1,5 @@
+@cli
+
 Feature: Validate the usage of the Veggies CLI
     
     Scenario: Should prevent snapshots creation

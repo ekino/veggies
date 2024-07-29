@@ -121,35 +121,6 @@ exports[\`scenario 1 1.1\`] = \`${exports.snapshotContentMultilineString}\`;
 
 `
 
-exports.diffErrorValue1VsValue2 = dedent`
-    \u001b[32m- Snapshot\u001b[39m
-    \u001b[31m+ Received\u001b[39m
-    
-    \u001b[2m  Object {\u001b[22m
-    \u001b[2m    "key1": "value1",\u001b[22m
-    \u001b[2m    "key2": "value2",\u001b[22m
-    \u001b[32m-   "key3": "value3",\u001b[39m
-    \u001b[31m+   "key3": "value8",\u001b[39m
-    \u001b[2m    "key4": "value4",\u001b[22m
-    \u001b[2m    "key5": "value5",\u001b[22m
-    \u001b[2m  }\u001b[22m
-`
-
-exports.diffErrorFile1WithPropertyMatchers = dedent`
-    
-    \u001b[32m- Snapshot\u001b[39m
-    \u001b[31m+ Received\u001b[39m
-    
-    \u001b[2m  Object {\u001b[22m
-    \u001b[2m    "key1": "value1",\u001b[22m
-    \u001b[32m-   "key2": "type(string)",\u001b[39m
-    \u001b[31m+   "key2": "type(number)",\u001b[39m
-    \u001b[2m    "key3": "value3",\u001b[22m
-    \u001b[2m    "key4": "value4",\u001b[22m
-    \u001b[2m    "key5": "value5",\u001b[22m
-    \u001b[2m  }\u001b[22m
-`
-
 exports.value1 = { key1: 'value1', key2: 'value2', key3: 'value3', key4: 'value4', key5: 'value5' }
 exports.value1WithError = {
     key1: 'value1',

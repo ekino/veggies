@@ -161,7 +161,7 @@ export const getCastedObject = (object) => {
  * Casts an array of objects.
  *
  * @example
- * Cast.objects([
+ * Cast.getCastedObjects([
  *     { username: 'plouc((string))', is_active: 'true((boolean))', age: '25((number))' },
  *     { username: 'john((string))', is_active: 'false((boolean))', age: '32((number))' },
  * ])

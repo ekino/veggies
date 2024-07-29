@@ -1,4 +1,4 @@
-@updateSnapshots
+@cli @updateSnapshots
 Feature: Dummy test for --updateSnapshots
 
     @long

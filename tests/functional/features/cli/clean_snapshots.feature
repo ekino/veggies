@@ -1,4 +1,4 @@
-@cleanSnapshots
+@cli @cleanSnapshots
 Feature: Dummy test for --cleanSnapshots
 
     Scenario: Should echo salut
