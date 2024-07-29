@@ -1,85 +1,96 @@
 'use strict'
 
-const clean = require('../../../../lib/cjs/extensions/snapshot/clean.js')
-const snapshot = require('../../../../lib/cjs/extensions/snapshot/snapshot.js')
-
 jest.mock('../../../../lib/cjs/extensions/snapshot/snapshot.js', () => ({
     readSnapshotFile: jest.fn(),
     writeSnapshotFile: jest.fn(),
 }))
 
-beforeEach(() => {
-    clean.resetReferences()
-})
+const clean = require('../../../../lib/cjs/extensions/snapshot/clean.js')
+const snapshot = require('../../../../lib/cjs/extensions/snapshot/snapshot.js')
 
-test('referenceSnapshot should add snapshot file and name to internal list', () => {
-    const file = './test.js.snap'
-    const snapshotName = 'Scenario 1 1.1'
+describe('extensions > snapshot > clean', () => {
+    beforeEach(() => {
+        clean.resetReferences()
+    })
 
-    clean.referenceSnapshot(file, snapshotName)
+    test('referenceSnapshot should add snapshot file and name to internal list', () => {
+        const file = './test.js.snap'
+        const snapshotName = 'Scenario 1 1.1'
 
-    expect(clean._snapshots).toEqual({ [file]: [snapshotName] })
-})
+        clean.referenceSnapshot(file, snapshotName)
 
-test('resetReferences should remove all entries', () => {
-    const file = './test.js.snap'
-    const snapshotName = 'Scenario 1 1.1'
+        expect(clean._snapshots).toEqual({ [file]: [snapshotName] })
+    })
 
-    clean.referenceSnapshot(file, snapshotName)
-    clean.resetReferences()
+    test('resetReferences should remove all entries', () => {
+        const file = './test.js.snap'
+        const snapshotName = 'Scenario 1 1.1'
 
-    expect(clean._snapshots).toEqual({})
-})
+        clean.referenceSnapshot(file, snapshotName)
+        clean.resetReferences()
 
-test('cleanSnapshots should remove unreferenced snapshots from file', () => {
-    const file = './test.js.snap'
-    const snapshotName = 'Scenario 1 1.1'
-    const snapshot2Name = 'Scenario 2 1.1'
-    const snapshotContent = { [snapshotName]: 'some content', [snapshot2Name]: 'another content' }
-    const expectedContent = { [snapshotName]: 'some content' }
+        expect(clean._snapshots).toEqual({})
+    })
 
-    clean.referenceSnapshot(file, snapshotName)
+    test('cleanSnapshots should remove unreferenced snapshots from file', () => {
+        const file = './test.js.snap'
+        const snapshotName = 'Scenario 1 1.1'
+        const snapshot2Name = 'Scenario 2 1.1'
+        const snapshotContent = {
+            [snapshotName]: 'some content',
+            [snapshot2Name]: 'another content',
+        }
+        const expectedContent = { [snapshotName]: 'some content' }
 
-    snapshot.readSnapshotFile = jest.fn()
-    snapshot.writeSnapshotFile = jest.fn()
+        clean.referenceSnapshot(file, snapshotName)
 
-    snapshot.readSnapshotFile.mockReturnValueOnce(snapshotContent)
+        snapshot.readSnapshotFile = jest.fn()
+        snapshot.writeSnapshotFile = jest.fn()
 
-    clean.cleanSnapshots()
+        snapshot.readSnapshotFile.mockReturnValueOnce(snapshotContent)
 
-    expect(snapshot.readSnapshotFile.mock.calls.length).toBe(1)
-    expect(snapshot.readSnapshotFile).toHaveBeenCalledWith(file)
+        clean.cleanSnapshots()
 
-    expect(snapshot.writeSnapshotFile.mock.calls.length).toBe(1)
-    expect(snapshot.writeSnapshotFile).toHaveBeenCalledWith(file, expectedContent)
-})
+        expect(snapshot.readSnapshotFile.mock.calls.length).toBe(1)
+        expect(snapshot.readSnapshotFile).toHaveBeenCalledWith(file)
 
-test('cleanSnapshots should remove unreferenced snapshots from multiple files', () => {
-    const file1 = './test1.js.snap'
-    const file2 = './test2.js.snap'
-    const snapshot1Name = 'Scenario 1 1.1'
-    const snapshot2Name = 'Scenario 2 1.1'
-    const snapshot1Content = { [snapshot1Name]: 'some content', [snapshot2Name]: 'another content' }
-    const snapshot2Content = { [snapshot1Name]: 'some content', [snapshot2Name]: 'another content' }
-    const expectedContent1 = { [snapshot1Name]: 'some content' }
-    const expectedContent2 = { [snapshot2Name]: 'another content' }
+        expect(snapshot.writeSnapshotFile.mock.calls.length).toBe(1)
+        expect(snapshot.writeSnapshotFile).toHaveBeenCalledWith(file, expectedContent)
+    })
 
-    clean.referenceSnapshot(file1, snapshot1Name)
-    clean.referenceSnapshot(file2, snapshot2Name)
+    test('cleanSnapshots should remove unreferenced snapshots from multiple files', () => {
+        const file1 = './test1.js.snap'
+        const file2 = './test2.js.snap'
+        const snapshot1Name = 'Scenario 1 1.1'
+        const snapshot2Name = 'Scenario 2 1.1'
+        const snapshot1Content = {
+            [snapshot1Name]: 'some content',
+            [snapshot2Name]: 'another content',
+        }
+        const snapshot2Content = {
+            [snapshot1Name]: 'some content',
+            [snapshot2Name]: 'another content',
+        }
+        const expectedContent1 = { [snapshot1Name]: 'some content' }
+        const expectedContent2 = { [snapshot2Name]: 'another content' }
 
-    snapshot.readSnapshotFile = jest.fn()
-    snapshot.writeSnapshotFile = jest.fn()
+        clean.referenceSnapshot(file1, snapshot1Name)
+        clean.referenceSnapshot(file2, snapshot2Name)
 
-    snapshot.readSnapshotFile.mockReturnValueOnce(snapshot1Content)
-    snapshot.readSnapshotFile.mockReturnValueOnce(snapshot2Content)
+        snapshot.readSnapshotFile = jest.fn()
+        snapshot.writeSnapshotFile = jest.fn()
 
-    clean.cleanSnapshots()
+        snapshot.readSnapshotFile.mockReturnValueOnce(snapshot1Content)
+        snapshot.readSnapshotFile.mockReturnValueOnce(snapshot2Content)
 
-    expect(snapshot.readSnapshotFile.mock.calls.length).toBe(2)
-    expect(snapshot.readSnapshotFile).toHaveBeenCalledWith(file1)
-    expect(snapshot.readSnapshotFile).toHaveBeenCalledWith(file2)
+        clean.cleanSnapshots()
 
-    expect(snapshot.writeSnapshotFile.mock.calls.length).toBe(2)
-    expect(snapshot.writeSnapshotFile).toHaveBeenCalledWith(file1, expectedContent1)
-    expect(snapshot.writeSnapshotFile).toHaveBeenCalledWith(file2, expectedContent2)
+        expect(snapshot.readSnapshotFile.mock.calls.length).toBe(2)
+        expect(snapshot.readSnapshotFile).toHaveBeenCalledWith(file1)
+        expect(snapshot.readSnapshotFile).toHaveBeenCalledWith(file2)
+
+        expect(snapshot.writeSnapshotFile.mock.calls.length).toBe(2)
+        expect(snapshot.writeSnapshotFile).toHaveBeenCalledWith(file1, expectedContent1)
+        expect(snapshot.writeSnapshotFile).toHaveBeenCalledWith(file2, expectedContent2)
+    })
 })

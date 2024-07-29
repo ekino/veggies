@@ -1,3 +1,4 @@
+import { jest } from '@jest/globals'
 import { hasArg, hasOneArgOf } from '../../../src/utils/command_line.js'
 
 describe('utils > command_line', () => {
@@ -6,10 +7,12 @@ describe('utils > command_line', () => {
     beforeAll(() => {
         originalArgv = process.argv
         process.argv = ['node', 'script.js', '--argOne', '-t', '--three']
+        jest.spyOn(console, 'log').mockImplementation()
     })
 
     afterAll(() => {
         process.argv = originalArgv
+        jest.restoreAllMocks()
     })
 
     test('hasArg should return true when the arg is found', () => {

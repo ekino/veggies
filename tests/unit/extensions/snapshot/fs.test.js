@@ -3,68 +3,85 @@
 const fs = require('fs')
 const fileSystem = require('../../../../lib/cjs/extensions/snapshot/fs.js')
 
-test('getFileContent read and decode a file sync', () => {
-    const filename = 'test.json'
-    const content = 'é~se'
+describe('logger middleware default', () => {
+    beforeAll(() => {
+        fs.statSync = jest.fn()
+        fs.readFileSync = jest.fn()
+        fs.writeFileSync = jest.fn()
+        fs.mkdirSync = jest.fn()
 
-    fs.readFileSync = jest.fn()
-    fs.readFileSync.mockReturnValueOnce(Buffer.from(content, 'utf8'))
+        fs.readFileSync.mockImplementation((file) => {
+            return ''
+        })
 
-    expect(fileSystem.getFileContent(filename)).toBe(content)
-    expect(fs.readFileSync.mock.calls.length).toBe(1)
-    expect(fs.readFileSync).toHaveBeenCalledWith(filename)
-})
+        fs.writeFileSync.mockImplementation(() => ({}))
+        fs.statSync.mockImplementation(() => ({}))
+    })
 
-test("writeFileContent create directory if it doesn't exists", () => {
-    const file = 'folder1/folder2/test.json'
-    const folder = 'folder1/folder2'
-    const content = 'test'
+    afterEach(() => {
+        fs.statSync.mockClear()
+        fs.readFileSync.mockClear()
+        fs.writeFileSync.mockClear()
+        fs.mkdirSync.mockClear()
+    })
+    afterAll(() => {
+        jest.restoreAllMocks()
+    })
 
-    fs.mkdirSync = jest.fn()
-    fs.writeFileSync = jest.fn()
+    test('getFileContent read and decode a file sync', () => {
+        const filename = 'test.json'
+        const content = 'é~se'
 
-    fileSystem.writeFileContent(file, content)
-    expect(fs.mkdirSync.mock.calls.length).toBe(1)
-    expect(fs.mkdirSync).toHaveBeenCalledWith(folder, { recursive: true })
+        fs.readFileSync = jest.fn()
+        fs.readFileSync.mockReturnValueOnce(Buffer.from(content, 'utf8'))
 
-    expect(fs.writeFileSync.mock.calls.length).toBe(1)
-    expect(fs.writeFileSync).toHaveBeenCalledWith(file, content)
-})
+        expect(fileSystem.getFileContent(filename)).toBe(content)
+        expect(fs.readFileSync.mock.calls.length).toBe(1)
+        expect(fs.readFileSync).toHaveBeenCalledWith(filename)
+    })
 
-test("writeFileContent don't create directory if explicitly not asked to", () => {
-    const file = 'folder1/folder2/test.json'
-    const content = 'test'
+    test("writeFileContent create directory if it doesn't exists", () => {
+        const file = 'folder1/folder2/test.json'
+        const folder = 'folder1/folder2'
+        const content = 'test'
 
-    fs.mkdirSync = jest.fn()
-    fs.writeFileSync = jest.fn()
+        fileSystem.writeFileContent(file, content)
+        expect(fs.mkdirSync.mock.calls.length).toBe(1)
+        expect(fs.mkdirSync).toHaveBeenCalledWith(folder, { recursive: true })
 
-    fileSystem.writeFileContent(file, content, { createDir: false })
-    expect(fs.mkdirSync.mock.calls.length).toBe(0)
+        expect(fs.writeFileSync.mock.calls.length).toBe(1)
+        expect(fs.writeFileSync).toHaveBeenCalledWith(file, content)
+    })
 
-    expect(fs.writeFileSync.mock.calls.length).toBe(1)
-    expect(fs.writeFileSync).toHaveBeenCalledWith(file, content)
-})
+    test("writeFileContent don't create directory if explicitly not asked to", () => {
+        const file = 'folder1/folder2/test.json'
+        const content = 'test'
 
-test("getFileInfo returns null if file doesn't exists", () => {
-    const file = './dontexist.file'
+        fileSystem.writeFileContent(file, content, { createDir: false })
+        expect(fs.mkdirSync.mock.calls.length).toBe(0)
 
-    const statSync = fs.statSync
-    fs.statSync = jest.fn()
-    fs.statSync.mockImplementationOnce(statSync)
+        expect(fs.writeFileSync.mock.calls.length).toBe(1)
+        expect(fs.writeFileSync).toHaveBeenCalledWith(file, content)
+    })
 
-    expect(fileSystem.getFileInfo(file)).toBe(null)
-    expect(fs.statSync.mock.calls.length).toBe(1)
-    expect(fs.statSync).toHaveBeenCalledWith(file)
-})
+    test("getFileInfo returns null if file doesn't exists", () => {
+        const file = './dontexist.file'
 
-test('getFileInfo returns file infos if it exists', () => {
-    const file = './exist.file'
-    const infos = { key1: 'value1' }
+        fs.statSync.mockReturnValueOnce(null)
 
-    fs.statSync = jest.fn()
-    fs.statSync.mockReturnValueOnce(infos)
+        expect(fileSystem.getFileInfo(file)).toBe(null)
+        expect(fs.statSync.mock.calls.length).toBe(1)
+        expect(fs.statSync).toHaveBeenCalledWith(file)
+    })
 
-    expect(fileSystem.getFileInfo(file)).toBe(infos)
-    expect(fs.statSync.mock.calls.length).toBe(1)
-    expect(fs.statSync).toHaveBeenCalledWith(file)
+    test('getFileInfo returns file infos if it exists', () => {
+        const file = './exist.file'
+        const infos = { key1: 'value1' }
+
+        fs.statSync.mockReturnValueOnce(infos)
+
+        expect(fileSystem.getFileInfo(file)).toBe(infos)
+        expect(fs.statSync.mock.calls.length).toBe(1)
+        expect(fs.statSync).toHaveBeenCalledWith(file)
+    })
 })
