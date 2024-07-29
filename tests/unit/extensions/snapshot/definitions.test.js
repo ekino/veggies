@@ -1,10 +1,9 @@
 'use strict'
-
 const helper = require('../definitions_helper.cjs')
-const definitions = require('../../../../lib/cjs/extensions/snapshot/definitions.js')
+const snapshot = require('../../../../lib/cjs/extensions/snapshot/index.js')
 
 beforeEach(() => {
-    definitions.install()
+    snapshot.install()
 })
 
 afterEach(() => {

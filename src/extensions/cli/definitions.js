@@ -1,44 +1,41 @@
 'use strict'
 
-import { Given, Then, When } from '@cucumber/cucumber'
+import { Given, Then, When, world } from '@cucumber/cucumber'
 import { expect } from 'chai'
 
 export const install = () => {
-    Given(/^(?:I )?set (?:working directory|cwd) to (.+)$/, function (cwd) {
-        this.cli.setCwd(cwd)
+    Given(/^(?:I )?set (?:working directory|cwd) to (.+)$/, (cwd) => {
+        world.cli.setCwd(cwd)
     })
 
-    Given(
-        /^(?:I )?set ([^ ]+) (?:env|environment) (?:var|variable) to (.+)$/,
-        function (name, value) {
-            this.cli.setEnvironmentVariable(name, value)
-        },
-    )
-
-    Given(/^(?:I )?set (?:env|environment) (?:vars|variables)$/, function (step) {
-        this.cli.setEnvironmentVariables(step.rowsHash())
+    Given(/^(?:I )?set ([^ ]+) (?:env|environment) (?:var|variable) to (.+)$/, (name, value) => {
+        world.cli.setEnvironmentVariable(name, value)
     })
 
-    Given(/^(?:I )?kill the process with ([^ ]+) in (\d+)(ms|s)/, function (signal, _delay, unit) {
+    Given(/^(?:I )?set (?:env|environment) (?:vars|variables)$/, (step) => {
+        world.cli.setEnvironmentVariables(step.rowsHash())
+    })
+
+    Given(/^(?:I )?kill the process with ([^ ]+) in (\d+)(ms|s)/, (signal, _delay, unit) => {
         let delay = Number(_delay)
         if (unit === 's') {
             delay = delay * 1000
         }
 
-        this.cli.scheduleKillProcess(delay, signal)
+        world.cli.scheduleKillProcess(delay, signal)
     })
 
-    When(/^(?:I )?run command (.+)$/, function (command) {
-        return this.cli.run(command)
+    When(/^(?:I )?run command (.+)$/, (command) => {
+        return world.cli.run(command)
     })
 
-    When(/^(?:I )?dump (stderr|stdout)$/, function (type) {
-        const output = this.cli.getOutput(type)
+    When(/^(?:I )?dump (stderr|stdout)$/, (type) => {
+        const output = world.cli.getOutput(type)
         console.log(output)
     })
 
-    Then(/^(?:the )?(?:command )?exit code should be (\d+)$/, function (expectedExitCode) {
-        const exitCode = this.cli.getExitCode()
+    Then(/^(?:the )?(?:command )?exit code should be (\d+)$/, (expectedExitCode) => {
+        const exitCode = world.cli.getExitCode()
 
         expect(
             exitCode,
@@ -46,32 +43,32 @@ export const install = () => {
         ).to.equal(Number(expectedExitCode))
     })
 
-    Then(/^(stderr|stdout) should be empty$/, function (type) {
-        const output = this.cli.getOutput(type)
+    Then(/^(stderr|stdout) should be empty$/, (type) => {
+        const output = world.cli.getOutput(type)
 
         expect(output).to.be.empty
     })
 
-    Then(/^(stderr|stdout) should contain (.+)$/, function (type, expected) {
-        const output = this.cli.getOutput(type)
+    Then(/^(stderr|stdout) should contain (.+)$/, (type, expected) => {
+        const output = world.cli.getOutput(type)
 
         expect(output).to.contain(expected)
     })
 
-    Then(/^(stderr|stdout) should not contain (.+)$/, function (type, expected) {
-        const output = this.cli.getOutput(type)
+    Then(/^(stderr|stdout) should not contain (.+)$/, (type, expected) => {
+        const output = world.cli.getOutput(type)
 
         expect(output).to.not.contain(expected)
     })
 
-    Then(/^(stderr|stdout) should match (.+)$/, function (type, regex) {
-        const output = this.cli.getOutput(type)
+    Then(/^(stderr|stdout) should match (.+)$/, (type, regex) => {
+        const output = world.cli.getOutput(type)
 
         expect(output).to.match(new RegExp(regex, 'gim'))
     })
 
-    Then(/^(stderr|stdout) should not match (.+)$/, function (type, regex) {
-        const output = this.cli.getOutput(type)
+    Then(/^(stderr|stdout) should not match (.+)$/, (type, regex) => {
+        const output = world.cli.getOutput(type)
 
         expect(output).to.not.match(new RegExp(regex, 'gim'))
     })

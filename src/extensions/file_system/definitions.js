@@ -1,28 +1,28 @@
 'use strict'
 
-import { Given, Then } from '@cucumber/cucumber'
+import { Given, Then, world } from '@cucumber/cucumber'
 import { expect } from 'chai'
 
 export const install = () => {
     /**
      * Creating a directory.
      */
-    Given(/^(?:I )?create directory (.+)$/, function (directory) {
-        return this.fileSystem.createDirectory(this.cli.getCwd(), directory)
+    Given(/^(?:I )?create directory (.+)$/, (directory) => {
+        return world.fileSystem.createDirectory(world.cli.getCwd(), directory)
     })
 
     /**
      * Remove a file or directory.
      */
-    Given(/^(?:I )?remove (?:file|directory) (.+)$/, function (fileOrDirectory) {
-        return this.fileSystem.remove(this.cli.getCwd(), fileOrDirectory)
+    Given(/^(?:I )?remove (?:file|directory) (.+)$/, (fileOrDirectory) => {
+        return world.fileSystem.remove(world.cli.getCwd(), fileOrDirectory)
     })
 
     /**
      * Checking file/directory presence.
      */
-    Then(/^(file|directory) (.+) should (not )?exist$/, function (type, file, flag) {
-        return this.fileSystem.getFileInfo(this.cli.getCwd(), file).then((info) => {
+    Then(/^(file|directory) (.+) should (not )?exist$/, (type, file, flag) => {
+        return world.fileSystem.getFileInfo(world.cli.getCwd(), file).then((info) => {
             if (flag === 'not ') {
                 expect(info, `${type} '${file}' exists`).to.be.null
             } else {
@@ -41,9 +41,9 @@ export const install = () => {
      */
     Then(
         /^file (.+) content should (not )?(equal|contain|match) (.+)$/,
-        function (file, flag, comparator, expectedValue) {
-            return this.fileSystem
-                .getFileContent(this.cli.getCwd(), file)
+        (file, flag, comparator, expectedValue) => {
+            return world.fileSystem
+                .getFileContent(world.cli.getCwd(), file)
                 .then((content) => {
                     let expectFn = expect(
                         content,

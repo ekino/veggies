@@ -51,7 +51,6 @@
         "arg": "5.0.2",
         "chai": "4.5.0",
         "fast-glob": "3.3.2",
-        "glob": "11.0.0",
         "jest-diff": "29.7.0",
         "js-yaml": "4.1.0",
         "moment-timezone": "0.5.45",
@@ -83,11 +82,11 @@
         "prettier": "^3.3.3"
     },
     "peerDependencies": {
-        "@cucumber/cucumber": ">=9.0.0"
+        "@cucumber/cucumber": ">=10.8.0"
     },
     "scripts": {
         "build-cjs": "node scripts/build.js",
-        "test": "NODE_NO_WARNINGS=1 NODE_OPTIONS=\"--experimental-vm-modules\" jest tests/unit/extensions/snapshot/definitions.test.js",
+        "test": "NODE_NO_WARNINGS=1 node --experimental-vm-modules node_modules/jest/bin/jest.js tests/unit/extensions/cli",
         "test-cover": "jest --coverage",
         "test-func": "veggies --import tests/functional/support tests/functional/features",
         "fmt": "prettier --cache --color --write \"{src,tests,scripts}/**/*.js\" \"*.{yml,yaml,json}\"",
