@@ -86,9 +86,9 @@
     },
     "scripts": {
         "build-cjs": "node scripts/build.js",
-        "test": "NODE_NO_WARNINGS=1 node --experimental-vm-modules node_modules/jest/bin/jest.js tests/unit/extensions/cli",
-        "test-cover": "jest --coverage",
-        "test-func": "veggies --import tests/functional/support tests/functional/features",
+        "test": "NODE_NO_WARNINGS=1 node --experimental-vm-modules node_modules/jest/bin/jest.js tests/unit",
+        "test-cover": "NODE_NO_WARNINGS=1 node --experimental-vm-modules node_modules/jest/bin/jest.js tests/unit --coverage",
+        "test-func": "veggies --import tests/functional/support tests/functional/features --tags @http_api",
         "fmt": "prettier --cache --color --write \"{src,tests,scripts}/**/*.js\" \"*.{yml,yaml,json}\"",
         "check-fmt": "prettier --cache --list-different \"{src,tests,scripts}/**/*.js\" \"*.{yml,yaml,json}\"",
         "lint": "eslint --quiet --cache \"{src,tests,scripts,examples}/**/*.{js,mjs,cjs}\"",
