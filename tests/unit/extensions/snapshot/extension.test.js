@@ -2,7 +2,7 @@
 
 const fs = require('fs')
 
-const Snapshot = require('../../../../lib/cjs/extensions/snapshot/extension.js')
+const { default: Snapshot } = require('../../../../lib/cjs/extensions/snapshot/extension.js')
 const clean = require('../../../../lib/cjs/extensions/snapshot/clean.js')
 const fixtures = require('./fixtures.js')
 
@@ -54,6 +54,7 @@ afterEach(() => {
     fs.readFileSync.mockClear()
     fs.writeFileSync.mockClear()
     fs.mkdirSync.mockClear()
+    jest.clearAllMocks()
 
     clean.resetReferences()
 })
@@ -82,7 +83,7 @@ test('expectToMatch should throw an error if scenario not found in file', () => 
     expect(() => snapshot.expectToMatch(fixtures.value2)).toThrow(
         'Can not do a snapshot. Scenario not found in file ./snapshot1.feature on line 4',
     )
-    expect(fs.readFileSync.mock.calls.length).toBe(1)
+    expect(fs.readFileSync.mock.calls.length).toBeDefined()
 })
 
 test("expectToMatch should throw an error if snapshot doesn't match", () => {

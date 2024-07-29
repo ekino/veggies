@@ -1,16 +1,10 @@
 'use strict'
 
-import { jest } from '@jest/globals'
-
-const glob = jest.createMockFromModule('glob')
+jest.genMockFromModule('fast-glob')
 
 let mockedResults = {}
 
-export const __setMockResults = (results) => {
-    mockedResults = results
-}
-
-glob.glob = (pattern, cb) => {
+module.exports = (pattern, cb) => {
     if (pattern === '__defineMocks') {
         mockedResults = cb
         return
@@ -20,5 +14,3 @@ glob.glob = (pattern, cb) => {
     if (mockedResult === undefined) return cb(null, [])
     cb(null, mockedResult)
 }
-
-export default glob

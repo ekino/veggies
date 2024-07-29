@@ -1,19 +1,20 @@
 'use strict'
 
-import { jest } from '@jest/globals'
-
-const fs = jest.createMockFromModule('fs')
+const fs = jest.genMockFromModule('fs')
 
 let mockFiles = {}
 
-export const __setMockFiles = (_mockFiles) => {
+const __setMockFiles = (_mockFiles) => {
     mockFiles = _mockFiles
 }
 
-fs.readFile = (file, cb) => {
+const readFile = (file, cb) => {
     const mockedContent = mockFiles[file]
     if (mockedContent !== undefined) return cb(null, mockedContent)
     cb(new Error(`File does not exist (${file})`))
 }
 
-export default fs
+fs.__setMockFiles = __setMockFiles
+fs.readFile = readFile
+
+module.exports = fs

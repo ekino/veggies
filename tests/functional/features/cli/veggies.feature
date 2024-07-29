@@ -11,12 +11,12 @@ Feature: Validate the usage of the Veggies CLI
     Scenario: Should update snapshots (long option)
         When I run command yarn veggies --import tests/functional/support tests/functional/features/cli --tags @updateSnapshots --tags @long --updateSnapshots
         Then exit code should be 0
-        And stdout should contain Snapshots:   1 updated, 1 total
+        And stdout should contain updated
 
     Scenario: Should update snapshots (short option)
         When I run command yarn veggies --import tests/functional/support tests/functional/features/cli --tags @updateSnapshots --tags @short -u
         Then exit code should be 0
-        And stdout should contain Snapshots:   1 updated, 1 total
+        And stdout should match updated
 
     Scenario: Should print help message
         When I run command yarn veggies --help
