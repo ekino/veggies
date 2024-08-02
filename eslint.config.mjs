@@ -12,6 +12,7 @@ const commonConfig = {
     },
 
     rules: {
+        ...eslintJs.configs.recommended.rules,
         'no-duplicate-imports': 'error',
         'no-unneeded-ternary': 'error',
         'prefer-object-spread': 'error',
