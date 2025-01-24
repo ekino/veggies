@@ -72,7 +72,6 @@
         "eslint": "^9.18.0",
         "gh-pages": "^6.3.0",
         "globals": "^15.14.0",
-        "husky": "^9.1.7",
         "jest": "^29.7.0",
         "jsdoc": "^4.0.4",
         "lint-staged": "^15.4.2",
@@ -82,7 +81,7 @@
         "prettier": "^3.4.2"
     },
     "peerDependencies": {
-        "@cucumber/cucumber": ">=10.x"
+        "@cucumber/cucumber": ">=11.x"
     },
     "scripts": {
         "build-cjs": "node scripts/build.js",
@@ -97,7 +96,8 @@
         "check-readme": "node scripts/generate_readme --check",
         "doc": "jsdoc -c .jsdoc.json --verbose",
         "doc-pub": "yarn run readme && yarn run doc && gh-pages -d _doc",
-        "examples": "veggies --import examples/support examples/features"
+        "examples": "veggies --import examples/support examples/features",
+        "postinstall": "git config core.hooksPath ./.githooks || true"
     },
     "packageManager": "yarn@4.3.1"
 }
