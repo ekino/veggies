@@ -259,7 +259,7 @@ const generateReadme = async () => {
             assert.strictEqual(
                 renderedReadme,
                 readmeContent,
-                'README.md was not generated: Use `yarn readme`.',
+                'README.md was not generated: Use `pnpm run readme`.',
             )
         } else {
             return writeFile(readmePath, renderedReadme)

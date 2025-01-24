@@ -54,16 +54,10 @@ It's also the perfect companion for testing CLI applications built with commande
     
 ## Installation
 
-Using npm:
-
 ```sh
-npm install @ekino/veggies
-```
-
-Or yarn:
-
-```sh
-yarn add @ekino/veggies
+npm install -D @ekino/veggies
+yarn add -D @ekino/veggies
+pnpm add -D @ekino/veggies
 ```
 
 Then all you have to do is installing the provided extensions:
@@ -98,10 +92,10 @@ As `cucumber-js` **no longer supports custom options**, it's the safest way to u
 To make use of it, you can use either of these commands:
 
 ```shell
+$ npm veggies
 $ yarn veggies
-
+$ pnpm veggies
 $ npx veggies
-
 $ ./node_modules/.bin/veggies.js
 ```
 
@@ -1116,19 +1110,19 @@ Can be used on:
 This repository comes with few examples, in order to run them, invoke the following script:
 
 ```sh
-yarn run examples
+pnpm run examples
 ```
 
 If you want to only run certain examples, you can use tags, for example to run cli extension examples:
 
 ```sh
-yarn run examples -- --tags @cli
+pnpm run examples -- --tags @cli
 ```
 
 There is a special tag which only runs examples not requiring network access:
 
 ```sh
-yarn run examples -- --tags @offline
+pnpm run examples -- --tags @offline
 ```
 
 Due to public API rate limit (e.g. GitHub API), this tag is used when running on CI.

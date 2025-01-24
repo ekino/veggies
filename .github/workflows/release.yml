@@ -12,19 +12,34 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ github.actor == 'pebie' || github.actor == 'Crow-EH' || github.actor == 'fthouraud' || github.actor == 'leguellec' || github.actor == 'rande' }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 10
+          run_install: false
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Bump the version using input strategy
-        run: yarn version ${{ github.event.inputs.strategy }}
+        run: pnpm version ${{ github.event.inputs.strategy }}
 
       - name: Update changelog    
         id: changelog
         run: |
-          yarn install
-          CHANGELOG=$(yarn conventional-changelog -p conventionalcommits -r -u 0)
+          pnpm install
+          CHANGELOG=$(pnpm conventional-changelog -p conventionalcommits -r -u 0)
           echo -e "${CHANGELOG}\n\n\n\n$(cat CHANGELOG.md)" > CHANGELOG.md
           BODY=$(echo -e "${CHANGELOG}" | sed -e "1,2d")
           BODY="${BODY//'%'/'%25'}"

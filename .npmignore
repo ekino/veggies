@@ -45,3 +45,5 @@ Makefile
 .pnp.*
 jest.config.js
 .yarnrc.yml
+.pnpm-store
+.pnpm*

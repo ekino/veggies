@@ -14,9 +14,9 @@ In return, they should reciprocate that respect in addressing your issue or asse
 
 1. Clone the repo with `git clone https://github.com/ekino/veggies`
 
-2. Run `yarn install` in the root `veggies` folder.
+2. Run `pnpm install` in the root `veggies` folder.
 
-Once it is done, you can modify any file locally and run `yarn run examples start` or `yarn test` to check it.
+Once it is done, you can modify any file locally and run `yarn run examples start` or `pnpm run test` to check it.
 
 ## Submitting a Pull Request
 
@@ -36,4 +36,4 @@ You should never update it directly, and should instead :
 
 1. Edit `doc/README.tpl.md`
 
-2. Run `yarn readme` to generate `README.md`
+2. Run `pnpm run readme` to generate `README.md`

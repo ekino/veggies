@@ -39,6 +39,7 @@ export default [
             'lib/*',
             '**/*.config.js',
             '__mocks__/*',
+            '.pnpm-store/*'
         ],
     },
     eslintJs.configs.recommended,

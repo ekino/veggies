@@ -55,3 +55,4 @@ _doc
 
 !bin/veggies.js
 events.json
+.pnpm*

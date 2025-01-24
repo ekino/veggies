@@ -1,12 +1,12 @@
 README.tpl.md:
-  - yarn readme
+  - pnpm readme
   - git add .
 
 "*.feature":
-  - yarn examples --tags @offline
+  - pnpm run examples --tags @offline
 
 "*.js":
-  - yarn lint-fix
-  - yarn fmt
+  - pnpm run lint-fix
+  - pnpm run fmt
   - git add .
   - jest --bail --findRelatedTests
