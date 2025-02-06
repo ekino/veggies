@@ -1,12 +1,9 @@
 name: Continuous integration
-on: 
-  push:
-  pull_request:
-    branches: [master]
+on: [push, pull_request]
 
 jobs:
   tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     strategy:
       matrix:
@@ -30,7 +27,6 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      - uses: actions/checkout@v4
 
       - name: Eslint
         run: pnpm run lint
@@ -39,7 +35,7 @@ jobs:
         run: pnpm run check-fmt
 
       - name: Tests
-        run: pnpm test-func
+        run: pnpm run test-func
 
       - name: Clear Jest cache
         run: pnpm jest --clearCache
@@ -63,5 +59,5 @@ jobs:
       - name: Coveralls Finished
         uses: coverallsapp/github-action@v2
         with:
-            github-token: ${{ secrets.github_token }}
-            parallel-finished: true
+          github-token: ${{ secrets.github_token }}
+          parallel-finished: true
