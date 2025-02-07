@@ -142,7 +142,7 @@ export const install = ({ baseUrl = '' } = {}) => {
      */
     Given(/^(?:I )?pick response (json|header) (.+) as (.+)$/, (dataSource, path, key) => {
         const response = world.httpApiClient.getResponse()
-        let data = dataSource !== 'header' ? response.body : response.headers
+        let data = dataSource !== 'header' ? response.data : response.headers
 
         world.state.set(key, getValue(data, path))
     })
@@ -234,8 +234,8 @@ export const install = ({ baseUrl = '' } = {}) => {
     Then(/^response status code should be ([1-5][0-9][0-9])$/, (statusCode) => {
         const response = mustGetResponse(world.httpApiClient)
         expect(
-            response.statusCode,
-            `Expected status code to be: ${statusCode}, but found: ${response.statusCode}`,
+            response.status,
+            `Expected status code to be: ${statusCode}, but found: ${response.status}`,
         ).to.equal(Number(statusCode))
     })
 
@@ -249,10 +249,10 @@ export const install = ({ baseUrl = '' } = {}) => {
 
         const response = mustGetResponse(world.httpApiClient)
         const statusCode = findKey(STATUS_CODES, (msg) => msg.toLowerCase() === statusMessage)
-        const currentStatusMessage = STATUS_CODES[`${response.statusCode}`] || response.statusCode
+        const currentStatusMessage = STATUS_CODES[`${response.status}`] || response.status
 
         expect(
-            response.statusCode,
+            response.status,
             `Expected status to be: '${statusMessage}', but found: '${currentStatusMessage.toLowerCase()}'`,
         ).to.equal(Number(statusCode))
     })

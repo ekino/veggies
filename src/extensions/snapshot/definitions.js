@@ -7,7 +7,7 @@ export const install = () => {
      * Checking if an http response body match a snapshot
      */
     Then(/^response body should match snapshot$/, () => {
-        world.snapshot.expectToMatch(world.httpApiClient.getResponse().body)
+        world.snapshot.expectToMatch(world.httpApiClient.getResponse().data)
     })
 
     /**
@@ -23,7 +23,7 @@ export const install = () => {
             }))
         }
 
-        world.snapshot.expectToMatchJson(world.httpApiClient.getResponse().body, spec)
+        world.snapshot.expectToMatchJson(world.httpApiClient.getResponse().data, spec)
     })
 
     /**

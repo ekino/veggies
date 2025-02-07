@@ -42,7 +42,7 @@ Then(/^response should match url encoded snapshot (.+)$/, (snapshotId) => {
     const httpResponse = world.httpApiClient.getResponse()
     expect(httpResponse).to.not.be.empty
     return world.fixtures.load(snapshotId).then((snapshot) => {
-        expect(httpResponse.body).to.equal(querystring.stringify(snapshot))
+        expect(httpResponse.data).to.equal(querystring.stringify(snapshot))
     })
 })
 

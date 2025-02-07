@@ -6,16 +6,30 @@
  * @module extensions/httpApi/client
  */
 
-import requestLib from 'request'
-import { Cookie } from 'tough-cookie'
+import { Cookie, CookieJar } from 'tough-cookie'
+import { wrapper } from 'axios-cookiejar-support'
 import { isPlainObject, isString } from '../../utils/index.js'
+import axios from 'axios'
+import FormData from 'form-data'
 
-const request = requestLib.defaults({ json: true })
 const BODY_TYPE_JSON = 'json'
 const BODY_TYPE_FORM = 'form'
 const BODY_TYPE_MULTIPART = 'form-data'
 
 const verbsAcceptingBody = ['POST', 'PUT', 'DELETE', 'PATCH']
+
+const axiosInstance = axios.create()
+let cookieInstance
+
+const getClient = (cookieJar) => {
+    if (cookieJar) {
+        if (!cookieInstance) {
+            cookieInstance = wrapper(axios.create({ jar: cookieJar, withCredentials: true }))
+        }
+        return cookieInstance
+    }
+    return axiosInstance
+}
 
 /**
  * Http Api Client extension.
@@ -26,9 +40,9 @@ class HttpApiClient {
     constructor() {
         // REQUEST INFORMATION
         this.body = null
-        this.bodyType = null
-        this.headers = null
-        this.query = null
+        this.bodyType = BODY_TYPE_JSON
+        this.headers = {}
+        this.query = {}
         this.cookies = []
         this.cookieJar = null
         this.followRedirect = true
@@ -43,9 +57,9 @@ class HttpApiClient {
      */
     reset() {
         this.body = null
-        this.bodyType = null
-        this.headers = null
-        this.query = null
+        this.bodyType = BODY_TYPE_JSON
+        this.headers = {}
+        this.query = {}
 
         this.cookies = []
         this.cookieJar = null
@@ -98,7 +112,7 @@ class HttpApiClient {
      */
     clearBody() {
         this.body = null
-        this.bodyType = null
+        this.bodyType = BODY_TYPE_JSON
     }
 
     /**
@@ -116,7 +130,7 @@ class HttpApiClient {
      * @param {Object} headers
      */
     setHeaders(headers) {
-        this.headers = headers
+        this.headers = headers || {}
     }
 
     /**
@@ -126,7 +140,6 @@ class HttpApiClient {
      * @param {string} value
      */
     setHeader(key, value) {
-        this.headers = this.headers || {}
         this.headers[key] = value
     }
 
@@ -141,10 +154,11 @@ class HttpApiClient {
      * Enables cookie jar.
      */
     enableCookies() {
-        if (this.cookieJar !== null) return
+        if (this.cookieJar) return
 
-        this.cookieJar = request.jar()
-        this.cookieJar._jar.rejectPublicSuffixes = false
+        this.cookieJar = new CookieJar()
+        this.cookieJar.rejectPublicSuffixes = false
+        this.cookieJar.looseMode = true
     }
 
     /**
@@ -226,64 +240,85 @@ class HttpApiClient {
                 baseUrl = url.origin
             }
 
+            const fullUrl = `${baseUrl}${path}`
             const options = {
-                baseUrl: baseUrl,
-                uri: path,
                 method,
-                qs: this.query || {},
+                url: fullUrl,
                 headers: this.headers,
+                params: this.query,
+                maxRedirects: this.followRedirect ? 5 : 0,
                 jar: this.cookieJar,
-                followRedirect: this.followRedirect,
             }
 
-            const fullUri = `${baseUrl}${path}`
-
-            if (this.body !== null) {
+            if (this.body) {
                 if (!verbsAcceptingBody.includes(method)) {
                     throw new Error(
-                        `You can only provide a body for ${verbsAcceptingBody.join(
-                            ', ',
-                        )} HTTP methods, found: ${method}`,
+                        `Body is only allowed for ${verbsAcceptingBody.join(', ')} methods, found: ${method}`,
                     )
                 }
 
                 if (this.bodyType === BODY_TYPE_JSON) {
-                    options.json = true
-                    options.body = this.body
+                    options.headers['Content-Type'] = 'application/json'
+                    options.data = this.body
                 } else if (this.bodyType === BODY_TYPE_FORM) {
-                    options.form = this.body
-                } else if (this.bodyType == BODY_TYPE_MULTIPART) {
-                    options.formData = this.body
+                    options.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+                    options.data = new URLSearchParams(this.body).toString()
+                } else if (this.bodyType === BODY_TYPE_MULTIPART) {
+                    const formData = new FormData()
+                    Object.entries(this.body).forEach(([key, value]) => formData.append(key, value))
+                    options.data = formData
                 }
             }
 
-            if (this.cookieJar !== null) {
+            // Set initial cookie before make request
+            if (this.cookieJar) {
                 this.cookies.forEach((cookie) => {
                     if (isPlainObject(cookie)) {
-                        this.cookieJar.setCookie(new Cookie(cookie), fullUri)
+                        this.cookieJar.setCookie(new Cookie(cookie), fullUrl)
                     } else if (isString(cookie)) {
-                        this.cookieJar.setCookie(cookie, fullUri)
+                        this.cookieJar.setCookie(cookie, fullUrl)
                     }
                 })
             }
+            const client = getClient(this.cookieJar)
 
-            request(options, (_error, _response, _body) => {
-                if (_error) {
-                    console.error(_error, options)
+            client
+                .request(options)
+                .then((response) => {
+                    this.response = response
+
+                    if (this.cookieJar) {
+                        this.responseCookies = {}
+                        const setCookieHeaders = this.response.headers['set-cookie']
+                        if (setCookieHeaders) {
+                            setCookieHeaders.forEach((cookie) => {
+                                this.cookieJar.setCookieSync(cookie, fullUrl)
+                            })
+                        }
+                        this.cookieJar.getCookiesSync(fullUrl).forEach((cookie) => {
+                            this.responseCookies[cookie.key] = cookie
+                        })
+                    }
+                    resolve()
+                })
+                .catch((error) => {
+                    if (axios.isAxiosError(error)) {
+                        console.error('Axios error:', {
+                            message: error.message,
+                            response: error.response
+                                ? {
+                                      status: error.response.status,
+                                      data: error.response.data,
+                                      headers: error.response.headers,
+                                  }
+                                : undefined,
+                            stack: error.stack,
+                        })
+                    } else {
+                        console.error('Unexpected error:', error)
+                    }
                     reject()
-                }
-
-                this.response = _response
-
-                if (this.cookieJar !== null) {
-                    this.responseCookies = {}
-                    this.cookieJar.getCookies(fullUri).forEach((cookie) => {
-                        this.responseCookies[cookie.key] = cookie
-                    })
-                }
-
-                resolve()
-            })
+                })
         })
     }
 }

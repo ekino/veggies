@@ -1140,5 +1140,5 @@ Due to public API rate limit (e.g. GitHub API), this tag is used when running on
 [github-watch]: https://github.com/ekino/veggies/watchers
 [github-star-badge]: https://img.shields.io/github/stars/ekino/veggies.svg?style=social
 [github-star]: https://github.com/ekino/veggies/stargazers
-[twitter]: https://twitter.com/intent/tweet?text=Check%20out%20veggies!%20https://github.com/ekino/veggies%20%F0%9F%91%8D
+[twitter]: https://x.com/intent/tweet?text=Check%20out%20veggies!%20https://github.com/ekino/veggies%20%F0%9F%91%8D
 [twitter-badge]: https://img.shields.io/twitter/url/https/github.com/ekino/veggies.svg?style=social

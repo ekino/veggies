@@ -3,25 +3,26 @@
 Feature: Validate the usage of the Veggies CLI
     
     Scenario: Should prevent snapshots creation
-        When I run command yarn veggies --import tests/functional/support tests/functional/features/cli --tags @preventSnapshotsCreation --preventSnapshotsCreation
+        When I run command bin/veggies.js --import tests/functional/support tests/functional/features/cli --tags @preventSnapshotsCreation --preventSnapshotsCreation
         Then exit code should be 0
 
     Scenario: Should clean snapshots
-        When I run command yarn veggies --import tests/functional/support tests/functional/features/cli --tags @cleanSnapshots --cleanSnapshots
+        When I run command bin/veggies.js --import tests/functional/support tests/functional/features/cli --tags @cleanSnapshots --cleanSnapshots
         Then exit code should be 0
         
     Scenario: Should update snapshots (long option)
-        When I run command yarn veggies --import tests/functional/support tests/functional/features/cli --tags @updateSnapshots --tags @long --updateSnapshots
+        When I run command bin/veggies.js --import tests/functional/support tests/functional/features/cli --tags @updateSnapshots --tags @long --updateSnapshots
         Then exit code should be 0
         And stdout should contain updated
 
     Scenario: Should update snapshots (short option)
-        When I run command yarn veggies --import tests/functional/support tests/functional/features/cli --tags @updateSnapshots --tags @short -u
+        When I run command bin/veggies.js --import tests/functional/support tests/functional/features/cli --tags @updateSnapshots --tags @short -u
         Then exit code should be 0
         And stdout should match updated
 
+        @debug
     Scenario: Should print help message
-        When I run command yarn veggies --help
+        When I run command bin/veggies.js --help
         Then exit code should be 0
         And stdout should contain veggies help
         And stdout should contain Options:
