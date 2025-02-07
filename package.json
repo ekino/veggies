@@ -52,7 +52,7 @@
         "fast-glob": "3.3.3",
         "jest-diff": "29.7.0",
         "js-yaml": "4.1.0",
-        "moment-timezone": "0.5.47",
+        "luxon": "^3.5.0",
         "natural-compare": "1.4.0",
         "pretty-format": "29.7.0",
         "request": "2.88.2",

@@ -5,7 +5,7 @@
  */
 
 import { expect, use } from 'chai'
-import moment from 'moment-timezone'
+import { DateTime } from 'luxon'
 import * as Cast from './cast.js'
 import { registerChaiAssertion } from './custom_chai_assertions.js'
 import { isEmpty, getValue } from '../utils/index.js'
@@ -193,10 +193,11 @@ export const assertObjectMatchSpec = (object, spec, exact = false) => {
                 if (match === null) throw new Error('relative date arguments are invalid')
                 const [, amount, unit, locale, format] = match
                 const normalizedLocale = Intl.getCanonicalLocales(locale)[0]
-                const expectedDate = moment()
-                    .add(amount, unit)
-                    .locale(normalizedLocale)
-                    .format(format)
+                const expectedDate = DateTime.now()
+                    .setLocale(normalizedLocale)
+                    .plus({ [unit]: Number(amount) })
+                    .toFormat(format)
+
                 const baseExpect = expect(
                     currentValue,
                     `Expected property '${field}' to ${
