@@ -48,6 +48,9 @@ importers:
       '@eslint/js':
         specifier: ^9.19.0
         version: 9.19.0
+      '@types/node':
+        specifier: ^22.13.1
+        version: 22.13.1
       '@vitest/coverage-v8':
         specifier: ^3.0.5
         version: 3.0.5(vitest@3.0.5(@types/node@22.13.1)(jiti@2.4.2)(yaml@2.7.0))
@@ -57,9 +60,6 @@ importers:
       commitlint:
         specifier: ^19.7.1
         version: 19.7.1(@types/node@22.13.1)(typescript@5.7.3)
-      esbuild:
-        specifier: ^0.24.2
-        version: 0.24.2
       eslint:
         specifier: ^9.19.0
         version: 9.19.0(jiti@2.4.2)
@@ -84,6 +84,9 @@ importers:
       prettier:
         specifier: ^3.4.2
         version: 3.4.2
+      typescript:
+        specifier: ^5.7.3
+        version: 5.7.3
       vitest:
         specifier: ^3.0.5
         version: 3.0.5(@types/node@22.13.1)(jiti@2.4.2)(yaml@2.7.0)
