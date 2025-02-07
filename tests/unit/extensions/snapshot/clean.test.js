@@ -1,8 +1,8 @@
-'use strict'
+const { describe, vi, beforeEach } = require('vitest')
 
-jest.mock('../../../../lib/cjs/extensions/snapshot/snapshot.js', () => ({
-    readSnapshotFile: jest.fn(),
-    writeSnapshotFile: jest.fn(),
+vi.mock('../../../../lib/cjs/extensions/snapshot/snapshot.js', () => ({
+    readSnapshotFile: vi.fn(),
+    writeSnapshotFile: vi.fn(),
 }))
 
 const clean = require('../../../../lib/cjs/extensions/snapshot/clean.js')
@@ -44,8 +44,8 @@ describe('extensions > snapshot > clean', () => {
 
         clean.referenceSnapshot(file, snapshotName)
 
-        snapshot.readSnapshotFile = jest.fn()
-        snapshot.writeSnapshotFile = jest.fn()
+        snapshot.readSnapshotFile = vi.fn()
+        snapshot.writeSnapshotFile = vi.fn()
 
         snapshot.readSnapshotFile.mockReturnValueOnce(snapshotContent)
 
@@ -77,8 +77,8 @@ describe('extensions > snapshot > clean', () => {
         clean.referenceSnapshot(file1, snapshot1Name)
         clean.referenceSnapshot(file2, snapshot2Name)
 
-        snapshot.readSnapshotFile = jest.fn()
-        snapshot.writeSnapshotFile = jest.fn()
+        snapshot.readSnapshotFile = vi.fn()
+        snapshot.writeSnapshotFile = vi.fn()
 
         snapshot.readSnapshotFile.mockReturnValueOnce(snapshot1Content)
         snapshot.readSnapshotFile.mockReturnValueOnce(snapshot2Content)

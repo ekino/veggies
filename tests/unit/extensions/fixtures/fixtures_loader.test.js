@@ -1,6 +1,5 @@
-'use strict'
-
 import FixturesLoader from '../../../../src/extensions/fixtures/fixtures_loader.js'
+import { afterEach, test, expect } from 'vitest'
 
 const yamlContent = { type: 'yaml', testing: true }
 const textContent = 'This data were loaded from mocked text file'

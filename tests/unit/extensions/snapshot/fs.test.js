@@ -1,7 +1,6 @@
-'use strict'
-
 const fs = require('fs')
 const fileSystem = require('../../../../lib/cjs/extensions/snapshot/fs.js')
+const { describe, beforeAll, afterEach, afterAll, test, expect } = require('vitest')
 
 describe('logger middleware default', () => {
     beforeAll(() => {

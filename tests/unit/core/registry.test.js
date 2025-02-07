@@ -1,6 +1,5 @@
-'use strict'
-
 import * as Registry from '../../../src/core/registry.js'
+import { test, expect } from 'vitest'
 
 test('should register an extension', () => {
     const world = {}

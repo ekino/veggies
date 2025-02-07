@@ -1,8 +1,8 @@
-'use strict'
+const { test, expect, vi, beforeEach } = require('vitest')
 
 beforeEach(() => {
     delete require.cache[require.resolve('../../../../lib/cjs/extensions/snapshot/cmd_options.js')]
-    jest.resetModules()
+    vi.resetModules()
 })
 
 test('Snapshot cmdOptions updateSnapshots and cleanSnapshots set to false if no args passed', () => {

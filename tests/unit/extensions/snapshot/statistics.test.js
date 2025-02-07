@@ -1,6 +1,5 @@
-'use strict'
-
 const statistics = require('../../../../lib/cjs/extensions/snapshot/statistics.js')
+const { vi, describe, beforeEach, afterAll, afterEach, test, expect } = require('vitest')
 
 // eslint-disable-next-line no-control-regex
 const stripAnsi = (str) => str.replace(/\x1b\[[0-9;]*m/g, '')
@@ -11,14 +10,14 @@ describe('extensions > snapshot > statistics', () => {
         statistics.created.length = 0
         statistics.removed.length = 0
         statistics.updated.length = 0
-        logSpy = jest.spyOn(console, 'log').mockImplementation()
+        logSpy = vi.spyOn(console, 'log').mockImplementation()
     })
 
     afterEach(() => {
         logSpy.mockRestore()
     })
     afterAll(() => {
-        jest.restoreAllMocks()
+        vi.restoreAllMocks()
     })
 
     test('should not print to console snapshot statistics with empty datas', () => {

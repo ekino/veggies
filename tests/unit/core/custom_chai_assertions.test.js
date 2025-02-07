@@ -1,13 +1,13 @@
-import { jest } from '@jest/globals'
 import * as chai from 'chai'
 import { registerChaiAssertion } from '../../../src/core/custom_chai_assertions.js'
+import { beforeAll, test, expect, vi } from 'vitest'
 
 beforeAll(() => {
     chai.use(registerChaiAssertion)
 })
 
 test('registerChaiAssertion should add startWith and endWith assertion methods', () => {
-    const addMethodMock = jest.fn()
+    const addMethodMock = vi.fn()
     const fakeChai = {
         Assertion: {
             addMethod: addMethodMock,

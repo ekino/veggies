@@ -1,13 +1,13 @@
-import globals from 'globals'
 import eslintJs from '@eslint/js'
+import globals from 'globals'
 
 const commonConfig = {
     languageOptions: {
         globals: {
             ...globals.node,
-            ...globals.jest,
+            ...globals.vitest,
         },
-        ecmaVersion: 2023,
+        ecmaVersion: 2024,
         sourceType: 'module',
     },
 
@@ -39,12 +39,12 @@ export default [
             'lib/*',
             '**/*.config.js',
             '__mocks__/*',
-            '.pnpm-store/*'
+            '.pnpm-store/*',
         ],
     },
     eslintJs.configs.recommended,
     {
-        files: ['{src,tests,scripts,examples}/**/*.cjs'],
+        files: ['src/**/*.cjs'],
         ...commonConfig,
         languageOptions: {
             ...commonConfig.languageOptions,
@@ -52,7 +52,7 @@ export default [
         },
     },
     {
-        files: ['{src,tests,scripts,examples}/**/*.{js,mjs}'],
+        files: ['src/**/*.{js,mjs}'],
         ...commonConfig,
     },
 ]

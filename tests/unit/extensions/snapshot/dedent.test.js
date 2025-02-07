@@ -1,6 +1,5 @@
-'use strict'
-
 const { dedent } = require('../../../../lib/cjs/extensions/snapshot/dedent.js')
+const { test, expect } = require('vitest')
 
 test('dedent align to first character', () => {
     const test = dedent(`

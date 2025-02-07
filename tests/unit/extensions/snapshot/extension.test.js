@@ -1,16 +1,15 @@
-'use strict'
-
 const fs = require('fs')
 const { default: Snapshot } = require('../../../../lib/cjs/extensions/snapshot/extension.js')
 const clean = require('../../../../lib/cjs/extensions/snapshot/clean.js')
 const fixtures = require('./fixtures.js')
+const { vi, describe, beforeAll, afterEach, test } = require('vitest')
 
 describe('extensions > snapshot > extension', () => {
     beforeAll(() => {
-        fs.statSync = jest.fn()
-        fs.readFileSync = jest.fn()
-        fs.writeFileSync = jest.fn()
-        fs.mkdirSync = jest.fn()
+        fs.statSync = vi.fn()
+        fs.readFileSync = vi.fn()
+        fs.writeFileSync = vi.fn()
+        fs.mkdirSync = vi.fn()
 
         fs.readFileSync.mockImplementation((file) => {
             if (file === fixtures.featureFile1) return fixtures.featureFileContent1
@@ -49,7 +48,7 @@ describe('extensions > snapshot > extension', () => {
         clean.resetReferences()
     })
     afterAll(() => {
-        jest.restoreAllMocks()
+        vi.restoreAllMocks()
     })
 
     test("expectToMatch shouldn't throw an error if snapshot matches", () => {

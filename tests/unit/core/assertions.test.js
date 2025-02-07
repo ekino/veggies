@@ -1,10 +1,9 @@
-'use strict'
-import { jest } from '@jest/globals'
 import { countNestedProperties, assertObjectMatchSpec } from '../../../src/core/assertions.js'
+import { vi, beforeAll, afterAll, beforeEach, test, expect } from 'vitest'
 
 beforeAll(() => {
     const MockDate = (lastDate) => () => new lastDate(2018, 4, 1)
-    global.Date = jest.fn(MockDate(global.Date))
+    global.Date = vi.fn(MockDate(global.Date))
 })
 
 afterAll(() => {

@@ -14,6 +14,7 @@ import {
     omit,
     partial,
 } from '../../../src/utils/index.js'
+import { describe, it, expect } from 'vitest'
 
 describe('utils > index', () => {
     describe('isNumber', () => {

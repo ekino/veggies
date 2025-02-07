@@ -1,17 +1,17 @@
-'use strict'
-
-jest.mock('jest-diff', () => ({ diff: jest.fn() }))
-jest.mock('../../../../lib/cjs/extensions/snapshot/fs.js', () => ({
-    getFileInfo: jest.fn(),
-    getFileContent: jest.fn(),
-    writeFileContent: jest.fn(),
-}))
+const { vi, describe, test, expect } = require('vitest')
 
 const jestDiff = require('jest-diff')
 const snapshot = require('../../../../lib/cjs/extensions/snapshot/snapshot.js')
 const fileSystem = require('../../../../lib/cjs/extensions/snapshot/fs.js')
 const { dedent } = require('../../../../lib/cjs/extensions/snapshot/dedent.js')
 const { GREEN, RED, RESET } = require('../../../../lib/cjs/utils/colors.js')
+
+vi.mock('jest-diff', () => ({ diff: vi.fn() }))
+vi.mock('../../../../lib/cjs/extensions/snapshot/fs.js', () => ({
+    getFileInfo: vi.fn(),
+    getFileContent: vi.fn(),
+    writeFileContent: vi.fn(),
+}))
 
 describe('extensions > snapshot > snapshot', () => {
     test('parseSnapshotFile should parse snapshot file content', () => {

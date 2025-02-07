@@ -1,6 +1,5 @@
-'use strict'
-
 import * as Cast from '../../../src/core/cast.js'
+import { test, expect } from 'vitest'
 
 test('cast nulls', () => {
     expect(Cast.getCastedValue('((null))')).toBe(null)
