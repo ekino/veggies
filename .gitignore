@@ -37,7 +37,6 @@ jspm_packages
 .DS_Store
 .idea
 *.iml
-bin/*
 _doc
 /examples/features/file_system/files/generated
 /examples/features/file_system/files/deeply
@@ -53,7 +52,6 @@ _doc
 !.yarn/versions
 .pnp.*
 
-!bin/veggies.js
 events.json
 .pnpm*
 lib/
