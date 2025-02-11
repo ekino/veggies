@@ -9,12 +9,6 @@ const veggiesArgsOptions = {
     preventSnapshotsCreation: { type: 'boolean' },
     help: { type: 'boolean', short: 'h' },
 }
-const veggiesArgsDefinitions = {
-    '--cleanSnapshots': Boolean,
-    '--updateSnapshots': Boolean,
-    '-u': '--updateSnapshots',
-    '--preventSnapshotsCreation': Boolean,
-}
 
 const printHelp = () => {
     console.log('veggies help')
@@ -40,8 +34,16 @@ const run = async (argv) => {
 
         if (values.help) printHelp()
 
+        // Remove all veggiesArgsOptions from argv
+        const cucumberArgs = argv.slice(2).filter((arg) => {
+            return !Object.keys(veggiesArgsOptions).some((option) => {
+                const shortOption = veggiesArgsOptions[option].short
+                return arg === `--${option}` || (shortOption && arg === `-${shortOption}`)
+            })
+        })
+
         const result = await new CucumberCli({
-            argv,
+            argv: [argv[0], argv[1], ...cucumberArgs],
             cwd: process.cwd(),
             stdout: process.stdout,
             stderr: process.stderr,
