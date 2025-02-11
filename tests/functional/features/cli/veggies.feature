@@ -20,7 +20,6 @@ Feature: Validate the usage of the Veggies CLI
         Then exit code should be 0
         And stdout should match updated
 
-        @debug
     Scenario: Should print help message
         When I run command bin/veggies.js --help
         Then exit code should be 0

@@ -141,8 +141,8 @@ Feature: Using fixtures with http API extension
 
     Scenario: Follow redirect
         Given I mock GET http call from http_api/fixtures/redirect.json to forward request json body for path /posts?redirect=true
+        Given I do not follow redirect
         When I GET http://mysite.com/api/v1/posts?redirect=true
-        And I do not follow redirect
         Then response status code should be 301
         And I pick response json redirect.url as url
         And I GET {{url}}

@@ -18,13 +18,19 @@ const BODY_TYPE_MULTIPART = 'form-data'
 
 const verbsAcceptingBody = ['POST', 'PUT', 'DELETE', 'PATCH']
 
-const axiosInstance = axios.create()
+const validateStatus = (status) => status >= 200 && status <= 302
+
+const axiosInstance = axios.create({
+    validateStatus,
+})
 let cookieInstance
 
 const getClient = (cookieJar) => {
     if (cookieJar) {
         if (!cookieInstance) {
-            cookieInstance = wrapper(axios.create({ jar: cookieJar, withCredentials: true }))
+            cookieInstance = wrapper(
+                axios.create({ jar: cookieJar, withCredentials: true, validateStatus }),
+            )
         }
         return cookieInstance
     }
