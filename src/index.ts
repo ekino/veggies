@@ -1,4 +1,3 @@
-'use strict'
 import * as state from './extensions/state/index.js'
 import * as fixtures from './extensions/fixtures/index.js'
 import * as httpApi from './extensions/http_api/index.js'
