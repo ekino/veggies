@@ -128,7 +128,7 @@ Feature: Using fixtures with http API extension
         And set request form body from json_00
         And I set request query
             | query | 1 |
-        When I POST http://fake.io/users/json?query=1
+        When I POST http://fake.io/users/json
         Then response status code should be 200
 
     Scenario: Get posts from http_api/fixtures/posts.json

@@ -209,7 +209,7 @@ export const install = ({ baseUrl = '' } = {}) => {
      */
     When(/^(?:I )?dump response body$/, () => {
         const response = mustGetResponse(world.httpApiClient)
-        console.log(inspect(response.body, { colors: true, depth: null }))
+        console.log(inspect(response.data, { colors: true, depth: null }))
     })
 
     /**
@@ -323,7 +323,7 @@ export const install = ({ baseUrl = '' } = {}) => {
      */
     Then(/^(?:I )?json response should (fully )?match$/, (fully, table) => {
         const response = mustGetResponse(world.httpApiClient)
-        const { body } = response
+        const { data } = response
 
         // We check the response has json content-type
         expect(response.headers['content-type']).to.contain('application/json')
@@ -339,7 +339,7 @@ export const install = ({ baseUrl = '' } = {}) => {
             }
         })
 
-        assertObjectMatchSpec(body, specifications, !!fully)
+        assertObjectMatchSpec(data, specifications, !!fully)
     })
 
     /**
@@ -349,9 +349,9 @@ export const install = ({ baseUrl = '' } = {}) => {
         /^(?:I )?should receive a collection of ([0-9]+) items?(?: for path )?(.+)?$/,
         (size, path) => {
             const response = mustGetResponse(world.httpApiClient)
-            const { body } = response
+            const { data } = response
 
-            const array = path != undefined ? getValue(body, path) : body
+            const array = path != undefined ? getValue(data, path) : data
 
             expect(array.length).to.be.equal(Number(size))
         },
@@ -364,7 +364,7 @@ export const install = ({ baseUrl = '' } = {}) => {
         const response = mustGetResponse(world.httpApiClient)
 
         return world.fixtures.load(fixtureId).then((snapshot) => {
-            expect(response.body).to.deep.equal(snapshot)
+            expect(response.data).to.deep.equal(snapshot)
         })
     })
 

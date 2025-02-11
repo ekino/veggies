@@ -140,6 +140,7 @@ class HttpApiClient {
      * @param {string} value
      */
     setHeader(key, value) {
+        this.headers = this.headers || {}
         this.headers[key] = value
     }
 
