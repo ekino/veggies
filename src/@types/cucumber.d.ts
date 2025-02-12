@@ -4,11 +4,12 @@ import { Cli } from '../extensions/cli/cli.js'
 import { FixturesLoader } from '../extensions/fixtures/fixtures_loader.js'
 import { HttpApiClient } from '../extensions/http_api/client.js'
 import { Snapshot } from '../extensions/snapshot/entension.js'
+import { FileSystem } from '../extensions/file_system/file_system.js'
 
 declare module '@cucumber/cucumber' {
     interface IWorld {
         cli: Cli
-        fileSysteme: unknown
+        fileSystem: FileSystem
         fixtures: FixturesLoader
         httpApiClient: HttpApiClient
         snapshot: Snapshot

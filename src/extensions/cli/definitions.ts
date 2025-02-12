@@ -1,7 +1,7 @@
 import { Given, Then, When, world } from '@cucumber/cucumber'
 import { expect } from 'chai'
 
-export const install = () => {
+export const install = (): void => {
     Given(/^(?:I )?set (?:working directory|cwd) to (.+)$/, (cwd) => {
         world.cli.setCwd(cwd)
     })

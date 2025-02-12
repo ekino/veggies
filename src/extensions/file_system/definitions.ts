@@ -1,9 +1,7 @@
-'use strict'
-
 import { Given, Then, world } from '@cucumber/cucumber'
 import { expect } from 'chai'
 
-export const install = () => {
+export const install = (): void => {
     /**
      * Creating a directory.
      */
@@ -21,27 +19,30 @@ export const install = () => {
     /**
      * Checking file/directory presence.
      */
-    Then(/^(file|directory) (.+) should (not )?exist$/, (type, file, flag) => {
-        return world.fileSystem.getFileInfo(world.cli.getCwd(), file).then((info) => {
-            if (flag === 'not ') {
-                expect(info, `${type} '${file}' exists`).to.be.null
-            } else {
-                expect(info, `${type} '${file}' does not exist`).not.to.be.null
-                if (type === 'file') {
-                    expect(info.isFile(), `'${file}' is not a file`).to.be.true
+    Then(
+        /^(file|directory) (.+) should (not )?exist$/,
+        (type: string, file: string, flag: string): Promise<void> => {
+            return world.fileSystem.getFileInfo(world.cli.getCwd(), file).then((info) => {
+                if (flag === 'not ') {
+                    expect(info, `${type} '${file}' exists`).to.be.null
                 } else {
-                    expect(info.isDirectory(), `'${file}' is not a directory`).to.be.true
+                    expect(info, `${type} '${file}' does not exist`).not.to.be.null
+                    if (type === 'file') {
+                        expect(info?.isFile(), `'${file}' is not a file`).to.be.true
+                    } else {
+                        expect(info?.isDirectory(), `'${file}' is not a directory`).to.be.true
+                    }
                 }
-            }
-        })
-    })
+            })
+        },
+    )
 
     /**
      * Checking file content.
      */
     Then(
         /^file (.+) content should (not )?(equal|contain|match) (.+)$/,
-        (file, flag, comparator, expectedValue) => {
+        (file: string, flag: string, comparator: string, expectedValue: string): Promise<void> => {
             return world.fileSystem
                 .getFileContent(world.cli.getCwd(), file)
                 .then((content) => {
@@ -57,6 +58,7 @@ export const install = () => {
                         expectFn = expectFn.not
                     }
 
+                    // @ts-ignore
                     expectFn[comparator](
                         comparator === 'match' ? new RegExp(expectedValue) : expectedValue,
                     )

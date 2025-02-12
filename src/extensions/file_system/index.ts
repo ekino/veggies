@@ -1,9 +1,3 @@
-'use strict'
-
-/**
- * @module extensions/FileSystem
- */
-
 import * as definitions from './definitions.js'
 import extendWorld from './extend_world.js'
 
@@ -22,9 +16,6 @@ import extendWorld from './extend_world.js'
  *     cli.extendWorld(this) // fileSystem extension requires cli extension
  *     fileSystem.extendWorld(this)
  * })
- *
- * @function
- * @param {Object} world - The cucumber world object
  */
 export { extendWorld }
 
