@@ -1,69 +1,31 @@
-'use strict'
-
-/**
- * The CLI helper used by the CLI extension.
- *
- * @module extensions/Cli/Cli
- */
-
 import { spawn } from 'node:child_process'
 import path from 'node:path'
 
-/**
- * Cli extension.
- *
- * @class
- */
+type CliArgs = ConstructorParameters<typeof Cli>
+
 class Cli {
+    public cwd: string
+    public env: Record<string, string>
+    public killSignal: number | NodeJS.Signals | undefined
+    public killDelay: number
+    public exitCode: number | undefined
+    public stdout: string
+    public stderr: string
+
     constructor() {
-        /**
-         * The Current Working Directory.
-         *
-         * @type {string}
-         */
         this.cwd = process.cwd()
-
-        /**
-         * An object containing environment variables to inject when running your command.
-         *
-         * @type {Object}
-         */
         this.env = {}
-
-        /** @type {string} */
-        this.killSignal = null
-
-        /** @type {number} */
+        this.killSignal = undefined
         this.killDelay = 0
-
-        /**
-         * Latest command execution exit code.
-         *
-         * @type {number}
-         */
-        this.exitCode = null
-
-        /**
-         * The command's output.
-         *
-         * @type {string}
-         */
+        this.exitCode = undefined
         this.stdout = ''
-
-        /**
-         * The command's error output.
-         *
-         * @type {string}
-         */
         this.stderr = ''
     }
 
     /**
      * Sets the Current Working Directory for the command.
-     *
-     * @param {string} cwd - The new CWD
      */
-    setCwd(cwd) {
+    setCwd(cwd: string): void {
         if (cwd.indexOf('/') === 0) {
             this.cwd = cwd
         } else {
@@ -73,55 +35,42 @@ class Cli {
 
     /**
      * Returns Current Working Directory.
-     *
-     * @return {string}
      */
-    getCwd() {
+    getCwd(): string {
         return this.cwd
     }
 
     /**
      * Defines environment variables.
      * Beware that all existing ones will be overridden!
-     *
-     * @param {Object} env - The environment variables object
      */
-    setEnvironmentVariables(env) {
+    setEnvironmentVariables(env: Record<string, string>): void {
         this.env = env
     }
 
     /**
      * Defines a single environment variable.
-     *
-     * @param {string} name  - The environment variable name
-     * @param {string} value - The value associated to the variable
      */
-    setEnvironmentVariable(name, value) {
+    setEnvironmentVariable(name: string, value: string): void {
         this.env[name] = value
     }
 
-    scheduleKillProcess(delay, signal) {
+    scheduleKillProcess(delay: number, signal: number | NodeJS.Signals): void {
         this.killDelay = delay
         this.killSignal = signal
     }
 
     /**
      * Returns latest command execution exit code.
-     *
-     * @return {number} The exit code
      */
-    getExitCode() {
+    getExitCode(): number | undefined {
         return this.exitCode
     }
 
     /**
      * Returns captured output.
-     *
-     * @throws {TypeError} Argument `type` must be one of: 'stdout', 'stderr'
-     * @param {string} [type=stdout] - The standard stream type
-     * @returns {string} The captured output
      */
-    getOutput(type = 'stdout') {
+    getOutput(type = 'stdout'): string {
         if (type === 'stdout') return this.stdout
         else if (type === 'stderr') return this.stderr
 
@@ -141,22 +90,20 @@ class Cli {
         this.cwd = process.cwd()
         this.env = {}
         this.killDelay = 0
-        this.killSignal = null
-        this.exitCode = null
+        this.killSignal = undefined
+        this.exitCode = undefined
         this.stdout = ''
         this.stderr = ''
     }
 
     /**
      * Run given command.
-     *
-     * @param {string} rawCommand - The command string
-     * @returns {Promise.<boolean>} The resulting `Promise`
      */
-    run(rawCommand) {
+    run(rawCommand: string): Promise<void> {
         const [command, ...args] = rawCommand.split(' ')
 
         return new Promise((resolve, reject) => {
+            if (!command) return reject()
             // we inherit from current env vars
             // otherwise, we can have problem with PATH
             const cmd = spawn(command, args, {
@@ -164,7 +111,7 @@ class Cli {
                 env: { ...process.env, ...this.env },
             })
 
-            let killer
+            let killer: NodeJS.Timeout | undefined
             let killed = false
             if (this.killSignal !== null) {
                 killer = setTimeout(() => {
@@ -173,13 +120,13 @@ class Cli {
                 }, this.killDelay)
             }
 
-            const cmdStdout = []
-            const cmdStderr = []
+            const cmdStdout: Uint8Array[] = []
+            const cmdStderr: Uint8Array[] = []
 
             cmd.stdout.on('data', cmdStdout.push.bind(cmdStdout))
             cmd.stderr.on('data', cmdStderr.push.bind(cmdStderr))
 
-            cmd.on('close', (code, signal) => {
+            cmd.on('close', (code, _signal) => {
                 if (killer !== undefined) {
                     if (killed !== true) {
                         clearTimeout(killer)
@@ -192,12 +139,12 @@ class Cli {
                     }
                 }
 
-                this.exitCode = code
+                this.exitCode = code ?? undefined
 
                 this.stdout = Buffer.concat(cmdStdout).toString()
                 this.stderr = Buffer.concat(cmdStderr).toString()
 
-                resolve(true)
+                resolve()
             })
         })
     }
@@ -205,14 +152,12 @@ class Cli {
 
 /**
  * Create a new isolated Cli
- * @return {Cli}
  */
-export default function (...args) {
+export default function (...args: CliArgs): Cli {
     return new Cli(...args)
 }
 
 /**
  * Cli extension.
- * @type {Cli}
  */
 export { Cli }

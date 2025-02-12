@@ -1,5 +1,3 @@
-'use strict'
-
 import { Given, Then, When, world } from '@cucumber/cucumber'
 import { expect } from 'chai'
 

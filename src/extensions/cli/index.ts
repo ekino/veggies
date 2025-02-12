@@ -1,9 +1,3 @@
-'use strict'
-
-/**
- * @module extensions/Cli
- */
-
 import * as definitions from './definitions.js'
 import extendWorld from './extend_world.js'
 
@@ -21,9 +15,6 @@ import extendWorld from './extend_world.js'
  *     state.extendWorld(this) // cli extension requires state extension
  *     cli.extendWorld(this)
  * })
- *
- * @function
- * @param {Object} world - The cucumber world object
  */
 export { extendWorld }
 
