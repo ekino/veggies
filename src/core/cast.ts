@@ -1,42 +1,30 @@
-'use strict'
-
 import { isFunction, isString, setValue } from '../utils/index.js'
 
-/**
- * @module Cast
- */
+interface CastFunction {
+    (value?: string | null): CastedValue
+}
+type CastFunctions = Record<string, CastFunction>
+type CastedValue =
+    | string
+    | number
+    | boolean
+    | Record<string, unknown>
+    | unknown[]
+    | null
+    | undefined
+type CastType = 'string' | 'boolean' | 'number' | 'date' | 'array' | 'null' | 'undefined'
 
-/**
- * @name CastFunction
- * @function
- * @param {string} Value to cast
- * @return {*} casted value
- */
+const castFunctions: CastFunctions = {}
 
-const castFunctions = {}
-
-/**
- * Cast to undefined
- * @return {undefined}
- */
-castFunctions['undefined'] = () => {
+castFunctions['undefined'] = (): undefined => {
     return undefined
 }
 
-/**
- * Cast to null
- * @return {null}
- */
-castFunctions['null'] = () => {
+castFunctions['null'] = (): null => {
     return null
 }
 
-/**
- * Cast to number. If is NaN, it throws an error
- * @param {string} value
- * @return {number}
- */
-castFunctions['number'] = (value) => {
+castFunctions['number'] = (value?: string | null): number => {
     const result = Number(value)
     if (Number.isNaN(result)) {
         throw new TypeError(`Unable to cast value to number '${value}'`)
@@ -44,30 +32,17 @@ castFunctions['number'] = (value) => {
     return result
 }
 
-/**
- * Cast to a boolean.
- * @param {string} value - true or false
- * @return {boolean} - true if true. False in all other case.
- */
-castFunctions['boolean'] = (value) => {
+castFunctions['boolean'] = (value?: string | null): boolean => {
     return value === 'true'
 }
 
-/**
- * Cast to an array
- * @param {string} value - Should follow the pattern "value1, value2, ..."
- * @return {Array}
- */
-castFunctions['array'] = (value) => {
+castFunctions['array'] = (value?: string | null): unknown[] => {
     return value ? value.replace(/\s/g, '').split(',').map(getCastedValue) : []
 }
 
-/**
- * Cast to as date
- * @param {string} value - today or a date as string
- * @return {string} - A date json formatted
- */
-castFunctions['date'] = (value) => {
+castFunctions['date'] = (value?: string | null): string => {
+    if (!value) throw new TypeError(`Unable to cast value to date '${value}'`)
+
     if (value === 'today') {
         return new Date().toJSON().slice(0, 10)
     }
@@ -75,13 +50,8 @@ castFunctions['date'] = (value) => {
     return new Date(value).toJSON()
 }
 
-/**
- * Cast to a string
- * @param {string} value
- * @return {string}
- */
-castFunctions['string'] = (value) => {
-    return `${value}`
+castFunctions['string'] = (value?: string | null): string => {
+    return `${value || ''}`
 }
 
 /**
@@ -90,11 +60,8 @@ castFunctions['string'] = (value) => {
  * @example
  * Cast.addType('boolean2', value => value === 'true')
  * //Then it can be used as "true((boolean2))"
- *
- * @param {string} typeName - New type name to add. It will be used in the "(( ))"
- * @param {CastFunction} castFunction
  */
-export const addType = (typeName, castFunction) => {
+export const addType = (typeName: string, castFunction: CastFunction): void => {
     if (!isFunction(castFunction))
         throw new TypeError(
             `Invalid cast function provided, must be a function (${typeof castFunction})`,
@@ -124,16 +91,14 @@ export const addType = (typeName, castFunction) => {
  * // > null
  * // > 'raw'
  *
- * @param {string} value - The value to cast
- * @return {*} The casted value or untouched value if no casting directive found
  */
-export const getCastedValue = (value) => {
-    if (!isString(value)) return value
+export const getCastedValue = (value: unknown): CastedValue => {
+    if (!isString(value)) return value as CastedValue
 
     const matchResult = value.match(/^(.*)\(\((\w+)\)\)$/)
 
     if (matchResult) {
-        const type = matchResult[2]
+        const type = matchResult[2] as CastType
         const castFunction = castFunctions[type]
         if (!castFunction) throw new TypeError(`Invalid type provided: ${type} '${value}'`)
         return castFunction(matchResult[1])
@@ -145,10 +110,8 @@ export const getCastedValue = (value) => {
 /**
  * Casts object all properties.
  *
- * @param {Object} object - The object containing values to cast
- * @return {Object} The object with casted values
  */
-export const getCastedObject = (object) => {
+export const getCastedObject = (object: Record<string, unknown>): Record<string, CastedValue> => {
     const castedObject = {}
     Object.keys(object).forEach((key) => {
         setValue(castedObject, key, getCastedValue(object[key]))
@@ -170,14 +133,12 @@ export const getCastedObject = (object) => {
  * // >    { username: 'plouc', is_active: true, age: 25 },
  * // >    { username: 'john', is_active: false, age: 32 },
  * // > ]
- *
- * @param {Array.<Object>} objects
  */
-export const getCastedObjects = (objects) => objects.map((object) => getCastedObject(object))
+export const getCastedObjects = (objects: Record<string, unknown>[]): Record<string, unknown>[] =>
+    objects.map((object) => getCastedObject(object))
 
 /**
  * Casts an array of values.
- *
- * @param {Array.<*>} array
  */
-export const getCastedArray = (array) => array.map((value) => getCastedValue(value))
+export const getCastedArray = (array: string[]): CastedValue[] =>
+    array.map((value) => getCastedValue(value))

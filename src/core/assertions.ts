@@ -1,16 +1,22 @@
-'use strict'
-
-/**
- * @module Assertions
- */
-
-import { expect, use } from 'chai'
+import * as chai from 'chai'
 import { DateTime } from 'luxon'
 import * as Cast from './cast.js'
 import { registerChaiAssertion } from './custom_chai_assertions.js'
-import { isEmpty, getValue } from '../utils/index.js'
+import { getValue, isObject } from '../utils/index.js'
 
-use(registerChaiAssertion)
+const { expect } = chai
+
+type ObjectFieldSpec = {
+    field?: string
+    matcher?: string
+    value?: string
+}
+type MatchingRule = {
+    name: symbol
+    isNegated: boolean
+}
+
+chai.use(registerChaiAssertion)
 
 const negationRegex = `!|! |not |does not |doesn't |is not |isn't `
 const matchRegex = new RegExp(`^(${negationRegex})?(match|matches|~=)$`)
@@ -54,15 +60,13 @@ const RuleName = Object.freeze({
  *     },
  * })
  * // => 4 (c is ignored because it's a nested object)
- *
- * @param {Object} object
- * @return {number}
  */
-export const countNestedProperties = (object) => {
+export const countNestedProperties = (object: Record<string, unknown>): number => {
     let propertiesCount = 0
     Object.keys(object).forEach((key) => {
-        if (!isEmpty(object[key]) && typeof object[key] === 'object') {
-            const count = countNestedProperties(object[key])
+        const val = object[key]
+        if (isObject(val)) {
+            const count = countNestedProperties(val)
             propertiesCount += count
         } else {
             propertiesCount++
@@ -71,13 +75,6 @@ export const countNestedProperties = (object) => {
 
     return propertiesCount
 }
-
-/**
- * @typedef {object} ObjectFieldSpec
- * @property {string} field
- * @property {string} matcher
- * @property {string} value
- */
 
 /**
  * Check that an object matches given specification.
@@ -105,19 +102,20 @@ export const countNestedProperties = (object) => {
  *     ]
  * )
  * // Will throw because last_name does not equal 'Dupond'.
- *
- * @see ObjectFieldSpec
- *
- * @param {object}            object        - object to test
- * @param {ObjectFieldSpec[]} spec          - specification
- * @param {boolean}           [exact=false] - if `true`, specification must match all object's properties
+ * [exact=false] - if `true`, specification must match all object's properties
  */
-export const assertObjectMatchSpec = (object, spec, exact = false) => {
+
+export const assertObjectMatchSpec = (
+    object: Record<string, unknown>,
+    spec: ObjectFieldSpec[],
+    exact = false,
+): void => {
     spec.forEach(({ field, matcher, value }) => {
         const currentValue = getValue(object, field)
-        const expectedValue = Cast.getCastedValue(value)
+        const expectedValue = Cast.getCastedValue(value) as string
 
         const rule = getMatchingRule(matcher)
+        if (!rule) return
 
         switch (rule.name) {
             case RuleName.Match: {
@@ -192,7 +190,12 @@ export const assertObjectMatchSpec = (object, spec, exact = false) => {
                 const match = relativeDateValueRegex.exec(expectedValue)
                 if (match === null) throw new Error('relative date arguments are invalid')
                 const [, amount, unit, locale, format] = match
+                if (!locale || amount == undefined || !unit || !format) break
+
                 const normalizedLocale = Intl.getCanonicalLocales(locale)[0]
+
+                if (!normalizedLocale) break
+
                 const expectedDate = DateTime.now()
                     .setLocale(normalizedLocale)
                     .plus({ [unit]: Number(amount) })
@@ -263,13 +266,12 @@ export const assertObjectMatchSpec = (object, spec, exact = false) => {
  * // => { name: 'contain', isNegated: false }
  * Assertions.getMatchingRule(`unknown matcher`)
  * // => undefined
- * @typedef {Object} Rule
- * @property {symbol} name - The name of the rule matched
- * @property {boolean} isNegated - Whether the matcher is negated or not
- * @param {string} matcher
- * @return {Rule} the result of the matching
  */
-export const getMatchingRule = (matcher) => {
+export const getMatchingRule = (matcher?: string): MatchingRule | undefined => {
+    if (!matcher) {
+        return expect.fail(`Matcher "${matcher}" must be defined`)
+    }
+
     const matchGroups = matchRegex.exec(matcher)
     if (matchGroups) {
         return { name: RuleName.Match, isNegated: !!matchGroups[1] }
@@ -310,5 +312,5 @@ export const getMatchingRule = (matcher) => {
         return { name: RuleName.RelativeDate, isNegated: !!relativeDateGroups[1] }
     }
 
-    expect.fail(`Matcher "${matcher}" did not match any supported assertions`)
+    return expect.fail(`Matcher "${matcher}" did not match any supported assertions`)
 }

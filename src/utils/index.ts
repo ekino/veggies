@@ -27,10 +27,10 @@ export const isObject = (val: unknown): val is PlainObject =>
 
 export const getValue = <T = unknown>(
     obj: unknown,
-    path: Path,
+    path?: Path,
     defaultValue = undefined,
 ): T | undefined => {
-    if (obj == null) return defaultValue
+    if (obj == null || !path) return defaultValue
 
     const pathArray = Array.isArray(path) ? path : path.match(/([^[.\]])+/g) || []
 
