@@ -1,24 +1,14 @@
-'use strict'
-
-/**
- * @module extensions/fixtures/FixturesLoader
- */
-
 import fs from 'node:fs'
 import path from 'node:path'
 import fastGlob from 'fast-glob'
 import { pathToFileURL } from 'url'
 import yaml from 'js-yaml'
+import { isObject } from '../../utils/index.js'
 
-/**
- * Fixtures loader extension.
- *
- * @class
- */
 class FixturesLoader {
-    /**
-     * @param {string} [fixturesDir='fixtures'] - The name of the fixtures directory relative to feature
-     */
+    public fixturesDir: string
+    public featureUri?: string
+
     constructor({ fixturesDir } = { fixturesDir: 'fixtures' }) {
         this.fixturesDir = fixturesDir
         this.featureUri = undefined
@@ -26,8 +16,6 @@ class FixturesLoader {
 
     /**
      * Configures the loader
-     *
-     * @param {string} [fixturesDir='fixtures'] - The name of the fixtures directory relative to feature
      */
     configure({ fixturesDir } = { fixturesDir: 'fixtures' }) {
         this.fixturesDir = fixturesDir
@@ -40,19 +28,15 @@ class FixturesLoader {
      * - fixturesDir
      * - fixture name
      *
-     * @param {string} featureUri - Feature uri
      */
-    setFeatureUri(featureUri) {
+    setFeatureUri(featureUri: string) {
         this.featureUri = featureUri
     }
 
     /**
      * Loads content from file.
-     *
-     * @param {string} file - File path
-     * @return {Promise.<string>} File content
      */
-    loadText(file) {
+    loadText(file: string): Promise<string> {
         return new Promise((resolve, reject) => {
             fs.readFile(file, (err, data) => {
                 if (err) return reject(err)
@@ -63,11 +47,8 @@ class FixturesLoader {
 
     /**
      * Loads content from yaml file.
-     *
-     * @param {string} file - File path
-     * @return {Promise.<Object|Array>} Parsed yaml data
      */
-    loadYaml(file) {
+    loadYaml(file: string): Promise<unknown> {
         return this.loadText(file).then((content) => {
             try {
                 const data = yaml.load(content)
@@ -82,7 +63,9 @@ class FixturesLoader {
                 return data
             } catch (err) {
                 return Promise.reject(
-                    new Error(`Unable to parse yaml fixture file: ${file}.\nerror: ${err.message}`),
+                    new Error(
+                        `Unable to parse yaml fixture file: ${file}.\nerror: ${getError(err).message}`,
+                    ),
                 )
             }
         })
@@ -90,11 +73,8 @@ class FixturesLoader {
 
     /**
      * Loads content from json file.
-     *
-     * @param {string} file - File path
-     * @return {Promise.<Object>} Json data
      */
-    loadJson(file) {
+    loadJson(file: string): Promise<Record<string, unknown>> {
         return this.loadText(file).then((content) => {
             try {
                 const data = JSON.parse(content)
@@ -102,7 +82,9 @@ class FixturesLoader {
                 return data
             } catch (err) {
                 return Promise.reject(
-                    new Error(`Unable to parse json fixture file: ${file}.\nerror: ${err.message}`),
+                    new Error(
+                        `Unable to parse json fixture file: ${file}.\nerror: ${getError(err).message}`,
+                    ),
                 )
             }
         })
@@ -110,11 +92,8 @@ class FixturesLoader {
 
     /**
      * Loads content from javascript module.
-     *
-     * @param {string} file - File path
-     * @return {Promise.<*>} Data generated from the module
      */
-    loadModule(file) {
+    loadModule(file: string): Promise<unknown> {
         const moduleURL = pathToFileURL(path.resolve(file)).href
 
         return import(moduleURL)
@@ -135,7 +114,7 @@ class FixturesLoader {
             .catch((err) => {
                 return Promise.reject(
                     new Error(
-                        `An error occurred while loading fixture file: ${file}\nerror: ${err.message}`,
+                        `An error occurred while loading fixture file: ${file}\nerror: ${getError(err).message}`,
                     ),
                 )
             })
@@ -149,11 +128,8 @@ class FixturesLoader {
      * - js
      * - json
      * - txt
-     *
-     * @param {string} fixture - Fixture file name without extension
-     * @return {Promise.<Object|string>} Fixture content
      */
-    load(fixture) {
+    load(fixture: string): Promise<unknown> {
         if (this.featureUri === undefined)
             return Promise.reject(
                 new Error(`Cannot load fixture: ${fixture}, no feature uri defined`),
@@ -180,7 +156,7 @@ class FixturesLoader {
                 )
             }
 
-            const fixtureFile = files[0]
+            const fixtureFile = files[0] || ''
             const ext = path.extname(fixtureFile).substring(1)
 
             switch (ext) {
@@ -208,16 +184,31 @@ class FixturesLoader {
     }
 }
 
+type ParseError = {
+    code?: string
+    stack?: string
+    message: string
+} & Record<string, unknown>
+type FixturesArgs = ConstructorParameters<typeof FixturesLoader>
+
+const getError = (error: unknown): ParseError => {
+    if (isObject(error)) return { ...error, message: error['message'] as string }
+
+    if (typeof error === 'string') return { message: error }
+
+    if (!error) return { message: 'unknown error' }
+
+    return { message: JSON.stringify(error) }
+}
+
 /**
  * Create a new isolated fixtures loader
- * @return {FixturesLoader}
  */
-export default function (...args) {
+export default function (...args: FixturesArgs): FixturesLoader {
     return new FixturesLoader(...args)
 }
 
 /**
  * fixtures loader extension.
- * @type {FixturesLoader}
  */
 export { FixturesLoader as Fixture }

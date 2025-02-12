@@ -1,9 +1,3 @@
-'use strict'
-
-/**
- * @module extensions/fixtures
- */
-
 import * as hooks from './hooks.js'
 import extendWorld from './extend_world.js'
 
@@ -20,9 +14,6 @@ import extendWorld from './extend_world.js'
  * setWorldConstructor(function() {
  *     fixtures.extendWorld(this)
  * })
- *
- * @function
- * @param {Object} world - The cucumber world object
  */
 export { extendWorld }
 

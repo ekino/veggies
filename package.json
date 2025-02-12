@@ -65,6 +65,7 @@
         "@cucumber/cucumber": "^11.2.0",
         "@eslint/js": "^9.20.0",
         "@types/chai": "^5.0.1",
+        "@types/js-yaml": "^4.0.9",
         "@types/luxon": "^3.4.2",
         "@types/node": "^22.13.1",
         "@vitest/coverage-v8": "^3.0.5",
