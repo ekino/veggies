@@ -1,9 +1,3 @@
-'use strict'
-
-/**
- * @module extensions/state
- */
-
 import * as definitions from './definitions.js'
 import extendWorld from './extend_world.js'
 
@@ -20,9 +14,6 @@ import extendWorld from './extend_world.js'
  * setWorldConstructor(function() {
  *     state.extendWorld(this)
  * })
- *
- * @function
- * @param {Object} world - The cucumber world object
  */
 export { extendWorld }
 

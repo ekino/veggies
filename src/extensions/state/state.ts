@@ -1,49 +1,32 @@
-'use strict'
-
+import { CastedValue } from '../../core/cast.js'
 import { setValue, getValue, template, isPlainObject, mapValues } from '../../utils/index.js'
 
-/**
- * @module extensions/state/State
- */
+type StateArgs = ConstructorParameters<typeof State>
 
-/**
- * State extension.
- *
- * @class
- */
 class State {
+    public state: Record<string, unknown>
     constructor() {
-        /**
-         * World state
-         * @type {Object}
-         */
         this.state = {}
     }
 
     /**
      * Sets value for given key.
-     *
-     * @param {string} key   - The key you wish to set a value for
-     * @param {*}      value - The value
      */
-    set(key, value) {
+    set(key: string, value: CastedValue): unknown {
         return setValue(this.state, key, value)
     }
 
     /**
      * Retrieves a value for given key.
-     *
-     * @param {string} key - The key you wish to retrieve a value for
-     * @return {*}
      */
-    get(key) {
+    get(key: string): unknown {
         return getValue(this.state, key)
     }
 
     /**
      * Clear the state
      */
-    clear() {
+    clear(): void {
         this.state = {}
     }
 
@@ -51,32 +34,30 @@ class State {
      * Dump state content
      * @return {Object|{}|*}
      */
-    dump() {
+    dump(): Record<string, unknown> {
         return this.state
     }
 
-    populate(value) {
+    populate(value: string): string {
         return template(value, { interpolate: /{{([\s\S]+?)}}/g })(this.state)
     }
 
-    populateObject(object) {
+    populateObject(object: Record<string, unknown>): Record<string, unknown> {
         return mapValues(object, (value) => {
             if (isPlainObject(value)) return this.populateObject(value)
-            return this.populate(value)
+            return this.populate(value as string)
         })
     }
 }
 
 /**
  * Create a new isolated state
- * @return {State}
  */
-export default function (...args) {
+export default function (...args: StateArgs): State {
     return new State(...args)
 }
 
 /**
  * State extension.
- * @type {State}
  */
 export { State }

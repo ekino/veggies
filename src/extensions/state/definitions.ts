@@ -1,5 +1,3 @@
-'use strict'
-
 import { Given, When, world } from '@cucumber/cucumber'
 import * as Cast from '../../core/cast.js'
 

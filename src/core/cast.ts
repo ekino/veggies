@@ -1,10 +1,10 @@
 import { isFunction, isString, setValue } from '../utils/index.js'
 
-interface CastFunction {
+export interface CastFunction {
     (value?: string | null): CastedValue
 }
-type CastFunctions = Record<string, CastFunction>
-type CastedValue =
+export type CastFunctions = Record<string, CastFunction>
+export type CastedValue =
     | string
     | number
     | boolean
@@ -12,7 +12,7 @@ type CastedValue =
     | unknown[]
     | null
     | undefined
-type CastType = 'string' | 'boolean' | 'number' | 'date' | 'array' | 'null' | 'undefined'
+export type CastType = 'string' | 'boolean' | 'number' | 'date' | 'array' | 'null' | 'undefined'
 
 const castFunctions: CastFunctions = {}
 

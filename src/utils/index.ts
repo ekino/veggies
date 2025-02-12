@@ -1,7 +1,7 @@
-type PlainObject = Record<string, unknown>
-type Predicate<T> = (value: T | undefined) => boolean
-type Path = string | string[]
-type InterpolateOptions = {
+export type PlainObject = Record<string, unknown>
+export type Predicate<T> = (value: T | undefined) => boolean
+export type Path = string | string[]
+export type InterpolateOptions = {
     interpolate?: RegExp
 }
 

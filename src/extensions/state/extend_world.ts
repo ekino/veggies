@@ -1,9 +1,8 @@
-'use strict'
-
+import { IWorld } from '@cucumber/cucumber'
 import Registry from '../../core/registry.js'
 import State from './state.js'
 
-const extendWorld = (world) => {
+const extendWorld = (world: IWorld) => {
     world.state = State()
     Registry.registerExtension(world, 'state')
 }
