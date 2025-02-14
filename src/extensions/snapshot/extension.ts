@@ -1,38 +1,38 @@
-'use strict'
-
-/**
- * @module extensions/snapshot/Snapshot
- */
-
 import { format as prettyFormat } from 'pretty-format'
-
-import * as snapshot from './snapshot.js'
-import * as clean from './clean.js'
-import * as statistics from './statistics.js'
-import * as assertions from '../../core/assertions.js'
 import { setValue } from '../../utils/index.js'
+import {
+    extractScenarios,
+    normalizeNewlines,
+    prefixSnapshots,
+    readSnapshotFile,
+    SnapshotContent,
+    SnapshotOptions,
+    snapshotsPath,
+    writeSnapshotFile,
+    diff as snapshotDiff,
+} from './snapshot.js'
+import { assertObjectMatchSpec, ObjectFieldSpec } from '../../core/assertions.js'
+import { referenceSnapshot } from './clean.js'
+import { created, updated } from './statistics.js'
 
-/**
- * Snapshot extension.
- *
- * @class
- */
+type SnapshotArgs = ConstructorParameters<typeof Snapshot>
+
 class Snapshot {
-    /**
-     * @param {Object} options - Options
-     * @param {boolean} [options.updateSnapshots=false] - Should we update the snapshots
-     * @param {boolean} [options.cleanSnapshots=false] - Should we clean the snapshot to remove unused snapshots
-     * @param {boolean} [options.preventSnapshotsCreation=false] - Should we avoid creating missing snapshots
-     */
-    constructor(options) {
+    public options: SnapshotOptions = {}
+    public shouldUpdate: boolean = false
+    public cleanSnapshots: boolean = false
+    public preventSnapshotsCreation: boolean = false
+    public featureFile: string = ''
+    public scenarioLine: number = -1
+    public _snapshotsCount: number = 0
+
+    constructor(options: SnapshotOptions) {
         this.options = options || {}
-        this.shouldUpdate = this.options.updateSnapshots
-        this.cleanSnapshots = this.options.cleanSnapshots
-        this.preventSnapshotsCreation = this.options.preventSnapshotsCreation
-
-        this.featureFile = null
+        this.shouldUpdate = this.options.updateSnapshots ?? false
+        this.cleanSnapshots = this.options.cleanSnapshots ?? false
+        this.preventSnapshotsCreation = this.options.preventSnapshotsCreation ?? false
+        this.featureFile = ''
         this.scenarioLine = -1
-
         this._snapshotsCount = 0
     }
 
@@ -40,17 +40,13 @@ class Snapshot {
      * When you do snapshots, it happens that some fields change at each snapshot check (ids, dates ...).
      * This work the same way as expectToMath but allow you to check some fields in a json objects against a matcher
      * and ignore them in the snapshot diff replacing them with a generic value.
-     * @param {*} expectedContent - Content to compare to snapshot
-     * @param {ObjectFieldSpec[]} spec  - specification
-     * @throws {string} If snapshot and expected content doesn't match, it throws diff between both
      */
-    expectToMatchJson(expectedContent, spec) {
-        assertions.assertObjectMatchSpec(expectedContent, spec) // Check optional fields
+    expectToMatchJson(expectedContent: SnapshotContent, spec: ObjectFieldSpec[]): void {
+        assertObjectMatchSpec(expectedContent, spec) // Check optional fields
 
         const copy = structuredClone(expectedContent)
         spec.forEach(({ field, matcher, value }) => {
-            // Replace value with generic one
-            setValue(copy, field, `${matcher}(${value})`)
+            if (field) setValue(copy, field, `${matcher}(${value})`)
         })
 
         this.expectToMatch(copy)
@@ -68,16 +64,14 @@ class Snapshot {
      *
      * If option "-u" or "--updateSnapshots" is used, all snapshots will be updated
      * If options "--cleanSnapshots" is used, unused stored snapshots will be removed.
-     * @param {*} expectedContent - Content to compare to snapshot
-     * @throws {string} If snapshot and expected content doesn't match, it throws diff between both
      */
-    expectToMatch(expectedContent) {
+    expectToMatch(expectedContent: string | SnapshotContent): void {
         expectedContent = prettyFormat(expectedContent)
-        expectedContent = snapshot.normalizeNewlines(expectedContent)
-        let snapshotsFile = snapshot.snapshotsPath(this.featureFile, this.options)
+        expectedContent = normalizeNewlines(expectedContent)
+        let snapshotsFile = snapshotsPath(this.featureFile, this.options)
 
-        const scenarios = snapshot.extractScenarios(this.featureFile)
-        const snapshotsPrefix = snapshot.prefixSnapshots(scenarios)[this.scenarioLine]
+        const scenarios = extractScenarios(this.featureFile)
+        const snapshotsPrefix = prefixSnapshots(scenarios)[this.scenarioLine]
 
         if (!snapshotsPrefix)
             throw new Error(
@@ -86,41 +80,39 @@ class Snapshot {
 
         this._snapshotsCount += 1
         const snapshotName = `${snapshotsPrefix.prefix}.${this._snapshotsCount}`
-        if (this.cleanSnapshots) clean.referenceSnapshot(snapshotsFile, snapshotName) // To clean after all unreferenced snapshots
+        if (this.cleanSnapshots) referenceSnapshot(snapshotsFile, snapshotName) // To clean after all unreferenced snapshots
 
-        const snapshotsContents = snapshot.readSnapshotFile(snapshotsFile)
+        const snapshotsContents = readSnapshotFile(snapshotsFile)
         let snapshotContent = snapshotsContents[snapshotName]
 
         if (this.preventSnapshotsCreation && !snapshotContent)
             throw new Error("The snapshot does not exist and won't be created.")
 
         if (!snapshotContent) {
-            statistics.created.push({ file: this.featureFile, name: snapshotName })
+            created.push({ file: this.featureFile, name: snapshotName })
         } else if (this.shouldUpdate) {
-            statistics.updated.push({ file: this.featureFile, name: snapshotName })
+            updated.push({ file: this.featureFile, name: snapshotName })
         }
 
         if (!snapshotContent || this.shouldUpdate) {
             snapshotsContents[snapshotName] = expectedContent
-            snapshot.writeSnapshotFile(snapshotsFile, snapshotsContents)
+            writeSnapshotFile(snapshotsFile, snapshotsContents)
             snapshotContent = expectedContent
         }
 
-        const diff = snapshot.diff(snapshotContent, expectedContent)
+        const diff = snapshotDiff(snapshotContent, expectedContent)
         if (diff) throw new Error(diff)
     }
 }
 
 /**
  * Create a new isolated Snapshot module
- * @return {Snapshot}
  */
-export default function (...args) {
+export default function (...args: SnapshotArgs): Snapshot {
     return new Snapshot(...args)
 }
 
 /**
  * Snapshot extension.
- * @type {Snapshot}
  */
 export { Snapshot }

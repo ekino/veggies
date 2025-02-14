@@ -1,15 +1,8 @@
-'use strict'
-
-/**
- * @module extensions/snapshot/dedent
- */
-
 /**
  * Extract spaces length
- * @param {string} text
- * @returns {number} length tab and space before first char
  */
-const getSpacesLength = (text) => {
+const getSpacesLength = (text?: string): number => {
+    if (!text) return 0
     let length = 0
 
     while (length < text.length) {
@@ -53,12 +46,9 @@ const getSpacesLength = (text) => {
  *  In this case, alignment is done on the spaces or tab before """
  *
  * Warning : First line and last line will always be ignored
- *
- * @param {string} text
- * @return {string}
  */
-export const dedent = (text) => {
-    if (typeof text !== 'string') text = text[0]
+export const dedent = (text: string | string[] | TemplateStringsArray): string => {
+    if (typeof text !== 'string') text = text[0] || ''
 
     let lines = text.split('\n')
     if (lines.length < 3) return text
@@ -68,8 +58,8 @@ export const dedent = (text) => {
     let skipLength = getSpacesLength(lines[0])
 
     if (
-        lines[0].substring(skipLength, skipLength + 3) === '"""' &&
-        lines[lines.length - 1].substring(skipLength, skipLength + 3) === '"""'
+        lines[0]?.substring(skipLength, skipLength + 3) === '"""' &&
+        lines[lines.length - 1]?.substring(skipLength, skipLength + 3) === '"""'
     ) {
         lines = lines.slice(1, lines.length - 1)
     } else {
@@ -81,7 +71,7 @@ export const dedent = (text) => {
 
     const resultLines = []
     for (let i = 0; i < lines.length; i++) {
-        resultLines.push(lines[i].substring(skipLength))
+        resultLines.push(lines[i]?.substring(skipLength))
     }
 
     return resultLines.join('\n')

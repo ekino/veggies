@@ -6,12 +6,12 @@ import { getValue, isObject } from '../utils/index.js'
 
 const { expect } = chai
 
-type ObjectFieldSpec = {
+export type ObjectFieldSpec = {
     field?: string
     matcher?: string
     value?: string
 }
-type MatchingRule = {
+export type MatchingRule = {
     name: symbol
     isNegated: boolean
 }

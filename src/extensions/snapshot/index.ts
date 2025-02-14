@@ -1,9 +1,3 @@
-'use strict'
-
-/**
- * @module extensions/snapshot
- */
-
 import * as definitions from './definitions.js'
 import * as hooks from './hooks.js'
 import extendWorld from './extend_world.js'
@@ -21,8 +15,6 @@ import extendWorld from './extend_world.js'
  * setWorldConstructor(function() {
  *     snapshot.extendWorld(this)
  * })
- *
- * @function
  * @param {Object} world - The cucumber world object
  */
 export { extendWorld }

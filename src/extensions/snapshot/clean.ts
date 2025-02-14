@@ -1,23 +1,15 @@
-'use strict'
-
-/**
- * @module extensions/snapshot/cleanup
- */
-
 import * as snapshot from './snapshot.js'
 import * as fileSystem from './fs.js'
 import * as statistics from './statistics.js'
 import { isEmpty, pick, omit } from '../../utils/index.js'
 
-export let _snapshots = {}
+export let _snapshots: Record<string, string[]> = {}
 
 /**
  * Store a snapshot name for a snapshot file
  * This can be used after to clean up unused snapshots
- * @param {string} file - File path
- * @param {string} snapshotName - Snapshot name
  */
-export const referenceSnapshot = function (file, snapshotName) {
+export const referenceSnapshot = function (file: string, snapshotName: string): void {
     _snapshots[file] = _snapshots[file] || []
     _snapshots[file].push(snapshotName)
 }
@@ -26,7 +18,7 @@ export const referenceSnapshot = function (file, snapshotName) {
  * Clean snapshots names and files
  * Used after tests to clear entries
  */
-export const resetReferences = function () {
+export const resetReferences = function (): void {
     _snapshots = {}
 }
 
@@ -35,11 +27,11 @@ export const resetReferences = function () {
  * If a snapshot file is empty, it's deleted
  * Only files that have been referenced will be cleaned
  */
-export const cleanSnapshots = function () {
-    Object.entries(_snapshots).forEach(([file, snapshotNames]) => {
+export const cleanSnapshots = function (): void {
+    Object.entries(_snapshots).forEach(([file, snapshotNames]): void => {
         if (isEmpty(snapshotNames)) {
             fileSystem.remove(file)
-            return true
+            return
         }
 
         const content = snapshot.readSnapshotFile(file)

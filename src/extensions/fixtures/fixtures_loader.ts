@@ -3,7 +3,7 @@ import path from 'node:path'
 import fastGlob from 'fast-glob'
 import { pathToFileURL } from 'url'
 import yaml from 'js-yaml'
-import { isObject } from '../../utils/index.js'
+import { getError } from '../../utils/index.js'
 
 class FixturesLoader {
     public fixturesDir: string
@@ -184,22 +184,7 @@ class FixturesLoader {
     }
 }
 
-type ParseError = {
-    code?: string
-    stack?: string
-    message: string
-} & Record<string, unknown>
 type FixturesArgs = ConstructorParameters<typeof FixturesLoader>
-
-const getError = (error: unknown): ParseError => {
-    if (isObject(error)) return { ...error, message: error['message'] as string }
-
-    if (typeof error === 'string') return { message: error }
-
-    if (!error) return { message: 'unknown error' }
-
-    return { message: JSON.stringify(error) }
-}
 
 /**
  * Create a new isolated fixtures loader

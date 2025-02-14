@@ -1,9 +1,3 @@
-'use strict'
-
-/**
- * @module extensions/snapshot/snapshot
- */
-
 import path from 'node:path'
 import { diff as jestDiff } from 'jest-diff'
 import naturalCompare from 'natural-compare'
@@ -14,12 +8,32 @@ const JEST_NO_DIFF_MESSAGE = 'Compared values have no visual difference.'
 
 export const scenarioRegex = /^[\s]*Scenario:[\s]*(.*[^\s])[\s]*$/
 
+export type Scenario = {
+    line: number
+    name?: string
+    prefix?: string
+}
+
+export type SnapshotOptions = {
+    cleanSnapshots?: boolean
+    updateSnapshots?: boolean
+    preventSnapshotsCreation?: boolean
+    snapshotsDirname?: string
+    snapshotsFileExtension?: string
+}
+
+export type SnapshotFile = {
+    file: string
+    name: string
+}
+
+// {snapshot_name: snapshot_content}
+export type SnapshotContent = Record<string, string | undefined>
+
 /**
  * Extract scenarios from a feature file
- * @param {string} file - Feature file path
- * @return {Array<string>} - Scenarios names
  */
-export const extractScenarios = (file) => {
+export const extractScenarios = (file: string): Scenario[] => {
     if (!file) {
         throw new TypeError(`Invalid feature file ${file}`)
     }
@@ -59,17 +73,14 @@ export const extractScenarios = (file) => {
  *   }
  *   ...
  * }
- *
- * @param {Array<string>} scenarios - Scenarios names
- * @return {Object} - Read above for result format
  */
-export const prefixSnapshots = (scenarios) => {
+export const prefixSnapshots = (scenarios?: Scenario[]): Record<number, Scenario> => {
     if (!scenarios) {
         throw new Error(`Scenarios are required to prefix snapshots`)
     }
 
     const nameCount = new Map()
-    return scenarios.reduce((acc, scenario) => {
+    return scenarios.reduce((acc: Record<number, Scenario>, scenario) => {
         const count = nameCount.get(scenario.name) || 0
         nameCount.set(scenario.name, count + 1)
 
@@ -83,10 +94,8 @@ export const prefixSnapshots = (scenarios) => {
 /**
  * Read a snapshot file and parse it.
  * For each feature file, we have one snapshot file
- * @param {string} file - snapshot file path
- * @return {Object} - Return follows the pattern : {snapshot_name: snapshot_content}
  */
-export const readSnapshotFile = (file) => {
+export const readSnapshotFile = (file: string): SnapshotContent => {
     if (!file) {
         throw new Error(`Missing snapshot file ${file} to read snapshots`)
     }
@@ -101,23 +110,17 @@ export const readSnapshotFile = (file) => {
 
 /**
  * Format and write a snapshot file content
- * @param {string} file - file path
- * @param {Object} content - snapshot file content following the pattern : {snapshot_name: snapshot_content}
  */
-export const writeSnapshotFile = (file, content) => {
+export const writeSnapshotFile = (file: string, content: SnapshotContent): void => {
     const serializedContent = formatSnapshotFile(content)
     return fileSystem.writeFileContent(file, serializedContent)
 }
 
 /**
  * Get snapshot file path base on feature file path
- * @param {string} featureFile - Feature file path
- * @param {Object} opts
- * @param {Object} [opts.snaphotsDirname = '__snapshots__'] - Snapshots dirname
- * @param {Object} [opts.snapshotsFileExtension = 'snap'] - Snapshots files extension
  */
-export const snapshotsPath = (featureFile, opts) => {
-    const dirname = opts.snaphotsDirname || '__snapshots__'
+export const snapshotsPath = (featureFile: string, opts: SnapshotOptions): string => {
+    const dirname = opts.snapshotsDirname || '__snapshots__'
     const dir = path.join(path.dirname(featureFile), dirname)
     const filename = `${path.basename(featureFile)}.${opts.snapshotsFileExtension || 'snap'}`
 
@@ -127,48 +130,38 @@ export const snapshotsPath = (featureFile, opts) => {
 /**
  * Compute diff between two contents.
  * If no diff, it returns null
- * @param {string} snapshot - snapshot content
- * @param {string} expected - expected content
- * @returns {string} Diff message
  */
-export const diff = (snapshot, expected) => {
+export const diff = (snapshot: string, expected: string): string | undefined => {
     let diffMessage = jestDiff(snapshot, expected, {
         expand: false,
-        colors: true,
-        //contextLines: -1, // Forces to use default from Jest
         aAnnotation: 'Snapshot',
         bAnnotation: 'Received',
     })
 
     diffMessage =
         diffMessage || `${GREEN}- ${expected || ''}${RESET} \n ${RED}+ ${snapshot}${RESET}`
-    if (diffMessage.indexOf(JEST_NO_DIFF_MESSAGE) !== -1) return null
+    if (diffMessage.indexOf(JEST_NO_DIFF_MESSAGE) !== -1) return undefined
     return `\n${diffMessage}`
 }
 
 /**
  * Add backticks to wrap snapshot content and replace backticks
- * @param {string} str - snapshot content
- * @return {string} wrapped content
  */
-export const wrapWithBacktick = (str) => {
+export const wrapWithBacktick = (str: string): string => {
     return '`' + str.replace(/`|\\|\${/g, '\\$&') + '`'
 }
 
 /**
  * Normalize new lines to be \n only
- * @param {string} string - Content to normalize
  */
-export const normalizeNewlines = (string) => {
+export const normalizeNewlines = (string: string): string => {
     return string.replace(/\r\n|\r/g, '\n')
 }
 
 /**
  * For a snapshot file by add backticks and format it as js files with keys
- * @param {object} content - snapshots content
- * @return {string} formated snapshot file
  */
-export const formatSnapshotFile = (content) => {
+export const formatSnapshotFile = (content: SnapshotContent): string => {
     const snapshots = Object.keys(content)
         .sort(naturalCompare)
         .map(
@@ -176,7 +169,7 @@ export const formatSnapshotFile = (content) => {
                 'exports[' +
                 wrapWithBacktick(key) +
                 '] = ' +
-                wrapWithBacktick(normalizeNewlines(content[key])) +
+                wrapWithBacktick(normalizeNewlines(content[key] || '')) +
                 ';',
         )
     return '\n\n' + snapshots.join('\n\n') + '\n'
@@ -184,10 +177,8 @@ export const formatSnapshotFile = (content) => {
 
 /**
  * Extract keys / values from snapshot file
- * @param {string} content - Snapshot file content
- * @return {Object} - should follow the pattern {snapshot_name: snapshot_content}
  */
-export const parseSnapshotFile = (content) => {
+export const parseSnapshotFile = (content: string): SnapshotContent => {
     const data = {}
     const populate = new Function('exports', content)
     populate(data)

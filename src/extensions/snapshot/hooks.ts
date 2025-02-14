@@ -1,23 +1,23 @@
-'use strict'
-
-import { Before, BeforeAll, AfterAll } from '@cucumber/cucumber'
+import { Before, BeforeAll, AfterAll, ITestCaseHookParameter } from '@cucumber/cucumber'
 
 import * as clean from './clean.js'
 import * as cmdOptions from './cmd_options.js'
 import * as statistics from './statistics.js'
 
-const getCurrentScenarioLineNumber = ({ gherkinDocument, pickle }) => {
+const getCurrentScenarioLineNumber = ({
+    gherkinDocument,
+    pickle,
+}: ITestCaseHookParameter): number | undefined => {
     const currentScenarioId = pickle.astNodeIds[0]
-    const { scenario } = gherkinDocument.feature.children.find(
-        ({ scenario: { id } }) => id === currentScenarioId,
+    const matchingChild = gherkinDocument.feature?.children.find(
+        (child) => !!child.scenario && child.scenario.id === currentScenarioId,
     )
-    return scenario.location.line
+
+    return matchingChild?.scenario?.location.line
 }
 
 /**
  * Registers hooks for the fixtures extension.
- *
- * @module extensions/fixtures/hooks
  */
 
 export const install = () => {

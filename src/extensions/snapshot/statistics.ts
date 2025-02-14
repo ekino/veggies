@@ -1,34 +1,22 @@
-'use strict'
 import { GREEN, RED, RESET, YELLOW } from '../../utils/colors.js'
-/**
- * @module extensions/snapshot/statistics
- */
-
-/**
- * @typedef {object} SnapshotIdentifier
- * @property {string} file - scenario file path
- * @property {string} name - snapshot name
- */
+import { SnapshotFile } from './snapshot.js'
 
 /**
  * Store snapshot identifier of created snapshots
- * @type {Array<SnapshotIdentifier>}
  */
-export const created = []
+export const created: SnapshotFile[] = []
 
 /**
  * Store snapshot identifier of updated snapshots
- * @type {Array<SnapshotIdentifier>}
  */
-export const updated = []
+export const updated: SnapshotFile[] = []
 
 /**
  * Store snapshot identifier of removed snapshots
- * @type {Array<SnapshotIdentifier>}
  */
-export const removed = []
+export const removed: SnapshotFile[] = []
 
-export const printReport = () => {
+export const printReport = (): void => {
     const total = created.length + updated.length + removed.length
     if (total) {
         let result = '`\n\nSnapshots:   '

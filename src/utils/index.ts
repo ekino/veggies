@@ -5,6 +5,12 @@ export type InterpolateOptions = {
     interpolate?: RegExp
 }
 
+export type Error = {
+    code?: string
+    stack?: string
+    message: string
+} & Record<string, unknown>
+
 export const isNumber = (n: unknown): n is number => Number.isFinite(n)
 
 export const isEmpty = (val: unknown): boolean => {
@@ -123,3 +129,10 @@ export const partial =
     ): ((...args: Parameters<T>) => ReturnType<T>) =>
     (...args: Parameters<T>) =>
         fn(...partials, ...args) as ReturnType<T>
+
+export const getError = (error: unknown): Error => {
+    if (isObject(error)) return { ...error, message: error['message'] as string }
+    if (typeof error === 'string') return { message: error }
+    if (!error) return { message: 'unknown error' }
+    return { message: JSON.stringify(error) }
+}
