@@ -1,41 +1,77 @@
-'use strict'
-
-/**
- * The http client used by the http API extension.
- *
- * @module extensions/httpApi/client
- */
-
 import { Cookie, CookieJar } from 'tough-cookie'
 import { wrapper } from 'axios-cookiejar-support'
 import { isPlainObject, isString } from '../../utils/index.js'
-import axios from 'axios'
+import axios, {
+    AxiosHeaders,
+    AxiosInstance,
+    AxiosRequestConfig,
+    AxiosResponse,
+    RawAxiosRequestHeaders,
+} from 'axios'
 import FormData from 'form-data'
 
 const BODY_TYPE_JSON = 'json'
 const BODY_TYPE_FORM = 'form'
 const BODY_TYPE_MULTIPART = 'form-data'
-
 const verbsAcceptingBody = ['POST', 'PUT', 'DELETE', 'PATCH']
-
-const validateStatus = (status) => status >= 200 && status <= 302
+const validateStatus = (status: number) => status >= 200 && status <= 302
 
 const axiosInstance = axios.create({
     validateStatus,
 })
-let cookieInstance
+let cookieInstance: AxiosInstance
 
-const getClient = (cookieJar) => {
+const getClient = (cookieJar?: CookieJar): AxiosInstance => {
     if (cookieJar) {
         if (!cookieInstance) {
             cookieInstance = wrapper(
-                axios.create({ jar: cookieJar, withCredentials: true, validateStatus }),
-            )
+                // @ts-ignore
+                axios.create({
+                    // @ts-ignore
+                    jar: cookieJar,
+                    withCredentials: true,
+                    validateStatus,
+                }),
+            ) as AxiosInstance
         }
         return cookieInstance
     }
     return axiosInstance
 }
+
+export type Method =
+    | 'get'
+    | 'GET'
+    | 'delete'
+    | 'DELETE'
+    | 'head'
+    | 'HEAD'
+    | 'options'
+    | 'OPTIONS'
+    | 'post'
+    | 'POST'
+    | 'put'
+    | 'PUT'
+    | 'patch'
+    | 'PATCH'
+    | 'purge'
+    | 'PURGE'
+    | 'link'
+    | 'LINK'
+    | 'unlink'
+    | 'UNLINK'
+export type CookieProperty = string | Record<string, unknown>
+export type Headers =
+    | (RawAxiosRequestHeaders &
+          Partial<
+              {
+                  [Key in Method as Lowercase<Key>]: AxiosHeaders
+              } & { common: AxiosHeaders }
+          >)
+    | AxiosHeaders
+export type RequestOptions = AxiosRequestConfig & { jar?: CookieJar; headers: Headers }
+export type RequestBody = string | string[][] | Record<string, string> | URLSearchParams
+export type HttpApiClientArgs = ConstructorParameters<typeof HttpApiClient>
 
 /**
  * Http Api Client extension.
@@ -43,72 +79,70 @@ const getClient = (cookieJar) => {
  * @class
  */
 class HttpApiClient {
+    public body: RequestBody | undefined
+    public bodyType: string = BODY_TYPE_JSON
+    public headers: Headers = {}
+    public query: Record<string, unknown> = {}
+    public cookies: CookieProperty[] = []
+    public cookieJar: CookieJar | undefined
+    public followRedirect: boolean = true
+    public response: AxiosResponse | undefined
+    public responseCookies: Record<string, Cookie> = {}
+
     constructor() {
-        // REQUEST INFORMATION
-        this.body = null
+        this.body = undefined
         this.bodyType = BODY_TYPE_JSON
         this.headers = {}
         this.query = {}
         this.cookies = []
-        this.cookieJar = null
+        this.cookieJar = undefined
         this.followRedirect = true
-
-        // RESPONSE INFORMATION
-        this.response = null
+        this.response = undefined
         this.responseCookies = {}
     }
 
     /**
      * Resets the client.
      */
-    reset() {
-        this.body = null
+    reset(): void {
+        this.body = undefined
         this.bodyType = BODY_TYPE_JSON
         this.headers = {}
         this.query = {}
-
         this.cookies = []
-        this.cookieJar = null
+        this.cookieJar = undefined
         this.followRedirect = true
-
-        this.response = null
+        this.response = undefined
         this.responseCookies = {}
     }
 
     /**
      * Sets request json body.
-     *
-     * @param {Object} payload
      */
-    setJsonBody(payload) {
+    setJsonBody(payload: RequestBody): void {
         this.bodyType = BODY_TYPE_JSON
         this.body = payload
     }
 
     /**
      * Sets request form body.
-     *
-     * @param {Object} payload
      */
-    setFormBody(payload) {
+    setFormBody(payload: RequestBody): void {
         this.bodyType = BODY_TYPE_FORM
         this.body = payload
     }
 
     /**
      * Sets Follow Redirect option.
-     *
      */
-    setFollowRedirect(isEnabled) {
+    setFollowRedirect(isEnabled: boolean): void {
         this.followRedirect = isEnabled
     }
 
     /**
      * Sets request body for multipart form data
-     *
-     * @param {Object} payload
      */
-    setMultipartBody(payload) {
+    setMultipartBody(payload: RequestBody): void {
         this.bodyType = BODY_TYPE_MULTIPART
         this.body = payload
     }
@@ -116,36 +150,29 @@ class HttpApiClient {
     /**
      * Clears current request body
      */
-    clearBody() {
-        this.body = null
+    clearBody(): void {
+        this.body = undefined
         this.bodyType = BODY_TYPE_JSON
     }
 
     /**
      * Sets request query parameters.
-     *
-     * @param {Object} query
      */
-    setQuery(query) {
+    setQuery(query: Record<string, unknown>): void {
         this.query = query
     }
 
     /**
      * Sets request headers.
-     *
-     * @param {Object} headers
      */
-    setHeaders(headers) {
+    setHeaders(headers: Headers): void {
         this.headers = headers || {}
     }
 
     /**
      * Sets a single request header.
-     *
-     * @param {string} key
-     * @param {string} value
      */
-    setHeader(key, value) {
+    setHeader(key: string, value: unknown): void {
         this.headers = this.headers || {}
         this.headers[key] = value
     }
@@ -153,26 +180,28 @@ class HttpApiClient {
     /**
      * Clears current request headers.
      */
-    clearHeaders() {
-        this.headers = null
+    clearHeaders(): void {
+        this.headers = {}
     }
 
     /**
      * Enables cookie jar.
      */
-    enableCookies() {
+    enableCookies(): void {
         if (this.cookieJar) return
 
         this.cookieJar = new CookieJar()
+        // @ts-ignore
         this.cookieJar.rejectPublicSuffixes = false
+        // @ts-ignore
         this.cookieJar.looseMode = true
     }
 
     /**
      * Disables cookie jar.
      */
-    disableCookies() {
-        this.cookieJar = null
+    disableCookies(): void {
+        this.cookieJar = undefined
     }
 
     /**
@@ -180,10 +209,8 @@ class HttpApiClient {
      * It does not actually add the cookie to the cookie jar
      * because setting the cookie requires the request url,
      * which we only have when making the request.
-     *
-     * @param {string|Object} cookie - Cookie string or Object
      */
-    setCookie(cookie) {
+    setCookie(cookie?: CookieProperty): void {
         if (!isPlainObject(cookie) && !isString(cookie)) {
             throw new TypeError(`"cookie" must be a string or a cookie object`)
         }
@@ -196,36 +223,31 @@ class HttpApiClient {
      * Clears registered request cookies.
      * Be aware that it does not clear existing response cookies.
      */
-    clearRequestCookies() {
+    clearRequestCookies(): void {
         this.cookies = []
     }
 
     /**
      * Retrieves a cookie by its key.
-     *
-     * @param {string} key - Cookie key
-     * @return {Object|null} The cookie object if any, or null
      */
-    getCookie(key) {
-        if (this.responseCookies === null) return null
-        if (this.responseCookies[key] === undefined) return null
+    getCookie(key: string): Cookie | undefined {
+        if (this.responseCookies === null) return undefined
+        if (this.responseCookies[key] === undefined) return undefined
 
         return this.responseCookies[key]
     }
 
     /**
      * Returns current response cookies.
-     *
-     * @return {Object} current response cookies
      */
-    getCookies() {
+    getCookies(): Record<string, Cookie> {
         return this.responseCookies
     }
 
     /**
      * Returns the latest collected response.
      */
-    getResponse() {
+    getResponse(): AxiosResponse | undefined {
         return this.response
     }
 
@@ -234,13 +256,9 @@ class HttpApiClient {
      * - headers
      * - query
      * - body
-     *
-     * @param {string} method    - The http verb
-     * @param {string} path      - The path
-     * @param {string} [baseUrl] - The base url
      */
-    makeRequest(method, path, baseUrl) {
-        return new Promise((resolve, reject) => {
+    async makeRequest(method: string, path: string, baseUrl?: string): Promise<void> {
+        try {
             if (/https?:\/\//.test(path)) {
                 const url = new URL(path)
                 path = path.replace(url.origin, '')
@@ -248,7 +266,7 @@ class HttpApiClient {
             }
 
             const fullUrl = `${baseUrl}${path}`
-            const options = {
+            const options: RequestOptions = {
                 method,
                 url: fullUrl,
                 headers: this.headers,
@@ -281,65 +299,56 @@ class HttpApiClient {
             if (this.cookieJar) {
                 this.cookies.forEach((cookie) => {
                     if (isPlainObject(cookie)) {
-                        this.cookieJar.setCookie(new Cookie(cookie), fullUrl)
+                        this.cookieJar?.setCookie(new Cookie(cookie), fullUrl)
                     } else if (isString(cookie)) {
-                        this.cookieJar.setCookie(cookie, fullUrl)
+                        this.cookieJar?.setCookie(cookie, fullUrl)
                     }
                 })
             }
             const client = getClient(this.cookieJar)
+            const _response = await client.request(options)
+            this.response = _response
 
-            client
-                .request(options)
-                .then((response) => {
-                    this.response = response
-
-                    if (this.cookieJar) {
-                        this.responseCookies = {}
-                        const setCookieHeaders = this.response.headers['set-cookie']
-                        if (setCookieHeaders) {
-                            setCookieHeaders.forEach((cookie) => {
-                                this.cookieJar.setCookieSync(cookie, fullUrl)
-                            })
-                        }
-                        this.cookieJar.getCookiesSync(fullUrl).forEach((cookie) => {
-                            this.responseCookies[cookie.key] = cookie
-                        })
-                    }
-                    resolve()
+            if (this.cookieJar) {
+                this.responseCookies = {}
+                const setCookieHeaders = this.response.headers['set-cookie']
+                if (setCookieHeaders) {
+                    setCookieHeaders.forEach((cookie) => {
+                        this.cookieJar?.setCookieSync(cookie, fullUrl)
+                    })
+                }
+                this.cookieJar.getCookiesSync(fullUrl).forEach((cookie) => {
+                    this.responseCookies[cookie.key] = cookie
                 })
-                .catch((error) => {
-                    if (axios.isAxiosError(error)) {
-                        console.error('Axios error:', {
-                            message: error.message,
-                            response: error.response
-                                ? {
-                                      status: error.response.status,
-                                      data: error.response.data,
-                                      headers: error.response.headers,
-                                  }
-                                : undefined,
-                            stack: error.stack,
-                        })
-                    } else {
-                        console.error('Unexpected error:', error)
-                    }
-                    reject()
+            }
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                console.error('Axios error:', {
+                    message: error.message,
+                    response: error.response
+                        ? {
+                              status: error.response.status,
+                              data: error.response.data,
+                              headers: error.response.headers,
+                          }
+                        : undefined,
+                    stack: error.stack,
                 })
-        })
+            } else {
+                console.error('Unexpected error:', error)
+            }
+        }
     }
 }
 
 /**
  * Create a new isolated http api client
- * @return {HttpApiClient}
  */
-export default function (...args) {
+export default function (...args: HttpApiClientArgs): HttpApiClient {
     return new HttpApiClient(...args)
 }
 
 /**
  * Http api client extension.
- * @type {HttpApiClient}
  */
 export { HttpApiClient }
