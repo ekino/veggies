@@ -36,6 +36,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build
+        run: pnpm run build
+
       - name: Bump the version using input strategy
         run: pnpm version ${{ github.event.inputs.strategy }}
 
