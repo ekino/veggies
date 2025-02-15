@@ -76,7 +76,9 @@ export type SnapshotFile = {
 }
 
 export type CastFunction = (value?: string | null) => CastedValue
+
 export type CastFunctions = Record<string, CastFunction>
+
 export type CastedValue =
     | string
     | number
@@ -85,4 +87,15 @@ export type CastedValue =
     | unknown[]
     | null
     | undefined
+
 export type CastType = 'string' | 'boolean' | 'number' | 'date' | 'array' | 'null' | 'undefined'
+
+export type ObjectFieldSpec = {
+    field?: string
+    matcher?: string
+    value?: string
+}
+export type MatchingRule = {
+    name: symbol
+    isNegated: boolean
+}

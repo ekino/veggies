@@ -1,6 +1,6 @@
 import { format as prettyFormat } from 'pretty-format'
-import { type ObjectFieldSpec, assertObjectMatchSpec } from '../../core/assertions.js'
-import type { SnapshotContent, SnapshotOptions } from '../../types.js'
+import { assertObjectMatchSpec } from '../../core/assertions.js'
+import type { ObjectFieldSpec, SnapshotContent, SnapshotOptions } from '../../types.js'
 import { setValue } from '../../utils/index.js'
 import { referenceSnapshot } from './clean.js'
 import {

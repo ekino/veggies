@@ -1,20 +1,11 @@
 import * as chai from 'chai'
 import { DateTime } from 'luxon'
+import type { MatchingRule, ObjectFieldSpec } from '../types.js'
 import { getValue, isNullsy, isObject } from '../utils/index.js'
 import * as Cast from './cast.js'
 import { registerChaiAssertion } from './custom_chai_assertions.js'
 
 const { expect } = chai
-
-export type ObjectFieldSpec = {
-    field?: string
-    matcher?: string
-    value?: string
-}
-export type MatchingRule = {
-    name: symbol
-    isNegated: boolean
-}
 
 chai.use(registerChaiAssertion)
 
