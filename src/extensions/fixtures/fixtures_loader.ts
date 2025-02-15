@@ -54,7 +54,7 @@ class FixturesLoader {
         return this.loadText(file).then((content) => {
             try {
                 const data = yaml.load(content)
-                if (data === undefined) {
+                if (!data) {
                     return Promise.reject(
                         new Error(
                             `Fixture file is invalid, yaml parsing resulted in undefined data for file: ${file}`,
@@ -132,7 +132,7 @@ class FixturesLoader {
      * - txt
      */
     async load(fixture: string): Promise<unknown> {
-        if (this.featureUri === undefined)
+        if (!this.featureUri)
             return Promise.reject(
                 new Error(`Cannot load fixture: ${fixture}, no feature uri defined`),
             )

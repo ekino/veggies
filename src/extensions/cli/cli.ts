@@ -113,9 +113,9 @@ class Cli {
 
             let killer: NodeJS.Timeout | undefined
             let killed = false
-            if (this.killSignal !== null) {
+            if (this.killSignal != undefined) {
                 killer = setTimeout(() => {
-                    cmd.kill(this.killSignal)
+                    cmd.kill(this.killSignal ?? undefined)
                     killed = true
                 }, this.killDelay)
             }

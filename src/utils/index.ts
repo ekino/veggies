@@ -3,7 +3,7 @@ import { InterpolateOptions, Path, PlainObject, Predicate, VeggiesError } from '
 export const isNumber = (n: unknown): n is number => Number.isFinite(n)
 
 export const isEmpty = (val: unknown): boolean => {
-    if (val == null) return true
+    if (val == undefined) return true
     if (typeof val === 'string' || Array.isArray(val)) return val.length === 0
     if (typeof val === 'object') return Object.keys(val).length === 0
     return false
@@ -25,7 +25,7 @@ export const getValue = <T = unknown>(
     path?: Path,
     defaultValue = undefined,
 ): T | undefined => {
-    if (obj == null || !path) return defaultValue
+    if (obj == undefined || !path) return defaultValue
 
     const pathArray = Array.isArray(path) ? path : path.match(/([^[.\]])+/g) || []
 
@@ -56,12 +56,12 @@ export const setValue = (obj: unknown, path: Path, value: unknown): unknown => {
 }
 
 export const isPlainObject = (value: unknown): value is PlainObject => {
-    if (value == null || typeof value !== 'object') {
+    if (value == undefined || typeof value !== 'object') {
         return false
     }
 
     const proto = Object.getPrototypeOf(value)
-    return proto === null || proto === Object.prototype
+    return proto == undefined || proto === Object.prototype
 }
 
 export const template = (tpl: string, options: InterpolateOptions = {}) => {
@@ -88,7 +88,7 @@ export const pick = <T extends PlainObject, K extends keyof T>(
     obj: T | null | undefined,
     keys: K[],
 ): Partial<T> => {
-    if (obj == null) return {}
+    if (obj == undefined) return {}
     return keys.reduce<Partial<T>>((acc, key) => {
         if (Object.prototype.hasOwnProperty.call(obj, key)) {
             acc[key] = obj[key]
@@ -101,7 +101,7 @@ export const omit = <T extends PlainObject, K extends keyof T>(
     obj: T | null | undefined,
     keys: K[],
 ): Partial<T> => {
-    if (obj == null) return {}
+    if (obj == undefined) return {}
 
     return Object.keys(obj)
         .filter((key) => !keys.includes(key as K))

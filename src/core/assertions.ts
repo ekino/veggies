@@ -188,7 +188,7 @@ export const assertObjectMatchSpec = (
             }
             case RuleName.RelativeDate: {
                 const match = relativeDateValueRegex.exec(expectedValue)
-                if (match === null) throw new Error('relative date arguments are invalid')
+                if (match == undefined) throw new Error('relative date arguments are invalid')
                 const [, amount, unit, locale, format] = match
                 if (!locale || amount == undefined || !unit || !format) break
 

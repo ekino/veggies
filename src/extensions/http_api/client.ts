@@ -194,8 +194,8 @@ class HttpApiClient {
      * Retrieves a cookie by its key.
      */
     getCookie(key: string): Cookie | undefined {
-        if (this.responseCookies === null) return undefined
-        if (this.responseCookies[key] === undefined) return undefined
+        if (!this.responseCookies) return undefined
+        if (!this.responseCookies[key]) return undefined
 
         return this.responseCookies[key]
     }
