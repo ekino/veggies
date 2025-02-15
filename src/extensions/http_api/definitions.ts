@@ -1,13 +1,12 @@
+import * as assert from 'node:assert/strict'
 import { STATUS_CODES } from 'node:http'
 import { inspect } from 'node:util'
 import { type DataTable, Given, Then, When, world } from '@cucumber/cucumber'
-import { expect } from 'chai'
-
 import type { AxiosResponse } from 'axios'
 import { assertObjectMatchSpec } from '../../core/assertions.js'
 import * as Cast from '../../core/cast.js'
 import type { CastedValue, CookieProperty, RequestBody, RequestHeaders } from '../../types.js'
-import { findKey, getValue, isNullsy, isString } from '../../utils/index.js'
+import { findKey, getValue, isEmpty, isNullsy, isString } from '../../utils/index.js'
 import type { HttpApiClient } from './client.js'
 import { parseMatchExpression } from './utils.js'
 
@@ -21,8 +20,7 @@ const STATUS_MESSAGES = Object.values(STATUS_CODES)
  */
 const mustGetResponse = (client: HttpApiClient) => {
     const response = client.getResponse()
-    expect(response, 'No response available').to.not.be.empty
-
+    assert.ok(!isEmpty(response), 'No response available')
     return response
 }
 
@@ -240,10 +238,11 @@ export const install = ({ baseUrl = '' } = {}): void => {
      */
     Then(/^response status code should be ([1-5][0-9][0-9])$/, (statusCode: number): void => {
         const response = mustGetResponse(world.httpApiClient)
-        expect(
+        assert.strictEqual(
             response?.status,
+            Number(statusCode),
             `Expected status code to be: ${statusCode}, but found: ${response?.status}`
-        ).to.equal(Number(statusCode))
+        )
     })
 
     /**
@@ -257,11 +256,11 @@ export const install = ({ baseUrl = '' } = {}): void => {
         const response = mustGetResponse(world.httpApiClient)
         const statusCode = findKey(STATUS_CODES, (msg) => msg?.toLowerCase() === statusMessage)
         const currentStatusMessage = STATUS_CODES[`${response?.status}`] || response?.status
-
-        expect(
+        assert.strictEqual(
             response?.status,
+            Number(statusCode),
             `Expected status to be: '${statusMessage}', but found: '${currentStatusMessage}'`
-        ).to.equal(Number(statusCode))
+        )
     })
 
     /**
@@ -273,9 +272,9 @@ export const install = ({ baseUrl = '' } = {}): void => {
             const cookie = world.httpApiClient.getCookie(key)
 
             if (isNullsy(flag)) {
-                expect(cookie, `No cookie found for key '${key}'`).to.not.be.undefined
+                assert.notStrictEqual(cookie, undefined, `No cookie found for key '${key}'`)
             } else {
-                expect(cookie, `A cookie exists for key '${key}'`).to.be.undefined
+                assert.strictEqual(cookie, undefined, `A cookie exists for key '${key}'`)
             }
         }
     )
@@ -285,12 +284,12 @@ export const install = ({ baseUrl = '' } = {}): void => {
      */
     Then(/^response (.+) cookie should (not )?be secure$/, (key: string, flag?: string): void => {
         const cookie = world.httpApiClient.getCookie(key)
-        expect(cookie, `No cookie found for key '${key}'`).to.not.be.undefined
+        assert.notStrictEqual(cookie, undefined, `No cookie found for key '${key}'`)
 
         if (isNullsy(flag)) {
-            expect(cookie?.secure, `Cookie '${key}' is not secure`).to.be.true
+            assert.strictEqual(cookie?.secure, true, `Cookie '${key}' is not secure`)
         } else {
-            expect(cookie?.secure, `Cookie '${key}' is secure`).to.be.false
+            assert.strictEqual(cookie?.secure, false, `Cookie '${key}' is secure`)
         }
     })
 
@@ -301,12 +300,13 @@ export const install = ({ baseUrl = '' } = {}): void => {
         /^response (.+) cookie should (not )?be http only$/,
         (key: string, flag?: string): void => {
             const cookie = world.httpApiClient.getCookie(key)
-            expect(cookie, `No cookie found for key '${key}'`).to.not.be.undefined
+
+            assert.notStrictEqual(cookie, undefined, `No cookie found for key '${key}'`)
 
             if (isNullsy(flag)) {
-                expect(cookie?.httpOnly, `Cookie '${key}' is not http only`).to.be.true
+                assert.strictEqual(cookie?.httpOnly, true, `Cookie '${key}' is not http only`)
             } else {
-                expect(cookie?.httpOnly, `Cookie '${key}' is http only`).to.be.false
+                assert.strictEqual(cookie?.httpOnly, false, `Cookie '${key}' is http only`)
             }
         }
     )
@@ -318,15 +318,20 @@ export const install = ({ baseUrl = '' } = {}): void => {
         /^response (.+) cookie domain should (not )?be (.+)$/,
         (key: string, flag: string | undefined, domain: string): void => {
             const cookie = world.httpApiClient.getCookie(key)
-            expect(cookie, `No cookie found for key '${key}'`).to.not.be.undefined
+            assert.notStrictEqual(cookie, undefined, `No cookie found for key '${key}'`)
 
             if (isNullsy(flag)) {
-                expect(
+                assert.strictEqual(
                     cookie?.domain,
+                    domain,
                     `Expected cookie '${key}' domain to be '${domain}', found '${cookie?.domain}'`
-                ).to.equal(domain)
+                )
             } else {
-                expect(cookie?.domain, `Cookie '${key}' domain is '${domain}'`).to.not.equal(domain)
+                assert.notStrictEqual(
+                    cookie?.domain,
+                    domain,
+                    `Cookie '${key}' domain is '${domain}'`
+                )
             }
         }
     )
@@ -344,7 +349,7 @@ export const install = ({ baseUrl = '' } = {}): void => {
             const data = response?.data
 
             // We check the response has json content-type
-            expect(response?.headers['content-type']).to.contain('application/json')
+            assert.ok(response?.headers['content-type'].includes('application/json'))
 
             // First we populate spec values if it contains some placeholder
             const specifications = table.hashes().map((fieldSpec) => {
@@ -371,8 +376,12 @@ export const install = ({ baseUrl = '' } = {}): void => {
             const data = response?.data
 
             const array = !isNullsy(path) ? getValue(data, path) : data
-
-            expect(array.length).to.be.equal(Number(size))
+            const expectedSize = Number(size)
+            assert.strictEqual(
+                array.length,
+                expectedSize,
+                `Expected array length to be ${expectedSize}, but got ${array.length}`
+            )
         }
     )
 
@@ -383,7 +392,7 @@ export const install = ({ baseUrl = '' } = {}): void => {
         const response = mustGetResponse(world.httpApiClient)
 
         world.fixtures.load(fixtureId).then((snapshot: AxiosResponse) => {
-            expect(response?.data).to.deep.equal(snapshot)
+            assert.strictEqual(response?.data, snapshot)
         })
     })
 
@@ -400,23 +409,45 @@ export const install = ({ baseUrl = '' } = {}): void => {
         ): void => {
             const response = mustGetResponse(world.httpApiClient)
             const header = response?.headers[key.toLowerCase()]
+            assert.notStrictEqual(header, undefined, `Header '${key}' does not exist`)
+            const msg = `Expected header '${key}' to ${
+                flag ? flag : ''
+            }${comparator} '${expectedValue}', but found '${header}' which does${
+                flag ? '' : ' not'
+            }`
 
-            expect(header, `Header '${key}' does not exist`).to.not.be.undefined
-
-            let expectFn = expect(
-                header,
-                `Expected header '${key}' to ${
-                    flag ? flag : ''
-                }${comparator} '${expectedValue}', but found '${header}' which does${
-                    flag ? '' : ' not'
-                }`
-            ).to
-            if (!isNullsy(flag)) {
-                expectFn = expectFn.not
+            switch (comparator) {
+                case 'equal': {
+                    if (flag === 'not ') {
+                        assert.notDeepStrictEqual(header, expectedValue, msg)
+                    } else {
+                        assert.deepStrictEqual(header, expectedValue, msg)
+                    }
+                    break
+                }
+                case 'contain': {
+                    if (typeof header !== 'string') {
+                        assert.fail(`File content is not a string`)
+                    }
+                    if (flag === 'not ') {
+                        assert.ok(!header.includes(expectedValue), msg)
+                    } else {
+                        assert.ok(header.includes(expectedValue), msg)
+                    }
+                    break
+                }
+                case 'match': {
+                    const re = new RegExp(expectedValue, 'gim')
+                    if (flag === 'not ') {
+                        assert.doesNotMatch(header, re, msg)
+                    } else {
+                        assert.match(header, re, msg)
+                    }
+                    break
+                }
+                default:
+                    assert.fail(`Unsupported comparator: ${comparator}`)
             }
-
-            //@ts-ignore
-            expectFn[comparator](comparator === 'match' ? new RegExp(expectedValue) : expectedValue)
         }
     )
 }

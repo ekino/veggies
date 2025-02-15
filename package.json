@@ -50,7 +50,6 @@
     "dependencies": {
         "axios": "1.7.9",
         "axios-cookiejar-support": "5.0.5",
-        "chai": "5.1.2",
         "fast-glob": "3.3.3",
         "form-data": "4.0.1",
         "jest-diff": "29.7.0",
@@ -64,7 +63,6 @@
         "@biomejs/biome": "^1.9.4",
         "@commitlint/config-conventional": "^19.7.1",
         "@cucumber/cucumber": "^11.2.0",
-        "@types/chai": "^5.0.1",
         "@types/js-yaml": "^4.0.9",
         "@types/luxon": "^3.4.2",
         "@types/node": "^22.13.1",

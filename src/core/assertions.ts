@@ -1,13 +1,8 @@
-import * as chai from 'chai'
+import * as assert from 'node:assert/strict'
 import { DateTime } from 'luxon'
 import type { MatchingRule, ObjectFieldSpec } from '../types.js'
 import { getValue, isNullsy, isObject } from '../utils/index.js'
 import * as Cast from './cast.js'
-import { registerChaiAssertion } from './custom_chai_assertions.js'
-
-const { expect } = chai
-
-chai.use(registerChaiAssertion)
 
 const negationRegex = `!|! |not |does not |doesn't |is not |isn't `
 const matchRegex = new RegExp(`^(${negationRegex})?(match|matches|~=)$`)
@@ -102,78 +97,68 @@ export const assertObjectMatchSpec = (
     exact = false
 ): void => {
     for (const { field, matcher, value } of spec) {
-        const currentValue = getValue(object, field)
+        const currentValue = getValue(object, field) as string
         const expectedValue = Cast.getCastedValue(value) as string
 
         const rule = getMatchingRule(matcher)
         if (!rule) return
 
+        let message: string
         switch (rule.name) {
             case RuleName.Match: {
-                const baseExpect = expect(
-                    currentValue,
-                    `Property '${field}' (${currentValue}) ${
-                        rule.isNegated ? 'matches' : 'does not match'
-                    } '${expectedValue}'`
-                )
+                message = `Property '${field}' (${currentValue}) ${
+                    rule.isNegated ? 'matches' : 'does not match'
+                } '${expectedValue}'`
+                const regex = new RegExp(expectedValue)
+
                 if (rule.isNegated) {
-                    baseExpect.to.not.match(new RegExp(expectedValue))
+                    assert.doesNotMatch(currentValue, regex, message)
                 } else {
-                    baseExpect.to.match(new RegExp(expectedValue))
+                    assert.match(currentValue, regex, message)
                 }
                 break
             }
             case RuleName.Contain: {
-                const baseExpect = expect(
-                    currentValue,
-                    `Property '${field}' (${currentValue}) ${
-                        rule.isNegated ? 'contains' : 'does not contain'
-                    } '${expectedValue}'`
-                )
+                message = `Property '${field}' (${currentValue}) ${
+                    rule.isNegated ? 'contains' : 'does not contain'
+                } '${expectedValue}'`
+
                 if (rule.isNegated) {
-                    baseExpect.to.not.contain(expectedValue)
+                    assert.ok(!currentValue.includes(expectedValue), message)
                 } else {
-                    baseExpect.to.contain(expectedValue)
+                    assert.ok(currentValue.includes(expectedValue), message)
                 }
                 break
             }
             case RuleName.StartWith: {
-                const baseExpect = expect(
-                    currentValue,
-                    `Property '${field}' (${currentValue}) ${
-                        rule.isNegated ? 'starts with' : 'does not start with'
-                    } '${expectedValue}'`
-                )
+                message = `Property '${field}' (${currentValue}) ${
+                    rule.isNegated ? 'starts with' : 'does not start with'
+                } '${expectedValue}'`
                 if (rule.isNegated) {
-                    baseExpect.to.not.startWith(expectedValue)
+                    assert.ok(!currentValue.startsWith(expectedValue), message)
                 } else {
-                    baseExpect.to.startWith(expectedValue)
+                    assert.ok(currentValue.startsWith(expectedValue), message)
                 }
                 break
             }
             case RuleName.EndWith: {
-                const baseExpect = expect(
-                    currentValue,
-                    `Property '${field}' (${currentValue}) ${
-                        rule.isNegated ? 'ends with' : 'does not end with'
-                    } '${expectedValue}'`
-                )
+                message = `Property '${field}' (${currentValue}) ${
+                    rule.isNegated ? 'ends with' : 'does not end with'
+                } '${expectedValue}'`
                 if (rule.isNegated) {
-                    baseExpect.to.not.endWith(expectedValue)
+                    assert.ok(!currentValue.endsWith(expectedValue), message)
                 } else {
-                    baseExpect.to.endWith(expectedValue)
+                    assert.ok(currentValue.endsWith(expectedValue), message)
                 }
                 break
             }
             case RuleName.Present: {
-                const baseExpect = expect(
-                    currentValue,
-                    `Property '${field}' is ${rule.isNegated ? 'defined' : 'undefined'}`
-                )
+                message = `Property '${field}' is ${rule.isNegated ? 'defined' : 'undefined'}`
+
                 if (rule.isNegated) {
-                    baseExpect.to.be.undefined
+                    assert.ok(isNullsy(currentValue), message)
                 } else {
-                    baseExpect.to.not.be.undefined
+                    assert.ok(!isNullsy(undefined), message)
                 }
                 break
             }
@@ -191,45 +176,38 @@ export const assertObjectMatchSpec = (
                     .setLocale(normalizedLocale)
                     .plus({ [unit]: Number(amount) })
                     .toFormat(format)
+                message = `Expected property '${field}' to ${
+                    rule.isNegated ? 'not ' : ''
+                }equal '${expectedDate}', but found '${currentValue}'`
 
-                const baseExpect = expect(
-                    currentValue,
-                    `Expected property '${field}' to ${
-                        rule.isNegated ? 'not ' : ''
-                    }equal '${expectedDate}', but found '${currentValue}'`
-                )
                 if (rule.isNegated) {
-                    baseExpect.to.not.be.deep.equal(expectedDate)
+                    assert.notDeepStrictEqual(currentValue, expectedDate, message)
                 } else {
-                    baseExpect.to.be.deep.equal(expectedDate)
+                    assert.deepStrictEqual(currentValue, expectedDate, message)
                 }
                 break
             }
             case RuleName.Type: {
-                const baseExpect = expect(
-                    currentValue,
-                    `Property '${field}' (${currentValue}) type is${
-                        rule.isNegated ? '' : ' not'
-                    } '${expectedValue}'`
-                )
+                message = `Property '${field}' (${currentValue}) type is${
+                    rule.isNegated ? '' : ' not'
+                } '${expectedValue}'`
+
                 if (rule.isNegated) {
-                    baseExpect.to.not.be.a(expectedValue)
+                    assert.notStrictEqual(typeof currentValue, expectedValue, message)
                 } else {
-                    baseExpect.to.be.a(expectedValue)
+                    assert.strictEqual(typeof currentValue, expectedValue, message)
                 }
                 break
             }
             case RuleName.Equal: {
-                const baseExpect = expect(
-                    currentValue,
-                    `Expected property '${field}' to${
-                        rule.isNegated ? ' not' : ''
-                    } equal '${value}', but found '${currentValue}'`
-                )
+                message = `Expected property '${field}' to${
+                    rule.isNegated ? ' not' : ''
+                } equal '${value}', but found '${currentValue}'`
+
                 if (rule.isNegated) {
-                    baseExpect.to.not.be.deep.equal(expectedValue)
+                    assert.notDeepStrictEqual(currentValue, expectedValue, message)
                 } else {
-                    baseExpect.to.be.deep.equal(expectedValue)
+                    assert.deepStrictEqual(currentValue, expectedValue, message)
                 }
                 break
             }
@@ -239,10 +217,8 @@ export const assertObjectMatchSpec = (
     // We check we have exactly the same number of properties as expected
     if (exact === true) {
         const propertiesCount = countNestedProperties(object)
-        expect(
-            propertiesCount,
-            'Expected json response to fully match spec, but it does not'
-        ).to.be.equal(spec.length)
+        const message = 'Expected json response to fully match spec, but it does not'
+        assert.strictEqual(propertiesCount, spec.length, message)
     }
 }
 
@@ -260,7 +236,7 @@ export const assertObjectMatchSpec = (
  */
 export const getMatchingRule = (matcher?: string): MatchingRule | undefined => {
     if (!matcher) {
-        return expect.fail(`Matcher "${matcher}" must be defined`)
+        return assert.fail(`Matcher "${matcher}" must be defined`)
     }
 
     const matchGroups = matchRegex.exec(matcher)
@@ -303,5 +279,5 @@ export const getMatchingRule = (matcher?: string): MatchingRule | undefined => {
         return { name: RuleName.RelativeDate, isNegated: !!relativeDateGroups[1] }
     }
 
-    return expect.fail(`Matcher "${matcher}" did not match any supported assertions`)
+    return assert.fail(`Matcher "${matcher}" did not match any supported assertions`)
 }

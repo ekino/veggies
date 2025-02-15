@@ -1,7 +1,8 @@
+import * as assert from 'node:assert/strict'
 import querystring from 'node:querystring'
 import { Given, Then, world } from '@cucumber/cucumber'
-import { expect } from 'chai'
 import nock from 'nock'
+import { isEmpty } from '../../../lib/esm/utils/index.js'
 
 Given(
     /^I mock (?:(POST|GET) )?http call to forward request body for path (.+)$/,
@@ -20,7 +21,7 @@ Given(
 
 Then(/^response should match url encoded snapshot (.+)$/, (snapshotId) => {
     const httpResponse = world.httpApiClient.getResponse()
-    expect(httpResponse).to.not.be.empty
+    assert.ok(!isEmpty(httpResponse))
     return world.fixtures.load(snapshotId).then((snapshot) => {
         expect(httpResponse.data).to.equal(querystring.stringify(snapshot))
     })

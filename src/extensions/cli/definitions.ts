@@ -1,5 +1,5 @@
+import * as assert from 'node:assert/strict'
 import { type DataTable, Given, Then, When, world } from '@cucumber/cucumber'
-import { expect } from 'chai'
 
 export const install = (): void => {
     Given(/^(?:I )?set (?:working directory|cwd) to (.+)$/, (cwd: string): void => {
@@ -42,44 +42,48 @@ export const install = (): void => {
         /^(?:the )?(?:command )?exit code should be (\d+)$/,
         (expectedExitCode: string | number): void => {
             const exitCode = world.cli.getExitCode()
-
-            expect(
-                exitCode,
-                `The command exit code doesn't match expected ${expectedExitCode}, found: ${exitCode}`
-            ).to.equal(Number(expectedExitCode))
+            const message = `The command exit code doesn't match expected ${expectedExitCode}, found: ${exitCode}`
+            assert.strictEqual(exitCode, Number(expectedExitCode), message)
         }
     )
 
     Then(/^(stderr|stdout) should be empty$/, (type: string): void => {
         const output = world.cli.getOutput(type)
-
-        expect(output).to.be.empty
+        assert.strictEqual(output, '', `Expected ${type} to be empty, but got: "${output}"`)
     })
 
     Then(/^(stderr|stdout) should contain (.+)$/, (type: string, expected: string): void => {
         const output = world.cli.getOutput(type)
-
-        expect(output).to.contain(expected)
+        assert.ok(
+            output.includes(expected),
+            `Expected ${type} to contain "${expected}", but got: "${output}"`
+        )
     })
 
     Then(/^(stderr|stdout) should not contain (.+)$/, (type: string, expected: string): void => {
         const output = world.cli.getOutput(type)
-
-        expect(output).to.not.contain(expected)
+        assert.ok(
+            !output.includes(expected),
+            `Expected ${type} not to contain "${expected}", but got: "${output}"`
+        )
     })
 
     Then(/^(stderr|stdout) should match (.+)$/, (type: string, regex: string | RegExp): void => {
         const output = world.cli.getOutput(type)
-
-        expect(output).to.match(new RegExp(regex, 'gim'))
+        const re = regex instanceof RegExp ? regex : new RegExp(regex, 'gim')
+        assert.match(output, re, `Expected ${type} to match ${re}, but got: "${output}"`)
     })
 
     Then(
         /^(stderr|stdout) should not match (.+)$/,
         (type: string, regex: string | RegExp): void => {
             const output = world.cli.getOutput(type)
-
-            expect(output).to.not.match(new RegExp(regex, 'gim'))
+            const re = regex instanceof RegExp ? regex : new RegExp(regex, 'gim')
+            assert.doesNotMatch(
+                output,
+                re,
+                `Expected ${type} not to match ${re}, but got: "${output}"`
+            )
         }
     )
 }

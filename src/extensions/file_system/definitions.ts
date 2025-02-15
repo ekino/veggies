@@ -1,6 +1,6 @@
 import { Given, Then, world } from '@cucumber/cucumber'
-import { expect } from 'chai'
-import { isNullsy } from '../../utils/index.js'
+
+import * as assert from 'node:assert/strict'
 
 export const install = (): void => {
     /**
@@ -25,13 +25,17 @@ export const install = (): void => {
         async (type: string, file: string, flag: string): Promise<void> => {
             return world.fileSystem.getFileInfo(world.cli.getCwd(), file).then((info) => {
                 if (flag === 'not ') {
-                    expect(info, `${type} '${file}' exists`).to.be.undefined
+                    assert.strictEqual(info, undefined, `${type} '${file}' exists`)
                 } else {
-                    expect(info, `${type} '${file}' does not exist`).not.to.be.undefined
+                    assert.notStrictEqual(info, undefined, `${type} '${file}' does not exist`)
                     if (type === 'file') {
-                        expect(info?.isFile(), `'${file}' is not a file`).to.be.true
+                        assert.strictEqual(info?.isFile(), true, `'${file}' is not a file`)
                     } else {
-                        expect(info?.isDirectory(), `'${file}' is not a directory`).to.be.true
+                        assert.strictEqual(
+                            info?.isDirectory(),
+                            true,
+                            `'${file}' is not a directory`
+                        )
                     }
                 }
             })
@@ -52,26 +56,42 @@ export const install = (): void => {
             return world.fileSystem
                 .getFileContent(world.cli.getCwd(), file)
                 .then((content) => {
-                    let expectFn = expect(
-                        content,
-                        `Expected file '${file}' to ${
-                            flag ? flag : ''
-                        }${comparator} '${expectedValue}', but found '${content}' which does${
-                            flag ? '' : ' not'
-                        }`
-                    ).to
-                    if (!isNullsy(flag)) {
-                        expectFn = expectFn.not
+                    const msg = `Expected file '${file}' to ${flag ? flag : ''}${comparator} '${expectedValue}', but found '${content}' which does${flag ? '' : ' not'}`
+                    switch (comparator) {
+                        case 'equal': {
+                            if (flag === 'not ') {
+                                assert.notDeepStrictEqual(content, expectedValue, msg)
+                            } else {
+                                assert.deepStrictEqual(content, expectedValue, msg)
+                            }
+                            break
+                        }
+                        case 'contain': {
+                            if (typeof content !== 'string') {
+                                assert.fail(`File content is not a string`)
+                            }
+                            if (flag === 'not ') {
+                                assert.ok(!content.includes(expectedValue), msg)
+                            } else {
+                                assert.ok(content.includes(expectedValue), msg)
+                            }
+                            break
+                        }
+                        case 'match': {
+                            const re = new RegExp(expectedValue, 'gim')
+                            if (flag === 'not ') {
+                                assert.doesNotMatch(content, re, msg)
+                            } else {
+                                assert.match(content, re, msg)
+                            }
+                            break
+                        }
+                        default:
+                            assert.fail(`Unsupported comparator: ${comparator}`)
                     }
-
-                    // @ts-ignore
-                    expectFn[comparator](
-                        comparator === 'match' ? new RegExp(expectedValue) : expectedValue
-                    )
                 })
                 .catch((err) => {
-                    if (err.code === 'ENOENT')
-                        return expect.fail('', '', `File '${file}' should exist`)
+                    if (err.code === 'ENOENT') return assert.fail(`File '${file}' should exist`)
 
                     return Promise.reject(err)
                 })
