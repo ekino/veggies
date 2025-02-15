@@ -1,7 +1,7 @@
 import * as assert from 'node:assert/strict'
-import { DateTime } from 'luxon'
 import type { MatchingRule, ObjectFieldSpec } from '../types.js'
 import { getValue, isNullsy, isObject } from '../utils/index.js'
+import { addTime, formatTime } from '../utils/time.js'
 import * as Cast from './cast.js'
 
 const negationRegex = `!|! |not |does not |doesn't |is not |isn't `
@@ -171,11 +171,9 @@ export const assertObjectMatchSpec = (
                 const normalizedLocale = Intl.getCanonicalLocales(locale)[0]
 
                 if (!normalizedLocale) break
-
-                const expectedDate = DateTime.now()
-                    .setLocale(normalizedLocale)
-                    .plus({ [unit]: Number(amount) })
-                    .toFormat(format)
+                const now = new Date()
+                const expectedDateObj = addTime(now, { unit, amount: Number(amount) })
+                const expectedDate = formatTime(expectedDateObj, format, normalizedLocale)
                 message = `Expected property '${field}' to ${
                     rule.isNegated ? 'not ' : ''
                 }equal '${expectedDate}', but found '${currentValue}'`
