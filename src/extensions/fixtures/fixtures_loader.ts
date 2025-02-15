@@ -5,6 +5,8 @@ import { pathToFileURL } from 'url'
 import yaml from 'js-yaml'
 import { getError } from '../../utils/index.js'
 
+type FixturesArgs = ConstructorParameters<typeof FixturesLoader>
+
 class FixturesLoader {
     public fixturesDir: string
     public featureUri?: string
@@ -17,7 +19,7 @@ class FixturesLoader {
     /**
      * Configures the loader
      */
-    configure({ fixturesDir } = { fixturesDir: 'fixtures' }) {
+    configure({ fixturesDir } = { fixturesDir: 'fixtures' }): void {
         this.fixturesDir = fixturesDir
     }
 
@@ -29,7 +31,7 @@ class FixturesLoader {
      * - fixture name
      *
      */
-    setFeatureUri(featureUri: string) {
+    setFeatureUri(featureUri: string): void {
         this.featureUri = featureUri
     }
 
@@ -48,7 +50,7 @@ class FixturesLoader {
     /**
      * Loads content from yaml file.
      */
-    loadYaml(file: string): Promise<unknown> {
+    async loadYaml(file: string): Promise<unknown> {
         return this.loadText(file).then((content) => {
             try {
                 const data = yaml.load(content)
@@ -74,7 +76,7 @@ class FixturesLoader {
     /**
      * Loads content from json file.
      */
-    loadJson(file: string): Promise<Record<string, unknown>> {
+    async loadJson(file: string): Promise<Record<string, unknown>> {
         return this.loadText(file).then((content) => {
             try {
                 const data = JSON.parse(content)
@@ -93,7 +95,7 @@ class FixturesLoader {
     /**
      * Loads content from javascript module.
      */
-    loadModule(file: string): Promise<unknown> {
+    async loadModule(file: string): Promise<unknown> {
         const moduleURL = pathToFileURL(path.resolve(file)).href
 
         return import(moduleURL)
@@ -129,7 +131,7 @@ class FixturesLoader {
      * - json
      * - txt
      */
-    load(fixture: string): Promise<unknown> {
+    async load(fixture: string): Promise<unknown> {
         if (this.featureUri === undefined)
             return Promise.reject(
                 new Error(`Cannot load fixture: ${fixture}, no feature uri defined`),
@@ -183,8 +185,6 @@ class FixturesLoader {
         this.featureUri = undefined
     }
 }
-
-type FixturesArgs = ConstructorParameters<typeof FixturesLoader>
 
 /**
  * Create a new isolated fixtures loader

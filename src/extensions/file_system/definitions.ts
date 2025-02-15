@@ -5,14 +5,14 @@ export const install = (): void => {
     /**
      * Creating a directory.
      */
-    Given(/^(?:I )?create directory (.+)$/, (directory) => {
+    Given(/^(?:I )?create directory (.+)$/, (directory: string): void => {
         return world.fileSystem.createDirectory(world.cli.getCwd(), directory)
     })
 
     /**
      * Remove a file or directory.
      */
-    Given(/^(?:I )?remove (?:file|directory) (.+)$/, (fileOrDirectory) => {
+    Given(/^(?:I )?remove (?:file|directory) (.+)$/, (fileOrDirectory: string): void => {
         return world.fileSystem.remove(world.cli.getCwd(), fileOrDirectory)
     })
 
@@ -21,7 +21,7 @@ export const install = (): void => {
      */
     Then(
         /^(file|directory) (.+) should (not )?exist$/,
-        (type: string, file: string, flag: string): Promise<void> => {
+        async (type: string, file: string, flag: string): Promise<void> => {
             return world.fileSystem.getFileInfo(world.cli.getCwd(), file).then((info) => {
                 if (flag === 'not ') {
                     expect(info, `${type} '${file}' exists`).to.be.null
@@ -42,7 +42,12 @@ export const install = (): void => {
      */
     Then(
         /^file (.+) content should (not )?(equal|contain|match) (.+)$/,
-        (file: string, flag: string, comparator: string, expectedValue: string): Promise<void> => {
+        async (
+            file: string,
+            flag: string,
+            comparator: string,
+            expectedValue: string,
+        ): Promise<void> => {
             return world.fileSystem
                 .getFileContent(world.cli.getCwd(), file)
                 .then((content) => {
