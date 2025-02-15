@@ -28,21 +28,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Eslint
-        run: pnpm run lint
+      - name: Lint
+        run: pnpm run check
 
-      - name: Prettier
-        run: pnpm run check-fmt
-
-      - name: Tests
+      - name: Integration tests
         run: pnpm run test-func
 
-      - name: Clear Jest cache
-        run: pnpm jest --clearCache
-
-      - name: Coverage
+      - name: Unit coverage tests
         run: pnpm run test-cover
-        continue-on-error: true
 
       - name: Coveralls Parallel
         env:
@@ -51,6 +44,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           parallel: true
+        continue-on-error: true
 
   coverall:
     needs: tests
