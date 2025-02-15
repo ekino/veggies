@@ -1,5 +1,5 @@
+import { expect, test } from 'vitest'
 import * as Cast from '../../../src/core/cast.js'
-import { test, expect } from 'vitest'
 
 test('cast nulls', () => {
     expect(Cast.getCastedValue('((null))')).toBe(null)
@@ -69,7 +69,7 @@ test('cast array of objects', () => {
             { a: '1((number))' },
             { b: 'true((boolean))' },
             { c: 'a,b,c((array))' },
-        ]),
+        ])
     ).toEqual([{ a: 1 }, { b: true }, { c: ['a', 'b', 'c'] }])
 })
 

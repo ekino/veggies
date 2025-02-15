@@ -1,4 +1,4 @@
-import { DataTable, Given, Then, When, world } from '@cucumber/cucumber'
+import { type DataTable, Given, Then, When, world } from '@cucumber/cucumber'
 import { expect } from 'chai'
 
 export const install = (): void => {
@@ -10,7 +10,7 @@ export const install = (): void => {
         /^(?:I )?set ([^ ]+) (?:env|environment) (?:var|variable) to (.+)$/,
         (name: string, value: string): void => {
             world.cli.setEnvironmentVariable(name, value)
-        },
+        }
     )
 
     Given(/^(?:I )?set (?:env|environment) (?:vars|variables)$/, (step: DataTable): void => {
@@ -26,7 +26,7 @@ export const install = (): void => {
             }
 
             world.cli.scheduleKillProcess(delay, signal)
-        },
+        }
     )
 
     When(/^(?:I )?run command (.+)$/, async (command: string): Promise<void> => {
@@ -45,9 +45,9 @@ export const install = (): void => {
 
             expect(
                 exitCode,
-                `The command exit code doesn't match expected ${expectedExitCode}, found: ${exitCode}`,
+                `The command exit code doesn't match expected ${expectedExitCode}, found: ${exitCode}`
             ).to.equal(Number(expectedExitCode))
-        },
+        }
     )
 
     Then(/^(stderr|stdout) should be empty$/, (type: string): void => {
@@ -80,6 +80,6 @@ export const install = (): void => {
             const output = world.cli.getOutput(type)
 
             expect(output).to.not.match(new RegExp(regex, 'gim'))
-        },
+        }
     )
 }

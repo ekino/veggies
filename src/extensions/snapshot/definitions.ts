@@ -1,5 +1,5 @@
-import { Then, world, DataTable } from '@cucumber/cucumber'
-import { SnapshotContent } from '../../types.js'
+import { type DataTable, Then, world } from '@cucumber/cucumber'
+import type { SnapshotContent } from '../../types.js'
 
 export const install = (): void => {
     /**
@@ -51,7 +51,7 @@ export const install = (): void => {
 
             const output = JSON.parse(world.cli.getOutput(type))
             world.snapshot.expectToMatchJson(output, spec)
-        },
+        }
     )
 
     /**
@@ -84,6 +84,6 @@ export const install = (): void => {
                 const parsedContent = JSON.parse(content)
                 world.snapshot.expectToMatchJson(parsedContent, spec)
             })
-        },
+        }
     )
 }

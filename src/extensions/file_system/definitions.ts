@@ -1,19 +1,20 @@
 import { Given, Then, world } from '@cucumber/cucumber'
 import { expect } from 'chai'
+import { isNullsy } from '../../utils/index.js'
 
 export const install = (): void => {
     /**
      * Creating a directory.
      */
     Given(/^(?:I )?create directory (.+)$/, (directory: string): void => {
-        return world.fileSystem.createDirectory(world.cli.getCwd(), directory)
+        world.fileSystem.createDirectory(world.cli.getCwd(), directory)
     })
 
     /**
      * Remove a file or directory.
      */
     Given(/^(?:I )?remove (?:file|directory) (.+)$/, (fileOrDirectory: string): void => {
-        return world.fileSystem.remove(world.cli.getCwd(), fileOrDirectory)
+        world.fileSystem.remove(world.cli.getCwd(), fileOrDirectory)
     })
 
     /**
@@ -34,7 +35,7 @@ export const install = (): void => {
                     }
                 }
             })
-        },
+        }
     )
 
     /**
@@ -46,7 +47,7 @@ export const install = (): void => {
             file: string,
             flag: string,
             comparator: string,
-            expectedValue: string,
+            expectedValue: string
         ): Promise<void> => {
             return world.fileSystem
                 .getFileContent(world.cli.getCwd(), file)
@@ -57,15 +58,15 @@ export const install = (): void => {
                             flag ? flag : ''
                         }${comparator} '${expectedValue}', but found '${content}' which does${
                             flag ? '' : ' not'
-                        }`,
+                        }`
                     ).to
-                    if (flag != undefined) {
+                    if (!isNullsy(flag)) {
                         expectFn = expectFn.not
                     }
 
                     // @ts-ignore
                     expectFn[comparator](
-                        comparator === 'match' ? new RegExp(expectedValue) : expectedValue,
+                        comparator === 'match' ? new RegExp(expectedValue) : expectedValue
                     )
                 })
                 .catch((err) => {
@@ -74,6 +75,6 @@ export const install = (): void => {
 
                     return Promise.reject(err)
                 })
-        },
+        }
     )
 }

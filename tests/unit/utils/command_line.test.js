@@ -1,5 +1,5 @@
+import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest'
 import { hasArg, hasOneArgOf } from '../../../src/utils/command_line.js'
-import { vi, describe, beforeAll, afterAll, test, expect } from 'vitest'
 
 describe('utils > command_line', () => {
     let originalArgv

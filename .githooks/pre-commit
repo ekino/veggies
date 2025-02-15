@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-pnpm run lint
+pnpm run check

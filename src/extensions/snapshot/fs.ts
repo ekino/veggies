@@ -1,5 +1,5 @@
+import fs, { type Stats } from 'node:fs'
 import path from 'node:path'
-import fs, { Stats } from 'node:fs'
 import { getError } from '../../utils/index.js'
 
 /**
@@ -13,24 +13,22 @@ export const getFileContent = (file: string, encoding: BufferEncoding = 'utf8'):
 export const writeFileContent = (
     file: string,
     content: string,
-    { createDir = true } = {},
+    { createDir = true } = {}
 ): void => {
     if (createDir) createDirectory(path.dirname(file))
-    return fs.writeFileSync(file, content)
+    fs.writeFileSync(file, content)
 }
 
 /**
  * Gets info about file/directory.
  */
 export const getFileInfo = (file: string): Stats | undefined => {
-    let result
     try {
-        result = fs.statSync(file)
+        return fs.statSync(file)
     } catch (err) {
         if (getError(err).code !== 'ENOENT') throw err
     }
-
-    return result
+    return undefined
 }
 
 /**

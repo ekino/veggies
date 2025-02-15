@@ -1,9 +1,9 @@
 import path from 'node:path'
 import { diff as jestDiff } from 'jest-diff'
 import naturalCompare from 'natural-compare'
+import type { Scenario, SnapshotContent, SnapshotOptions } from '../../types.js'
 import { GREEN, RED, RESET } from '../../utils/colors.js'
 import * as fileSystem from './fs.js'
-import { Scenario, SnapshotContent, SnapshotOptions } from '../../types.js'
 
 const JEST_NO_DIFF_MESSAGE = 'Compared values have no visual difference.'
 
@@ -92,7 +92,7 @@ export const readSnapshotFile = (file: string): SnapshotContent => {
  */
 export const writeSnapshotFile = (file: string, content: SnapshotContent): void => {
     const serializedContent = formatSnapshotFile(content)
-    return fileSystem.writeFileContent(file, serializedContent)
+    fileSystem.writeFileContent(file, serializedContent)
 }
 
 /**
@@ -149,7 +149,7 @@ export const formatSnapshotFile = (content: SnapshotContent): string => {
                 wrapWithBacktick(key) +
                 '] = ' +
                 wrapWithBacktick(normalizeNewlines(content[key] || '')) +
-                ';',
+                ';'
         )
     return '\n\n' + snapshots.join('\n\n') + '\n'
 }

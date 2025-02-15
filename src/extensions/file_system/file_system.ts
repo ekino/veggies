@@ -1,18 +1,16 @@
+import fs, { type Stats } from 'node:fs'
 import path from 'node:path'
-import fs, { Stats } from 'node:fs'
 
 export type FileSystemArgs = ConstructorParameters<typeof FileSystem>
 
 class FileSystem {
-    constructor() {}
-
     /**
      * Loads file content.
      */
     getFileContent = (
         cwd: string,
         file: string,
-        encoding: BufferEncoding = 'utf8',
+        encoding: BufferEncoding = 'utf8'
     ): Promise<string> =>
         new Promise((resolve, reject) => {
             fs.readFile(path.join(cwd, file), (err, data) => {

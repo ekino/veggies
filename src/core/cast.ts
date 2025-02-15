@@ -1,18 +1,5 @@
+import type { CastFunction, CastFunctions, CastType, CastedValue } from '../types.js'
 import { isFunction, isString, setValue } from '../utils/index.js'
-
-export interface CastFunction {
-    (value?: string | null): CastedValue
-}
-export type CastFunctions = Record<string, CastFunction>
-export type CastedValue =
-    | string
-    | number
-    | boolean
-    | Record<string, unknown>
-    | unknown[]
-    | null
-    | undefined
-export type CastType = 'string' | 'boolean' | 'number' | 'date' | 'array' | 'null' | 'undefined'
 
 const castFunctions: CastFunctions = {}
 
@@ -64,7 +51,7 @@ castFunctions['string'] = (value?: string | null): string => {
 export const addType = (typeName: string, castFunction: CastFunction): void => {
     if (!isFunction(castFunction))
         throw new TypeError(
-            `Invalid cast function provided, must be a function (${typeof castFunction})`,
+            `Invalid cast function provided, must be a function (${typeof castFunction})`
         )
     castFunctions[typeName] = castFunction
 }
@@ -113,9 +100,9 @@ export const getCastedValue = (value: unknown): CastedValue => {
  */
 export const getCastedObject = (object: Record<string, unknown>): Record<string, CastedValue> => {
     const castedObject = {}
-    Object.keys(object).forEach((key) => {
+    for (const key of Object.keys(object)) {
         setValue(castedObject, key, getCastedValue(object[key]))
-    })
+    }
 
     return castedObject
 }

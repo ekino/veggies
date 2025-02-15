@@ -1,5 +1,5 @@
+import { afterEach, expect, test } from 'vitest'
 import FixturesLoader from '../../../../src/extensions/fixtures/fixtures_loader.js'
-import { afterEach, test, expect } from 'vitest'
 
 const yamlContent = { type: 'yaml', testing: true }
 const textContent = 'This data were loaded from mocked text file'
@@ -31,7 +31,7 @@ test('load non existing .yaml fixture file', () => {
     return fixturesLoader
         .loadText('noent.yaml')
         .catch((err) =>
-            expect(err.message).toEqual("ENOENT: no such file or directory, open 'noent.yaml'"),
+            expect(err.message).toEqual("ENOENT: no such file or directory, open 'noent.yaml'")
         )
 })
 
@@ -40,8 +40,8 @@ test('load empty .yaml fixture file', () => {
         .loadYaml('tests/unit/extensions/fixtures/mocks/yaml/fixture.yaml.empty')
         .catch((err) =>
             expect(err.message).toMatch(
-                'Fixture file is invalid, yaml parsing resulted in undefined data for file: tests/unit/extensions/fixtures/mocks/yaml/fixture.yaml.empty',
-            ),
+                'Fixture file is invalid, yaml parsing resulted in undefined data for file: tests/unit/extensions/fixtures/mocks/yaml/fixture.yaml.empty'
+            )
         )
 })
 
@@ -74,7 +74,7 @@ test('load non existing .txt fixture file', () => {
     return fixturesLoader
         .loadText('noent.txt')
         .catch((err) =>
-            expect(err.message).toEqual("ENOENT: no such file or directory, open 'noent.txt'"),
+            expect(err.message).toEqual("ENOENT: no such file or directory, open 'noent.txt'")
         )
 })
 
@@ -161,7 +161,7 @@ test('generic load with no matching fixture file', () => {
 
     return fixturesLoader.load('fixture').catch((err) => {
         expect(err.message).toEqual(
-            'No fixture found for: fixture (./none/fixture.@(yaml|yml|js|json|txt))',
+            'No fixture found for: fixture (./none/fixture.@(yaml|yml|js|json|txt))'
         )
     })
 })

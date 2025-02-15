@@ -1,9 +1,13 @@
-import { InterpolateOptions, Path, PlainObject, Predicate, VeggiesError } from '../types.js'
+import type { InterpolateOptions, Path, PlainObject, Predicate, VeggiesError } from '../types.js'
 
 export const isNumber = (n: unknown): n is number => Number.isFinite(n)
 
+export const isNullsy = (val: unknown): val is undefined | null => val === undefined || val === null
+
+export const isNotNullsy = <T>(val: unknown): val is T => val !== undefined && val !== null
+
 export const isEmpty = (val: unknown): boolean => {
-    if (val == undefined) return true
+    if (val === null || val === undefined) return true
     if (typeof val === 'string' || Array.isArray(val)) return val.length === 0
     if (typeof val === 'object') return Object.keys(val).length === 0
     return false
@@ -23,9 +27,9 @@ export const isObject = (val: unknown): val is PlainObject =>
 export const getValue = <T = unknown>(
     obj: unknown,
     path?: Path,
-    defaultValue = undefined,
+    defaultValue = undefined
 ): T | undefined => {
-    if (obj == undefined || !path) return defaultValue
+    if (isNullsy(obj) || !path) return defaultValue
 
     const pathArray = Array.isArray(path) ? path : path.match(/([^[.\]])+/g) || []
 
@@ -56,12 +60,12 @@ export const setValue = (obj: unknown, path: Path, value: unknown): unknown => {
 }
 
 export const isPlainObject = (value: unknown): value is PlainObject => {
-    if (value == undefined || typeof value !== 'object') {
+    if (isNullsy(value) || typeof value !== 'object') {
         return false
     }
 
     const proto = Object.getPrototypeOf(value)
-    return proto == undefined || proto === Object.prototype
+    return isNullsy(proto) || proto === Object.prototype
 }
 
 export const template = (tpl: string, options: InterpolateOptions = {}) => {
@@ -86,9 +90,9 @@ export const findKey = <T>(obj: Record<string, T>, predicate: Predicate<T>): str
 
 export const pick = <T extends PlainObject, K extends keyof T>(
     obj: T | null | undefined,
-    keys: K[],
+    keys: K[]
 ): Partial<T> => {
-    if (obj == undefined) return {}
+    if (isNullsy(obj)) return {}
     return keys.reduce<Partial<T>>((acc, key) => {
         if (Object.prototype.hasOwnProperty.call(obj, key)) {
             acc[key] = obj[key]
@@ -99,9 +103,9 @@ export const pick = <T extends PlainObject, K extends keyof T>(
 
 export const omit = <T extends PlainObject, K extends keyof T>(
     obj: T | null | undefined,
-    keys: K[],
+    keys: K[]
 ): Partial<T> => {
-    if (obj == undefined) return {}
+    if (obj === undefined || obj === null) return {}
 
     return Object.keys(obj)
         .filter((key) => !keys.includes(key as K))

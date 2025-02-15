@@ -140,7 +140,7 @@ describe('extensions > snapshot > snapshot', () => {
                 1,
                 snapshotContent,
                 expectedContent,
-                diffOptions,
+                diffOptions
             )
         })
 
@@ -335,7 +335,7 @@ describe('extensions > snapshot > snapshot', () => {
 
     test('readSnapshotFile throw an error if no file', () => {
         expect(snapshot.readSnapshotFile).toThrowError(
-            /Missing snapshot file undefined to read snapshots/,
+            /Missing snapshot file undefined to read snapshots/
         )
     })
 

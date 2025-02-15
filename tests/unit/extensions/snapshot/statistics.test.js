@@ -1,7 +1,6 @@
 const statistics = require('../../../../lib/cjs/extensions/snapshot/statistics.js')
 const { vi, describe, beforeEach, afterAll, afterEach, test, expect } = require('vitest')
 
-// eslint-disable-next-line no-control-regex
 const stripAnsi = (str) => str.replace(/\x1b\[[0-9;]*m/g, '')
 
 describe('extensions > snapshot > statistics', () => {

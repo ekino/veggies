@@ -1,13 +1,10 @@
-/* eslint no-console: "off" */
-'use strict'
-
 /**
  * This script is used to extract step definitions
  * from extensions' definition files.
  */
 
-import assert from 'assert'
-import fs from 'fs'
+import assert from 'node:assert'
+import fs from 'node:fs'
 import { parse } from 'babylon'
 import Mustache from 'mustache'
 
@@ -144,9 +141,9 @@ const extractModuleExportBody = (file, node) => {
     module.exports = module.exports = ({ Given, When, Then }) => {
         // definitions
     }
-${RESET}`,
-        ),
-            process.exit(1)
+${RESET}`
+        )
+        process.exit(1)
     }
 
     if (node.body.type === 'BlockStatement') return node.body.body
@@ -179,9 +176,9 @@ const extractDefinitionInfo = (file, node) => {
     const [regex] = node.expression.arguments
     if (!regex || regex.type !== 'RegExpLiteral') {
         console.error(
-            `${RED}! Found invalid definition in: '${file}' at line ${node.loc.start.line}${RESET}`,
-        ),
-            process.exit(1)
+            `${RED}! Found invalid definition in: '${file}' at line ${node.loc.start.line}${RESET}`
+        )
+        process.exit(1)
     }
 
     return {
@@ -236,7 +233,7 @@ const getDefinitionsFromFile = (file) => {
 const generateReadme = async () => {
     try {
         const definitions = await Promise.all(
-            extensions.map((extensionId) => getDefinitionsFromFile(definitionFiles[extensionId])),
+            extensions.map((extensionId) => getDefinitionsFromFile(definitionFiles[extensionId]))
         )
 
         const definitionsByExtension = {}
@@ -251,7 +248,7 @@ const generateReadme = async () => {
             {
                 definitions: definitionsByExtension,
             },
-            partials,
+            partials
         )
 
         if (isCheck) {
@@ -259,7 +256,7 @@ const generateReadme = async () => {
             assert.strictEqual(
                 renderedReadme,
                 readmeContent,
-                'README.md was not generated: Use `pnpm run readme`.',
+                'README.md was not generated: Use `pnpm run readme`.'
             )
         } else {
             return writeFile(readmePath, renderedReadme)

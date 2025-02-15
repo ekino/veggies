@@ -1,4 +1,4 @@
-import { Before, BeforeAll, AfterAll, ITestCaseHookParameter } from '@cucumber/cucumber'
+import { AfterAll, Before, BeforeAll, type ITestCaseHookParameter } from '@cucumber/cucumber'
 
 import * as clean from './clean.js'
 import * as cmdOptions from './cmd_options.js'
@@ -10,7 +10,7 @@ const getCurrentScenarioLineNumber = ({
 }: ITestCaseHookParameter): number | undefined => {
     const currentScenarioId = pickle.astNodeIds[0]
     const matchingChild = gherkinDocument.feature?.children.find(
-        (child) => !!child.scenario && child.scenario.id === currentScenarioId,
+        (child) => !!child.scenario && child.scenario.id === currentScenarioId
     )
 
     return matchingChild?.scenario?.location.line
@@ -29,11 +29,11 @@ export const install = () => {
         this.snapshot.scenarioLine = line
     })
 
-    BeforeAll(function () {
+    BeforeAll(() => {
         clean.resetReferences()
     })
 
-    AfterAll(function () {
+    AfterAll(() => {
         if (cmdOptions.cleanSnapshots) clean.cleanSnapshots()
         statistics.printReport()
     })

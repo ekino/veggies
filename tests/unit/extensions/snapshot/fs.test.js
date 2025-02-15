@@ -1,4 +1,4 @@
-const fs = require('fs')
+const fs = require('node:fs')
 const fileSystem = require('../../../../lib/cjs/extensions/snapshot/fs.js')
 const { describe, beforeAll, afterEach, afterAll, test, expect } = require('vitest')
 

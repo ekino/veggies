@@ -1,20 +1,20 @@
+import { describe, expect, it } from 'vitest'
 import {
-    isNumber,
-    isEmpty,
-    isDefined,
-    isString,
-    isFunction,
-    getValue,
-    setValue,
-    isPlainObject,
-    template,
-    mapValues,
     findKey,
-    pick,
+    getValue,
+    isDefined,
+    isEmpty,
+    isFunction,
+    isNumber,
+    isPlainObject,
+    isString,
+    mapValues,
     omit,
     partial,
+    pick,
+    setValue,
+    template,
 } from '../../../src/utils/index.js'
-import { describe, it, expect } from 'vitest'
 
 describe('utils > index', () => {
     describe('isNumber', () => {
@@ -26,8 +26,8 @@ describe('utils > index', () => {
         })
 
         it('should return false for non-finite numbers and other types', () => {
-            expect(isNumber(NaN)).toBe(false)
-            expect(isNumber(Infinity)).toBe(false)
+            expect(isNumber(Number.NaN)).toBe(false)
+            expect(isNumber(Number.POSITIVE_INFINITY)).toBe(false)
             expect(isNumber('1')).toBe(false)
             expect(isNumber({})).toBe(false)
             expect(isNumber([])).toBe(false)
@@ -88,7 +88,7 @@ describe('utils > index', () => {
     describe('isFunction', () => {
         it('should return true for functions', () => {
             expect(isFunction(() => {})).toBe(true)
-            expect(isFunction(function () {})).toBe(true)
+            expect(isFunction(() => {})).toBe(true)
         })
 
         it('should return false for non-functions', () => {
@@ -195,7 +195,7 @@ describe('utils > index', () => {
         })
 
         it('should return false for functions', () => {
-            expect(isPlainObject(function () {})).toBe(false)
+            expect(isPlainObject(() => {})).toBe(false)
         })
 
         it('should return false for null', () => {

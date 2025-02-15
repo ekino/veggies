@@ -1,9 +1,9 @@
-import { Cookie, CookieJar } from 'tough-cookie'
+import axios, { type AxiosInstance, type AxiosResponse } from 'axios'
 import { wrapper } from 'axios-cookiejar-support'
-import { isPlainObject, isString } from '../../utils/index.js'
-import axios, { AxiosInstance, AxiosResponse } from 'axios'
 import FormData from 'form-data'
-import { CookieProperty, RequestBody, RequestHeaders, RequestOptions } from '../../types.js'
+import { Cookie, CookieJar } from 'tough-cookie'
+import type { CookieProperty, RequestBody, RequestHeaders, RequestOptions } from '../../types.js'
+import { isPlainObject, isString } from '../../utils/index.js'
 
 const BODY_TYPE_JSON = 'json'
 const BODY_TYPE_FORM = 'form'
@@ -26,7 +26,7 @@ const getClient = (cookieJar?: CookieJar): AxiosInstance => {
                     jar: cookieJar,
                     withCredentials: true,
                     validateStatus,
-                }),
+                })
             ) as AxiosInstance
         }
         return cookieInstance
@@ -48,7 +48,7 @@ class HttpApiClient {
     public query: Record<string, unknown> = {}
     public cookies: CookieProperty[] = []
     public cookieJar: CookieJar | undefined
-    public followRedirect: boolean = true
+    public followRedirect = true
     public response: AxiosResponse | undefined
     public responseCookies: Record<string, Cookie> = {}
 
@@ -220,8 +220,14 @@ class HttpApiClient {
      * - query
      * - body
      */
-    async makeRequest(method: string, path: string, baseUrl?: string): Promise<void> {
+    async makeRequest(
+        method: string,
+        requestPath: string,
+        originalBaseUrl?: string
+    ): Promise<void> {
         try {
+            let path = requestPath
+            let baseUrl = originalBaseUrl
             if (/https?:\/\//.test(path)) {
                 const url = new URL(path)
                 path = path.replace(url.origin, '')
@@ -241,7 +247,7 @@ class HttpApiClient {
             if (this.body) {
                 if (!verbsAcceptingBody.includes(method)) {
                     throw new Error(
-                        `Body is only allowed for ${verbsAcceptingBody.join(', ')} methods, found: ${method}`,
+                        `Body is only allowed for ${verbsAcceptingBody.join(', ')} methods, found: ${method}`
                     )
                 }
 
@@ -253,20 +259,22 @@ class HttpApiClient {
                     options.data = new URLSearchParams(this.body).toString()
                 } else if (this.bodyType === BODY_TYPE_MULTIPART) {
                     const formData = new FormData()
-                    Object.entries(this.body).forEach(([key, value]) => formData.append(key, value))
+                    for (const [key, value] of Object.entries(this.body)) {
+                        formData.append(key, value)
+                    }
                     options.data = formData
                 }
             }
 
             // Set initial cookie before make request
             if (this.cookieJar) {
-                this.cookies.forEach((cookie) => {
+                for (const cookie of this.cookies) {
                     if (isPlainObject(cookie)) {
                         this.cookieJar?.setCookie(new Cookie(cookie), fullUrl)
                     } else if (isString(cookie)) {
                         this.cookieJar?.setCookie(cookie, fullUrl)
                     }
-                })
+                }
             }
             const client = getClient(this.cookieJar)
             const _response = await client.request(options)
@@ -276,13 +284,13 @@ class HttpApiClient {
                 this.responseCookies = {}
                 const setCookieHeaders = this.response.headers['set-cookie']
                 if (setCookieHeaders) {
-                    setCookieHeaders.forEach((cookie) => {
+                    for (const cookie of setCookieHeaders) {
                         this.cookieJar?.setCookieSync(cookie, fullUrl)
-                    })
+                    }
                 }
-                this.cookieJar.getCookiesSync(fullUrl).forEach((cookie) => {
+                for (const cookie of this.cookieJar.getCookiesSync(fullUrl)) {
                     this.responseCookies[cookie.key] = cookie
-                })
+                }
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {

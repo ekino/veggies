@@ -1,6 +1,6 @@
 import * as definitions from './definitions.js'
-import * as hooks from './hooks.js'
 import extendWorld from './extend_world.js'
+import * as hooks from './hooks.js'
 
 /**
  * Extends cucumber world object.

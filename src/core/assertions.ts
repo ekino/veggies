@@ -1,8 +1,8 @@
 import * as chai from 'chai'
 import { DateTime } from 'luxon'
+import { getValue, isNullsy, isObject } from '../utils/index.js'
 import * as Cast from './cast.js'
 import { registerChaiAssertion } from './custom_chai_assertions.js'
-import { getValue, isObject } from '../utils/index.js'
 
 const { expect } = chai
 
@@ -63,7 +63,7 @@ const RuleName = Object.freeze({
  */
 export const countNestedProperties = (object: Record<string, unknown>): number => {
     let propertiesCount = 0
-    Object.keys(object).forEach((key) => {
+    for (const key of Object.keys(object)) {
         const val = object[key]
         if (isObject(val)) {
             const count = countNestedProperties(val)
@@ -71,7 +71,7 @@ export const countNestedProperties = (object: Record<string, unknown>): number =
         } else {
             propertiesCount++
         }
-    })
+    }
 
     return propertiesCount
 }
@@ -108,9 +108,9 @@ export const countNestedProperties = (object: Record<string, unknown>): number =
 export const assertObjectMatchSpec = (
     object: Record<string, unknown>,
     spec: ObjectFieldSpec[],
-    exact = false,
+    exact = false
 ): void => {
-    spec.forEach(({ field, matcher, value }) => {
+    for (const { field, matcher, value } of spec) {
         const currentValue = getValue(object, field)
         const expectedValue = Cast.getCastedValue(value) as string
 
@@ -123,7 +123,7 @@ export const assertObjectMatchSpec = (
                     currentValue,
                     `Property '${field}' (${currentValue}) ${
                         rule.isNegated ? 'matches' : 'does not match'
-                    } '${expectedValue}'`,
+                    } '${expectedValue}'`
                 )
                 if (rule.isNegated) {
                     baseExpect.to.not.match(new RegExp(expectedValue))
@@ -137,7 +137,7 @@ export const assertObjectMatchSpec = (
                     currentValue,
                     `Property '${field}' (${currentValue}) ${
                         rule.isNegated ? 'contains' : 'does not contain'
-                    } '${expectedValue}'`,
+                    } '${expectedValue}'`
                 )
                 if (rule.isNegated) {
                     baseExpect.to.not.contain(expectedValue)
@@ -151,7 +151,7 @@ export const assertObjectMatchSpec = (
                     currentValue,
                     `Property '${field}' (${currentValue}) ${
                         rule.isNegated ? 'starts with' : 'does not start with'
-                    } '${expectedValue}'`,
+                    } '${expectedValue}'`
                 )
                 if (rule.isNegated) {
                     baseExpect.to.not.startWith(expectedValue)
@@ -165,7 +165,7 @@ export const assertObjectMatchSpec = (
                     currentValue,
                     `Property '${field}' (${currentValue}) ${
                         rule.isNegated ? 'ends with' : 'does not end with'
-                    } '${expectedValue}'`,
+                    } '${expectedValue}'`
                 )
                 if (rule.isNegated) {
                     baseExpect.to.not.endWith(expectedValue)
@@ -177,7 +177,7 @@ export const assertObjectMatchSpec = (
             case RuleName.Present: {
                 const baseExpect = expect(
                     currentValue,
-                    `Property '${field}' is ${rule.isNegated ? 'defined' : 'undefined'}`,
+                    `Property '${field}' is ${rule.isNegated ? 'defined' : 'undefined'}`
                 )
                 if (rule.isNegated) {
                     baseExpect.to.be.undefined
@@ -188,9 +188,9 @@ export const assertObjectMatchSpec = (
             }
             case RuleName.RelativeDate: {
                 const match = relativeDateValueRegex.exec(expectedValue)
-                if (match == undefined) throw new Error('relative date arguments are invalid')
+                if (isNullsy(match)) throw new Error('relative date arguments are invalid')
                 const [, amount, unit, locale, format] = match
-                if (!locale || amount == undefined || !unit || !format) break
+                if (!locale || isNullsy(amount) || !unit || !format) break
 
                 const normalizedLocale = Intl.getCanonicalLocales(locale)[0]
 
@@ -205,7 +205,7 @@ export const assertObjectMatchSpec = (
                     currentValue,
                     `Expected property '${field}' to ${
                         rule.isNegated ? 'not ' : ''
-                    }equal '${expectedDate}', but found '${currentValue}'`,
+                    }equal '${expectedDate}', but found '${currentValue}'`
                 )
                 if (rule.isNegated) {
                     baseExpect.to.not.be.deep.equal(expectedDate)
@@ -219,7 +219,7 @@ export const assertObjectMatchSpec = (
                     currentValue,
                     `Property '${field}' (${currentValue}) type is${
                         rule.isNegated ? '' : ' not'
-                    } '${expectedValue}'`,
+                    } '${expectedValue}'`
                 )
                 if (rule.isNegated) {
                     baseExpect.to.not.be.a(expectedValue)
@@ -233,7 +233,7 @@ export const assertObjectMatchSpec = (
                     currentValue,
                     `Expected property '${field}' to${
                         rule.isNegated ? ' not' : ''
-                    } equal '${value}', but found '${currentValue}'`,
+                    } equal '${value}', but found '${currentValue}'`
                 )
                 if (rule.isNegated) {
                     baseExpect.to.not.be.deep.equal(expectedValue)
@@ -243,14 +243,14 @@ export const assertObjectMatchSpec = (
                 break
             }
         }
-    })
+    }
 
     // We check we have exactly the same number of properties as expected
     if (exact === true) {
         const propertiesCount = countNestedProperties(object)
         expect(
             propertiesCount,
-            'Expected json response to fully match spec, but it does not',
+            'Expected json response to fully match spec, but it does not'
         ).to.be.equal(spec.length)
     }
 }

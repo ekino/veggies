@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process'
 import path from 'node:path'
+import { isNotNullsy } from '../../utils/index.js'
 
 export type CliArgs = ConstructorParameters<typeof Cli>
 
@@ -72,7 +73,7 @@ class Cli {
      */
     getOutput(type = 'stdout'): string {
         if (type === 'stdout') return this.stdout
-        else if (type === 'stderr') return this.stderr
+        if (type === 'stderr') return this.stderr
 
         throw new TypeError(`invalid output type '${type}', must be one of: 'stdout', 'stderr'`)
     }
@@ -113,7 +114,7 @@ class Cli {
 
             let killer: NodeJS.Timeout | undefined
             let killed = false
-            if (this.killSignal != undefined) {
+            if (isNotNullsy(this.killSignal)) {
                 killer = setTimeout(() => {
                     cmd.kill(this.killSignal ?? undefined)
                     killed = true
@@ -133,8 +134,8 @@ class Cli {
 
                         return reject(
                             new Error(
-                                `process.kill('${this.killSignal}') scheduled but process exited (delay: ${this.killDelay}ms)`,
-                            ),
+                                `process.kill('${this.killSignal}') scheduled but process exited (delay: ${this.killDelay}ms)`
+                            )
                         )
                     }
                 }

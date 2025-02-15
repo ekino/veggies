@@ -1,9 +1,7 @@
-'use strict'
-
-import querystring from 'querystring'
+import querystring from 'node:querystring'
 import { Given, Then, world } from '@cucumber/cucumber'
-import nock from 'nock'
 import { expect } from 'chai'
+import nock from 'nock'
 
 Given(
     /^I mock (?:(POST|GET) )?http call to forward request body for path (.+)$/,
@@ -17,7 +15,7 @@ Given(
         }
 
         nock('http://fake.io').get(path).reply(200)
-    },
+    }
 )
 
 Then(/^response should match url encoded snapshot (.+)$/, (snapshotId) => {

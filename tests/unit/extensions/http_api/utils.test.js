@@ -1,5 +1,5 @@
+import { describe, expect, test } from 'vitest'
 import { parseMatchExpression } from '../../../../src/extensions/http_api/utils.js'
-import { describe, test, expect } from 'vitest'
 
 describe('extensions > http_api > utils', () => {
     test('parseMatchExpression should throw when expression is undefined', () => {
@@ -8,7 +8,7 @@ describe('extensions > http_api > utils', () => {
 
     test('parseMatchExpression should throw when expression does not match', () => {
         expect(() => parseMatchExpression('does not match')).toThrow(
-            "'does not match' is not a valid expression",
+            "'does not match' is not a valid expression"
         )
     })
 

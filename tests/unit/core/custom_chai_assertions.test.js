@@ -1,6 +1,6 @@
 import * as chai from 'chai'
+import { beforeAll, expect, test, vi } from 'vitest'
 import { registerChaiAssertion } from '../../../src/core/custom_chai_assertions.js'
-import { beforeAll, test, expect, vi } from 'vitest'
 
 beforeAll(() => {
     chai.use(registerChaiAssertion)
@@ -27,13 +27,13 @@ test('chai startWith should pass', () => {
 
 test('chai startWith should fail', () => {
     expect(() => chai.expect('foo').to.startWith('ba')).toThrowError(
-        "expected 'foo' to start with 'ba'",
+        "expected 'foo' to start with 'ba'"
     )
 })
 
 test('chai startWith should fail with a negated message', () => {
     expect(() => chai.expect('foo').not.to.startWith('fo')).toThrowError(
-        "expected 'foo' not to start with 'fo'",
+        "expected 'foo' not to start with 'fo'"
     )
 })
 
@@ -43,12 +43,12 @@ test('chai endWith should pass', () => {
 
 test('chai endWith should fail', () => {
     expect(() => chai.expect('foo').to.endWith('ar')).toThrowError(
-        "expected 'foo' to end with 'ar'",
+        "expected 'foo' to end with 'ar'"
     )
 })
 
 test('chai endWith should fail with a negated message', () => {
     expect(() => chai.expect('foo').not.to.endWith('oo')).toThrowError(
-        "expected 'foo' not to end with 'oo'",
+        "expected 'foo' not to end with 'oo'"
     )
 })

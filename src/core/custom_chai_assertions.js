@@ -4,7 +4,7 @@ export const registerChaiAssertion = (chai) => {
             typeof this._obj === 'string' && this._obj.startsWith(expected),
             `expected #{this} to start with #{exp}`,
             `expected #{this} not to start with #{exp}`,
-            expected,
+            expected
         )
     })
     chai.Assertion.addMethod('endWith', function (expected) {
@@ -12,7 +12,7 @@ export const registerChaiAssertion = (chai) => {
             typeof this._obj === 'string' && this._obj.endsWith(expected),
             `expected #{this} to end with #{exp}`,
             `expected #{this} not to end with #{exp}`,
-            expected,
+            expected
         )
     })
 }

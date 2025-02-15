@@ -1,7 +1,5 @@
-'use strict'
-
 import { setWorldConstructor } from '@cucumber/cucumber'
-import { state, fixtures, httpApi, cli, fileSystem, snapshot } from '../../../lib/esm/index.js'
+import { cli, fileSystem, fixtures, httpApi, snapshot, state } from '../../../lib/esm/index.js'
 
 setWorldConstructor(function () {
     state.extendWorld(this)

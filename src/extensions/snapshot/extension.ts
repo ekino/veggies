@@ -1,29 +1,29 @@
 import { format as prettyFormat } from 'pretty-format'
+import { type ObjectFieldSpec, assertObjectMatchSpec } from '../../core/assertions.js'
+import type { SnapshotContent, SnapshotOptions } from '../../types.js'
 import { setValue } from '../../utils/index.js'
+import { referenceSnapshot } from './clean.js'
 import {
     extractScenarios,
     normalizeNewlines,
     prefixSnapshots,
     readSnapshotFile,
+    diff as snapshotDiff,
     snapshotsPath,
     writeSnapshotFile,
-    diff as snapshotDiff,
 } from './snapshot.js'
-import { assertObjectMatchSpec, ObjectFieldSpec } from '../../core/assertions.js'
-import { referenceSnapshot } from './clean.js'
 import { created, updated } from './statistics.js'
-import { SnapshotContent, SnapshotOptions } from '../../types.js'
 
 export type SnapshotArgs = ConstructorParameters<typeof Snapshot>
 
 class Snapshot {
     public options: SnapshotOptions = {}
-    public shouldUpdate: boolean = false
-    public cleanSnapshots: boolean = false
-    public preventSnapshotsCreation: boolean = false
-    public featureFile: string = ''
-    public scenarioLine: number = -1
-    public _snapshotsCount: number = 0
+    public shouldUpdate = false
+    public cleanSnapshots = false
+    public preventSnapshotsCreation = false
+    public featureFile = ''
+    public scenarioLine = -1
+    public _snapshotsCount = 0
 
     constructor(options: SnapshotOptions) {
         this.options = options || {}
@@ -44,9 +44,9 @@ class Snapshot {
         assertObjectMatchSpec(expectedContent, spec) // Check optional fields
 
         const copy = structuredClone(expectedContent)
-        spec.forEach(({ field, matcher, value }) => {
+        for (const { field, matcher, value } of spec) {
             if (field) setValue(copy, field, `${matcher}(${value})`)
-        })
+        }
 
         this.expectToMatch(copy)
     }
@@ -64,17 +64,18 @@ class Snapshot {
      * If option "-u" or "--updateSnapshots" is used, all snapshots will be updated
      * If options "--cleanSnapshots" is used, unused stored snapshots will be removed.
      */
-    expectToMatch(expectedContent: string | SnapshotContent): void {
+    expectToMatch(content: string | SnapshotContent): void {
+        let expectedContent = content
         expectedContent = prettyFormat(expectedContent)
         expectedContent = normalizeNewlines(expectedContent)
-        let snapshotsFile = snapshotsPath(this.featureFile, this.options)
+        const snapshotsFile = snapshotsPath(this.featureFile, this.options)
 
         const scenarios = extractScenarios(this.featureFile)
         const snapshotsPrefix = prefixSnapshots(scenarios)[this.scenarioLine]
 
         if (!snapshotsPrefix)
             throw new Error(
-                `Can not do a snapshot. Scenario not found in file ${this.featureFile} on line ${this.scenarioLine}`,
+                `Can not do a snapshot. Scenario not found in file ${this.featureFile} on line ${this.scenarioLine}`
             )
 
         this._snapshotsCount += 1

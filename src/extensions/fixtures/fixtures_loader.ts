@@ -1,7 +1,7 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { pathToFileURL } from 'node:url'
 import fastGlob from 'fast-glob'
-import { pathToFileURL } from 'url'
 import yaml from 'js-yaml'
 import { getError } from '../../utils/index.js'
 
@@ -57,8 +57,8 @@ class FixturesLoader {
                 if (!data) {
                     return Promise.reject(
                         new Error(
-                            `Fixture file is invalid, yaml parsing resulted in undefined data for file: ${file}`,
-                        ),
+                            `Fixture file is invalid, yaml parsing resulted in undefined data for file: ${file}`
+                        )
                     )
                 }
 
@@ -66,8 +66,8 @@ class FixturesLoader {
             } catch (err) {
                 return Promise.reject(
                     new Error(
-                        `Unable to parse yaml fixture file: ${file}.\nerror: ${getError(err).message}`,
-                    ),
+                        `Unable to parse yaml fixture file: ${file}.\nerror: ${getError(err).message}`
+                    )
                 )
             }
         })
@@ -85,8 +85,8 @@ class FixturesLoader {
             } catch (err) {
                 return Promise.reject(
                     new Error(
-                        `Unable to parse json fixture file: ${file}.\nerror: ${getError(err).message}`,
-                    ),
+                        `Unable to parse json fixture file: ${file}.\nerror: ${getError(err).message}`
+                    )
                 )
             }
         })
@@ -106,8 +106,8 @@ class FixturesLoader {
                             [
                                 `JavaScript fixture file should export default function.\n`,
                                 `Make sure you declared 'export default function' in ${file}`,
-                            ].join(''),
-                        ),
+                            ].join('')
+                        )
                     )
                 }
 
@@ -116,8 +116,8 @@ class FixturesLoader {
             .catch((err) => {
                 return Promise.reject(
                     new Error(
-                        `An error occurred while loading fixture file: ${file}\nerror: ${getError(err).message}`,
-                    ),
+                        `An error occurred while loading fixture file: ${file}\nerror: ${getError(err).message}`
+                    )
                 )
             })
     }
@@ -134,7 +134,7 @@ class FixturesLoader {
     async load(fixture: string): Promise<unknown> {
         if (!this.featureUri)
             return Promise.reject(
-                new Error(`Cannot load fixture: ${fixture}, no feature uri defined`),
+                new Error(`Cannot load fixture: ${fixture}, no feature uri defined`)
             )
 
         const featureDir = path.dirname(this.featureUri)
@@ -153,8 +153,8 @@ class FixturesLoader {
                             `Found ${fixturesCount} matching fixture files, `,
                             `you should have only one matching '${fixture}', matches:\n  `,
                             `- ${files.join('\n  - ')}`,
-                        ].join(''),
-                    ),
+                        ].join('')
+                    )
                 )
             }
 

@@ -47,7 +47,8 @@ const getSpacesLength = (text?: string): number => {
  *
  * Warning : First line and last line will always be ignored
  */
-export const dedent = (text: string | string[] | TemplateStringsArray): string => {
+export const dedent = (inputText: string | string[] | TemplateStringsArray): string => {
+    let text = inputText
     if (typeof text !== 'string') text = text[0] || ''
 
     let lines = text.split('\n')

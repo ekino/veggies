@@ -1,11 +1,11 @@
+import type { IWorld } from '@cucumber/cucumber'
 import Registry from '../../core/registry.js'
-import snapshot from './extension.js'
+import type { SnapshotOptions } from '../../types.js'
 import * as cmdOptions from './cmd_options.js'
-import { IWorld } from '@cucumber/cucumber'
-import { SnapshotOptions } from '../../types.js'
+import snapshot from './extension.js'
 
-const extendWorld = (world: IWorld, options?: SnapshotOptions) => {
-    options = { ...cmdOptions, ...options }
+const extendWorld = (world: IWorld, snapshotOptions?: SnapshotOptions) => {
+    const options = { ...cmdOptions, ...(snapshotOptions || {}) }
 
     world.snapshot = snapshot(options)
     Registry.registerExtension(world, 'snapshot')

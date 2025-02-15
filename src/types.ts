@@ -1,5 +1,5 @@
-import { AxiosHeaders, AxiosRequestConfig, RawAxiosRequestHeaders } from 'axios'
-import { CookieJar } from 'tough-cookie'
+import type { AxiosHeaders, AxiosRequestConfig, RawAxiosRequestHeaders } from 'axios'
+import type { CookieJar } from 'tough-cookie'
 
 export type PlainObject = Record<string, unknown>
 
@@ -74,3 +74,15 @@ export type SnapshotFile = {
     file: string
     name: string
 }
+
+export type CastFunction = (value?: string | null) => CastedValue
+export type CastFunctions = Record<string, CastFunction>
+export type CastedValue =
+    | string
+    | number
+    | boolean
+    | Record<string, unknown>
+    | unknown[]
+    | null
+    | undefined
+export type CastType = 'string' | 'boolean' | 'number' | 'date' | 'array' | 'null' | 'undefined'

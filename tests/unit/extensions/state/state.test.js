@@ -1,5 +1,5 @@
+import { expect, test } from 'vitest'
 import State from '../../../../src/extensions/state/state.js'
-import { test, expect } from 'vitest'
 
 const state = State()
 

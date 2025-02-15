@@ -1,7 +1,7 @@
-import * as snapshot from './snapshot.js'
+import { isEmpty, omit, pick } from '../../utils/index.js'
 import * as fileSystem from './fs.js'
+import * as snapshot from './snapshot.js'
 import * as statistics from './statistics.js'
-import { isEmpty, pick, omit } from '../../utils/index.js'
 
 export let _snapshots: Record<string, string[]> = {}
 
@@ -9,7 +9,7 @@ export let _snapshots: Record<string, string[]> = {}
  * Store a snapshot name for a snapshot file
  * This can be used after to clean up unused snapshots
  */
-export const referenceSnapshot = function (file: string, snapshotName: string): void {
+export const referenceSnapshot = (file: string, snapshotName: string): void => {
     _snapshots[file] = _snapshots[file] || []
     _snapshots[file].push(snapshotName)
 }
@@ -18,7 +18,7 @@ export const referenceSnapshot = function (file: string, snapshotName: string): 
  * Clean snapshots names and files
  * Used after tests to clear entries
  */
-export const resetReferences = function (): void {
+export const resetReferences = (): void => {
     _snapshots = {}
 }
 
@@ -27,8 +27,8 @@ export const resetReferences = function (): void {
  * If a snapshot file is empty, it's deleted
  * Only files that have been referenced will be cleaned
  */
-export const cleanSnapshots = function (): void {
-    Object.entries(_snapshots).forEach(([file, snapshotNames]): void => {
+export const cleanSnapshots = (): void => {
+    for (const [file, snapshotNames] of Object.entries(_snapshots)) {
         if (isEmpty(snapshotNames)) {
             fileSystem.remove(file)
             return
@@ -39,8 +39,8 @@ export const cleanSnapshots = function (): void {
         snapshot.writeSnapshotFile(file, newContent)
 
         const omittedContent = omit(content, snapshotNames)
-        Object.entries(omittedContent).forEach(([snapshotName, _snapshotContent]) => {
+        for (const [snapshotName, _snapshotContent] of Object.entries(omittedContent)) {
             statistics.removed.push({ file, name: snapshotName })
-        })
-    })
+        }
+    }
 }

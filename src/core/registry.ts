@@ -1,4 +1,4 @@
-import { IWorld } from '@cucumber/cucumber'
+import type { IWorld } from '@cucumber/cucumber'
 
 const VEGGIES_NAMESPACE = '_registredExtensions'
 

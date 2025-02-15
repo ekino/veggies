@@ -1,4 +1,4 @@
-import { SnapshotFile } from '../../types.js'
+import type { SnapshotFile } from '../../types.js'
 import { GREEN, RED, RESET, YELLOW } from '../../utils/colors.js'
 
 /**

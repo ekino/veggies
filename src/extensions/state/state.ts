@@ -1,5 +1,5 @@
-import { CastedValue } from '../../core/cast.js'
-import { setValue, getValue, template, isPlainObject, mapValues } from '../../utils/index.js'
+import type { CastedValue } from '../../types.js'
+import { getValue, isPlainObject, mapValues, setValue, template } from '../../utils/index.js'
 
 export type StateArgs = ConstructorParameters<typeof State>
 
