@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process'
 import path from 'node:path'
 
-type CliArgs = ConstructorParameters<typeof Cli>
+export type CliArgs = ConstructorParameters<typeof Cli>
 
 class Cli {
     public cwd: string

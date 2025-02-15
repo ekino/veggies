@@ -1,5 +1,5 @@
+import { SnapshotFile } from '../../types.js'
 import { GREEN, RED, RESET, YELLOW } from '../../utils/colors.js'
-import { SnapshotFile } from './snapshot.js'
 
 /**
  * Store snapshot identifier of created snapshots

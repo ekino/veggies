@@ -5,8 +5,6 @@ import {
     normalizeNewlines,
     prefixSnapshots,
     readSnapshotFile,
-    SnapshotContent,
-    SnapshotOptions,
     snapshotsPath,
     writeSnapshotFile,
     diff as snapshotDiff,
@@ -14,8 +12,9 @@ import {
 import { assertObjectMatchSpec, ObjectFieldSpec } from '../../core/assertions.js'
 import { referenceSnapshot } from './clean.js'
 import { created, updated } from './statistics.js'
+import { SnapshotContent, SnapshotOptions } from '../../types.js'
 
-type SnapshotArgs = ConstructorParameters<typeof Snapshot>
+export type SnapshotArgs = ConstructorParameters<typeof Snapshot>
 
 class Snapshot {
     public options: SnapshotOptions = {}

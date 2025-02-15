@@ -3,32 +3,11 @@ import { diff as jestDiff } from 'jest-diff'
 import naturalCompare from 'natural-compare'
 import { GREEN, RED, RESET } from '../../utils/colors.js'
 import * as fileSystem from './fs.js'
+import { Scenario, SnapshotContent, SnapshotOptions } from '../../types.js'
 
 const JEST_NO_DIFF_MESSAGE = 'Compared values have no visual difference.'
 
 export const scenarioRegex = /^[\s]*Scenario:[\s]*(.*[^\s])[\s]*$/
-
-export type Scenario = {
-    line: number
-    name?: string
-    prefix?: string
-}
-
-export type SnapshotOptions = {
-    cleanSnapshots?: boolean
-    updateSnapshots?: boolean
-    preventSnapshotsCreation?: boolean
-    snapshotsDirname?: string
-    snapshotsFileExtension?: string
-}
-
-export type SnapshotFile = {
-    file: string
-    name: string
-}
-
-// {snapshot_name: snapshot_content}
-export type SnapshotContent = Record<string, string | undefined>
 
 /**
  * Extract scenarios from a feature file

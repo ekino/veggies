@@ -1,7 +1,7 @@
 import path from 'node:path'
 import fs, { Stats } from 'node:fs'
 
-type FileSystemArgs = ConstructorParameters<typeof FileSystem>
+export type FileSystemArgs = ConstructorParameters<typeof FileSystem>
 
 class FileSystem {
     constructor() {}

@@ -1,15 +1,4 @@
-export type PlainObject = Record<string, unknown>
-export type Predicate<T> = (value: T | undefined) => boolean
-export type Path = string | string[]
-export type InterpolateOptions = {
-    interpolate?: RegExp
-}
-
-export type Error = {
-    code?: string
-    stack?: string
-    message: string
-} & Record<string, unknown>
+import { InterpolateOptions, Path, PlainObject, Predicate, VeggiesError } from '../types.js'
 
 export const isNumber = (n: unknown): n is number => Number.isFinite(n)
 
@@ -130,7 +119,7 @@ export const partial =
     (...args: Parameters<T>) =>
         fn(...partials, ...args) as ReturnType<T>
 
-export const getError = (error: unknown): Error => {
+export const getError = (error: unknown): VeggiesError => {
     if (isObject(error)) return { ...error, message: error['message'] as string }
     if (typeof error === 'string') return { message: error }
     if (!error) return { message: 'unknown error' }

@@ -5,7 +5,7 @@ import { pathToFileURL } from 'url'
 import yaml from 'js-yaml'
 import { getError } from '../../utils/index.js'
 
-type FixturesArgs = ConstructorParameters<typeof FixturesLoader>
+export type FixturesArgs = ConstructorParameters<typeof FixturesLoader>
 
 class FixturesLoader {
     public fixturesDir: string

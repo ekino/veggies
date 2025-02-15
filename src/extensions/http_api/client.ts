@@ -1,14 +1,9 @@
 import { Cookie, CookieJar } from 'tough-cookie'
 import { wrapper } from 'axios-cookiejar-support'
 import { isPlainObject, isString } from '../../utils/index.js'
-import axios, {
-    AxiosHeaders,
-    AxiosInstance,
-    AxiosRequestConfig,
-    AxiosResponse,
-    RawAxiosRequestHeaders,
-} from 'axios'
+import axios, { AxiosInstance, AxiosResponse } from 'axios'
 import FormData from 'form-data'
+import { CookieProperty, RequestBody, RequestHeaders, RequestOptions } from '../../types.js'
 
 const BODY_TYPE_JSON = 'json'
 const BODY_TYPE_FORM = 'form'
@@ -39,38 +34,6 @@ const getClient = (cookieJar?: CookieJar): AxiosInstance => {
     return axiosInstance
 }
 
-export type Method =
-    | 'get'
-    | 'GET'
-    | 'delete'
-    | 'DELETE'
-    | 'head'
-    | 'HEAD'
-    | 'options'
-    | 'OPTIONS'
-    | 'post'
-    | 'POST'
-    | 'put'
-    | 'PUT'
-    | 'patch'
-    | 'PATCH'
-    | 'purge'
-    | 'PURGE'
-    | 'link'
-    | 'LINK'
-    | 'unlink'
-    | 'UNLINK'
-export type CookieProperty = string | Record<string, unknown>
-export type Headers =
-    | (RawAxiosRequestHeaders &
-          Partial<
-              {
-                  [Key in Method as Lowercase<Key>]: AxiosHeaders
-              } & { common: AxiosHeaders }
-          >)
-    | AxiosHeaders
-export type RequestOptions = AxiosRequestConfig & { jar?: CookieJar; headers: Headers }
-export type RequestBody = string | string[][] | Record<string, string> | URLSearchParams
 export type HttpApiClientArgs = ConstructorParameters<typeof HttpApiClient>
 
 /**
@@ -81,7 +44,7 @@ export type HttpApiClientArgs = ConstructorParameters<typeof HttpApiClient>
 class HttpApiClient {
     public body: RequestBody | undefined
     public bodyType: string = BODY_TYPE_JSON
-    public headers: Headers = {}
+    public headers: RequestHeaders = {}
     public query: Record<string, unknown> = {}
     public cookies: CookieProperty[] = []
     public cookieJar: CookieJar | undefined
@@ -165,7 +128,7 @@ class HttpApiClient {
     /**
      * Sets request headers.
      */
-    setHeaders(headers: Headers): void {
+    setHeaders(headers: RequestHeaders): void {
         this.headers = headers || {}
     }
 

@@ -7,8 +7,9 @@ import * as Cast from '../../core/cast.js'
 import { assertObjectMatchSpec } from '../../core/assertions.js'
 import { parseMatchExpression } from './utils.js'
 import { getValue, findKey, isString } from '../../utils/index.js'
-import { CookieProperty, Headers, HttpApiClient, RequestBody } from './client.js'
+import { HttpApiClient } from './client.js'
 import { AxiosResponse } from 'axios'
+import { CookieProperty, RequestBody, RequestHeaders } from '../../types.js'
 
 const STATUS_MESSAGES = Object.values(STATUS_CODES)
     .map((code) => (code ? code.toLowerCase() : undefined))
@@ -31,7 +32,7 @@ export const install = ({ baseUrl = '' } = {}): void => {
      */
     Given(/^(?:I )?set request headers$/, (step: DataTable): void => {
         world.httpApiClient.setHeaders(
-            Cast.getCastedObject(world.state.populateObject(step.rowsHash())) as Headers,
+            Cast.getCastedObject(world.state.populateObject(step.rowsHash())) as RequestHeaders,
         )
     })
 

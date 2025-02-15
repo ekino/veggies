@@ -1,5 +1,5 @@
 import { Then, world, DataTable } from '@cucumber/cucumber'
-import { SnapshotContent } from './snapshot.js'
+import { SnapshotContent } from '../../types.js'
 
 export const install = (): void => {
     /**

@@ -1,7 +1,7 @@
 import { CastedValue } from '../../core/cast.js'
 import { setValue, getValue, template, isPlainObject, mapValues } from '../../utils/index.js'
 
-type StateArgs = ConstructorParameters<typeof State>
+export type StateArgs = ConstructorParameters<typeof State>
 
 class State {
     public state: Record<string, unknown>
