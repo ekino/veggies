@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterAll, afterEach, vi } from 'vitest'
+import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import * as statistics from '../../../../src/extensions/snapshot/statistics.js'
 
 const stripAnsi = (str: string) => str.replace(/\x1b\[[0-9;]*m/g, '')

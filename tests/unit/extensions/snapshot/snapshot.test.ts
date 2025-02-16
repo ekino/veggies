@@ -1,10 +1,10 @@
-import { describe, it, expect, afterEach, vi, beforeEach } from 'vitest'
-import * as jestDiff from 'jest-diff'
-import * as snapshot from '../../../../src/extensions/snapshot/snapshot.js'
-import * as fileSystem from '../../../../src/extensions/snapshot/fs.js'
-import { dedent } from '../../../../src/extensions/snapshot/dedent.js'
-import { GREEN, RED, RESET } from '../../../../src/utils/colors.js'
 import type { Stats } from 'node:fs'
+import * as jestDiff from 'jest-diff'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { dedent } from '../../../../src/extensions/snapshot/dedent.js'
+import * as fileSystem from '../../../../src/extensions/snapshot/fs.js'
+import * as snapshot from '../../../../src/extensions/snapshot/snapshot.js'
+import { GREEN, RED, RESET } from '../../../../src/utils/colors.js'
 
 vi.mock('jest-diff', () => ({ diff: vi.fn() }))
 vi.mock('../../../../src/extensions/snapshot/fs.js', () => ({

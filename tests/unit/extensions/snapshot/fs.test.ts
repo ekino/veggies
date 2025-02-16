@@ -1,6 +1,6 @@
-import { describe, it, expect, beforeAll, afterEach, afterAll, vi } from 'vitest'
-import * as fileSystem from '../../../../src/extensions/snapshot/fs.js'
 import fs, { type Stats } from 'node:fs'
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
+import * as fileSystem from '../../../../src/extensions/snapshot/fs.js'
 
 describe('logger middleware default', () => {
     beforeAll(() => {

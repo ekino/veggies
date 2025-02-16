@@ -1,1 +1,1 @@
-exports.noDefaultFunction = () => ({ type: 'javascript module', testing: true })
+export const noDefaultFunction = () => ({ type: 'javascript module', testing: true })
