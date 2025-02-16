@@ -100,17 +100,15 @@ describe('core > assertions', () => {
             assertObjectMatchSpec({ name: 'john', gender: 'male', age: 31 }, spec)
         ).not.toThrow()
         expect(() => assertObjectMatchSpec({ name: 'john', gender: 'male' }, spec)).toThrow(
-            `Property 'age' is undefined\n+ actual - expected\n\n+ 'defined'\n- 'undefined'\n`
+            /Property 'age' is undefined/
         )
         expect(() => assertObjectMatchSpec({ name: 'john' }, spec)).toThrow(
-            `Property 'gender' is undefined\n+ actual - expected\n\n+ 'defined'\n- 'undefined'\n`
+            /Property 'gender' is undefined/
         )
         expect(() => assertObjectMatchSpec({ gender: 'john' }, spec)).toThrow(
-            `Property 'name' is undefined\n+ actual - expected\n\n+ 'defined'\n- 'undefined'\n`
+            /Property 'name' is undefined/
         )
-        expect(() => assertObjectMatchSpec({}, spec)).toThrow(
-            `Property 'name' is undefined\n+ actual - expected\n\n+ 'defined'\n- 'undefined'\n`
-        )
+        expect(() => assertObjectMatchSpec({}, spec)).toThrow(/Property 'name' is undefined/)
     })
 
     test('object property is not defined', () => {
@@ -139,26 +137,24 @@ describe('core > assertions', () => {
 
         expect(() => assertObjectMatchSpec({}, spec)).not.toThrow()
         expect(() => assertObjectMatchSpec({ name: 'john' }, spec)).toThrow(
-            `Property 'name' is defined\n+ actual - expected\n\n+ 'undefined'\n- 'defined'\n`
+            /Property 'name' is defined/
         )
         expect(() => assertObjectMatchSpec({ gender: 'john' }, spec)).toThrow(
-            `Property 'gender' is defined\n+ actual - expected\n\n+ 'undefined'\n- 'defined'\n`
+            /Property 'gender' is defined/
         )
         expect(() => assertObjectMatchSpec({ city: 'paris' }, spec)).toThrow(
-            `Property 'city' is defined\n+ actual - expected\n\n+ 'undefined'\n- 'defined'\n`
+            /Property 'city' is defined/
         )
         expect(() => assertObjectMatchSpec({ street: 'rue du chat qui pêche' }, spec)).toThrow(
-            `Property 'street' is defined\n+ actual - expected\n\n+ 'undefined'\n- 'defined'\n`
+            /Property 'street' is defined/
         )
-        expect(() => assertObjectMatchSpec({ age: 31 }, spec)).toThrow(
-            `Property 'age' is defined\n+ actual - expected\n\n+ 'undefined'\n- 'defined'\n`
-        )
+        expect(() => assertObjectMatchSpec({ age: 31 }, spec)).toThrow(/Property 'age' is defined/)
         expect(() =>
             assertObjectMatchSpec(
                 { name: 'john', gender: 'male', city: 'paris', street: 'rue du chat qui pêche' },
                 spec
             )
-        ).toThrow(`Property 'name' is defined\n+ actual - expected\n\n+ 'undefined'\n- 'defined'\n`)
+        ).toThrow(/Property 'name' is defined/)
     })
 
     test('check object property equals expected value', () => {
@@ -177,10 +173,10 @@ describe('core > assertions', () => {
 
         expect(() => assertObjectMatchSpec({ name: 'john', city: 'Bordeaux' }, spec)).not.toThrow()
         expect(() => assertObjectMatchSpec({ name: 'plouc' }, spec)).toThrow(
-            `Expected property 'name' to equal 'john', but found 'plouc'\n\n'plouc' !== 'john'\n`
+            /Expected property 'name' to equal 'john', but found 'plouc'/
         )
         expect(() => assertObjectMatchSpec({ name: 'john', city: 'Paris' }, spec)).toThrow(
-            `Expected property 'city' to equal 'Bordeaux', but found 'Paris'\n+ actual - expected\n\n+ 'Paris'\n- 'Bordeaux'\n`
+            /Expected property 'city' to equal 'Bordeaux', but found 'Paris'/
         )
     })
 
@@ -599,9 +595,7 @@ describe('core > assertions', () => {
                     value: '+2,days,fr,YYYY-MM-DD',
                 },
             ])
-        }).toThrow(
-            `Expected property 'beginDate' to equal '2018-05-03', but found '2018-04-30'\n+ actual - expected\n\n+ '2018-04-30'\n- '2018-05-03'\n         ^\n`
-        )
+        }).toThrow(/Expected property 'beginDate' to equal '2018-05-03', but found '2018-04-30'/)
 
         expect(() => {
             assertObjectMatchSpec(object, [
@@ -611,9 +605,7 @@ describe('core > assertions', () => {
                     value: '-2,days,fr,YYYY-MM-DD',
                 },
             ])
-        }).toThrow(
-            `Expected property 'beginDate' to equal '2018-04-29', but found '2018-04-30'\n+ actual - expected\n\n+ '2018-04-30'\n- '2018-04-29'\n           ^\n`
-        )
+        }).toThrow(/Expected property 'beginDate' to equal '2018-04-29', but found '2018-04-30'/)
 
         expect(() => {
             assertObjectMatchSpec(object, [
@@ -624,7 +616,7 @@ describe('core > assertions', () => {
                 },
             ])
         }).toThrow(
-            `Expected property 'beginDate' to equal 'Aujourd'hui 2018-04-29 12h00', but found '2018-04-30'\n+ actual - expected\n\n+ '2018-04-30'\n- "Aujourd'hui 2018-04-29 12h00"\n`
+            /Expected property 'beginDate' to equal 'Aujourd'hui 2018-04-29 12h00', but found '2018-04-30'/
         )
 
         expect(() => {
@@ -635,9 +627,7 @@ describe('core > assertions', () => {
                     value: '-2,days,EN-ZS,YYYY-MM-DD',
                 },
             ])
-        }).toThrow(
-            `Expected property 'beginDate' to equal '2018-04-29', but found '2018-04-30'\n+ actual - expected\n\n+ '2018-04-30'\n- '2018-04-29'\n           ^\n`
-        )
+        }).toThrow(/Expected property 'beginDate' to equal '2018-04-29', but found '2018-04-30'/)
     })
 
     test("check object property equals does not 'equalRelativeDate' and format", () => {

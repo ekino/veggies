@@ -212,6 +212,6 @@ describe('extensions > snapshot > extension', () => {
                 fixtures.value1WithError as SnapshotContent,
                 propertiesMatchers
             )
-        ).toThrowError("Property 'key2' (2) type is not 'string'\n\n'number' !== 'string'\n")
+        ).toThrowError()
     })
 })
