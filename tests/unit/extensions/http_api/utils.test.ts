@@ -3,7 +3,9 @@ import { parseMatchExpression } from '../../../../src/extensions/http_api/utils.
 
 describe('extensions > http_api > utils', () => {
     test('parseMatchExpression should throw when expression is undefined', () => {
-        expect(() => parseMatchExpression()).toThrow("'undefined' is not a valid expression")
+        expect(() => parseMatchExpression('undefined')).toThrow(
+            "'undefined' is not a valid expression"
+        )
     })
 
     test('parseMatchExpression should throw when expression does not match', () => {
