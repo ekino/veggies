@@ -1,3 +1,3 @@
 import { Given } from '@cucumber/cucumber'
 
-Given(/^(?:I )?define http mock from (.+)$/, (fixture) => {})
+Given(/^(?:I )?define http mock from (.+)$/, (_fixture) => {})

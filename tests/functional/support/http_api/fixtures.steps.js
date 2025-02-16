@@ -3,7 +3,6 @@ import fs from 'node:fs'
 import querystring from 'node:querystring'
 import { Given, Then, world } from '@cucumber/cucumber'
 import nock from 'nock'
-import { isEmpty } from '../../../../lib/esm/utils/index.js'
 
 Given(
     /^I mock (?:(POST|GET) )?http call to forward request body for path (.+)$/,
@@ -39,9 +38,9 @@ Given(
 
 Then(/^response should match url encoded snapshot (.+)$/, (snapshotId) => {
     const httpResponse = world.httpApiClient.getResponse()
-    assert.ok(!isEmpty(response))
+    assert.ok(response !== undefined && response !== null)
     return world.fixtures.load(snapshotId).then((snapshot) => {
-        expect(httpResponse.data).to.equal(querystring.stringify(snapshot))
+        assert.strictEqual(httpResponse?.data, querystring.strinfigy(snapshot))
     })
 })
 
