@@ -9,6 +9,7 @@ export default defineConfig({
             reporter: ['lcov', 'cobertura', 'text'],
             include: ['src/**'],
             exclude: [],
+            all: false,
         },
     },
     esbuild: {
