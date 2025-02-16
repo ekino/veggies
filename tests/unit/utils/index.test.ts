@@ -1,10 +1,13 @@
 import { describe, expect, it } from 'vitest'
+import type { Predicate } from '../../../src/types.js'
 import {
     findKey,
     getValue,
     isDefined,
     isEmpty,
     isFunction,
+    isNotNullsy,
+    isNullsy,
     isNumber,
     isPlainObject,
     isString,
@@ -33,6 +36,42 @@ describe('utils > index', () => {
             expect(isNumber([])).toBe(false)
             expect(isNumber(null)).toBe(false)
             expect(isNumber(undefined)).toBe(false)
+        })
+    })
+
+    describe('isNullsy', () => {
+        it('should return true for undefined', () => {
+            expect(isNullsy(undefined)).toBe(true)
+        })
+
+        it('should return true for null', () => {
+            expect(isNullsy(null)).toBe(true)
+        })
+
+        it('should return false for non-nullsy values', () => {
+            expect(isNullsy('')).toBe(false)
+            expect(isNullsy(0)).toBe(false)
+            expect(isNullsy(false)).toBe(false)
+            expect(isNullsy([])).toBe(false)
+            expect(isNullsy({})).toBe(false)
+        })
+    })
+
+    describe('isNotNullsy', () => {
+        it('should return false for undefined', () => {
+            expect(isNotNullsy(undefined)).toBe(false)
+        })
+
+        it('should return false for null', () => {
+            expect(isNotNullsy(null)).toBe(false)
+        })
+
+        it('should return true for non-nullsy values', () => {
+            expect(isNotNullsy('')).toBe(true)
+            expect(isNotNullsy(0)).toBe(true)
+            expect(isNotNullsy(false)).toBe(true)
+            expect(isNotNullsy([])).toBe(true)
+            expect(isNotNullsy({})).toBe(true)
         })
     })
 
@@ -110,7 +149,7 @@ describe('utils > index', () => {
         })
 
         it('should return defaultValue when the path does not exist', () => {
-            const obj = { a: { b: {} } }
+            const obj: Record<string, unknown> = { a: { b: {} } }
             expect(getValue(obj, 'a.b.c', 'default')).toBe('default')
         })
 
@@ -146,7 +185,7 @@ describe('utils > index', () => {
         })
 
         it('should create intermediate objects and set the value when the path does not exist', () => {
-            const obj = { a: {} }
+            const obj = { a: { b: { c: undefined } } }
             setValue(obj, 'a.b.c', 100)
             expect(obj.a.b.c).toBe(100)
         })
@@ -158,7 +197,7 @@ describe('utils > index', () => {
         })
 
         it('should handle path as an array', () => {
-            const obj = {}
+            const obj = { x: { y: { z: undefined } } }
             setValue(obj, ['x', 'y', 'z'], 200)
             expect(obj.x.y.z).toBe(200)
         })
@@ -245,14 +284,14 @@ describe('utils > index', () => {
     describe('mapValues', () => {
         it('should apply the function to each value in the object and return a new object', () => {
             const obj = { a: 1, b: 2, c: 3 }
-            const fn = (value) => value * 2
+            const fn = (value: number) => value * 2
             const result = mapValues(obj, fn)
             expect(result).toEqual({ a: 2, b: 4, c: 6 })
         })
 
         it('should handle an empty object', () => {
             const obj = {}
-            const fn = (value) => value + 1
+            const fn = (value: number) => value + 1
             const result = mapValues(obj, fn)
             expect(result).toEqual({})
         })
@@ -261,14 +300,14 @@ describe('utils > index', () => {
     describe('findKey', () => {
         it('should return the key where the value satisfies the predicate', () => {
             const obj = { a: 1, b: 2, c: 3 }
-            const predicate = (value) => value > 1
+            const predicate: Predicate<number> = (value?: number) => (value && value > 1) || false
             const result = findKey(obj, predicate)
             expect(result).toBe('b')
         })
 
         it('should return undefined if no value satisfies the predicate', () => {
             const obj = { a: 1, b: 2, c: 3 }
-            const predicate = (value) => value > 3
+            const predicate: Predicate<number> = (value?: number) => (value && value > 3) || false
             const result = findKey(obj, predicate)
             expect(result).toBeUndefined()
         })
@@ -276,15 +315,15 @@ describe('utils > index', () => {
 
     describe('pick', () => {
         it('should return an object with only the specified keys from the source object', () => {
-            const obj = { a: 1, b: 2, c: 3 }
+            const obj: Record<string, number> = { a: 1, b: 2, c: 3 }
             const keys = ['a', 'c']
             const result = pick(obj, keys)
             expect(result).toEqual({ a: 1, c: 3 })
         })
 
         it('should return an empty object if no keys are specified', () => {
-            const obj = { a: 1, b: 2, c: 3 }
-            const keys = []
+            const obj: Record<string, number> = { a: 1, b: 2, c: 3 }
+            const keys: string[] = []
             const result = pick(obj, keys)
             expect(result).toEqual({})
         })
@@ -295,7 +334,7 @@ describe('utils > index', () => {
         })
 
         it('should handle keys that do not exist in the source object gracefully', () => {
-            const obj = { a: 1, b: 2 }
+            const obj: Record<string, number> = { a: 1, b: 2 }
             const keys = ['a', 'c']
             const result = pick(obj, keys)
             expect(result).toEqual({ a: 1 })
@@ -304,15 +343,15 @@ describe('utils > index', () => {
 
     describe('utils > omit', () => {
         it('should return an object with all keys except those specified', () => {
-            const obj = { a: 1, b: 2, c: 3 }
+            const obj: Record<string, number> = { a: 1, b: 2, c: 3 }
             const keysToOmit = ['b', 'c']
             const result = omit(obj, keysToOmit)
             expect(result).toEqual({ a: 1 })
         })
 
         it('should return the original object if no keys are specified to omit', () => {
-            const obj = { a: 1, b: 2, c: 3 }
-            const keysToOmit = []
+            const obj: Record<string, number> = { a: 1, b: 2, c: 3 }
+            const keysToOmit: string[] = []
             const result = omit(obj, keysToOmit)
             expect(result).toEqual({ a: 1, b: 2, c: 3 })
         })
@@ -323,7 +362,7 @@ describe('utils > index', () => {
         })
 
         it('should handle keys that do not exist in the source object gracefully', () => {
-            const obj = { a: 1, b: 2 }
+            const obj: Record<string, number> = { a: 1, b: 2 }
             const keysToOmit = ['c']
             const result = omit(obj, keysToOmit)
             expect(result).toEqual({ a: 1, b: 2 })
@@ -332,14 +371,14 @@ describe('utils > index', () => {
 
     describe('partial', () => {
         it('should create a function with the initial arguments pre-filled', () => {
-            const add = (a, b, c) => a + b + c
+            const add = (a: string, b: string, c: string) => a + b + c
             const addPartial = partial(add, 1, 2)
             const result = addPartial(3)
             expect(result).toBe(6)
         })
 
         it('should handle functions with no initial arguments', () => {
-            const greet = (salutation, name) => `${salutation}, ${name}!`
+            const greet = (salutation: string, name: string) => `${salutation}, ${name}!`
             const greetPartial = partial(greet, 'Hello')
             const result = greetPartial('Alice')
             expect(result).toBe('Hello, Alice!')

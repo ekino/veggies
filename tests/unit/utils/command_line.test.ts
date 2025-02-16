@@ -2,12 +2,12 @@ import { afterAll, beforeAll, describe, expect, test, vi } from 'vitest'
 import { hasArg, hasOneArgOf } from '../../../src/utils/command_line.js'
 
 describe('utils > command_line', () => {
-    let originalArgv
+    let originalArgv: string[]
 
     beforeAll(() => {
         originalArgv = process.argv
         process.argv = ['node', 'script.js', '--argOne', '-t', '--three']
-        vi.spyOn(console, 'log').mockImplementation()
+        vi.spyOn(console, 'log').mockImplementation(() => {})
     })
 
     afterAll(() => {

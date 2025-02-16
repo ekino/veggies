@@ -27,7 +27,7 @@ export const isObject = (val: unknown): val is PlainObject =>
 export const getValue = <T = unknown>(
     obj: unknown,
     path?: Path,
-    defaultValue = undefined
+    defaultValue: T | undefined = undefined
 ): T | undefined => {
     if (isNullsy(obj) || !path) return defaultValue
 
@@ -116,12 +116,11 @@ export const omit = <T extends PlainObject, K extends keyof T>(
 }
 
 export const partial =
-    <T extends (...args: unknown[]) => unknown>(
-        fn: T,
-        ...partials: Parameters<T>
-    ): ((...args: Parameters<T>) => ReturnType<T>) =>
-    (...args: Parameters<T>) =>
-        fn(...partials, ...args) as ReturnType<T>
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        <T extends (...args: any[]) => any>(fn: T, ...partials: any[]) =>
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        (...args: any[]) =>
+            fn(...partials, ...args)
 
 export const getError = (error: unknown): VeggiesError => {
     if (isObject(error)) return { ...error, message: error['message'] as string }
