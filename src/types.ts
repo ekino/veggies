@@ -54,7 +54,7 @@ export type RequestOptions = AxiosRequestConfig & { jar?: CookieJar; headers: Re
 
 export type RequestBody = string | string[][] | Record<string, string> | URLSearchParams
 
-export type SnapshotContent = Record<string, string | undefined>
+export type SnapshotContent = Record<string, unknown>
 
 export type Scenario = {
     line: number

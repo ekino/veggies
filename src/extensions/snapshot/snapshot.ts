@@ -148,7 +148,7 @@ export const formatSnapshotFile = (content: SnapshotContent): string => {
                 'exports[' +
                 wrapWithBacktick(key) +
                 '] = ' +
-                wrapWithBacktick(normalizeNewlines(content[key] || '')) +
+                wrapWithBacktick(normalizeNewlines(content[key]?.toString() || '')) +
                 ';'
         )
     return '\n\n' + snapshots.join('\n\n') + '\n'

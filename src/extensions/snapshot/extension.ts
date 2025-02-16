@@ -25,7 +25,7 @@ class Snapshot {
     public scenarioLine = -1
     public _snapshotsCount = 0
 
-    constructor(options: SnapshotOptions) {
+    constructor(options?: SnapshotOptions) {
         this.options = options || {}
         this.shouldUpdate = this.options.updateSnapshots ?? false
         this.cleanSnapshots = this.options.cleanSnapshots ?? false
@@ -100,7 +100,7 @@ class Snapshot {
             snapshotContent = expectedContent
         }
 
-        const diff = snapshotDiff(snapshotContent, expectedContent)
+        const diff = snapshotDiff(snapshotContent as string, expectedContent)
         if (diff) throw new Error(diff)
     }
 }
