@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest'
 import * as Cast from '../../../src/core/cast.js'
+import type { CastFunction } from '../../../src/types.js'
 
 test('cast nulls', () => {
     expect(Cast.getCastedValue('((null))')).toBe(null)
@@ -80,7 +81,7 @@ test('Add a new type to cast', () => {
 
 test('throw when trying to add a type without providing a casting function', () => {
     expect(() => {
-        Cast.addType('newType2', 'test')
+        Cast.addType('newType2', 'test' as unknown as CastFunction)
     }).toThrow('Invalid cast function provided, must be a function')
 
     expect(() => {

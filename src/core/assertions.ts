@@ -1,6 +1,6 @@
 import * as assert from 'node:assert/strict'
 import type { MatchingRule, ObjectFieldSpec } from '../types.js'
-import { getValue, isNullsy, isObject } from '../utils/index.js'
+import { getValue, isEmpty, isNullsy } from '../utils/index.js'
 import { addTime, formatTime } from '../utils/time.js'
 import * as Cast from './cast.js'
 
@@ -51,8 +51,8 @@ export const countNestedProperties = (object: Record<string, unknown>): number =
     let propertiesCount = 0
     for (const key of Object.keys(object)) {
         const val = object[key]
-        if (isObject(val)) {
-            const count = countNestedProperties(val)
+        if (!isEmpty(val) && typeof val === 'object') {
+            const count = countNestedProperties(val as Record<string, unknown>)
             propertiesCount += count
         } else {
             propertiesCount++
@@ -154,11 +154,11 @@ export const assertObjectMatchSpec = (
             }
             case RuleName.Present: {
                 message = `Property '${field}' is ${rule.isNegated ? 'defined' : 'undefined'}`
-
+                const value = isNullsy(currentValue) ? 'defined' : 'undefined'
                 if (rule.isNegated) {
-                    assert.ok(isNullsy(currentValue), message)
+                    assert.strictEqual(value, 'defined', message)
                 } else {
-                    assert.ok(!isNullsy(undefined), message)
+                    assert.strictEqual(value, 'undefined', message)
                 }
                 break
             }
