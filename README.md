@@ -3,7 +3,6 @@
 [![NPM version][npm-image]][npm-url]
 [![Github CI][ci-image]][ci-url]
 [![Coverage Status][coverage-image]][coverage-url]
-[![styled with prettier][prettier-image]][prettier-url]
 
 [![Watch on GitHub][github-watch-badge]][github-watch]
 [![Star on GitHub][github-star-badge]][github-star]
@@ -11,47 +10,47 @@
 
 Veggies is an awesome cucumberjs library for API/CLI testing.
 Great for testing APIs built upon Express, Koa, HAPI, Loopback and others.
-It's also the perfect companion for testing CLI applications built with commander, meow & Co. 
+It's also the perfect companion for testing CLI applications.
 
 - [Requirements](#requirements)
 - [Installation](#installation)
-- [CLI](#cli)   
+- [CLI](#cli)
 - [Features](#features)
-    - [API testing](#api-testing)
-        - [Making a simple request](#making-a-simple-request-and-testing-its-status-code)
-        - [Posting data](#posting-data)
-        - [Posting data using fixture file](#posting-data-using-fixture-file)
-        - [Using values issued by a previous request](#using-values-issued-by-a-previous-request)
-        - [Using cookies](#using-cookies)
-        - [Testing json response](#testing-json-response)
-        - [Testing response headers](#testing-response-headers)
-        - [Debugging failing API tests](#debugging-failing-api-tests)
-        - [Type system](#type-system)
-    - [CLI testing](#cli-testing) 
-       - [Running a simple command](#running-a-simple-command-and-checking-its-exit-code)
-       - [Testing a command error](#testing-a-command-error)
-    - [File System testing](#file-system-testing)   
-       - [Testing file content](#testing-file-content)
-    - [Snapshot testing](#snapshot-testing)   
-       - [API Snapshot testing](#api-snapshot-testing)
-       - [CLI Snapshot testing](#cli-snapshot-testing)
-       - [File Snapshot testing](#file-snapshot-testing)
+  - [API testing](#api-testing)
+    - [Making a simple request](#making-a-simple-request-and-testing-its-status-code)
+    - [Posting data](#posting-data)
+    - [Posting data using fixture file](#posting-data-using-fixture-file)
+    - [Using values issued by a previous request](#using-values-issued-by-a-previous-request)
+    - [Using cookies](#using-cookies)
+    - [Testing json response](#testing-json-response)
+    - [Testing response headers](#testing-response-headers)
+    - [Debugging failing API tests](#debugging-failing-api-tests)
+    - [Type system](#type-system)
+  - [CLI testing](#cli-testing)
+    - [Running a simple command](#running-a-simple-command-and-checking-its-exit-code)
+    - [Testing a command error](#testing-a-command-error)
+  - [File System testing](#file-system-testing)
+    - [Testing file content](#testing-file-content)
+  - [Snapshot testing](#snapshot-testing)
+    - [API Snapshot testing](#api-snapshot-testing)
+    - [CLI Snapshot testing](#cli-snapshot-testing)
+    - [File Snapshot testing](#file-snapshot-testing)
 - [Extensions](#extensions)
-    - [**state**](#state-extension) [install](#state-installation) | [gherkin expressions](#state-gherkin-expressions) | [low level API](#state-low-level-api)
-    - [**fixtures**](#fixtures-extension) [install](#fixtures-installation) | [low level API](#fixtures-low-level-api)
-    - [**http API**](#http-api-extension) [install](#http-api-installation) | [gherkin expressions](#http-api-gherkin-expressions) | [low level API](#http-api-low-level-api)
-    - [**CLI**](#cli-extension) [install](#cli-installation) | [gherkin expressions](#cli-gherkin-expressions) | [low level API](#cli-low-level-api)
-    - [**fileSystem**](#file-system-extension) [install](#file-system-installation) | [gherkin expressions](#file-system-gherkin-expressions) | [low level API](#file-system-low-level-api)
-    - [**snapshot**](#snapshot-extension) [install](#snapshot-installation) | [low level API](#snapshot-low-level-api)
+  - [**state**](#state-extension) [install](#state-installation) | [gherkin expressions](#state-gherkin-expressions) | [low level API](#state-low-level-api)
+  - [**fixtures**](#fixtures-extension) [install](#fixtures-installation) | [low level API](#fixtures-low-level-api)
+  - [**http API**](#http-api-extension) [install](#http-api-installation) | [gherkin expressions](#http-api-gherkin-expressions) | [low level API](#http-api-low-level-api)
+  - [**CLI**](#cli-extension) [install](#cli-installation) | [gherkin expressions](#cli-gherkin-expressions) | [low level API](#cli-low-level-api)
+  - [**fileSystem**](#file-system-extension) [install](#file-system-installation) | [gherkin expressions](#file-system-gherkin-expressions) | [low level API](#file-system-low-level-api)
+  - [**snapshot**](#snapshot-extension) [install](#snapshot-installation) | [low level API](#snapshot-low-level-api)
 - [Helpers](#helpers)
-    - [**cast**](#cast-helper) [usage](#cast-usage) | [add a type](#add-a-type)
-- [Examples](#examples)   
-    
+  - [**cast**](#cast-helper) [usage](#cast-usage) | [add a type](#add-a-type)
+- [Examples](#examples)
+
 ## Requirements
-    
-- Node.js `>=12.0.0`
-- cucumber `>=7.0.0`
-    
+
+- Node.js `>=20.0`
+- cucumber `>=11.0`
+
 ## Installation
 
 ```sh
@@ -68,7 +67,7 @@ Then all you have to do is installing the provided extensions:
 const { setWorldConstructor } = require('@cucumber/cucumber')
 const { state, fixtures, httpApi, cli } = require('@ekino/veggies')
 
-setWorldConstructor(function() {
+setWorldConstructor(function () {
     state.extendWorld(this)
     fixtures.extendWorld(this)
     httpApi.extendWorld(this)
@@ -92,21 +91,21 @@ As `cucumber-js` **no longer supports custom options**, it's the safest way to u
 To make use of it, you can use either of these commands:
 
 ```shell
-$ npm veggies
-$ yarn veggies
-$ pnpm veggies
-$ npx veggies
-$ ./node_modules/.bin/veggies.js
+npm veggies
+yarn veggies
+pnpm veggies
+npx veggies
+./node_modules/.bin/veggies.js
 ```
 
 The available options are:
 
-| Option                      | Description                                                                                |
-|-----------------------------|--------------------------------------------------------------------------------------------|
-| --cleanSnapshots            | removes unused snapshots (not recommended while matching tags)                             |
-| -u, --updateSnapshots       | updates current snapshots if required                                                      |
-| --preventSnapshotsCreation  | a snapshot related step that would create one will fail instead (useful on CI environment) |
-| --help                      | prints the veggies CLI help then the cucumber-js CLI help                                  |
+| Option                     | Description                                                                                |
+| -------------------------- | ------------------------------------------------------------------------------------------ |
+| --cleanSnapshots           | removes unused snapshots (not recommended while matching tags)                             |
+| -u, --updateSnapshots      | updates current snapshots if required                                                      |
+| --preventSnapshotsCreation | a snapshot related step that would create one will fail instead (useful on CI environment) |
+| --help                     | prints the veggies CLI help then the cucumber-js CLI help                                  |
 
 Please refer to the [CucumberJS CLI documentation](https://github.com/cucumber/cucumber-js/blob/master/docs/cli.md) to see native Cucumber options (or use `veggies --help`).
 
@@ -161,7 +160,7 @@ to improve this, you can use the [fixtures extension](#fixtures-extension) to de
 # /features/user/fixtures/user.yml
 
 username: plouc
-gender:   male
+gender: male
 ```
 
 ```gherkin
@@ -179,7 +178,7 @@ Imagine you want to test a resource creation and then that you're able
 to fetch this new entity through the API.
 
 If resource id is generated by your API, it will be impossible to make
-the second call because id is unknown. 
+the second call because id is unknown.
 
 To solve this problem you have the ability to collect data from
 a previous response, store it in the state and inject it at various
@@ -221,10 +220,10 @@ Scenario Outline: Fetching <key> API endpoint from root endpoint
     | public_gists_url |
 ```
 
-
 Pick a value from response header
 
 Syntax:
+
 ```
 I pick response header <key> as <key>
 ```
@@ -242,18 +241,19 @@ Scenario: Setting json body from .json fixture file
     And response status code should be 200
 ```
 
-
-
-#### Replace placeholder in key of state:
+#### Replace placeholder in key of state
 
 Syntax:
+
 ```
 I replace (placeholder) <search> in <key> to <value> with regex option <flags>
 ```
+
 - `placeholder` and `with regex option <flags>` are optional
 - `<value>` does not support spaces
 
-Example: 
+Example:
+
 ```
 And I replace {token} in URLPage to e1c401d5c
 And I replace placeholder {stateUpMode} in URLPage to live with regex option gi
@@ -270,10 +270,10 @@ and/or using the [state extension](#state-extension) to store it.
 Scenario: Enabling cookies
   Given I enable cookies
   # …
-  
+
 Scenario: Disabling cookies
   Given I disable cookies
-  # …  
+  # …
 ```
 
 See [definitions](#http-api-gherkin-expressions) for all available cookies related gherkin expressions.
@@ -287,7 +287,7 @@ See [definitions](#http-api-gherkin-expressions) for all available cookies relat
 ```
 
 Checking json response properties equal value:
- 
+
 ```gherkin
 Scenario: Fetching some json response from the internets
     When I GET http://whatever.io/things/1
@@ -295,10 +295,10 @@ Scenario: Fetching some json response from the internets
       | field           | matcher | value |
       | name            | equal   | thing |
       | address.country | equal   | Japan |
-``` 
+```
 
 Checking json response properties start with value:
- 
+
 ```gherkin
 Scenario: Fetching some json response from the internets
     When I GET http://whatever.io/things/1
@@ -306,10 +306,10 @@ Scenario: Fetching some json response from the internets
       | field           | matcher     | value |
       | name            | start with  | ing   |
       | address.country | starts with | Jap   |
-``` 
+```
 
 Checking json response properties contain value:
- 
+
 ```gherkin
 Scenario: Fetching some json response from the internets
     When I GET http://whatever.io/things/1
@@ -317,7 +317,7 @@ Scenario: Fetching some json response from the internets
       | field           | matcher | value |
       | name            | contain | ing   |
       | address.country | contain | Jap   |
-``` 
+```
 
 Checking json response properties end with value:
 
@@ -328,7 +328,7 @@ Scenario: Fetching some json response from the internets
       | field           | matcher   | value |
       | name            | end with  | ing   |
       | address.country | ends with | pan   |
-``` 
+```
 
 Checking json response properties match value:
 
@@ -339,7 +339,7 @@ Scenario: Fetching some json response from the internets
       | field           | matcher | value     |
       | name            | match   | ^(.+)ing$ |
       | address.country | match   | ^Jap(.+)$ |
-``` 
+```
 
 Checking json response properties equalRelativeDate value:
 
@@ -350,7 +350,7 @@ Scenario: Fetching some json response from the internets
       | field           | matcher            | value                                        |
       | endDate         | equalRelativeDate  | 2,days,fr,dddd                               |
       | beginDate       | equalRelativeDate  | -1,week,fr,[Aujourd'hui] YYYY-MM-DD hh[h]mm  |
-``` 
+```
 
 By default, this assertion does not check for full match.
 Properties not listed will just be ignored, if you want a full match:
@@ -368,22 +368,22 @@ Now if the json contains extra properties, the test will fail.
 
 Available matchers are:
 
-| matcher                   | short matcher             | description                                       |
-|-------------------------- |-------------------------- |---------------------------------------------------|
-| `match`                   | `~=`                      | property must match given regexp                  |
-| `matches`                 | see `match`               | see `match`                                       |
-| `start with`              | `^=`                      | property must start with given value              |
-| `starts with`             | see `start with`          | see `startWith`                                   |
-| `contain`                 | `*=`                      | property must contain given value                 |
-| `contains`                | see `contain`             | see `contain`                                     |
-| `end with`                | `$=`                      | property must end with given value                |
-| `ends with`               | see `end with`            | see `endWith`                                     |
-| `defined`                 | `?`                       | property must not be `undefined`                  |
-| `present`                 | see `defined`             | see `defined`                                     |
-| `equal`                   | `=`                       | property must equal given value                   |
-| `equals`                  | see `equal`               | see `equal`                                       |
-| `type`                    | `#=`                      | property must be of the given type                |
-| `equalRelativeDate`       | n/a                       | property must be equal to the computed date       |
+| matcher             | short matcher    | description                                 |
+| ------------------- | ---------------- | ------------------------------------------- |
+| `match`             | `~=`             | property must match given regexp            |
+| `matches`           | see `match`      | see `match`                                 |
+| `start with`        | `^=`             | property must start with given value        |
+| `starts with`       | see `start with` | see `startWith`                             |
+| `contain`           | `*=`             | property must contain given value           |
+| `contains`          | see `contain`    | see `contain`                               |
+| `end with`          | `$=`             | property must end with given value          |
+| `ends with`         | see `end with`   | see `endWith`                               |
+| `defined`           | `?`              | property must not be `undefined`            |
+| `present`           | see `defined`    | see `defined`                               |
+| `equal`             | `=`              | property must equal given value             |
+| `equals`            | see `equal`      | see `equal`                                 |
+| `type`              | `#=`             | property must be of the given type          |
+| `equalRelativeDate` | n/a              | property must be equal to the computed date |
 
 **Any** of these matchers can be negated when preceded by these : `!`, `not`, `does not`, `doesn't`, `is not` and `isn't`.
 
@@ -462,13 +462,13 @@ a lightweight type systems.
 The following directives are available:
 
 | directive            | type        | example                  | output                    |
-|--------------------- |------------ |------------------------- |-------------------------- |
+| -------------------- | ----------- | ------------------------ | ------------------------- |
 | `((undefined))`      | `undefined` | `((undefined))`          | `undefined`               |
 | `((null))`           | `null`      | `((null))`               | `null`                    |
 | `<value>((string))`  | `string`    | `hi((string))`           | `'hi'`                    |
 | `<value>((number))`  | `number`    | `1((number))`            | `1`                       |
 | `<value>((boolean))` | `boolean`   | `true((boolean))`        | `true`                    |
-| `<value>((array))`   | `Array`     | `one,two,three((array))` | `['one', 'two', 'three']` |     
+| `<value>((array))`   | `Array`     | `one,two,three((array))` | `['one', 'two', 'three']` |
 
 You can now use those directive for most of the step definitions accepting data tables.
 
@@ -489,13 +489,10 @@ which will generate the following payload:
 
 ```json
 {
-  "username": "plouc",
-  "team_id": 1,
-  "is_active": true,
-  "hobbies": [
-    "drawing",
-    "hacking"
-  ]
+    "username": "plouc",
+    "team_id": 1,
+    "is_active": true,
+    "hobbies": ["drawing", "hacking"]
 }
 ```
 
@@ -551,26 +548,26 @@ If the file does not exist, the test will fail.
 
 Snapshot testing compare a response / content against a saved snapshot.
 Snapshots are stored in a file with same name as the feature file with the extension `.snap`
-in a folder __snapshots__ in the same folder as the feature file.
+in a folder **snapshots** in the same folder as the feature file.
 
 **:warning: Snapshots files should be versioned to be compared while running tests**
 
-Folder tree should look like : 
+Folder tree should look like :
 support/
 features/
-  feature_with_snapshot.feature
-  feature_without_snapshot.feature
-  __snapshots__/
-    feature_with_snapshot.feature.snap
-  …
+feature_with_snapshot.feature
+feature_without_snapshot.feature
+**snapshots**/
+feature_with_snapshot.feature.snap
+…
 
-In a snapshot file, snapshot name follow the pattern: 
+In a snapshot file, snapshot name follow the pattern:
 SNAPSHOT_NAME NUMBER_OF_TIME_THIS_NAME_WAS_ENCOUNTERED_IN_CURRENT_FILE.NUMBER_OF_TIME_WE_HAD_A_SNAPSHOT_IN_THIS_SCENARIO.
 For example, this would give: Scenario 1 1.1
 
 If a snapshot doesn't exist, it will be created the first time.
 
-To update snapshot use the cucumber command line option '-u'. If you narrowed the tests with tags, only the snapshots 
+To update snapshot use the cucumber command line option '-u'. If you narrowed the tests with tags, only the snapshots
 related to the tagged scenarios will be updated.
 
 In case you need to remove unused snapshots, you can use the option `--cleanSnapshots`.
@@ -578,7 +575,7 @@ In case you need to remove unused snapshots, you can use the option `--cleanSnap
 :information_source: Snapshot files related to feature files with no snapshots won't get removed. You need to do it manually.
 
 Sometimes, it could be useful to prevent the creation of snapshots, for instance in a CI environment. To do this,
-you can use the `--preventSnapshotsCreation` flag. An error will be thrown if the snapshot is missing and this option is present. 
+you can use the `--preventSnapshotsCreation` flag. An error will be thrown if the snapshot is missing and this option is present.
 
 #### API Snapshot testing
 
@@ -604,11 +601,13 @@ Scenario: Creating a resource using typed json payload
 
 It is sometimes useful to ignore some fields in a response when comparing with the snapshot.
 In this case and if it's json you can then use with a table:
+
 ```
 /^response json body should match snapshot$/
 ```
 
 This examples illustrates it:
+
 ```gherkin
 Scenario: Creating a resource using typed json payload
   Given I set request json body
@@ -645,11 +644,13 @@ Scenario: Getting info about installed yarn version
 
 It is sometimes useful to ignore some fields in a cli json formatted output when comparing with the snapshot.
 In this case and if it's json you can then use with a table:
+
 ```
 /^(stderr|stdout) json output should match snapshot$/
 ```
 
 This examples illustrates it:
+
 ```gherkin
 Scenario: Snapshot testing on a json file
   Given I set cwd to examples/features/snapshot/fixtures
@@ -660,7 +661,6 @@ Scenario: Snapshot testing on a json file
 ```
 
 The table supports anything defined in [Testing json response](#testing-json-response)
-
 
 #### File Snapshot testing
 
@@ -679,11 +679,13 @@ Scenario: Testing file content related expectations
 
 It is sometimes useful to ignore some fields in a json file when comparing with the snapshot.
 In this case and if it's json you can then use with a table:
+
 ```
 /^json file (.+) content should match snapshot$/
 ```
 
 This examples illustrates it:
+
 ```gherkin
 Scenario: Creating a resource using typed json payload
   Then json file sample_1.text content should match snapshot
@@ -697,7 +699,7 @@ The table supports anything defined in [Testing json response](#testing-json-res
 
 This module is composed of several extensions.
 
-[state](#state-extension) | [fixtures](#fixtures-extension) | [http API](#http-api-extension) | [CLI](#cli-extension) | [file system](#file-system-extension) | [snapshot](#snapshot-extension) 
+[state](#state-extension) | [fixtures](#fixtures-extension) | [http API](#http-api-extension) | [CLI](#cli-extension) | [file system](#file-system-extension) | [snapshot](#snapshot-extension)
 
 ### state extension
 
@@ -717,7 +719,7 @@ To install the extension, you should add the following snippet to your `world` f
 const { setWorldConstructor } = require('@cucumber/cucumber')
 const { state } = require('@ekino/veggies')
 
-setWorldConstructor(function() {
+setWorldConstructor(function () {
     state.extendWorld(this)
 })
 
@@ -728,14 +730,14 @@ state.install()
 
 ```yaml
 Given:
-  - /^(?:I )?set state (.+) to (.+)$/
+    - /^(?:I )?set state (.+) to (.+)$/
 
 When:
-  - /^(?:I )?clear state$/
-  - /^(?:I )?dump state$/
+    - /^(?:I )?clear state$/
+    - /^(?:I )?dump state$/
 
 Then:
-  # No definitions
+    # No definitions
 ```
 
 #### State low level API
@@ -746,8 +748,8 @@ For available methods on the state, please refer to its own
 
 ```javascript
 const { When } = require('@cucumber/cucumber')
-    
-When(/^I do something useful$/, function() {
+
+When(/^I do something useful$/, function () {
     const stateValue = this.state.get('whatever')
     // …
 })
@@ -763,7 +765,7 @@ It supports the following file extensions:
 - **.txt** - loads text content, result is a `string`
 - **.json** - loads json, result is and `Object`
 - **.js** - loads a javascript module, the module must exports load function via `module.exports`,
-  result can be whatever type the function returns 
+  result can be whatever type the function returns
 
 #### Fixtures installation
 
@@ -775,7 +777,7 @@ To install the extension, you should add the following snippet to your `world` f
 const { setWorldConstructor } = require('@cucumber/cucumber')
 const { fixtures } = require('@ekino/veggies')
 
-setWorldConstructor(function() {
+setWorldConstructor(function () {
     fixtures.extendWorld(this)
 })
 
@@ -791,17 +793,16 @@ For available methods on the fixtures loader, please refer to its own
 ```javascript
 const { When } = require('@cucumber/cucumber')
 
-When(/^I do something useful with fixtures$/, function() {
-    return this.fixtures.load('whatever')
-        .then(fixture => {
-            // …
-        })
+When(/^I do something useful with fixtures$/, function () {
+    return this.fixtures.load('whatever').then((fixture) => {
+        // …
+    })
 })
 ```
 
-### http API extension 
+### http API extension
 
-#### http API installation 
+#### http API installation
 
 The http API extension relies on the [state](#state-extension) &
 [fixtures](#fixtures-extension) extensions, so make sure they're
@@ -816,7 +817,7 @@ to your `world` file:
 const { setWorldConstructor } = require('@cucumber/cucumber')
 const { state, fixtures, httpApi } = require('@ekino/veggies')
 
-setWorldConstructor(function() {
+setWorldConstructor(function () {
     state.extendWorld(this)
     fixtures.extendWorld(this)
     httpApi.extendWorld(this)
@@ -881,12 +882,12 @@ For available methods on the client, please refer to its own
 ```javascript
 const { When } = require('@cucumber/cucumber')
 
-When(/^I do something useful$/, function() {
+When(/^I do something useful$/, function () {
     return this.httpApiClient.makeRequest(/* … */)
 })
 ```
 
-### CLI extension 
+### CLI extension
 
 #### CLI installation
 
@@ -903,7 +904,7 @@ to your `world` file:
 const { setWorldConstructor } = require('@cucumber/cucumber')
 const { state, fixtures, cli } = require('@ekino/veggies')
 
-setWorldConstructor(function() {
+setWorldConstructor(function () {
     state.extendWorld(this)
     fixtures.extendWorld(this)
     cli.extendWorld(this)
@@ -918,22 +919,22 @@ cli.install()
 
 ```yaml
 Given:
-  - /^(?:I )?set (?:working directory|cwd) to (.+)$/
-  - /^(?:I )?set ([^ ]+) (?:env|environment) (?:var|variable) to (.+)$/
-  - /^(?:I )?set (?:env|environment) (?:vars|variables)$/
-  - /^(?:I )?kill the process with ([^ ]+) in (\d+)(ms|s)/
+    - /^(?:I )?set (?:working directory|cwd) to (.+)$/
+    - /^(?:I )?set ([^ ]+) (?:env|environment) (?:var|variable) to (.+)$/
+    - /^(?:I )?set (?:env|environment) (?:vars|variables)$/
+    - /^(?:I )?kill the process with ([^ ]+) in (\d+)(ms|s)/
 
 When:
-  - /^(?:I )?run command (.+)$/
-  - /^(?:I )?dump (stderr|stdout)$/
+    - /^(?:I )?run command (.+)$/
+    - /^(?:I )?dump (stderr|stdout)$/
 
 Then:
-  - /^(?:the )?(?:command )?exit code should be (\d+)$/
-  - /^(stderr|stdout) should be empty$/
-  - /^(stderr|stdout) should contain (.+)$/
-  - /^(stderr|stdout) should not contain (.+)$/
-  - /^(stderr|stdout) should match (.+)$/
-  - /^(stderr|stdout) should not match (.+)$/
+    - /^(?:the )?(?:command )?exit code should be (\d+)$/
+    - /^(stderr|stdout) should be empty$/
+    - /^(stderr|stdout) should contain (.+)$/
+    - /^(stderr|stdout) should not contain (.+)$/
+    - /^(stderr|stdout) should match (.+)$/
+    - /^(stderr|stdout) should not match (.+)$/
 ```
 
 #### CLI low level API
@@ -945,13 +946,13 @@ For available methods on the client, please refer to its own
 ```javascript
 const { When } = require('@cucumber/cucumber')
 
-Then(/^I check something from the CLI output$/, function() {
+Then(/^I check something from the CLI output$/, function () {
     const out = this.cli.getOutput()
     // …
 })
 ```
 
-### File system extension 
+### File system extension
 
 #### File system installation
 
@@ -967,7 +968,7 @@ to your `world` file:
 const { setWorldConstructor } = require('@cucumber/cucumber')
 const { state, fixtures, cli, fileSystem } = require('@ekino/veggies')
 
-setWorldConstructor(function() {
+setWorldConstructor(function () {
     state.extendWorld(this)
     fixtures.extendWorld(this)
     cli.extendWorld(this)
@@ -984,15 +985,15 @@ fileSystem.install()
 
 ```yaml
 Given:
-  - /^(?:I )?create directory (.+)$/
-  - /^(?:I )?remove (?:file|directory) (.+)$/
+    - /^(?:I )?create directory (.+)$/
+    - /^(?:I )?remove (?:file|directory) (.+)$/
 
 When:
-  # No definitions
+    # No definitions
 
 Then:
-  - /^(file|directory) (.+) should (not )?exist$/
-  - /^file (.+) content should (not )?(equal|contain|match) (.+)$/
+    - /^(file|directory) (.+) should (not )?exist$/
+    - /^file (.+) content should (not )?(equal|contain|match) (.+)$/
 ```
 
 #### File system low level API
@@ -1004,15 +1005,14 @@ For available methods on the fileSystem, please refer to its own
 ```javascript
 const { Then } = require('@cucumber/cucumber')
 
-Then(/^I check something using file system$/, function() {
-    return this.fileSystem.getFileContent('whatever')
-        .then(content => {
-            // …    
-        })
+Then(/^I check something using file system$/, function () {
+    return this.fileSystem.getFileContent('whatever').then((content) => {
+        // …
+    })
 })
 ```
 
-### Snapshot extension 
+### Snapshot extension
 
 #### Snapshot installation
 
@@ -1028,7 +1028,7 @@ to your `world` file:
 const { setWorldConstructor } = require('@cucumber/cucumber')
 const { state, fixtures, cli, fileSystem, snapshot } = require('@ekino/veggies')
 
-setWorldConstructor(function() {
+setWorldConstructor(function () {
     state.extendWorld(this)
     fixtures.extendWorld(this)
     cli.extendWorld(this)
@@ -1052,7 +1052,7 @@ For available methods on the snapshot, please refer to its own
 ```javascript
 const { Then } = require('@cucumber/cucumber')
 
-Then(/^Some content should match snapshot$/, function() {
+Then(/^Some content should match snapshot$/, function () {
     this.snapshot.expectToMatch('whatever')
 })
 ```
@@ -1066,12 +1066,13 @@ To find more about casting see [Type System](#type-system).
 
 #### Cast usage
 
-This must be used on gherkin arrays. Based on your array type you have to use: 
- * ```step.hashes()``` -> ```Cast.objects(step.hashes())```
- * ```step.rows()``` -> ```Cast.array(step.rows())```
- * ```step.raw()``` -> ```Cast.array(step.raw())```
- * ```step.rowsHash()``` -> ```Cast.objects(step.rowsHash())```
- 
+This must be used on gherkin arrays. Based on your array type you have to use:
+
+- `step.hashes()` -> `Cast.objects(step.hashes())`
+- `step.rows()` -> `Cast.array(step.rows())`
+- `step.raw()` -> `Cast.array(step.raw())`
+- `step.rowsHash()` -> `Cast.objects(step.rowsHash())`
+
 For example:
 
 ```javascript
@@ -1091,10 +1092,11 @@ You can provide your own type.
 For example:
 
 ```javascript
-Cast.addType('newType', value => value === 'true')
+Cast.addType('newType', (value) => value === 'true')
 ```
 
 Can be used on:
+
 ```gherkin
   Given I get user id1 profile
   Then I should receive
@@ -1103,7 +1105,6 @@ Can be used on:
     | name            | veggies         |
     | isPublic        | true((newType)) |
 ```
-
 
 ## Examples
 
@@ -1131,11 +1132,8 @@ Due to public API rate limit (e.g. GitHub API), this tag is used when running on
 [npm-url]: https://www.npmjs.com/package/@ekino/veggies
 [ci-image]: https://img.shields.io/github/workflow/status/ekino/veggies/Node.js%20CI?style=for-the-badge
 [ci-url]: https://github.com/ekino/veggies/actions
-[prettier-image]: https://img.shields.io/badge/styled_with-prettier-ff69b4.svg?longCache=true&style=for-the-badge
-[prettier-url]: https://github.com/prettier/prettier
 [coverage-image]: https://img.shields.io/coveralls/ekino/veggies/master.svg?longCache=true&style=for-the-badge
 [coverage-url]: https://coveralls.io/github/ekino/veggies?branch=master
-
 [github-watch-badge]: https://img.shields.io/github/watchers/ekino/veggies.svg?style=social
 [github-watch]: https://github.com/ekino/veggies/watchers
 [github-star-badge]: https://img.shields.io/github/stars/ekino/veggies.svg?style=social
