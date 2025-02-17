@@ -4,8 +4,6 @@
         "allowSyntheticDefaultImports": true,
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
-        "declaration": true,
-        "declarationMap": true,
         "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "incremental": true,
@@ -28,6 +26,6 @@
         "target": "ES2020",
         "typeRoots": ["./node_modules/@types", "src/@types"]
     },
-    "include": ["src/**/*", "tests/**/*", "examples/**/*", "scripts/**/*", "bin/**/*"],
+    "include": ["src/**/*", "tests/**/*"],
     "exclude": ["node_modules", "lib", "doc"]
 }
