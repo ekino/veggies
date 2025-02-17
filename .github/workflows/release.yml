@@ -39,24 +39,17 @@ jobs:
       - name: Build
         run: pnpm run build
 
-      - name: Bump the version using input strategy
-        run: pnpm version ${{ github.event.inputs.strategy }}
+      - name: Set up Git user
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
 
       - name: Bump version
         id: versioning
         run: |
-          pnpm version ${{ github.event.inputs.strategy }}
+          npm version ${{ github.event.inputs.strategy }} -m "chore(release): v%s"
           VERSION=$(node -p "require('./package.json').version")
           echo "current-version=$VERSION" >> $GITHUB_OUTPUT
-
-      - name: Commit and tag release
-        run: |
-          git config user.name github-actions[bot]
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add .
-          git commit -m "chore(release): v${{ steps.versioning.outputs.current-version }}"
-          git tag v${{ steps.versioning.outputs.current-version }}
-          git push --follow-tags
 
       - name: Set up git-cliff
         uses: kenji-miyake/setup-git-cliff@v2
