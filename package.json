@@ -82,6 +82,7 @@
         "test-func": "./bin/veggies.js --import tests/functional/support tests/functional/features",
         "lint": "biome check --write",
         "check": "biome check",
+        "check-typing": "tsc -p tsconfig.json --noEmit",
         "examples": "./bin/veggies.js --import examples/support examples/features --tags='@offline'",
         "postinstall": "git config core.hooksPath ./.githooks || true"
     }
