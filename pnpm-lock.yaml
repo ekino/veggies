@@ -9,31 +9,31 @@ importers:
   .:
     dependencies:
       axios:
-        specifier: 1.7.9
+        specifier: 1.x
         version: 1.7.9
       axios-cookiejar-support:
-        specifier: 5.0.5
+        specifier: 5.x
         version: 5.0.5(axios@1.7.9)(tough-cookie@5.1.1)
       fast-glob:
-        specifier: 3.3.3
+        specifier: 3.x
         version: 3.3.3
       form-data:
-        specifier: 4.0.2
+        specifier: 4.x
         version: 4.0.2
       jest-diff:
-        specifier: 29.7.0
+        specifier: 29.x
         version: 29.7.0
       js-yaml:
-        specifier: 4.1.0
+        specifier: 4.x
         version: 4.1.0
       natural-compare:
-        specifier: 1.4.0
+        specifier: 1.x
         version: 1.4.0
       pretty-format:
-        specifier: 29.7.0
+        specifier: 29.x
         version: 29.7.0
       tough-cookie:
-        specifier: 5.1.1
+        specifier: 5.x
         version: 5.1.1
     devDependencies:
       '@biomejs/biome':
