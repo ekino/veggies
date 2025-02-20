@@ -33,9 +33,10 @@ export const getValue = <T = unknown>(obj: unknown, path?: Path): T | undefined 
 
     const pathArray: (string | number)[] = Array.isArray(path)
         ? path
-        : path
-              .match(/([^[.\]]+)/g)
-              ?.map((segment) => (segment.match(/^\d+$/) ? Number(segment) : segment)) || []
+        : (path.match(/([^[.\]]+)/g) || []).map((segment) =>
+              // If the segment is all digits, convert it to a number.
+              segment.match(/^\d+$/) ? Number(segment) : segment.replace(/^['"]|['"]$/g, '')
+          )
     return pathArray.reduce<unknown>((acc, key) => {
         if (isNullsy(acc) || typeof acc !== 'object') {
             return undefined

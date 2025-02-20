@@ -198,6 +198,9 @@ describe('utils > index', () => {
                 ],
                 'some.key': 'test',
                 'nested.key[1]': 'wrong',
+                local: {
+                    'Accept-Language': 'fr',
+                },
             }
             expect(getValue(obj, 'some.key')).toEqual('test')
             expect(getValue(obj, 'contents[0].contentID')).toEqual(519)
@@ -206,6 +209,7 @@ describe('utils > index', () => {
             expect(getValue(obj, 'contents[0].onClick.adult')).toEqual(true)
             expect(getValue(obj, 'contents[1].contentID')).toBeUndefined()
             expect(getValue(obj, 'nested.key[1]')).toEqual('wrong')
+            expect(getValue(obj, 'local["Accept-Language"]')).toEqual('fr')
         })
     })
 
