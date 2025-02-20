@@ -294,17 +294,7 @@ class HttpApiClient {
             }
         } catch (error) {
             if (axios.isAxiosError(error)) {
-                console.error('Axios error:', {
-                    message: error.message,
-                    response: error.response
-                        ? {
-                              status: error.response.status,
-                              data: error.response.data,
-                              headers: error.response.headers,
-                          }
-                        : undefined,
-                    stack: error.stack,
-                })
+                this.response = error.response
             } else {
                 console.error('Unexpected error:', error)
             }
