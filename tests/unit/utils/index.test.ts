@@ -148,14 +148,14 @@ describe('utils > index', () => {
             expect(getValue(obj, ['a', 'b', 'c'])).toBe(42)
         })
 
-        it('should return defaultValue when the path does not exist', () => {
+        it('should return undefined when the path does not exist', () => {
             const obj: Record<string, unknown> = { a: { b: {} } }
-            expect(getValue(obj, 'a.b.c', 'default')).toBe('default')
+            expect(getValue(obj, 'a.b.c')).toBeUndefined()
         })
 
-        it('should return defaultValue when the path is partially missing', () => {
+        it('should return undefined when the path is partially missing', () => {
             const obj = { a: { b: {} } }
-            expect(getValue(obj, 'a.b.c', 'default')).toBe('default')
+            expect(getValue(obj, 'a.b.c')).toBeUndefined()
         })
 
         it('should return undefined when the path does not exist and no defaultValue is provided', () => {
@@ -168,12 +168,42 @@ describe('utils > index', () => {
             expect(getValue(obj, [])).toBe(obj)
         })
 
-        it('should return defaultValue when the object is null', () => {
-            expect(getValue(null, 'a.b.c', 'default')).toBe('default')
+        it('should return undefined when the object is null', () => {
+            expect(getValue(null, 'a.b.c')).toBeUndefined()
         })
 
-        it('should return defaultValue when the path is empty and object is null', () => {
-            expect(getValue(null, [], 'default')).toBe('default')
+        it('should return undefined when the path is empty and object is null', () => {
+            expect(getValue(null, [])).toBeUndefined()
+        })
+
+        it('should return correct value from complex array object', () => {
+            const obj = {
+                contents: [
+                    {
+                        contentID: 519,
+                        isInOffer: true,
+                        ratings: [{ value: '1', authority: 'csa' }],
+                        onClick: {
+                            adult: true,
+                            params: [
+                                {
+                                    in: 'params',
+                                    enum: ['jh'],
+                                },
+                            ],
+                        },
+                    },
+                ],
+                'some.key': 'test',
+                'nested.key[1]': 'wrong',
+            }
+            expect(getValue(obj, 'some.key')).toEqual('test')
+            expect(getValue(obj, 'contents[0].contentID')).toEqual(519)
+            expect(getValue(obj, ['contents', 0, 'contentID'])).toEqual(519)
+            expect(getValue(obj, 'contents[0].onClick.params[0].enum[0]')).toEqual('jh')
+            expect(getValue(obj, 'contents[0].onClick.adult')).toEqual(true)
+            expect(getValue(obj, 'contents[1].contentID')).toBeUndefined()
+            expect(getValue(obj, 'nested.key[1]')).toEqual('wrong')
         })
     })
 

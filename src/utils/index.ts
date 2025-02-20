@@ -24,18 +24,21 @@ export const isFunction = (func: unknown) => typeof func === 'function'
 export const isObject = (val: unknown): val is PlainObject =>
     !!val && typeof val === 'object' && !Array.isArray(val)
 
-export const getValue = <T = unknown>(
-    obj: unknown,
-    path?: Path,
-    defaultValue: T | undefined = undefined
-): T | undefined => {
-    if (isNullsy(obj) || !path) return defaultValue
+export const getValue = <T = unknown>(obj: unknown, path?: Path): T | undefined => {
+    if (isNullsy(obj) || !path) return undefined
 
-    const pathArray = Array.isArray(path) ? path : path.match(/([^[.\]])+/g) || []
+    if (typeof path === 'string' && Object.prototype.hasOwnProperty.call(obj, path)) {
+        return (obj as Record<string, unknown>)[path] as T
+    }
 
+    const pathArray: (string | number)[] = Array.isArray(path)
+        ? path
+        : path
+              .match(/([^[.\]]+)/g)
+              ?.map((segment) => (segment.match(/^\d+$/) ? Number(segment) : segment)) || []
     return pathArray.reduce<unknown>((acc, key) => {
-        if (!isObject(acc) || !(key in acc)) {
-            return defaultValue
+        if (isNullsy(acc) || typeof acc !== 'object') {
+            return undefined
         }
         return (acc as PlainObject)[key]
     }, obj) as T | undefined

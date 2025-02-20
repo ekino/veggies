@@ -5,7 +5,7 @@ export type PlainObject = Record<string, unknown>
 
 export type Predicate<T> = (value: T | undefined) => boolean
 
-export type Path = string | string[]
+export type Path = string | string[] | (string | number)[]
 
 export type InterpolateOptions = {
     interpolate?: RegExp
