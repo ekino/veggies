@@ -247,6 +247,44 @@ describe('utils > index', () => {
             const result = setValue(42, 'a.b.c', 100)
             expect(result).toBe(42)
         })
+
+        it('should set correct value in complex array object', () => {
+            const obj = {
+                contents: [
+                    {
+                        contentID: 519,
+                        isInOffer: true,
+                        ratings: [{ value: '1', authority: 'csa' }],
+                        onClick: {
+                            adult: true,
+                            params: [
+                                {
+                                    in: 'params',
+                                    enum: ['jh'],
+                                },
+                            ],
+                        },
+                    },
+                ],
+                'some.key': 'test',
+                'nested.key[1]': 'wrong',
+            }
+
+            setValue(obj, 'contents[0].contentID', 1000)
+            setValue(obj, 'contents[0].onClick.params[0].enum[1]', 'jk')
+            setValue(obj, 'nested.key[0]', 'correct')
+            setValue(obj, 'some.newKey', 'newValue')
+            setValue(obj, 'new.array[0]', 'firstItem')
+
+            expect(getValue(obj, 'contents[0].contentID')).toEqual(1000)
+            expect(getValue(obj, 'contents[0].onClick.params[0].enum[1]')).toEqual('jk')
+            expect(getValue(obj, 'nested.key[0]')).toEqual('correct')
+            expect(getValue(obj, 'some.newKey')).toEqual('newValue')
+            expect(getValue(obj, 'new.array[0]')).toEqual('firstItem')
+
+            expect(getValue(obj, 'some.key')).toEqual('test')
+            expect(getValue(obj, 'nested.key[1]')).toEqual('wrong')
+        })
     })
 
     describe('isPlainObject', () => {

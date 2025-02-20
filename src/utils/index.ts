@@ -45,20 +45,27 @@ export const getValue = <T = unknown>(obj: unknown, path?: Path): T | undefined 
 }
 
 export const setValue = (obj: unknown, path: Path, value: unknown): unknown => {
-    if (!isObject(obj)) return obj
+    if (isNullsy(obj) || typeof obj !== 'object') return obj
 
-    const pathArray = Array.isArray(path) ? path : path.match(/([^[.\]])+/g) || []
-    pathArray.reduce<PlainObject>((acc, key, idx) => {
-        if (idx === pathArray.length - 1) {
-            acc[key] = value
+    const pathArray: (string | number)[] = Array.isArray(path)
+        ? path
+        : path
+              .match(/([^[.\]]+)/g)
+              ?.map((segment) => (segment.match(/^\d+$/) ? Number(segment) : segment)) || []
+
+    let current = obj as Record<string | number, unknown>
+    for (let i = 0; i < pathArray.length; i++) {
+        const key = pathArray[i]
+        if (isNullsy(key)) continue
+        if (i === pathArray.length - 1) {
+            current[key] = value
         } else {
-            if (!isObject(acc[key])) {
-                acc[key] = {}
+            if (isNullsy(current[key]) || typeof current[key] !== 'object') {
+                current[key] = {}
             }
+            current = current[key] as Record<string | number, unknown>
         }
-        return acc[key] as PlainObject
-    }, obj)
-
+    }
     return obj
 }
 
