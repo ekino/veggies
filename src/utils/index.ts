@@ -79,13 +79,17 @@ export const isPlainObject = (value: unknown): value is PlainObject => {
 }
 
 export const template = (tpl: string, options: InterpolateOptions = {}) => {
-    const defaultPattern = /\${(.*?)}/g
+    // Matches either:
+    //   - `${key}` with key captured in group 1,
+    //   - `{{<key>}}` with key captured in group 2, or
+    //   - `<key>` with key captured in group 3.
+    const defaultPattern = /(?:\${([\s\S]+?)}|{{<([\s\S]+?)>}}|<([\s\S]+?)>)/g
     const pattern = options.interpolate || defaultPattern
 
-    return (data: PlainObject) =>
-        tpl.replace(pattern, (_match, key): string => {
-            const trimmedKey = key.trim()
-            return data[trimmedKey] ? String(data[trimmedKey]) : ''
+    return (data: Record<string, unknown>) =>
+        tpl.replace(pattern, (_match, g1, g2, g3): string => {
+            const key = (g1 || g2 || g3 || '').trim()
+            return key in data ? String(data[key]) : ''
         })
 }
 

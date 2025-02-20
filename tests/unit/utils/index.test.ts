@@ -349,6 +349,45 @@ describe('utils > index', () => {
             const result = tplFn({ name: 'Eve' })
             expect(result).toBe('Hello Eve, Eve!')
         })
+
+        it('should replace <key> placeholders', () => {
+            const tpl = 'Your order <orderNumber> is ready at <location>!'
+            const tplFn = template(tpl)
+            const result = tplFn({ orderNumber: '1234', location: 'Main Street' })
+            expect(result).toBe('Your order 1234 is ready at Main Street!')
+        })
+
+        it('should replace {{<key>}} placeholders', () => {
+            const tpl = 'Your order {{<orderNumber>}} is ready at {{<location>}}!'
+            const tplFn = template(tpl)
+            const result = tplFn({ orderNumber: '1234', location: 'Main Street' })
+            expect(result).toBe('Your order 1234 is ready at Main Street!')
+        })
+
+        it('should handle mixed placeholders correctly', () => {
+            const tpl = 'Order: ${orderNumber}, <location>, and {{<status>}}'
+            const tplFn = template(tpl)
+            const result = tplFn({
+                orderNumber: '1234',
+                location: 'Main Street',
+                status: 'confirmed',
+            })
+            expect(result).toBe('Order: 1234, Main Street, and confirmed')
+        })
+
+        it('should handle falsy values correctly', () => {
+            const tpl = 'Count: ${count}, Flag: ${flag}, Empty: ${empty}'
+            const tplFn = template(tpl)
+            const result = tplFn({ count: 0, flag: false, empty: '' })
+            expect(result).toBe('Count: 0, Flag: false, Empty: ')
+        })
+
+        it('should trim keys with extra whitespace', () => {
+            const tpl = 'Hello ${  name  }!'
+            const tplFn = template(tpl)
+            const result = tplFn({ name: 'Eve' })
+            expect(result).toBe('Hello Eve!')
+        })
     })
 
     describe('mapValues', () => {
