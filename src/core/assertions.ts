@@ -109,12 +109,21 @@ export const assertObjectMatchSpec = (
                 message = `Property '${field}' (${currentValue}) ${
                     rule.isNegated ? 'matches' : 'does not match'
                 } '${expectedValue}'`
-                const regex = new RegExp(expectedValue)
 
-                if (rule.isNegated) {
-                    assert.doesNotMatch(currentValue, regex, message)
+                if (currentValue === expectedValue) {
+                    if (rule.isNegated) {
+                        assert.notEqual(currentValue, expectedValue, message)
+                    } else {
+                        assert.equal(currentValue, expectedValue, message)
+                    }
                 } else {
-                    assert.match(currentValue, regex, message)
+                    const regex = new RegExp(expectedValue)
+
+                    if (rule.isNegated) {
+                        assert.doesNotMatch(currentValue, regex, message)
+                    } else {
+                        assert.match(currentValue, regex, message)
+                    }
                 }
                 break
             }
