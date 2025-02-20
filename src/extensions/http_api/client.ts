@@ -1,3 +1,4 @@
+import pathModule from 'node:path'
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios'
 import { wrapper } from 'axios-cookiejar-support'
 import FormData from 'form-data'
@@ -220,11 +221,7 @@ class HttpApiClient {
      * - query
      * - body
      */
-    async makeRequest(
-        method: string,
-        requestPath: string,
-        originalBaseUrl?: string
-    ): Promise<void> {
+    async makeRequest(method: string, requestPath: string, originalBaseUrl: string): Promise<void> {
         try {
             let path = requestPath
             let baseUrl = originalBaseUrl
@@ -234,7 +231,7 @@ class HttpApiClient {
                 baseUrl = url.origin
             }
 
-            const fullUrl = `${baseUrl}${path}`
+            const fullUrl = pathModule.join(baseUrl, path)
             const options: RequestOptions = {
                 method,
                 url: fullUrl,
