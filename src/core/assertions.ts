@@ -110,11 +110,11 @@ export const assertObjectMatchSpec = (
                     rule.isNegated ? 'matches' : 'does not match'
                 } '${expectedValue}'`
 
-                if (currentValue === expectedValue) {
+                if (String(currentValue) === String(expectedValue)) {
                     if (rule.isNegated) {
-                        assert.notEqual(currentValue, expectedValue, message)
+                        assert.notEqual(currentValue, currentValue, message)
                     } else {
-                        assert.equal(currentValue, expectedValue, message)
+                        assert.equal(currentValue, currentValue, message)
                     }
                 } else {
                     const regex = new RegExp(expectedValue)
