@@ -1,7 +1,9 @@
 import { describe, expect, it } from 'vitest'
-import type { Predicate } from '../../../src/types.js'
+import type { Predicate, VeggiesError } from '../../../src/types.js'
 import {
     findKey,
+    getError,
+    getType,
     getValue,
     isDefined,
     isEmpty,
@@ -450,6 +452,84 @@ describe('utils > index', () => {
             const greetPartial = partial(greet, 'Hello')
             const result = greetPartial('Alice')
             expect(result).toBe('Hello, Alice!')
+        })
+    })
+
+    describe('getError', () => {
+        it('should return an error object with the message from an object', () => {
+            const error = { message: 'An error occurred', code: 500 }
+            const result: VeggiesError = getError(error)
+            expect(result).toEqual({ ...error, message: 'An error occurred' })
+        })
+
+        it('should return an error object with the message from a string', () => {
+            const error = 'An error occurred'
+            const result: VeggiesError = getError(error)
+            expect(result).toEqual({ message: error })
+        })
+
+        it('should return an error object with "unknown error" message for null', () => {
+            const result: VeggiesError = getError(null)
+            expect(result).toEqual({ message: 'unknown error' })
+        })
+
+        it('should return an error object with "unknown error" message for undefined', () => {
+            const result: VeggiesError = getError(undefined)
+            expect(result).toEqual({ message: 'unknown error' })
+        })
+
+        it('should return an error object with the stringified message for non-object, non-string errors', () => {
+            const error = 12345
+            const result: VeggiesError = getError(error)
+            expect(result).toEqual({ message: JSON.stringify(error) })
+        })
+
+        it('should return an error object with the stringified message for array errors', () => {
+            const error = [1, 2, 3]
+            const result: VeggiesError = getError(error)
+            expect(result).toEqual({ message: JSON.stringify(error) })
+        })
+    })
+
+    describe('getType', () => {
+        it('should return "array" for arrays', () => {
+            expect(getType([])).toBe('array')
+        })
+
+        it('should return "null" for null', () => {
+            expect(getType(null)).toBe('null')
+        })
+
+        it('should return "date" for Date objects', () => {
+            expect(getType(new Date())).toBe('date')
+        })
+
+        it('should return "regexp" for RegExp objects', () => {
+            expect(getType(/test/)).toBe('regexp')
+        })
+
+        it('should return "object" for plain objects', () => {
+            expect(getType({})).toBe('object')
+        })
+
+        it('should return "string" for strings', () => {
+            expect(getType('test')).toBe('string')
+        })
+
+        it('should return "number" for numbers', () => {
+            expect(getType(123)).toBe('number')
+        })
+
+        it('should return "boolean" for booleans', () => {
+            expect(getType(true)).toBe('boolean')
+        })
+
+        it('should return "undefined" for undefined', () => {
+            expect(getType(undefined)).toBe('undefined')
+        })
+
+        it('should return "function" for functions', () => {
+            expect(getType(() => {})).toBe('function')
         })
     })
 })

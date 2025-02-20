@@ -1,6 +1,6 @@
 import * as assert from 'node:assert/strict'
 import type { MatchingRule, ObjectFieldSpec } from '../types.js'
-import { getValue, isEmpty, isNullsy } from '../utils/index.js'
+import { getType, getValue, isEmpty, isNullsy } from '../utils/index.js'
 import { addTime, formatTime } from '../utils/time.js'
 import * as Cast from './cast.js'
 
@@ -190,10 +190,12 @@ export const assertObjectMatchSpec = (
                     rule.isNegated ? '' : ' not'
                 } '${expectedValue}'`
 
+                const actualType = getType(currentValue)
+
                 if (rule.isNegated) {
-                    assert.notStrictEqual(typeof currentValue, expectedValue, message)
+                    assert.notStrictEqual(actualType, expectedValue, message)
                 } else {
-                    assert.strictEqual(typeof currentValue, expectedValue, message)
+                    assert.strictEqual(actualType, expectedValue, message)
                 }
                 break
             }

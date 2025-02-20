@@ -138,3 +138,13 @@ export const getError = (error: unknown): VeggiesError => {
     if (!error) return { message: 'unknown error' }
     return { message: JSON.stringify(error) }
 }
+
+export const getType = (value: unknown): string => {
+    if (Array.isArray(value)) return 'array'
+    if (value === null) return 'null'
+    if (value instanceof Date) return 'date'
+    if (value instanceof RegExp) return 'regexp'
+    if (typeof value === 'object' && value !== null && 'nodeType' in value && value.nodeType === 1)
+        return 'element'
+    return typeof value
+}
