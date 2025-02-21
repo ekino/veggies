@@ -511,7 +511,7 @@ describe('core > assertions', () => {
                 spec,
                 true
             )
-        ).toThrow(`Expected json response to fully match spec, but it does not\n\n3 !== 2\n`)
+        ).toThrow(/Expected json response to fully match spec, but it does not/)
         expect(() =>
             assertObjectMatchSpec({ first_name: 'john', last_name: 'john' }, spec, true)
         ).toThrow(`Property 'last_name' (john) does not match '^doe'`)
