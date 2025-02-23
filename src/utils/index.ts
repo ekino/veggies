@@ -62,7 +62,8 @@ export const setValue = (obj: unknown, path: Path, value: unknown): unknown => {
             current[key] = value
         } else {
             if (isNullsy(current[key]) || typeof current[key] !== 'object') {
-                current[key] = {}
+                const nextKey = pathArray[i + 1]
+                current[key] = typeof nextKey === 'number' ? [] : {}
             }
             current = current[key] as Record<string | number, unknown>
         }
