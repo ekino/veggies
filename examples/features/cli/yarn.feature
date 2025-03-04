@@ -1,5 +1,5 @@
 @cli @offline
-Feature: Pnpm CLI
+Feature: yarn CLI
 
   Scenario: Running an invalid command
     When I run command node -z
