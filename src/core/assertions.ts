@@ -1,6 +1,6 @@
 import * as assert from 'node:assert/strict'
 import type { MatchingRule, ObjectFieldSpec } from '../types.js'
-import { getType, getValue, isEmpty, isNullsy } from '../utils/index.js'
+import { getType, getValue, isEmpty, isNullish } from '../utils/index.js'
 import { addTime, formatTime } from '../utils/time.js'
 import * as Cast from './cast.js'
 
@@ -163,7 +163,7 @@ export const assertObjectMatchSpec = (
             }
             case RuleName.Present: {
                 message = `Property '${field}' is ${rule.isNegated ? 'defined' : 'undefined'}`
-                const value = isNullsy(currentValue) ? 'defined' : 'undefined'
+                const value = isNullish(currentValue) ? 'defined' : 'undefined'
                 if (rule.isNegated) {
                     assert.strictEqual(value, 'defined', message)
                 } else {
@@ -173,9 +173,9 @@ export const assertObjectMatchSpec = (
             }
             case RuleName.RelativeDate: {
                 const match = relativeDateValueRegex.exec(expectedValue)
-                if (isNullsy(match)) throw new Error('relative date arguments are invalid')
+                if (isNullish(match)) throw new Error('relative date arguments are invalid')
                 const [, amount, unit, locale, format] = match
-                if (!locale || isNullsy(amount) || !unit || !format) break
+                if (!locale || isNullish(amount) || !unit || !format) break
 
                 const normalizedLocale = Intl.getCanonicalLocales(locale)[0]
 

@@ -5,14 +5,14 @@ import {
     getError,
     getType,
     getValue,
-    isDefined,
     isEmpty,
     isFunction,
-    isNotNullsy,
-    isNullsy,
+    isNotNullish,
+    isNullish,
     isNumber,
     isPlainObject,
     isString,
+    isTruthy,
     mapValues,
     omit,
     partial,
@@ -41,39 +41,39 @@ describe('utils > index', () => {
         })
     })
 
-    describe('isNullsy', () => {
+    describe('isNullish', () => {
         it('should return true for undefined', () => {
-            expect(isNullsy(undefined)).toBe(true)
+            expect(isNullish(undefined)).toBe(true)
         })
 
         it('should return true for null', () => {
-            expect(isNullsy(null)).toBe(true)
+            expect(isNullish(null)).toBe(true)
         })
 
         it('should return false for non-nullsy values', () => {
-            expect(isNullsy('')).toBe(false)
-            expect(isNullsy(0)).toBe(false)
-            expect(isNullsy(false)).toBe(false)
-            expect(isNullsy([])).toBe(false)
-            expect(isNullsy({})).toBe(false)
+            expect(isNullish('')).toBe(false)
+            expect(isNullish(0)).toBe(false)
+            expect(isNullish(false)).toBe(false)
+            expect(isNullish([])).toBe(false)
+            expect(isNullish({})).toBe(false)
         })
     })
 
-    describe('isNotNullsy', () => {
+    describe('isNotNullish', () => {
         it('should return false for undefined', () => {
-            expect(isNotNullsy(undefined)).toBe(false)
+            expect(isNotNullish(undefined)).toBe(false)
         })
 
         it('should return false for null', () => {
-            expect(isNotNullsy(null)).toBe(false)
+            expect(isNotNullish(null)).toBe(false)
         })
 
         it('should return true for non-nullsy values', () => {
-            expect(isNotNullsy('')).toBe(true)
-            expect(isNotNullsy(0)).toBe(true)
-            expect(isNotNullsy(false)).toBe(true)
-            expect(isNotNullsy([])).toBe(true)
-            expect(isNotNullsy({})).toBe(true)
+            expect(isNotNullish('')).toBe(true)
+            expect(isNotNullish(0)).toBe(true)
+            expect(isNotNullish(false)).toBe(true)
+            expect(isNotNullish([])).toBe(true)
+            expect(isNotNullish({})).toBe(true)
         })
     })
 
@@ -95,18 +95,18 @@ describe('utils > index', () => {
         })
     })
 
-    describe('isDefined', () => {
+    describe('isTruthy', () => {
         it('should return true for defined values', () => {
-            expect(isDefined('string')).toBe(true)
-            expect(isDefined(123)).toBe(true)
-            expect(isDefined([])).toBe(true)
-            expect(isDefined({})).toBe(true)
-            expect(isDefined(true)).toBe(true)
+            expect(isTruthy('string')).toBe(true)
+            expect(isTruthy(123)).toBe(true)
+            expect(isTruthy([])).toBe(true)
+            expect(isTruthy({})).toBe(true)
+            expect(isTruthy(true)).toBe(true)
         })
 
         it('should return false for undefined and null', () => {
-            expect(isDefined(undefined)).toBe(false)
-            expect(isDefined(null)).toBe(false)
+            expect(isTruthy(undefined)).toBe(false)
+            expect(isTruthy(null)).toBe(false)
         })
     })
 

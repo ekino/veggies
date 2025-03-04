@@ -1,6 +1,6 @@
 import { spawn } from 'node:child_process'
 import path from 'node:path'
-import { isNotNullsy } from '../../utils/index.js'
+import { isNotNullish } from '../../utils/index.js'
 
 export type CliArgs = ConstructorParameters<typeof Cli>
 
@@ -114,7 +114,7 @@ class Cli {
 
             let killer: NodeJS.Timeout | undefined
             let killed = false
-            if (isNotNullsy(this.killSignal)) {
+            if (isNotNullish(this.killSignal)) {
                 killer = setTimeout(() => {
                     cmd.kill(this.killSignal ?? undefined)
                     killed = true

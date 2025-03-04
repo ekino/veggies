@@ -2,9 +2,10 @@ import type { InterpolateOptions, Path, PlainObject, Predicate, VeggiesError } f
 
 export const isNumber = (n: unknown): n is number => Number.isFinite(n)
 
-export const isNullsy = (val: unknown): val is undefined | null => val === undefined || val === null
+export const isNullish = (val: unknown): val is undefined | null =>
+    val === undefined || val === null
 
-export const isNotNullsy = <T>(val: unknown): val is T => val !== undefined && val !== null
+export const isNotNullish = <T>(val: unknown): val is T => val !== undefined && val !== null
 
 export const isEmpty = (val: unknown): boolean => {
     if (val === null || val === undefined) return true
@@ -13,7 +14,7 @@ export const isEmpty = (val: unknown): boolean => {
     return false
 }
 
-export const isDefined = <T>(toTest: T | undefined | null): toTest is T => {
+export const isTruthy = <T>(toTest: T | undefined | null): toTest is T => {
     return !!toTest
 }
 
@@ -25,7 +26,7 @@ export const isObject = (val: unknown): val is PlainObject =>
     !!val && typeof val === 'object' && !Array.isArray(val)
 
 export const getValue = <T = unknown>(obj: unknown, path?: Path): T | undefined => {
-    if (isNullsy(obj) || !path) return undefined
+    if (isNullish(obj) || !path) return undefined
 
     if (typeof path === 'string' && Object.prototype.hasOwnProperty.call(obj, path)) {
         return (obj as Record<string, unknown>)[path] as T
@@ -38,7 +39,7 @@ export const getValue = <T = unknown>(obj: unknown, path?: Path): T | undefined 
               segment.match(/^\d+$/) ? Number(segment) : segment.replace(/^['"]|['"]$/g, '')
           )
     return pathArray.reduce<unknown>((acc, key) => {
-        if (isNullsy(acc) || typeof acc !== 'object') {
+        if (isNullish(acc) || typeof acc !== 'object') {
             return undefined
         }
         return (acc as PlainObject)[key]
@@ -46,7 +47,7 @@ export const getValue = <T = unknown>(obj: unknown, path?: Path): T | undefined 
 }
 
 export const setValue = (obj: unknown, path: Path, value: unknown): unknown => {
-    if (isNullsy(obj) || typeof obj !== 'object') return obj
+    if (isNullish(obj) || typeof obj !== 'object') return obj
 
     const pathArray: (string | number)[] = Array.isArray(path)
         ? path
@@ -57,11 +58,11 @@ export const setValue = (obj: unknown, path: Path, value: unknown): unknown => {
     let current = obj as Record<string | number, unknown>
     for (let i = 0; i < pathArray.length; i++) {
         const key = pathArray[i]
-        if (isNullsy(key)) continue
+        if (isNullish(key)) continue
         if (i === pathArray.length - 1) {
             current[key] = value
         } else {
-            if (isNullsy(current[key]) || typeof current[key] !== 'object') {
+            if (isNullish(current[key]) || typeof current[key] !== 'object') {
                 const nextKey = pathArray[i + 1]
                 current[key] = typeof nextKey === 'number' ? [] : {}
             }
@@ -72,12 +73,12 @@ export const setValue = (obj: unknown, path: Path, value: unknown): unknown => {
 }
 
 export const isPlainObject = (value: unknown): value is PlainObject => {
-    if (isNullsy(value) || typeof value !== 'object') {
+    if (isNullish(value) || typeof value !== 'object') {
         return false
     }
 
     const proto = Object.getPrototypeOf(value)
-    return isNullsy(proto) || proto === Object.prototype
+    return isNullish(proto) || proto === Object.prototype
 }
 
 export const template = (tpl: string, options: InterpolateOptions = {}) => {
@@ -108,7 +109,7 @@ export const pick = <T extends PlainObject, K extends keyof T>(
     obj: T | null | undefined,
     keys: K[]
 ): Partial<T> => {
-    if (isNullsy(obj)) return {}
+    if (isNullish(obj)) return {}
     return keys.reduce<Partial<T>>((acc, key) => {
         if (Object.prototype.hasOwnProperty.call(obj, key)) {
             acc[key] = obj[key]

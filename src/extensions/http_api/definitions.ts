@@ -6,7 +6,7 @@ import type { AxiosResponse } from 'axios'
 import { assertObjectMatchSpec } from '../../core/assertions.js'
 import * as Cast from '../../core/cast.js'
 import type { CastedValue, CookieProperty, RequestBody, RequestHeaders } from '../../types.js'
-import { findKey, getValue, isEmpty, isNullsy, isString } from '../../utils/index.js'
+import { findKey, getValue, isEmpty, isNullish, isString } from '../../utils/index.js'
 import type { HttpApiClient } from './client.js'
 import { parseMatchExpression } from './utils.js'
 
@@ -271,7 +271,7 @@ export const install = ({ baseUrl = '' } = {}): void => {
         (flag: string | undefined, key: string): void => {
             const cookie = world.httpApiClient.getCookie(key)
 
-            if (isNullsy(flag)) {
+            if (isNullish(flag)) {
                 assert.notStrictEqual(cookie, undefined, `No cookie found for key '${key}'`)
             } else {
                 assert.strictEqual(cookie, undefined, `A cookie exists for key '${key}'`)
@@ -286,7 +286,7 @@ export const install = ({ baseUrl = '' } = {}): void => {
         const cookie = world.httpApiClient.getCookie(key)
         assert.notStrictEqual(cookie, undefined, `No cookie found for key '${key}'`)
 
-        if (isNullsy(flag)) {
+        if (isNullish(flag)) {
             assert.strictEqual(cookie?.secure, true, `Cookie '${key}' is not secure`)
         } else {
             assert.strictEqual(cookie?.secure, false, `Cookie '${key}' is secure`)
@@ -303,7 +303,7 @@ export const install = ({ baseUrl = '' } = {}): void => {
 
             assert.notStrictEqual(cookie, undefined, `No cookie found for key '${key}'`)
 
-            if (isNullsy(flag)) {
+            if (isNullish(flag)) {
                 assert.strictEqual(cookie?.httpOnly, true, `Cookie '${key}' is not http only`)
             } else {
                 assert.strictEqual(cookie?.httpOnly, false, `Cookie '${key}' is http only`)
@@ -320,7 +320,7 @@ export const install = ({ baseUrl = '' } = {}): void => {
             const cookie = world.httpApiClient.getCookie(key)
             assert.notStrictEqual(cookie, undefined, `No cookie found for key '${key}'`)
 
-            if (isNullsy(flag)) {
+            if (isNullish(flag)) {
                 assert.strictEqual(
                     cookie?.domain,
                     domain,
@@ -375,7 +375,7 @@ export const install = ({ baseUrl = '' } = {}): void => {
             const response = mustGetResponse(world.httpApiClient)
             const data = response?.data
 
-            const array = !isNullsy(path) ? getValue(data, path) : data
+            const array = !isNullish(path) ? getValue(data, path) : data
             const expectedSize = Number(size)
             assert.strictEqual(
                 array.length,
