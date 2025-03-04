@@ -87,11 +87,11 @@ describe('extensions > snapshot > clean', () => {
 
             clean.cleanSnapshots()
 
-            expect(snapshot.readSnapshotFile).toHaveBeenCalledTimes(3)
+            expect(snapshot.readSnapshotFile).toHaveBeenCalledTimes(2)
             expect(snapshot.readSnapshotFile).toHaveBeenCalledWith(file1)
             expect(snapshot.readSnapshotFile).toHaveBeenCalledWith(file2)
 
-            expect(snapshot.writeSnapshotFile).toHaveBeenCalledTimes(3)
+            expect(snapshot.writeSnapshotFile).toHaveBeenCalledTimes(2)
             expect(snapshot.writeSnapshotFile).toHaveBeenCalledWith(file1, expectedContent1)
             expect(snapshot.writeSnapshotFile).toHaveBeenCalledWith(file2, expectedContent2)
         })
