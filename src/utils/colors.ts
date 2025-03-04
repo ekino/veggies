@@ -1,4 +1,12 @@
-export const GREEN = '\x1b[32m'
-export const RED = '\x1b[31m'
-export const RESET = '\x1b[0m'
-export const YELLOW = '\x1b[33m'
+const format =
+    (open: number, close = 39) =>
+    (input: string) =>
+        `\x1b[${open}m` + input + `\x1b[${close}m`
+
+const createColors = () => ({
+    green: format(32),
+    red: format(31),
+    yellow: format(33),
+})
+
+export const colors = createColors()

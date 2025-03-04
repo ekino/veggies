@@ -2,7 +2,7 @@ import path from 'node:path'
 import { diff as jestDiff } from 'jest-diff'
 import naturalCompare from 'natural-compare'
 import type { Scenario, SnapshotContent, SnapshotOptions } from '../../types.js'
-import { GREEN, RED, RESET } from '../../utils/colors.js'
+import { colors } from '../../utils/colors.js'
 import * as fileSystem from './fs.js'
 
 const JEST_NO_DIFF_MESSAGE = 'Compared values have no visual difference.'
@@ -116,9 +116,9 @@ export const diff = (snapshot: string, expected: string): string | undefined => 
         aAnnotation: 'Snapshot',
         bAnnotation: 'Received',
     })
-
-    diffMessage =
-        diffMessage || `${GREEN}- ${expected || ''}${RESET} \n ${RED}+ ${snapshot}${RESET}`
+    const expectedMsg = colors.green(`- ${expected || ''}`)
+    const snapshotMsg = colors.red(`+ ${snapshot}`)
+    diffMessage = diffMessage || `${expectedMsg} \n ${snapshotMsg}`
     if (diffMessage.indexOf(JEST_NO_DIFF_MESSAGE) !== -1) return undefined
     return `\n${diffMessage}`
 }

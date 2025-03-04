@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { dedent } from '../../../../src/extensions/snapshot/dedent.js'
 import * as fileSystem from '../../../../src/extensions/snapshot/fs.js'
 import * as snapshot from '../../../../src/extensions/snapshot/snapshot.js'
-import { GREEN, RED, RESET } from '../../../../src/utils/colors.js'
+import { colors } from '../../../../src/utils/colors.js'
 
 vi.mock('jest-diff', () => ({ diff: vi.fn() }))
 vi.mock('../../../../src/extensions/snapshot/fs.js', () => ({
@@ -149,7 +149,10 @@ describe('extensions > snapshot > snapshot', () => {
             vi.spyOn(jestDiff, 'diff').mockReturnValue(null)
 
             const diffMessage = snapshot.diff(snapshotContent, expectedContent)
-            const expectedDiffMessage = `\n${GREEN}- ${expectedContent}${RESET} \n ${RED}+ ${snapshotContent}${RESET}`
+
+            const expectedMsg = colors.green(`- ${expectedContent || ''}`)
+            const snapshotMsg = colors.red(`+ ${snapshotContent}`)
+            const expectedDiffMessage = `\n${expectedMsg} \n ${snapshotMsg}`
             expect(diffMessage).toEqual(expectedDiffMessage)
         })
 
