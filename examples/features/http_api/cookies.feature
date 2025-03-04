@@ -1,10 +1,10 @@
 @http_api @cookies
 Feature: Using cookies
 
-  Scenario: Visiting twitter home
+  Scenario: Visit Wikipedia API with cookies
     Given enable cookies
-    When I GET https://twitter.com/
+    When I GET https://en.wikipedia.org/w/api.php
     Then response status should be ok
-    And response should have a guest_id cookie
-    And response guest_id cookie should be secure
-    And response guest_id cookie should not be http only
+    And response should have a WMF-Last-Access cookie
+    And response WMF-Last-Access cookie should be secure
+    And response WMF-Last-Access cookie domain should be en.wikipedia.org
