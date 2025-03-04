@@ -18,7 +18,7 @@ export const isTruthy = <T>(toTest: T | undefined | null): toTest is T => {
     return !!toTest
 }
 
-export const isString = (val: unknown) => typeof val === 'string'
+export const isString = (val: unknown): val is string => typeof val === 'string'
 
 export const isFunction = (func: unknown) => typeof func === 'function'
 

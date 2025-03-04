@@ -75,20 +75,9 @@ export type SnapshotFile = {
     name: string
 }
 
+export type CastedValue = undefined | null | number | boolean | unknown[] | string
+
 export type CastFunction = (value?: string | null) => CastedValue
-
-export type CastFunctions = Record<string, CastFunction>
-
-export type CastedValue =
-    | string
-    | number
-    | boolean
-    | Record<string, unknown>
-    | unknown[]
-    | null
-    | undefined
-
-export type CastType = 'string' | 'boolean' | 'number' | 'date' | 'array' | 'null' | 'undefined'
 
 export type ObjectFieldSpec = {
     field?: string

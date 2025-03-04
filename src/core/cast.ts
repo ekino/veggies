@@ -1,17 +1,11 @@
-import type { CastFunction, CastFunctions, CastType, CastedValue } from '../types.js'
+import type { CastFunction, CastedValue } from '../types.js'
 import { isFunction, isString, setValue } from '../utils/index.js'
 
-const castFunctions: CastFunctions = {}
+const toUndefined = (): undefined => undefined
 
-castFunctions['undefined'] = (): undefined => {
-    return undefined
-}
+const toNull = (): null => null
 
-castFunctions['null'] = (): null => {
-    return null
-}
-
-castFunctions['number'] = (value?: string | null): number => {
+const toNumber = (value?: string | null): number => {
     const result = Number(value)
     if (Number.isNaN(result)) {
         throw new TypeError(`Unable to cast value to number '${value}'`)
@@ -19,15 +13,12 @@ castFunctions['number'] = (value?: string | null): number => {
     return result
 }
 
-castFunctions['boolean'] = (value?: string | null): boolean => {
-    return value === 'true'
-}
+const toBoolean = (value?: string | null): boolean => value === 'true'
 
-castFunctions['array'] = (value?: string | null): unknown[] => {
-    return value ? value.replace(/\s/g, '').split(',').map(getCastedValue) : []
-}
+const toArray = (value?: string | null): unknown[] =>
+    value ? value.replace(/\s/g, '').split(',').map(getCastedValue) : []
 
-castFunctions['date'] = (value?: string | null): string => {
+const toDate = (value?: string | null): string => {
     if (!value) throw new TypeError(`Unable to cast value to date '${value}'`)
 
     if (value === 'today') {
@@ -37,8 +28,16 @@ castFunctions['date'] = (value?: string | null): string => {
     return new Date(value).toJSON()
 }
 
-castFunctions['string'] = (value?: string | null): string => {
-    return `${value || ''}`
+const toStr = (value?: string | null): string => `${value || ''}`
+
+const castFunctions: Record<string, CastFunction> = {
+    undefined: toUndefined,
+    null: toNull,
+    number: toNumber,
+    boolean: toBoolean,
+    array: toArray,
+    date: toDate,
+    string: toStr,
 }
 
 /**
@@ -85,10 +84,10 @@ export const getCastedValue = (value: unknown): CastedValue => {
     const matchResult = value.match(/^(.*)\(\((\w+)\)\)$/)
 
     if (matchResult) {
-        const type = matchResult[2] as CastType
-        const castFunction = castFunctions[type]
-        if (!castFunction) throw new TypeError(`Invalid type provided: ${type} '${value}'`)
-        return castFunction(matchResult[1])
+        const type = matchResult[2]
+        if (!type || !castFunctions[type])
+            throw new TypeError(`Invalid type provided: ${type} '${value}'`)
+        return castFunctions[type](matchResult[1])
     }
 
     return value
