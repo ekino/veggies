@@ -14,9 +14,7 @@ export const isEmpty = (val: unknown): boolean => {
     return false
 }
 
-export const isTruthy = <T>(toTest: T | undefined | null): toTest is T => {
-    return !!toTest
-}
+export const isTruthy = <T>(toTest: T | undefined | null): toTest is T => !!toTest
 
 export const isString = (val: unknown): val is string => typeof val === 'string'
 
@@ -28,11 +26,10 @@ export const isObject = (val: unknown): val is PlainObject =>
 export const getValue = <T = unknown>(obj: unknown, path?: Path): T | undefined => {
     if (isNullish(obj) || !path) return undefined
 
-    if (typeof path === 'string' && Object.prototype.hasOwnProperty.call(obj, path)) {
+    if (typeof path === 'string' && Object.prototype.hasOwnProperty.call(obj, path))
         return (obj as Record<string, unknown>)[path] as T
-    }
 
-    const pathArray: (string | number)[] = Array.isArray(path)
+    const pathArray = Array.isArray(path)
         ? path
         : (path.match(/([^[.\]]+)/g) || []).map((segment) =>
               // If the segment is all digits, convert it to a number.
@@ -63,8 +60,7 @@ export const setValue = (obj: unknown, path: Path, value: unknown): unknown => {
             current[key] = value
         } else {
             if (isNullish(current[key]) || typeof current[key] !== 'object') {
-                const nextKey = pathArray[i + 1]
-                current[key] = typeof nextKey === 'number' ? [] : {}
+                current[key] = typeof pathArray[i + 1] === 'number' ? [] : {}
             }
             current = current[key] as Record<string | number, unknown>
         }
@@ -73,9 +69,7 @@ export const setValue = (obj: unknown, path: Path, value: unknown): unknown => {
 }
 
 export const isPlainObject = (value: unknown): value is PlainObject => {
-    if (isNullish(value) || typeof value !== 'object') {
-        return false
-    }
+    if (isNullish(value) || typeof value !== 'object') return false
 
     const proto = Object.getPrototypeOf(value)
     return isNullish(proto) || proto === Object.prototype
@@ -151,7 +145,6 @@ export const getType = (value: unknown): string => {
     if (value === null) return 'null'
     if (value instanceof Date) return 'date'
     if (value instanceof RegExp) return 'regexp'
-    if (typeof value === 'object' && value !== null && 'nodeType' in value && value.nodeType === 1)
-        return 'element'
+    if (typeof value === 'object' && 'nodeType' in value && value.nodeType === 1) return 'element'
     return typeof value
 }

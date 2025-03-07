@@ -5,12 +5,22 @@ import { isNotNullish } from '../../utils/index.js'
 export type CliArgs = ConstructorParameters<typeof Cli>
 
 class Cli {
+    //The Current Working Directory.
     public cwd: string
+
+    // An object containing environment variables to inject when running your command.
     public env: Record<string, string>
+
     public killSignal: number | NodeJS.Signals | undefined
     public killDelay: number
+
+    // Latest command execution exit code.
     public exitCode: number | undefined
+
+    // The command's output.
     public stdout: string
+
+    // The command's error output.
     public stderr: string
 
     constructor() {
@@ -128,16 +138,14 @@ class Cli {
             cmd.stderr.on('data', cmdStderr.push.bind(cmdStderr))
 
             cmd.on('close', (code, _signal) => {
-                if (killer !== undefined) {
-                    if (killed !== true) {
-                        clearTimeout(killer)
+                if (killer !== undefined && killed !== true) {
+                    clearTimeout(killer)
 
-                        return reject(
-                            new Error(
-                                `process.kill('${this.killSignal}') scheduled but process exited (delay: ${this.killDelay}ms)`
-                            )
+                    return reject(
+                        new Error(
+                            `process.kill('${this.killSignal}') scheduled but process exited (delay: ${this.killDelay}ms)`
                         )
-                    }
+                    )
                 }
 
                 this.exitCode = code ?? undefined

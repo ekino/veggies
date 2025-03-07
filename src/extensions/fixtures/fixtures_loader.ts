@@ -79,9 +79,7 @@ class FixturesLoader {
     async loadJson(file: string): Promise<Record<string, unknown>> {
         return this.loadText(file).then((content) => {
             try {
-                const data = JSON.parse(content)
-
-                return data
+                return JSON.parse(content)
             } catch (err) {
                 return Promise.reject(
                     new Error(

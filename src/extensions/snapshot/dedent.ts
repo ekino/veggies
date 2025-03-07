@@ -48,8 +48,7 @@ const getSpacesLength = (text?: string): number => {
  * Warning : First line and last line will always be ignored
  */
 export const dedent = (inputText: string | string[] | TemplateStringsArray): string => {
-    let text = inputText
-    if (typeof text !== 'string') text = text[0] || ''
+    const text = typeof inputText === 'string' ? inputText : inputText[0] || ''
 
     let lines = text.split('\n')
     if (lines.length < 3) return text
@@ -64,18 +63,10 @@ export const dedent = (inputText: string | string[] | TemplateStringsArray): str
     ) {
         lines = lines.slice(1, lines.length - 1)
     } else {
-        for (let i = 0; i < lines.length; i++) {
-            const line = lines[i]
-            skipLength = Math.min(skipLength, getSpacesLength(line))
-        }
+        skipLength = Math.min(...lines.map(getSpacesLength))
     }
 
-    const resultLines = []
-    for (let i = 0; i < lines.length; i++) {
-        resultLines.push(lines[i]?.substring(skipLength))
-    }
-
-    return resultLines.join('\n')
+    return lines.map((line) => line.substring(skipLength)).join('\n')
 }
 
 export default dedent

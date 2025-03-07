@@ -44,14 +44,14 @@ export type HttpApiClientArgs = ConstructorParameters<typeof HttpApiClient>
  */
 class HttpApiClient {
     public body: RequestBody | undefined
-    public bodyType: string = BODY_TYPE_JSON
-    public headers: RequestHeaders = {}
-    public query: Record<string, unknown> = {}
-    public cookies: CookieProperty[] = []
+    public bodyType: string
+    public headers: RequestHeaders
+    public query: Record<string, unknown>
+    public cookies: CookieProperty[]
     public cookieJar: CookieJar | undefined
-    public followRedirect = true
+    public followRedirect: boolean
     public response: AxiosResponse | undefined
-    public responseCookies: Record<string, Cookie> = {}
+    public responseCookies: Record<string, Cookie>
 
     constructor() {
         this.body = undefined
@@ -274,12 +274,11 @@ class HttpApiClient {
                 }
             }
             const client = getClient(this.cookieJar)
-            const _response = await client.request(options)
-            this.response = _response
+            this.response = await client.request(options)
 
             if (this.cookieJar) {
                 this.responseCookies = {}
-                const setCookieHeaders = this.response.headers['set-cookie']
+                const setCookieHeaders = this.response?.headers['set-cookie']
                 if (setCookieHeaders) {
                     for (const cookie of setCookieHeaders) {
                         this.cookieJar?.setCookieSync(cookie, fullUrl)
