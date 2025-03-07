@@ -49,7 +49,7 @@ const RuleName = Object.freeze({
  */
 export const countNestedProperties = (object: Record<string, unknown>): number => {
     let propertiesCount = 0
-    for (const key of Object.keys(object)) {
+    for (const key in object) {
         const val = object[key]
         if (!isEmpty(val) && typeof val === 'object') {
             const count = countNestedProperties(val as Record<string, unknown>)
@@ -103,72 +103,50 @@ export const assertObjectMatchSpec = (
         const rule = getMatchingRule(matcher)
         if (!rule) return
 
-        let message: string
+        const message = (msg: string) =>
+            `Property '${field}' (${currentValue}) ${msg} '${expectedValue}'`
+
         switch (rule.name) {
             case RuleName.Match: {
-                message = `Property '${field}' (${currentValue}) ${
-                    rule.isNegated ? 'matches' : 'does not match'
-                } '${expectedValue}'`
-
                 if (String(currentValue) === String(expectedValue)) {
-                    if (rule.isNegated) {
-                        assert.notEqual(currentValue, currentValue, message)
-                    } else {
-                        assert.equal(currentValue, currentValue, message)
-                    }
+                    rule.isNegated
+                        ? assert.notEqual(currentValue, currentValue, message('matches'))
+                        : assert.equal(currentValue, currentValue, message('does not match'))
                 } else {
                     const regex = new RegExp(expectedValue)
-
-                    if (rule.isNegated) {
-                        assert.doesNotMatch(currentValue, regex, message)
-                    } else {
-                        assert.match(currentValue, regex, message)
-                    }
+                    rule.isNegated
+                        ? assert.doesNotMatch(currentValue, regex, message('matches'))
+                        : assert.match(currentValue, regex, message('does not match'))
                 }
                 break
             }
             case RuleName.Contain: {
-                message = `Property '${field}' (${currentValue}) ${
-                    rule.isNegated ? 'contains' : 'does not contain'
-                } '${expectedValue}'`
-
-                if (rule.isNegated) {
-                    assert.ok(!currentValue.includes(expectedValue), message)
-                } else {
-                    assert.ok(currentValue.includes(expectedValue), message)
-                }
+                rule.isNegated
+                    ? assert.ok(!currentValue.includes(expectedValue), message('contains'))
+                    : assert.ok(currentValue.includes(expectedValue), message('does not contain'))
                 break
             }
             case RuleName.StartWith: {
-                message = `Property '${field}' (${currentValue}) ${
-                    rule.isNegated ? 'starts with' : 'does not start with'
-                } '${expectedValue}'`
-                if (rule.isNegated) {
-                    assert.ok(!currentValue.startsWith(expectedValue), message)
-                } else {
-                    assert.ok(currentValue.startsWith(expectedValue), message)
-                }
+                rule.isNegated
+                    ? assert.ok(!currentValue.startsWith(expectedValue), message('starts with'))
+                    : assert.ok(
+                          currentValue.startsWith(expectedValue),
+                          message('does not start with')
+                      )
                 break
             }
             case RuleName.EndWith: {
-                message = `Property '${field}' (${currentValue}) ${
-                    rule.isNegated ? 'ends with' : 'does not end with'
-                } '${expectedValue}'`
-                if (rule.isNegated) {
-                    assert.ok(!currentValue.endsWith(expectedValue), message)
-                } else {
-                    assert.ok(currentValue.endsWith(expectedValue), message)
-                }
+                rule.isNegated
+                    ? assert.ok(!currentValue.endsWith(expectedValue), message('ends with'))
+                    : assert.ok(currentValue.endsWith(expectedValue), message('does not end with'))
                 break
             }
             case RuleName.Present: {
-                message = `Property '${field}' is ${rule.isNegated ? 'defined' : 'undefined'}`
+                const messageErr = `Property '${field}' is ${rule.isNegated ? 'defined' : 'undefined'}`
                 const value = isNullish(currentValue) ? 'defined' : 'undefined'
-                if (rule.isNegated) {
-                    assert.strictEqual(value, 'defined', message)
-                } else {
-                    assert.strictEqual(value, 'undefined', message)
-                }
+                rule.isNegated
+                    ? assert.strictEqual(value, 'defined', messageErr)
+                    : assert.strictEqual(value, 'undefined', messageErr)
                 break
             }
             case RuleName.RelativeDate: {
@@ -183,48 +161,42 @@ export const assertObjectMatchSpec = (
                 const now = new Date()
                 const expectedDateObj = addTime(now, { unit, amount: Number(amount) })
                 const expectedDate = formatTime(expectedDateObj, format, normalizedLocale)
-                message = `Expected property '${field}' to ${
+                const messageErr = `Expected property '${field}' to ${
                     rule.isNegated ? 'not ' : ''
                 }equal '${expectedDate}', but found '${currentValue}'`
 
-                if (rule.isNegated) {
-                    assert.notDeepStrictEqual(currentValue, expectedDate, message)
-                } else {
-                    assert.deepStrictEqual(currentValue, expectedDate, message)
-                }
+                rule.isNegated
+                    ? assert.notDeepStrictEqual(currentValue, expectedDate, messageErr)
+                    : assert.deepStrictEqual(currentValue, expectedDate, messageErr)
                 break
             }
             case RuleName.Type: {
-                message = `Property '${field}' (${currentValue}) type is${
+                const messageErr = `Property '${field}' (${currentValue}) type is${
                     rule.isNegated ? '' : ' not'
                 } '${expectedValue}'`
 
                 const actualType = getType(currentValue)
 
-                if (rule.isNegated) {
-                    assert.notStrictEqual(actualType, expectedValue, message)
-                } else {
-                    assert.strictEqual(actualType, expectedValue, message)
-                }
+                rule.isNegated
+                    ? assert.notStrictEqual(actualType, expectedValue, messageErr)
+                    : assert.strictEqual(actualType, expectedValue, messageErr)
                 break
             }
             case RuleName.Equal: {
-                message = `Expected property '${field}' to${
+                const messageErr = `Expected property '${field}' to${
                     rule.isNegated ? ' not' : ''
                 } equal '${value}', but found '${currentValue}'`
 
-                if (rule.isNegated) {
-                    assert.notDeepStrictEqual(currentValue, expectedValue, message)
-                } else {
-                    assert.deepStrictEqual(currentValue, expectedValue, message)
-                }
+                rule.isNegated
+                    ? assert.notDeepStrictEqual(currentValue, expectedValue, messageErr)
+                    : assert.deepStrictEqual(currentValue, expectedValue, messageErr)
                 break
             }
         }
     }
 
     // We check we have exactly the same number of properties as expected
-    if (exact === true) {
+    if (exact) {
         const propertiesCount = countNestedProperties(object)
         const message = 'Expected json response to fully match spec, but it does not'
         assert.strictEqual(propertiesCount, spec.length, message)
@@ -244,49 +216,23 @@ export const assertObjectMatchSpec = (
  * // => undefined
  */
 export const getMatchingRule = (matcher?: string): MatchingRule | undefined => {
-    if (!matcher) {
-        return assert.fail(`Matcher "${matcher}" must be defined`)
-    }
+    if (!matcher) return assert.fail(`Matcher "${matcher}" must be defined`)
 
-    const matchGroups = matchRegex.exec(matcher)
-    if (matchGroups) {
-        return { name: RuleName.Match, isNegated: !!matchGroups[1] }
-    }
-
-    const containGroups = containRegex.exec(matcher)
-    if (containGroups) {
-        return { name: RuleName.Contain, isNegated: !!containGroups[1] }
-    }
-
-    const startWithGroups = startWithRegex.exec(matcher)
-    if (startWithGroups) {
-        return { name: RuleName.StartWith, isNegated: !!startWithGroups[1] }
-    }
-
-    const endWithGroups = endWithRegex.exec(matcher)
-    if (endWithGroups) {
-        return { name: RuleName.EndWith, isNegated: !!endWithGroups[1] }
-    }
-
-    const presentGroups = presentRegex.exec(matcher)
-    if (presentGroups) {
-        return { name: RuleName.Present, isNegated: !!presentGroups[1] }
-    }
-
-    const equalGroups = equalRegex.exec(matcher)
-    if (equalGroups) {
-        return { name: RuleName.Equal, isNegated: !!equalGroups[1] }
-    }
-
-    const typeGroups = typeRegex.exec(matcher)
-    if (typeGroups) {
-        return { name: RuleName.Type, isNegated: !!typeGroups[1] }
-    }
-
-    const relativeDateGroups = relativeDateRegex.exec(matcher)
-    if (relativeDateGroups) {
-        return { name: RuleName.RelativeDate, isNegated: !!relativeDateGroups[1] }
+    for (const { regex, name } of patterns) {
+        const matchGroups = regex.exec(matcher)
+        if (matchGroups) return { name, isNegated: !!matchGroups[1] }
     }
 
     return assert.fail(`Matcher "${matcher}" did not match any supported assertions`)
 }
+
+const patterns = [
+    { regex: matchRegex, name: RuleName.Match },
+    { regex: containRegex, name: RuleName.Contain },
+    { regex: startWithRegex, name: RuleName.StartWith },
+    { regex: endWithRegex, name: RuleName.EndWith },
+    { regex: presentRegex, name: RuleName.Present },
+    { regex: equalRegex, name: RuleName.Equal },
+    { regex: typeRegex, name: RuleName.Type },
+    { regex: relativeDateRegex, name: RuleName.RelativeDate },
+]

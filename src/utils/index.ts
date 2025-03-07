@@ -8,7 +8,7 @@ export const isNullish = (val: unknown): val is undefined | null =>
 export const isNotNullish = <T>(val: unknown): val is T => val !== undefined && val !== null
 
 export const isEmpty = (val: unknown): boolean => {
-    if (val === null || val === undefined) return true
+    if (isNullish(val)) return true
     if (typeof val === 'string' || Array.isArray(val)) return val.length === 0
     if (typeof val === 'object') return Object.keys(val).length === 0
     return false

@@ -13,12 +13,8 @@ export const registerExtension = (world: IWorld, extensionId: string): void => {
 /**
  * Checks if an extension were registered.
  */
-export const hasExtension = (world: IWorld, extensionId: string): boolean => {
-    if (!world[VEGGIES_NAMESPACE]) return false
-    if (!world[VEGGIES_NAMESPACE].includes(extensionId)) return false
-
-    return true
-}
+export const hasExtension = (world: IWorld, extensionId: string): boolean =>
+    world[VEGGIES_NAMESPACE]?.includes(extensionId)
 
 export default {
     registerExtension,
