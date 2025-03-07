@@ -6,7 +6,7 @@
 
 [![Watch on GitHub][github-watch-badge]][github-watch]
 [![Star on GitHub][github-star-badge]][github-star]
-[![Tweet][twitter-badge]][twitter]
+[![Tweet][x-badge]][x]
 
 Veggies is an awesome cucumberjs library for API/CLI testing.
 Great for testing APIs built upon Express, Koa, HAPI, Loopback and others.
@@ -290,7 +290,7 @@ Checking json response properties equal value:
 
 ```gherkin
 Scenario: Fetching some json response from the internets
-    When I GET http://whatever.io/things/1
+    When I GET https://whatever.io/things/1
     Then json response should match
       | field           | matcher | value |
       | name            | equal   | thing |
@@ -301,7 +301,7 @@ Checking json response properties start with value:
 
 ```gherkin
 Scenario: Fetching some json response from the internets
-    When I GET http://whatever.io/things/1
+    When I GET https://whatever.io/things/1
     Then json response should match
       | field           | matcher     | value |
       | name            | start with  | ing   |
@@ -312,7 +312,7 @@ Checking json response properties contain value:
 
 ```gherkin
 Scenario: Fetching some json response from the internets
-    When I GET http://whatever.io/things/1
+    When I GET https://whatever.io/things/1
     Then json response should match
       | field           | matcher | value |
       | name            | contain | ing   |
@@ -323,7 +323,7 @@ Checking json response properties end with value:
 
 ```gherkin
 Scenario: Fetching some json response from the internets
-    When I GET http://whatever.io/things/1
+    When I GET https://whatever.io/things/1
     Then json response should match
       | field           | matcher   | value |
       | name            | end with  | ing   |
@@ -334,7 +334,7 @@ Checking json response properties match value:
 
 ```gherkin
 Scenario: Fetching some json response from the internets
-    When I GET http://whatever.io/things/1
+    When I GET https://whatever.io/things/1
     Then json response should match
       | field           | matcher | value     |
       | name            | match   | ^(.+)ing$ |
@@ -345,7 +345,7 @@ Checking json response properties equalRelativeDate value:
 
 ```gherkin
 Scenario: Fetching some json response from the internets
-    When I GET http://whatever.io/things/1
+    When I GET https://whatever.io/things/1
     Then json response should match
       | field           | matcher            | value                                        |
       | endDate         | equalRelativeDate  | 2,days,fr,dddd                               |
@@ -357,7 +357,7 @@ Properties not listed will just be ignored, if you want a full match:
 
 ```gherkin
 Scenario: Fetching some json response from the internets
-    When I GET http://whatever.io/things/1
+    When I GET https://whatever.io/things/1
     Then json response should fully match
       | field           | matcher | value     |
       | name            | match   | ^(.+)ing$ |
@@ -391,7 +391,7 @@ The short version of each matcher is intended to be used that way:
 
 ```gherkin
 Scenario: Fetching some json response from the internets
-    When I GET http://whatever.io/things/1
+    When I GET https://whatever.io/things/1
     Then json response should fully match
       | expression                   |
       | name ~= ^(.+)ing$            |
@@ -404,7 +404,7 @@ If it eases the reading, you can also pad your expressions:
 
 ```gherkin
 Scenario: Fetching some json response from the internets
-    When I GET http://whatever.io/things/1
+    When I GET https://whatever.io/things/1
     Then json response should fully match
       | expression                      |
       | name               ~= ^(.+)ing$ |
@@ -426,7 +426,7 @@ This example illustrates its different features:
 
 ```gherkin
 Scenario: Testing header related expectations
-    When I GET http://whatever.io/
+    When I GET https://whatever.io/
     Then response header X-Whatever-A should equal whatever
     And response header X-Whatever-B should not equal whatever
     And response header X-Whatever-C should contain part
@@ -444,7 +444,7 @@ The dirty fix was to add some nasty `console.log()` everywhere, that's why **veg
 
 ```gherkin
 Scenario: Fetching something from the internets
-    When I GET http://whatever.io/things
+    When I GET https://whatever.io/things
     And dump response body
     And dump response headers
     And dump response cookies
@@ -1138,5 +1138,5 @@ Due to public API rate limit (e.g. GitHub API), this tag is used when running on
 [github-watch]: https://github.com/ekino/veggies/watchers
 [github-star-badge]: https://img.shields.io/github/stars/ekino/veggies.svg?style=social
 [github-star]: https://github.com/ekino/veggies/stargazers
-[twitter]: https://x.com/intent/tweet?text=Check%20out%20veggies!%20https://github.com/ekino/veggies%20%F0%9F%91%8D
-[twitter-badge]: https://img.shields.io/twitter/url/https/github.com/ekino/veggies.svg?style=social
+[x]: https://x.com/intent/tweet?text=Check%20out%20veggies!%20https://github.com/ekino/veggies%20%F0%9F%91%8D
+[x-badge]: https://img.shields.io/twitter/url/https/github.com/ekino/veggies.svg?style=social
