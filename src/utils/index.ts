@@ -46,7 +46,7 @@ export const getValue = <T = unknown>(obj: unknown, path?: Path): T | undefined 
 export const setValue = (obj: unknown, path: Path, value: unknown): unknown => {
     if (isNullish(obj) || typeof obj !== 'object') return obj
 
-    const pathArray: (string | number)[] = Array.isArray(path)
+    const pathArray = Array.isArray(path)
         ? path
         : path
               .match(/([^[.\]]+)/g)
