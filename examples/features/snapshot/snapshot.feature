@@ -4,7 +4,7 @@ Feature: Using snapshot definitions
     Scenario: Snapshot testing on an api
         Given I mock http call to forward request body for path /users/yaml
         And set request json body from file
-        When I POST http://fake.io/users/yaml
+        When I POST https://fake.io/users/yaml
         Then response body should match snapshot
 
     Scenario: Snapshot testing on cli
@@ -19,7 +19,7 @@ Feature: Using snapshot definitions
     Scenario: Snapshot testing on a json api
         Given I mock http call to forward request body for path /users/yaml
         And set request json body from file
-        When I POST http://fake.io/users/yaml
+        When I POST https://fake.io/users/yaml
         Then response json body should match snapshot
             | field           | matcher | value    |
             | gender          | type    | string   |

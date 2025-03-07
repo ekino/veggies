@@ -5,7 +5,7 @@ Feature: Using fixtures with http API extension
     Scenario: Setting json body from .yaml fixture file
         Given I mock http call to forward request body for path /users/yaml
         And set request json body from yaml_00
-        When I POST http://fake.io/users/yaml
+        When I POST https://fake.io/users/yaml
         Then response status code should be 200
         And response status should be ok
         And response body should match snapshot
@@ -14,7 +14,7 @@ Feature: Using fixtures with http API extension
     Scenario: Setting form body from .yaml fixture file
         Given I mock http call to forward request body for path /users/yaml
         And set request form body from yaml_00
-        When I POST http://fake.io/users/yaml
+        When I POST https://fake.io/users/yaml
         Then response status code should be 200
 
 
@@ -25,21 +25,21 @@ Feature: Using fixtures with http API extension
             | first_name | Raphaël |
             | last_name  | Benitte |
             | gender     | male    |
-        When I POST http://fake.io/users/yaml
+        When I POST https://fake.io/users/yaml
         Then response status code should be 200
 
     @yaml
     Scenario: Setting json body from .yml fixture file
         Given I mock http call to forward request body for path /users/yml
         And set request json body from yaml_01
-        When I POST http://fake.io/users/yml
+        When I POST https://fake.io/users/yml
         Then response status code should be 200
 
     @yaml
     Scenario: Setting form body from .yml fixture file
         Given I mock http call to forward request body for path /users/yml
         And set request form body from yaml_01
-        When I POST http://fake.io/users/yml
+        When I POST https://fake.io/users/yml
         Then response status code should be 200
         And response should match fixture check
 
@@ -47,35 +47,35 @@ Feature: Using fixtures with http API extension
     Scenario: Setting json body from .txt fixture file
         Given I mock http call to forward request body for path /users/txt
         And set request json body from text_00
-        When I POST http://fake.io/users/txt
+        When I POST https://fake.io/users/txt
         Then response status code should be 200
 
     @text
     Scenario: Setting form body from .txt fixture file
         Given I mock http call to forward request body for path /users/txt
         And set request form body from text_00
-        When I POST http://fake.io/users/txt
+        When I POST https://fake.io/users/txt
         Then response status code should be 200
 
     @js
     Scenario: Setting json body from .js fixture file
         Given I mock http call to forward request body for path /users/js
         And set request json body from module_00
-        When I POST http://fake.io/users/js
+        When I POST https://fake.io/users/js
         Then response status code should be 200
 
     @js
     Scenario: Setting form body from .js fixture file
         Given I mock http call to forward request body for path /users/js
         And set request form body from module_00
-        When I POST http://fake.io/users/js
+        When I POST https://fake.io/users/js
         Then response status code should be 200
 
     @json
     Scenario: Setting json body from .json fixture file
         Given I mock http call to forward request body for path /users/json
         And set request json body from json_00
-        When I POST http://fake.io/users/json
+        When I POST https://fake.io/users/json
         Then response status code should be 200
         And json response should fully match
             | field       | matcher | value             |
@@ -90,7 +90,7 @@ Feature: Using fixtures with http API extension
             | first_name | Raphaël |
             | last_name  | Benitte |
             | gender     | male    |
-        When I POST http://fake.io/users/json
+        When I POST https://fake.io/users/json
         Then response status code should be 200
         Then response body should match snapshot
 
@@ -98,7 +98,7 @@ Feature: Using fixtures with http API extension
     Scenario: Setting form body from .json fixture file
         Given I mock http call to forward request body for path /users/json
         And set request form body from json_00
-        When I POST http://fake.io/users/json
+        When I POST https://fake.io/users/json
         Then response status code should be 200
 
     @json @header
@@ -110,7 +110,7 @@ Feature: Using fixtures with http API extension
             | content-type    | application/json |
             | accept-language | fr               |
             | User-Agent      | veggies/2.0      |
-        When I POST http://fake.io/users
+        When I POST https://fake.io/users
         Then response status code should be 200
         And I pick response header location as location
         And I clear request body
@@ -128,7 +128,7 @@ Feature: Using fixtures with http API extension
         And set request form body from json_00
         And I set request query
             | query | 1 |
-        When I POST http://fake.io/users/json
+        When I POST https://fake.io/users/json
         Then response status code should be 200
 
     Scenario: Get posts from http_api/fixtures/posts.json
