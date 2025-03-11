@@ -216,7 +216,7 @@ class HttpApiClient {
     }
 
     /**
-     * Performs a request using all previously defined paramaters:
+     * Performs a request using all previously defined parameters:
      * - headers
      * - query
      * - body
