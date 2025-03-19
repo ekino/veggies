@@ -55,7 +55,7 @@ export const extractScenarios = (file: string): Scenario[] => {
  */
 export const prefixSnapshots = (scenarios?: Scenario[]): Record<number, Scenario> => {
     if (!scenarios) {
-        throw new Error(`Scenarios are required to prefix snapshots`)
+        throw new Error('Scenarios are required to prefix snapshots')
     }
 
     const nameCount = new Map()

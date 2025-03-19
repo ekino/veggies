@@ -131,7 +131,7 @@ describe('core > assertions', () => {
             },
             {
                 field: 'age',
-                matcher: `!?`,
+                matcher: '!?',
             },
         ]
 

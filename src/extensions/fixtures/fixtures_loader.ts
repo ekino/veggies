@@ -102,7 +102,7 @@ class FixturesLoader {
                     return Promise.reject(
                         new Error(
                             [
-                                `JavaScript fixture file should export default function.\n`,
+                                'JavaScript fixture file should export default function.\n',
                                 `Make sure you declared 'export default function' in ${file}`,
                             ].join('')
                         )

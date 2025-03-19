@@ -427,7 +427,7 @@ export const install = ({ baseUrl = '' } = {}): void => {
                 }
                 case 'contain': {
                     if (typeof header !== 'string') {
-                        assert.fail(`File content is not a string`)
+                        assert.fail('File content is not a string')
                     }
                     if (flag === 'not ') {
                         assert.ok(!header.includes(expectedValue), msg)

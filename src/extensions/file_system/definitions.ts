@@ -68,7 +68,7 @@ export const install = (): void => {
                         }
                         case 'contain': {
                             if (typeof content !== 'string') {
-                                assert.fail(`File content is not a string`)
+                                assert.fail('File content is not a string')
                             }
                             if (flag === 'not ') {
                                 assert.ok(!content.includes(expectedValue), msg)
