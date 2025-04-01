@@ -48,8 +48,9 @@ It's also the perfect companion for testing CLI applications.
 
 ## Requirements
 
-- Node.js `>=20.0`
+- Node.js `>=18.0`
 - cucumber `>=11.0`
+- pnpm `>=10.0`
 
 ## Installation
 
