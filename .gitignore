@@ -42,16 +42,6 @@ _doc
 /examples/features/file_system/files/deeply
 .vscode
 .eslintcache
-
-# yarn 
-.yarn/*
-!.yarn/patches
-!.yarn/releases
-!.yarn/plugins
-!.yarn/sdks
-!.yarn/versions
-.pnp.*
-
 events.json
 .pnpm*
 lib/

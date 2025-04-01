@@ -30,10 +30,4 @@ Please also provide a **test plan**, i.e. specify how you verified that your add
 
 ## Updating README.md
 
-`README.md` is meant to be generated from `doc/README.tpl.md` and the various Gherkin definitions in this project.
-
-You should never update it directly, and should instead :
-
-1. Edit `doc/README.tpl.md`
-
-2. Run `pnpm run readme` to generate `README.md`
+Update `README.md` to keep the documentation up to date.
