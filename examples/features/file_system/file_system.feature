@@ -45,6 +45,8 @@ Feature: File system extension
     Given I set cwd to examples/features/file_system/files
     And I create directory generated
     Then directory generated should exist
+    And I remove directory generated
+    Then directory generated should not exist
 
   Scenario: Creating nested directory
     Given I set cwd to examples/features/file_system/files
@@ -57,3 +59,5 @@ Feature: File system extension
     Then directory deeply/nested/directory should exist
     Given I remove directory deeply/nested/directory
     Then directory deeply/nested/directory should not exist
+    Given I remove directory deeply
+    Then directory deeply should not exist

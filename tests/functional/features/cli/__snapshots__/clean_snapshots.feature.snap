@@ -1,0 +1,4 @@
+
+
+exports[`Should echo salut 1.1`] = `"salut
+"`;

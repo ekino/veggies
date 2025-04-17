@@ -1,7 +1,0 @@
-
-
-exports[`Should echo salut 1.1`] = `"salut
-"`;
-
-exports[`Should get deleted 1.1`] = `"salut
-"`;

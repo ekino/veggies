@@ -4,67 +4,87 @@ on:
     inputs:
       strategy:
         description: Valid semver number <x.x.x> or strategy <patch, minor, major>
-        default: "patch"
+        default: 'patch'
         required: false
+
+permissions:
+  contents: write
 
 jobs:
   release:
-    runs-on: ubuntu-latest
-    if: ${{ github.actor == 'pebie' || github.actor == 'Crow-EH' || github.actor == 'fthouraud' || github.actor == 'leguellec' || github.actor == 'rande' }}
+    runs-on: ubuntu-24.04
+    if: ${{ github.actor == 'pebie' || github.actor == 'leguellec' }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Bump the version using input strategy
-        run: yarn version ${{ github.event.inputs.strategy }}
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          version: 10
+          run_install: false
 
-      - name: Update changelog    
+      - name: Setup Node.js 22.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'pnpm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Set up Git user
+        run: |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+
+      - name: Verify version bump
+        run: |
+          echo "Version bumped to $(node -p "require('./package.json').version")"
+
+      - name: Bump version
+        id: versioning
+        run: |
+          npm version ${{ github.event.inputs.strategy }} -m "chore(release): v%s"
+          VERSION=$(node -p "require('./package.json').version")
+          echo "current-version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Set up git-cliff
+        uses: kenji-miyake/setup-git-cliff@v2
+
+      - name: Run git-cliff to generate changelog
         id: changelog
         run: |
-          yarn install
-          CHANGELOG=$(yarn conventional-changelog -p conventionalcommits -r -u 0)
-          echo -e "${CHANGELOG}\n\n\n\n$(cat CHANGELOG.md)" > CHANGELOG.md
-          BODY=$(echo -e "${CHANGELOG}" | sed -e "1,2d")
-          BODY="${BODY//'%'/'%25'}"
-          BODY="${BODY//$'\n'/'%0A'}"
-          BODY="${BODY//$'\r'/'%0D'}"
-          echo "::set-output name=body::${BODY}"
+          git-cliff --latest > temp_changelog
+          cat temp_changelog CHANGELOG.md > temp && mv temp CHANGELOG.md
+          echo "changelog-body<<EOF" >> $GITHUB_OUTPUT
+          cat temp_changelog >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Log changes
         run: |
-          echo "The changelog will be : ${{ steps.changelog.outputs.body }}"
-            
-      - name: Get version
-        id: package-version
-        uses: martinbeentjes/npm-get-version-action@v1.1.0
+          echo "The changelog will be: $(git cliff --latest)"
 
-      - name: Create tag
+      - name: Commit changelog
         run: |
-          git config user.name github-actions[bot]
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add .
-          git commit -m "chore(bump): release v${{ steps.package-version.outputs.current-version }}"
+          git add CHANGELOG.md
+          git commit -m "docs: update changelog for v${{ steps.versioning.outputs.current-version }}"
           git push
-          git tag -a v${{ steps.package-version.outputs.current-version }} -m "chore(tag): release v${{ steps.package-version.outputs.current-version }}"
-          git push origin v${{ steps.package-version.outputs.current-version }}
 
-      - name: Create release
-        uses: softprops/action-gh-release@v1
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
         with:
-          body: ${{ steps.changelog.outputs.body }}
-          tag_name: v${{ steps.package-version.outputs.current-version }}
-          name: v${{ steps.package-version.outputs.current-version }}
+          body: ${{ steps.changelog.outputs.changelog-body}}
+          tag_name: v${{ steps.versioning.outputs.current-version }}
+          name: v${{ steps.versioning.outputs.current-version }}
 
-      - name: Setup npmrc
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16.x'
-          registry-url: 'https://registry.npmjs.org'
-          
       - name: Publish to NPM
         run: npm publish --access public
         env:
-          VERSION: ${{ steps.package-version.outputs.current-version }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

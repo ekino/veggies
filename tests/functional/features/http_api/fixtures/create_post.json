@@ -1,0 +1,23 @@
+{
+    "request": {
+        "url": "/posts",
+        "method": "POST"
+    },
+    "response": {
+        "status": 200,
+        "headers": {
+            "Content-Type": "application/json",
+            "Connection": "keep-alive"
+        },
+        "jsonBody": {
+            "data": {
+                "post": {
+                    "userId": 10,
+                    "id": 1,
+                    "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+                    "text": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+                }
+            }
+        }
+    }
+}

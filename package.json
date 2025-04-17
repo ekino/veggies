@@ -15,69 +15,75 @@
         "type": "git",
         "url": "https://github.com/ekino/veggies.git"
     },
-    "main": "src/index.js",
-    "bin": "./bin/veggies.js",
     "author": "plouc <https://github.com/plouc>",
     "maintainers": [
         {
-            "name": "Raphaël Benitte"
+            "name": "ekino"
         }
     ],
     "license": "MIT",
     "engines": {
-        "node": ">=12"
+        "node": ">=18.x"
     },
-    "engineStrict": true,
+    "type": "module",
+    "files": [
+        "/bin",
+        "/lib"
+    ],
+    "main": "./lib/esm/index.js",
+    "bin": {
+        "veggies": "./bin/veggies.js"
+    },
+    "types": "lib/esm/index.d.ts",
+    "exports": {
+        ".": {
+            "import": {
+                "types": "./lib/esm/index.d.ts",
+                "default": "./lib/esm/index.js"
+            },
+            "require": {
+                "types": "./lib/cjs/index.d.ts",
+                "default": "./lib/cjs/index.js"
+            }
+        }
+    },
     "dependencies": {
-        "arg": "5.0.1",
-        "chai": "4.3",
-        "fs-extra": "10.0",
-        "glob": "7.1",
-        "jest-diff": "27.0",
-        "js-yaml": "4.1",
-        "lodash": "4.17",
-        "moment-timezone": "0.5.33",
-        "natural-compare": "1.4",
-        "pretty-format": "27.0",
-        "request": "2.88",
-        "tough-cookie": "4.0"
+        "axios": "1.x",
+        "axios-cookiejar-support": "5.x",
+        "fast-glob": "3.x",
+        "form-data": "4.x",
+        "jest-diff": "29.x",
+        "js-yaml": "4.x",
+        "natural-compare": "1.x",
+        "pretty-format": "29.x",
+        "tough-cookie": "5.x"
     },
     "devDependencies": {
-        "@commitlint/config-conventional": "12.x",
-        "@cucumber/cucumber": "8.x",
-        "babylon": "6.x",
-        "chalk": "4.x",
-        "commitlint": "12.x",
-        "conventional-changelog": "^3.1.24",
-        "conventional-changelog-cli": "2.x",
-        "coveralls": "3.x",
-        "eslint": "7.x",
-        "gh-pages": "3.x",
-        "husky": "7.x",
-        "jest": "27.x",
-        "jsdoc": "3.x",
-        "lint-staged": "11.x",
-        "minami": "1.x",
-        "mustache": "4.x",
-        "nock": "13.x",
-        "prettier": "2.x",
-        "sinon": "11.x"
+        "@biomejs/biome": "1.9.4",
+        "@cucumber/cucumber": "11.2.0",
+        "@types/js-yaml": "4.0.9",
+        "@types/node": "22.13.16",
+        "@vitest/coverage-v8": "3.1.1",
+        "commitlint": "19.8.0",
+        "nock": "14.0.2",
+        "typescript": "5.8.2",
+        "vitest": "3.1.1"
     },
     "peerDependencies": {
-        "@cucumber/cucumber": ">=8.0.0"
+        "@cucumber/cucumber": ">=11.x"
     },
     "scripts": {
-        "test": "jest --verbose --colors tests",
-        "test-cover": "jest --verbose --colors --coverage",
-        "test-cli": "veggies --require tests/cli/support tests/cli/features",
-        "fmt": "prettier --color --write \"{src,tests,scripts}/**/*.js\" \"*.{yml,yaml,json}\"",
-        "check-fmt": "prettier --list-different \"{src,tests,scripts}/**/*.js\" \"*.{yml,yaml,json}\"",
-        "lint": "eslint .",
-        "lint-fix": "eslint --fix .",
-        "readme": "node scripts/generate_readme",
-        "check-readme": "node scripts/generate_readme --check",
-        "doc": "jsdoc -c .jsdoc.json --verbose",
-        "doc-pub": "yarn run readme && yarn run doc && gh-pages -d _doc",
-        "examples": "veggies --require examples/support examples/features"
+        "build": "pnpm run build:esm && pnpm run build:cjs",
+        "build:esm": "tsc -p tsconfig.lib.json --outDir lib/esm",
+        "build:cjs": "tsc -p tsconfig.lib.json --module CommonJS --moduleResolution Node --outDir lib/cjs",
+        "postbuild:cjs": "echo '{\"type\": \"commonjs\"}' > lib/cjs/package.json",
+        "test": "vitest --run",
+        "test-cover": "vitest run --coverage",
+        "test-func": "./bin/veggies.js --import tests/functional/support tests/functional/features",
+        "lint": "biome check --write",
+        "check": "biome check",
+        "check-typing": "tsc -p tsconfig.json --noEmit",
+        "examples": "./bin/veggies.js --import examples/support examples/features --tags='@offline'",
+        "postinstall": "git config core.hooksPath ./.githooks || true"
     }
 }

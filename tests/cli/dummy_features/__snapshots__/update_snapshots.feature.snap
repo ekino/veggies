@@ -1,7 +1,0 @@
-
-
-exports[`Should echo salut1 1.1`] = `"salut
-"`;
-
-exports[`Should echo salut2 1.1`] = `"salut
-"`;

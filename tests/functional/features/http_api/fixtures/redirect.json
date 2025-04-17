@@ -1,0 +1,27 @@
+{
+    "request": {
+        "url": "/posts?redirect=true",
+        "method": "GET"
+    },
+    "response": {
+        "status": 301,
+        "headers": {
+            "Content-Type": "application/json",
+            "Connection": "keep-alive"
+        },
+        "jsonBody": {
+            "data": {
+                "redirect": {
+                    "url": "https://google.com",
+                    "method": "GET",
+                    "headers": {
+                        "Content-Type": "application/json"
+                    },
+                    "body": {
+                        "redirect": true
+                    }
+                }
+            }
+        }
+    }
+}
