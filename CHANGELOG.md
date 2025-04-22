@@ -1,3 +1,130 @@
+# What's changed
+
+## [2.0.1](https://github.com/ekino/veggies/compare/v1.4.0..v2.0.1) - 2025-04-22
+
+### 🚀 Features
+
+- *(esm)* Use arrow function and use world param to replace this keyword - ([76c8d35](https://github.com/ekino/veggies/commit/76c8d35cb1e22e1c250ce65c0c721623a6c44502))
+- *(esm)* Support dual package esm-cjs - ([437c688](https://github.com/ekino/veggies/commit/437c688e2159787f63d079ed10befe7dadeeae87))
+- *(time)* Remove luxon, write native date time typescript code - ([184a6ae](https://github.com/ekino/veggies/commit/184a6ae4185a3e1c1ad3925a502e0db539e520f3))
+- *(typescript)* Convert extensions/http_api to typescript - ([932f8e1](https://github.com/ekino/veggies/commit/932f8e15a53c422fcadd78e9f9905999cd6d7eab))
+- *(typescript)* Add missing return type - ([1eb6312](https://github.com/ekino/veggies/commit/1eb6312223c9e6c11501ebfced73711fa7806bb9))
+- *(typescript)* Convert extensions/snaphost to typescript - ([924191c](https://github.com/ekino/veggies/commit/924191c2a1567517522be7ece03bf9089454e8fa))
+- *(typescript)* Covert extensions/fixtures to typescript - ([d08a5e2](https://github.com/ekino/veggies/commit/d08a5e2645f75c35fc476266bdd8d1d73e52bbe2))
+- *(typescript)* Convert extensions/file_system to typescript - ([b11c8e3](https://github.com/ekino/veggies/commit/b11c8e3415646f282356808dea8df48b8078e5b3))
+- *(typescript)* Convert src/cli to typescript - ([fb438f2](https://github.com/ekino/veggies/commit/fb438f2bbdb75ac3b282697c1acac291e0907d97))
+- *(typescript)* Convert src/state to typescript - ([b3163af](https://github.com/ekino/veggies/commit/b3163aff30e5586b54645b03dde7a825a9b10f19))
+- *(typescript)* Convert src/core to typescript - ([09ef87a](https://github.com/ekino/veggies/commit/09ef87a9b79f8d94e48f8c471b1264b97670ddbe))
+- *(typescript)* Convert src/index to typescript - ([c4363eb](https://github.com/ekino/veggies/commit/c4363eb2fb4a0fd297826823943c64b419bad8db))
+- *(typescript)* Convert utils files to typescript - ([3654dfb](https://github.com/ekino/veggies/commit/3654dfb12ca722897d477eb10bbc6459ef3968a5))
+- *(typescript)* Setup tsconfig configurations - ([f1422dd](https://github.com/ekino/veggies/commit/f1422dd8ba9f570f8435f9e35495ad29c8a90816))
+- Remove chai, replace by node:assert - ([519f4d5](https://github.com/ekino/veggies/commit/519f4d50ff27fe0a63db92fc98c11bc3068787c4))
+- Replace eslint+prettier by biome and fix typings - ([0dc14fe](https://github.com/ekino/veggies/commit/0dc14fe90f5ec8ac87f0c76f6b94c6e6c37d37e4))
+- Replace request by axios - ([9c655c3](https://github.com/ekino/veggies/commit/9c655c3359b76ff22e9dbbfe098df912512b3a5c))
+- Replace moment-timezone by luxon - ([16b7323](https://github.com/ekino/veggies/commit/16b7323b4c447bdecc91b7f5f8997a3256a5fcd5))
+
+### 🐛 Bug Fixes
+
+- *(assertions)* Allow match undefined value for regex - ([a031087](https://github.com/ekino/veggies/commit/a03108790352d17bb1bef9840cf2922452173b51))
+- *(assertions)* Fix type comparison - ([461199d](https://github.com/ekino/veggies/commit/461199d0dd17b923dff60051df576d4617b3f033))
+- *(bin)* Filter cucumber args only - ([7354cd2](https://github.com/ekino/veggies/commit/7354cd252cbd1acb3316bdd6796c58aa358c23fe))
+- *(cli)* Check correctly null type - ([f5b310b](https://github.com/ekino/veggies/commit/f5b310bce2c1f9a0a94d0861aa1445a886d3ed1b))
+- *(esm)* Fix issues common.js for CLI - ([0a7fdf6](https://github.com/ekino/veggies/commit/0a7fdf61278ea51ce15b518d2293b9b43de74fdb))
+- *(http_api)* Flexible path join for slash on baseUrl - ([0bc44df](https://github.com/ekino/veggies/commit/0bc44df8fe0d1e2fd5b628aa079ecf1a2bcdfd13))
+- *(http_api)* Should return response when axios error - ([082266f](https://github.com/ekino/veggies/commit/082266f4389021ba42bcdbb9c9a4ad2d4c7e20f1))
+- *(http_api)* Setup correctly valid status redirect for axios - ([171c1dd](https://github.com/ekino/veggies/commit/171c1dd05c014458ea8c13bbe0d1486c1aa974e8))
+- *(http_api)* Fix correct info for axios request - ([5e7d72e](https://github.com/ekino/veggies/commit/5e7d72e9564f2a850a2566d51eb8989d72f38e28))
+- *(utils)* Handle correctly base number index for setValue method - ([c601d22](https://github.com/ekino/veggies/commit/c601d22cb8f5c00c7acee8de65086192f26123b9))
+- *(utils)* Loose the comparison type for the match rule - ([960adb1](https://github.com/ekino/veggies/commit/960adb1e8524ee013a94d61ec7049983e857d322))
+- *(utils)* Check correctly for obj["key"] case - ([98e1ced](https://github.com/ekino/veggies/commit/98e1cedfbc4ac6ae5a377e7bcae735378d778975))
+- *(utils)* Fix template, accept escape <key> template - ([760c141](https://github.com/ekino/veggies/commit/760c1414184d5b724a4f8802d17c43a18c6d0838))
+- *(utils)* Fix method setValue for array[x] value - ([31e06d2](https://github.com/ekino/veggies/commit/31e06d2c66f5505bd9a6f228a05337626f67621b))
+- *(utils)* Fix method getValue - ([ad30a72](https://github.com/ekino/veggies/commit/ad30a720ef56ccbbaeff6175c609da63dde08eae))
+
+### 🚜 Refactor
+
+- *(colors)* Write better for colors utils - ([c0ef364](https://github.com/ekino/veggies/commit/c0ef364e15fa12d94422f3331deb04ed8ffbe252))
+- *(core)* Clean assertion message error - ([d7c29dd](https://github.com/ekino/veggies/commit/d7c29ddd0e729b0b57a5f12466864cbc84396d2d))
+- *(core)* Make the castFunction more clean - ([16a7fc1](https://github.com/ekino/veggies/commit/16a7fc106a2c396c6ee7061fde4016bab8ce6f92))
+- *(extensions)* Keep the code more clean - ([6626f59](https://github.com/ekino/veggies/commit/6626f5938caf7ac842e1fcd4bec225d1c6c3ab5a))
+- *(peft)* Replace glob by fast-glob - ([91eb414](https://github.com/ekino/veggies/commit/91eb414932cf3c8868cdda745c151b351b9fe062))
+- *(test)* Restructure unit and functional folder tests - ([89acf6b](https://github.com/ekino/veggies/commit/89acf6bcc22a987e878e4ccd8e848ab0dad1c0e1))
+- *(utils)* Clean useless typing - ([68dd49a](https://github.com/ekino/veggies/commit/68dd49ae4da6dfeef4408637cfd38d5995f3963d))
+- *(utils)* Use name nullish, truthy correctly - ([7c71424](https://github.com/ekino/veggies/commit/7c7142417bf48f2a3f3d808351c8e63f91a6b169))
+- Remove chalk and use native ANSI color - ([bf1ac5c](https://github.com/ekino/veggies/commit/bf1ac5c26554e23313bd0e298a175ba85681076d))
+- Use only snackcase for file name - ([c076341](https://github.com/ekino/veggies/commit/c076341349b41bf3c4b7b1ca0df1b85aa2f3a4a9))
+- Use structuredClone native in nodejs - ([0ebef6b](https://github.com/ekino/veggies/commit/0ebef6b017fdc3f9078cc20751de608fc479ee05))
+- Migrate to ESM - ([0bc5abb](https://github.com/ekino/veggies/commit/0bc5abb7aacc03bf907a03faf0d02b1ade38ae3d))
+- Remove lodash - ([8fc81df](https://github.com/ekino/veggies/commit/8fc81df9db13f302a9c66ad611dc4973073a7aaf))
+
+### 📚 Documentation
+
+- Rename twitter to x and use https protocol for example - ([2d821f1](https://github.com/ekino/veggies/commit/2d821f1c312e8222d38fa9f2559741b2ad7472ac))
+- Update README.md - ([7411124](https://github.com/ekino/veggies/commit/74111243f57e7d30721cf9fa47c240c79481c2e1))
+
+### 🎨 Styling
+
+- Keep original format - ([8221c58](https://github.com/ekino/veggies/commit/8221c58c4150953c01a0b62e1a9142507fd8e3c6))
+
+### 🧪 Testing
+
+- *(core)* Convert test core to typescript and fix code - ([6fd34dd](https://github.com/ekino/veggies/commit/6fd34ddcfb095977af88652f1361c5687cab5ab7))
+- *(coverage)* Disabe all options for coverage - ([71e6344](https://github.com/ekino/veggies/commit/71e6344346bba288ed5118d472778f45225b5215))
+- *(fixtures)* Convert tests to typescript - ([8695e24](https://github.com/ekino/veggies/commit/8695e24c67f352cda8611cdd0747a57c52e9404c))
+- *(func)* Twitter block testing request, replace to wikipedia - ([d116811](https://github.com/ekino/veggies/commit/d116811af51a5995efdbccd7526c1e92db88337c))
+- *(func)* Complete test-func for http_api definitions - ([c30c5b0](https://github.com/ekino/veggies/commit/c30c5b0ad856a78a3162faef0908564f48a30289))
+- *(http_api)* Convert http_api tests to typescript - ([75431c4](https://github.com/ekino/veggies/commit/75431c4cd7c5c10b96a8cf5a68c3e6f0df7773bf))
+- *(snapshot)* Convert tests to typescript - ([6a43e29](https://github.com/ekino/veggies/commit/6a43e29c16839faa05596ee61628cf7151a00f13))
+- *(state)* Convert extensions/state tests to typescript - ([1ead586](https://github.com/ekino/veggies/commit/1ead586416dafae28b3e472843fd278d9b4d69d2))
+- *(uni)* Simplify throw error message - ([0af995a](https://github.com/ekino/veggies/commit/0af995af789ccf159afef8653710f53689ac26c9))
+- *(unit)* Loose string comparison for multiplateform check - ([f96cf09](https://github.com/ekino/veggies/commit/f96cf09df5b8ad89840ff4bf964088567abf6660))
+- *(unit)* Replace jest by vitest - ([426a3dc](https://github.com/ekino/veggies/commit/426a3dc81bbf57111800591cde94833a2d89b18a))
+- *(unit)* Make all unit tests passe (still use cjs) - ([2d0b5d7](https://github.com/ekino/veggies/commit/2d0b5d712497c6d4b49a422fbf8c090aa6cfb69c))
+- *(unit)* Still use cjs for testing extensions/snapshot - ([127fbf6](https://github.com/ekino/veggies/commit/127fbf6eb00352367f7f195a710ba47411e591bd))
+- *(unit)* Fix unit tests core - ([b7b9029](https://github.com/ekino/veggies/commit/b7b90293d2ea44e4a3bf6d543567be60d6e391be))
+- *(unit)* Fix and add utils tests - ([354a213](https://github.com/ekino/veggies/commit/354a213d1da490df433c089635950dcea1c80090))
+- *(utils)* Convert utils test to typescript and fix code - ([7829fbf](https://github.com/ekino/veggies/commit/7829fbfc1912b4dea3c627090c3cc2b701dcfcc8))
+- Change http to https on .feature files - ([2d525be](https://github.com/ekino/veggies/commit/2d525be64899903a5543d152a9af3ea8eed6eaf3))
+- Replace step definitions unit tests not working in cucumber 10.x by functional tests - ([a5880ac](https://github.com/ekino/veggies/commit/a5880ace965ae58e8590b4adea717122f5030895))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(changlog)* Add cliff changelog configurations - ([46f0fdd](https://github.com/ekino/veggies/commit/46f0fdd93453fea0a1a9d3eaa88bc2f0fd991a15))
+- *(docs)* Remove generated docs and gh pages - ([3077485](https://github.com/ekino/veggies/commit/3077485fae6b7e1e13b53faffbd088ae3c4dbb80))
+- *(eslint)* Migrate and fix compability for ESLint 9.x - ([7e16100](https://github.com/ekino/veggies/commit/7e161009976caeeb73a0635ef1fe044820371019))
+- *(hook)* Replace husky by native feature githooks - ([80f4cf7](https://github.com/ekino/veggies/commit/80f4cf7dd75c31cea1ed4e541f71eccfccb5616f))
+- *(lint)* Active rule to check noUnusedTemplateLiteral - ([1f80274](https://github.com/ekino/veggies/commit/1f80274b14fa1ba4c0b38241d3e9acb021bea6f4))
+- *(release)* V2.0.1 - ([24d78c3](https://github.com/ekino/veggies/commit/24d78c3c6108fdd7158ce6b42ddcd1c9aa0c2086))
+- *(release)* Print bumped version - ([1e49891](https://github.com/ekino/veggies/commit/1e49891963e5d12410820f096cd13c9ee89ee19a))
+- *(tsconfig)* Remove allowJs options - ([c8a8f84](https://github.com/ekino/veggies/commit/c8a8f849e66318266f4bcf0c61e2469d5a0c5d35))
+- *(tsconfig)* Clean tsconfigs options - ([ede28b6](https://github.com/ekino/veggies/commit/ede28b66c4f043f195d232386b9c636c27a3b49e))
+- *(tsconfig)* Set declarationMap true - ([e0be20a](https://github.com/ekino/veggies/commit/e0be20a25d1f62c5534e1b7cc2515c9da9f67e17))
+- *(typescript)* Add erasableSyntaxOnly flag to disable typescript only features - ([6168a78](https://github.com/ekino/veggies/commit/6168a7876fc1baef95816a977c0b1b0d81dd9b0d))
+- *(typescript)* Centralize types - ([38c4498](https://github.com/ekino/veggies/commit/38c449870a5b6c741bf9bf4d1efa4b73010bbc86))
+- Add .nvmrc - ([fdf34c5](https://github.com/ekino/veggies/commit/fdf34c55e143fe9d8f0264212d3ae09bc5292cfe))
+- Clean up - ([ae35d08](https://github.com/ekino/veggies/commit/ae35d0869b0cda0634d10ed0230521bb941d5ca9))
+- Correct typos - ([b2d895b](https://github.com/ekino/veggies/commit/b2d895b840012984db8ea3692a04df6b1e88ef6e))
+- Rename maintainer Ekino to ekino - ([a882aa7](https://github.com/ekino/veggies/commit/a882aa75dcc796311dca29d387142c6a2a0aca07))
+- Still support nodejs 18 lts - ([091c159](https://github.com/ekino/veggies/commit/091c159fe1910a7bdb2a157ba9a3e01c7ae5b7c3))
+- Add check-typing command - ([356f505](https://github.com/ekino/veggies/commit/356f505ec8d80c8b16b5d987ce5dab10f6522d34))
+- Simplify create tag and bump version by using npm - ([e17be7e](https://github.com/ekino/veggies/commit/e17be7edb099d4b3d74886600ee1ee095b00c1ea))
+- Fix tests func support files - ([7a7e21f](https://github.com/ekino/veggies/commit/7a7e21f227d3b3c2117003ca7daf1374697fad78))
+- Add build steps - ([bf903c4](https://github.com/ekino/veggies/commit/bf903c49bc901f8e1cddd5a0b0651e65043a00ba))
+- Move assertions types to types central - ([4770f8b](https://github.com/ekino/veggies/commit/4770f8b6fadeef0ce9070df2a50cf3aa92864d36))
+- Fix linters steps - ([831394d](https://github.com/ekino/veggies/commit/831394dd1494aa08e5b30b6d53887447397a961d))
+- Remove arg, use node:util, clean bin command - ([f135c81](https://github.com/ekino/veggies/commit/f135c81e3ada96bbb5264a15171d2e4ed3e9f625))
+- Setup correctly CI - ([3e91936](https://github.com/ekino/veggies/commit/3e9193669386ff027b0b6feb07f9b9735c49dea4))
+- Use pnpm instead of yarn - ([f938423](https://github.com/ekino/veggies/commit/f938423816a36fbdc05a4ff7e0a92c4ebd08945c))
+- Add recommended lint rules to common config - ([fb1912b](https://github.com/ekino/veggies/commit/fb1912bccc47b2b3727dd26ac109208d0b3ea2c0))
+- Downgrade chai to 4.5, because 5.x support only esm - ([9801967](https://github.com/ekino/veggies/commit/9801967e43618781b93666848927e8dab0a965d3))
+- Use test-func command instead of test-cli - ([07b87b0](https://github.com/ekino/veggies/commit/07b87b0cc0046c2a03360f435d949d50173487a9))
+- Update yarn 4.3 - ([cda8ded](https://github.com/ekino/veggies/commit/cda8ded34900a64e4c3e78b0f76945d9f258ccaa))
+
+## New Contributors ❤️
+
+* @olivierGuillermEkino made their first contribution in [#96](https://github.com/ekino/veggies/pull/96)
+* @tduyng made their first contribution
+
 ## 1.4.0 (2022-06-22)
 
 * chore(deps): upgrade cucumber v8 ([163ea41](https://github.com/ekino/veggies/commit/163ea41))
