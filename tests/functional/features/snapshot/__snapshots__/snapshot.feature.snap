@@ -1,12 +1,13 @@
 
 
 exports[`Snapshot testing on a cli with json output 1.1`] = `Object {
+  "first_name": "defined()",
   "gender": "equal(male)",
   "name": "john",
 }`;
 
 exports[`Snapshot testing on a json api 1.1`] = `Object {
-  "first_name": "Raphaël",
+  "first_name": "defined()",
   "gender": "type(string)",
   "id": 1,
   "last_name": "Benitte",

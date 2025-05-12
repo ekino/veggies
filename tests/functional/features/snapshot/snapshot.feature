@@ -23,13 +23,15 @@ Feature: Using snapshot definitions
         Then response json body should match snapshot
             | field           | matcher | value    |
             | gender          | type    | string   |
+            | first_name      | defined |          |
 
     Scenario: Snapshot testing on a cli with json output
-        When I run command echo {"gender": "male", "name": "john"}
+        When I run command echo {"gender": "male", "name": "john", "first_name": "Lily"}
         Then exit code should be 0
         And stdout json output should match snapshot
             | field           | matcher | value    |
             | gender          | equal   | male     |
+            | first_name      | defined |          |
 
     Scenario: Snapshot testing on a json file
         Given I set cwd to examples/features/snapshot/fixtures
