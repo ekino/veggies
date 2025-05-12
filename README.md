@@ -1131,8 +1131,8 @@ Due to public API rate limit (e.g. GitHub API), this tag is used when running on
 
 [npm-image]: https://img.shields.io/npm/v/@ekino/veggies.svg?longCache=true&style=for-the-badge
 [npm-url]: https://www.npmjs.com/package/@ekino/veggies
-[ci-image]: https://img.shields.io/github/workflow/status/ekino/veggies/Node.js%20CI?style=for-the-badge
-[ci-url]: https://github.com/ekino/veggies/actions
+[ci-image]: https://img.shields.io/github/actions/workflow/status/ekino/veggies/release.yml?branch=master&style=for-the-badge
+[ci-url]: https://github.com/ekino/veggies/actions/workflows/release.yml
 [coverage-image]: https://img.shields.io/coveralls/ekino/veggies/master.svg?longCache=true&style=for-the-badge
 [coverage-url]: https://coveralls.io/github/ekino/veggies?branch=master
 [github-watch-badge]: https://img.shields.io/github/watchers/ekino/veggies.svg?style=social
