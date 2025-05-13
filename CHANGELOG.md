@@ -1,5 +1,28 @@
 # What's changed
 
+## [2.0.2](https://github.com/ekino/veggies/compare/v2.0.1..v2.0.2) - 2025-05-13
+
+### 🐛 Bug Fixes
+
+- *(snapshot)* Do not print undefined value to snapshot - ([ee50529](https://github.com/ekino/veggies/commit/ee50529a23c29b57adf81956de5651c2bbfaf6cc))
+
+### 📚 Documentation
+
+- Fix build status badge - ([f932c93](https://github.com/ekino/veggies/commit/f932c937b85c6df5e0e8411e219bec84d9d82152))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(release)* V2.0.2 - ([d717825](https://github.com/ekino/veggies/commit/d717825b1f3b0a86ba6ba6f2abf81e9b022d7cd8))
+- *(release)* Display release version on Github UI - ([fc054b7](https://github.com/ekino/veggies/commit/fc054b71430af7284239aaabce9207a66256deb7))
+- *(release)* Print correctly the bumped version - ([dae533d](https://github.com/ekino/veggies/commit/dae533dd9e1bfa12b9d61a6aa1488c894c184f28))
+
+## New Contributors ❤️
+
+* @pebie made their first contribution in [#97](https://github.com/ekino/veggies/pull/97)
+* @tduyng made their first contribution
+
+# What's changed
+
 ## [2.0.1](https://github.com/ekino/veggies/compare/v1.4.0..v2.0.1) - 2025-04-22
 
 ### 🚀 Features
