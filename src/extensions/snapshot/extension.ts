@@ -45,7 +45,10 @@ class Snapshot {
 
         const copy = structuredClone(expectedContent)
         for (const { field, matcher, value } of spec) {
-            if (field) setValue(copy, field, `${matcher}(${value})`)
+            if (field) {
+                const snapshotValue = value === undefined ? '' : value
+                setValue(copy, field, `${matcher}(${snapshotValue})`)
+            }
         }
 
         this.expectToMatch(copy)

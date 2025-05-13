@@ -10,6 +10,8 @@ on:
 permissions:
   contents: write
 
+run-name: Release v${{ inputs.strategy }}
+
 jobs:
   release:
     runs-on: ubuntu-24.04
@@ -44,16 +46,13 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           git config --global user.name "github-actions[bot]"
 
-      - name: Verify version bump
-        run: |
-          echo "Version bumped to $(node -p "require('./package.json').version")"
-
       - name: Bump version
         id: versioning
         run: |
           npm version ${{ github.event.inputs.strategy }} -m "chore(release): v%s"
           VERSION=$(node -p "require('./package.json').version")
           echo "current-version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version bumped to $VERSION"
 
       - name: Set up git-cliff
         uses: kenji-miyake/setup-git-cliff@v2
