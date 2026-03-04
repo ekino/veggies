@@ -1,11 +1,50 @@
 import path from 'node:path'
-import { diff as jestDiff } from 'jest-diff'
 import naturalCompare from 'natural-compare'
 import type { Scenario, SnapshotContent, SnapshotOptions } from '../../types.js'
 import { colors } from '../../utils/colors.js'
 import * as fileSystem from './fs.js'
 
-const JEST_NO_DIFF_MESSAGE = 'Compared values have no visual difference.'
+const NO_DIFF_MSG = 'Compared values have no visual difference.'
+/**
+ * Create a unified diff between two strings
+ */
+const createUnifiedDiff = (
+    oldStr: string,
+    newStr: string,
+    oldLabel: string,
+    newLabel: string
+): string | null => {
+    if (oldStr === newStr) return NO_DIFF_MSG
+
+    const oldLines = oldStr.split('\n')
+    const newLines = newStr.split('\n')
+    const maxLines = Math.max(oldLines.length, newLines.length)
+    const diffLines: string[] = []
+
+    diffLines.push(colors.red(`- ${oldLabel}`))
+    diffLines.push(colors.green(`+ ${newLabel}`))
+
+    let hasChanges = false
+
+    for (let i = 0; i < maxLines; i++) {
+        const oldLine = oldLines[i] || ''
+        const newLine = newLines[i] || ''
+
+        if (oldLine !== newLine) {
+            hasChanges = true
+            if (oldLines[i] !== undefined) {
+                diffLines.push(colors.red(`- ${oldLine}`))
+            }
+            if (newLines[i] !== undefined) {
+                diffLines.push(colors.green(`+ ${newLine}`))
+            }
+        } else if (oldLine) {
+            diffLines.push(`  ${oldLine}`)
+        }
+    }
+
+    return hasChanges ? diffLines.join('\n') : NO_DIFF_MSG
+}
 
 export const scenarioRegex = /^[\s]*Scenario:[\s]*(.*[^\s])[\s]*$/
 
@@ -111,15 +150,18 @@ export const snapshotsPath = (featureFile: string, opts: SnapshotOptions): strin
  * If no diff, it returns null
  */
 export const diff = (snapshot: string, expected: string): string | undefined => {
-    let diffMessage = jestDiff(snapshot, expected, {
-        expand: false,
-        aAnnotation: 'Snapshot',
-        bAnnotation: 'Received',
-    })
-    const expectedMsg = colors.green(`- ${expected || ''}`)
-    const snapshotMsg = colors.red(`+ ${snapshot}`)
-    diffMessage = diffMessage || `${expectedMsg} \n ${snapshotMsg}`
-    if (diffMessage.indexOf(JEST_NO_DIFF_MESSAGE) !== -1) return undefined
+    let diffMessage = createUnifiedDiff(snapshot, expected, 'Snapshot', 'Received')
+
+    if (diffMessage && diffMessage.indexOf('Compared values have no visual difference.') !== -1) {
+        return undefined
+    }
+
+    if (!diffMessage) {
+        const expectedMsg = colors.green(`- ${expected || ''}`)
+        const snapshotMsg = colors.red(`+ ${snapshot}`)
+        diffMessage = `${expectedMsg} \n ${snapshotMsg}`
+    }
+
     return `\n${diffMessage}`
 }
 
