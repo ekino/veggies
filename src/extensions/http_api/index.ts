@@ -1,5 +1,7 @@
 import * as definitions from './definitions.js'
-import extendWorld from './extend_world.js'
+import baseExtendWorld from './extend_world.js'
+
+let proxyConfig = false
 
 /**
  * Extends cucumber world object.
@@ -16,7 +18,9 @@ import extendWorld from './extend_world.js'
  *     httpApi.extendWorld(this)
  * })
  */
-export { extendWorld }
+export const extendWorld = (world: Parameters<typeof baseExtendWorld>[0]): void => {
+    baseExtendWorld(world, proxyConfig)
+}
 
 /**
  * Installs the extension.
@@ -35,6 +39,7 @@ export { extendWorld }
  * state.install()
  * httpApi.install({ baseUrl: 'http://localhost:3000' })
  */
-export const install = ({ baseUrl = '' } = {}): void => {
+export const install = ({ baseUrl = '', proxy = false } = {}): void => {
+    proxyConfig = proxy
     definitions.install({ baseUrl })
 }
