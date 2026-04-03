@@ -59,15 +59,15 @@
         "tough-cookie": "6.x"
     },
     "devDependencies": {
-        "@biomejs/biome": "2.3.5",
-        "@cucumber/cucumber": "12.2.0",
+        "@biomejs/biome": "2.4.10",
+        "@cucumber/cucumber": "12.7.0",
         "@types/js-yaml": "4.0.9",
-        "@types/node": "24.10.1",
-        "@vitest/coverage-v8": "4.0.9",
-        "commitlint": "20.1.0",
-        "nock": "14.0.10",
-        "typescript": "5.9.3",
-        "vitest": "4.0.9"
+        "@types/node": "25.5.2",
+        "@vitest/coverage-v8": "4.1.2",
+        "commitlint": "20.5.0",
+        "nock": "14.0.11",
+        "typescript": "6.0.2",
+        "vitest": "4.1.2"
     },
     "peerDependencies": {
         "@cucumber/cucumber": ">=11.x"
