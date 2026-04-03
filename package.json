@@ -65,7 +65,7 @@
         "@types/node": "25.5.2",
         "@vitest/coverage-v8": "4.1.2",
         "commitlint": "20.5.0",
-        "nock": "14.0.11",
+        "nock": "14.0.12",
         "typescript": "6.0.2",
         "vitest": "4.1.2"
     },
@@ -75,7 +75,7 @@
     "scripts": {
         "build": "pnpm run build:esm && pnpm run build:cjs",
         "build:esm": "tsc -p tsconfig.lib.json --outDir lib/esm",
-        "build:cjs": "tsc -p tsconfig.lib.json --module CommonJS --moduleResolution Node --outDir lib/cjs",
+        "build:cjs": "tsc -p tsconfig.lib.cjs.json --outDir lib/cjs",
         "postbuild:cjs": "echo '{\"type\": \"commonjs\"}' > lib/cjs/package.json",
         "test": "vitest --run",
         "test-cover": "vitest run --coverage",

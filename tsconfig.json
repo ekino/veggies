@@ -1,13 +1,11 @@
 {
     "compilerOptions": {
-        "allowSyntheticDefaultImports": true,
         "allowUnreachableCode": false,
         "allowUnusedLabels": false,
-        "esModuleInterop": true,
         "forceConsistentCasingInFileNames": true,
         "incremental": true,
         "erasableSyntaxOnly": true,
-        "lib": ["ES2024", "DOM"],
+        "lib": ["ES2025", "DOM"],
         "module": "NodeNext",
         "moduleResolution": "NodeNext",
         "noErrorTruncation": true,
@@ -16,15 +14,14 @@
         "noImplicitReturns": true,
         "noPropertyAccessFromIndexSignature": true,
         "noUncheckedIndexedAccess": true,
-        "noUncheckedSideEffectImports": true,
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "outDir": "./lib",
         "skipLibCheck": true,
         "sourceMap": true,
-        "strict": true,
-        "target": "ES2020",
-        "typeRoots": ["./node_modules/@types", "src/@types"]
+        "target": "ES2022",
+        "typeRoots": ["./node_modules/@types", "src/@types"],
+        "types": ["node"]
     },
     "include": ["src/**/*", "tests/**/*"],
     "exclude": ["node_modules", "lib", "doc"]
