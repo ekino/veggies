@@ -52,7 +52,7 @@
         "axios-cookiejar-support": "6.x",
         "fast-glob": "3.x",
         "form-data": "4.x",
-        "jest-diff": "30.x",
+
         "js-yaml": "4.x",
         "natural-compare": "1.x",
         "pretty-format": "30.x",

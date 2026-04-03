@@ -1,12 +1,9 @@
 import type { Stats } from 'node:fs'
-import * as jestDiff from 'jest-diff'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { dedent } from '../../../../src/extensions/snapshot/dedent.js'
 import * as fileSystem from '../../../../src/extensions/snapshot/fs.js'
 import * as snapshot from '../../../../src/extensions/snapshot/snapshot.js'
-import { colors } from '../../../../src/utils/colors.js'
 
-vi.mock('jest-diff', () => ({ diff: vi.fn() }))
 vi.mock('../../../../src/extensions/snapshot/fs.js', () => ({
     getFileInfo: vi.fn(),
     getFileContent: vi.fn(),
@@ -103,12 +100,6 @@ describe('extensions > snapshot > snapshot', () => {
             vi.resetAllMocks()
         })
 
-        const diffOptions = {
-            expand: false,
-            aAnnotation: 'Snapshot',
-            bAnnotation: 'Received',
-        }
-
         it('return null when the diff message contains the NO_DIFF_MESSAGE value', () => {
             const expectedContent = `
         Object {
@@ -122,85 +113,56 @@ describe('extensions > snapshot > snapshot', () => {
         }
       `
 
-            const diffResult = `This         
-        has
-        nothing to do with the 
-        result!
-        -> Compared values have no visual difference. ¯\\_(ツ)_/¯
-      `
-
-            vi.spyOn(jestDiff, 'diff').mockReturnValue(diffResult)
-
             const diffMessage = snapshot.diff(snapshotContent, expectedContent)
 
             expect(diffMessage).toBeUndefined()
-
-            expect(jestDiff.diff).toHaveBeenCalledWith(
-                snapshotContent,
-                expectedContent,
-                diffOptions
-            )
         })
 
-        it('return a custom diff message when the diff message is not defined', () => {
+        it('return a properly formatted diff message for simple content differences', () => {
             const expectedContent = 'a'
             const snapshotContent = 'b'
 
-            vi.spyOn(jestDiff, 'diff').mockReturnValue(null)
-
             const diffMessage = snapshot.diff(snapshotContent, expectedContent)
 
-            const expectedMsg = colors.green(`- ${expectedContent || ''}`)
-            const snapshotMsg = colors.red(`+ ${snapshotContent}`)
-            const expectedDiffMessage = `\n${expectedMsg} \n ${snapshotMsg}`
-            expect(diffMessage).toEqual(expectedDiffMessage)
+            // Verify the diff contains the header and content
+            expect(diffMessage).toBeDefined()
+            expect(diffMessage).toContain('- Snapshot')
+            expect(diffMessage).toContain('+ Received')
+            expect(diffMessage).toContain('- b') // snapshot content with removal color
+            expect(diffMessage).toContain('+ a') // expected content with addition color
+
+            // Verify structure starts with newline
+            expect(diffMessage).toMatch(/^\n/)
         })
 
-        it('return the diff message', () => {
-            const snapshotContent = `
-        Object {
-          "key1": "value1",
-          "key2": "value2",
-          "key3": "value3",
-          "key4": "value4",
-          "key5": "value5",
-        }
-      `
+        it('return the diff message for multiline content with changes', () => {
+            const snapshotContent = `Object {
+  "key1": "value1",
+  "key2": "value2",
+  "key4": "value4",
+}`
 
-            const expectedContent = `
-        Object {
-          "key1": "value1",
-          "key2": "value6",
-          "key3": "value3",
-          "key4": "value7",
-          "key5": "value5",
-        }
-      `
-
-            const diffResult = `
-        """
-        \u001b[32m- Snapshot\u001b[39m
-        \u001b[31m+ Received\u001b[39m
-        \u001b[2m          Object {\u001b[22m
-        \u001b[2m              "key1": "value1",\u001b[22m
-        \u001b[32m-             "key2": "value2",\u001b[39m
-        \u001b[31m+             "key2": "value6",\u001b[39m
-        \u001b[2m              "key3": "value3",\u001b[22m
-        \u001b[32m-             "key4": "value4",\u001b[39m
-        \u001b[31m+             "key4": "value7",\u001b[39m
-        \u001b[2m              "key5": "value5",\u001b[22m
-        \u001b[2m          }\u001b[22m
-        \u001b[2m      \u001b[22m
-        """
-      `
-
-            vi.spyOn(jestDiff, 'diff').mockReturnValue(diffResult)
-
-            const expectedDiffMessage = `\n${diffResult}`
+            const expectedContent = `Object {
+  "key1": "value1",
+  "key2": "value6",
+  "key4": "value7",
+}`
 
             const diffMessage = snapshot.diff(snapshotContent, expectedContent)
 
-            expect(diffMessage).toEqual(expectedDiffMessage)
+            // Verify that the diff message exists and contains expected elements
+            expect(diffMessage).toBeDefined()
+            expect(diffMessage).toContain('- Snapshot')
+            expect(diffMessage).toContain('+ Received')
+
+            // Check that it shows the differences
+            expect(diffMessage).toContain('value2') // old value
+            expect(diffMessage).toContain('value6') // new value
+            expect(diffMessage).toContain('value4') // old value
+            expect(diffMessage).toContain('value7') // new value
+
+            // Verify structure starts with newline
+            expect(diffMessage).toMatch(/^\n/)
         })
     })
 
