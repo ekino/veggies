@@ -84,6 +84,6 @@
         "check": "biome check",
         "check-typing": "tsc -p tsconfig.json --noEmit",
         "examples": "./bin/veggies.js --import examples/support examples/features --tags='@offline'",
-        "postinstall": "git config core.hooksPath ./.githooks || true"
+        "hook": "git config core.hooksPath ./.githooks || true"
     }
 }
