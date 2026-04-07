@@ -9,13 +9,14 @@ on:
 
 permissions:
   contents: write
+  id-token: true
 
 run-name: Release v${{ inputs.strategy }}
 
 jobs:
   release:
     runs-on: ubuntu-24.04
-    if: ${{ contains(fromJSON('["pebie", "leguellec", "olivierGuillermEkino"]'), github.actor) }}
+    if: github.actor_permissions == 'maintain' || github.actor_permissions == 'admin'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -84,6 +85,4 @@ jobs:
           name: v${{ steps.versioning.outputs.current-version }}
 
       - name: Publish to NPM
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public --provenance
