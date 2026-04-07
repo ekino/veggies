@@ -9,21 +9,21 @@ on:
 
 permissions:
   contents: write
-  id-token: true
+  id-token: write
 
 run-name: Release v${{ inputs.strategy }}
 
 jobs:
   release:
     runs-on: ubuntu-24.04
-    if: github.actor_permissions == 'maintain' || github.actor_permissions == 'admin'
+    if: ${{ contains(fromJSON('["pebie", "leguellec", "olivierGuillermEkino", "tduyng"]'), github.actor) }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v5
         name: Install pnpm
         with:
           version: 10
