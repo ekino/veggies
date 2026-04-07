@@ -7,8 +7,6 @@ export default defineConfig({
         include: ['tests/unit/**/*.test.ts'],
         coverage: {
             reporter: ['lcov', 'cobertura', 'text'],
-            include: ['src/**'],
-            exclude: [],
             all: false,
         },
     },
