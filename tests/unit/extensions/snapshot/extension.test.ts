@@ -212,6 +212,6 @@ describe('extensions > snapshot > extension', () => {
                 fixtures.value1WithError as SnapshotContent,
                 propertiesMatchers
             )
-        ).toThrowError()
+        ).toThrow()
     })
 })

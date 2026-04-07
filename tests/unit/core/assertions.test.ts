@@ -699,7 +699,7 @@ describe('core > assertions', () => {
             },
         ]
 
-        expect(() => assertObjectMatchSpec(object, spec)).toThrowError(
+        expect(() => assertObjectMatchSpec(object, spec)).toThrow(
             'relative date arguments are invalid'
         )
     })

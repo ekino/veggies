@@ -349,7 +349,7 @@ describe('extensions > snapshot > snapshot', () => {
     })
 
     it('prefixSnapshots should throw an error if no scenarios object', () => {
-        expect(() => snapshot.prefixSnapshots(undefined)).toThrowError(
+        expect(() => snapshot.prefixSnapshots(undefined)).toThrow(
             /Scenarios are required to prefix snapshots/
         )
     })
