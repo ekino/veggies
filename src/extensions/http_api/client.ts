@@ -12,22 +12,25 @@ const BODY_TYPE_MULTIPART = 'form-data'
 const verbsAcceptingBody = ['POST', 'PUT', 'DELETE', 'PATCH']
 const validateStatus = (status: number) => status >= 200 && status <= 302
 
+// Proxy is disabled by default to ensure direct connections in test environments
+// Set proxy: false explicitly to prevent axios from reading HTTP_PROXY env vars
 const axiosInstance = axios.create({
     validateStatus,
+    proxy: false,
 })
-let cookieInstance: AxiosInstance
 
-const getClient = (cookieJar?: CookieJar): AxiosInstance => {
+const getClient = (cookieJar?: CookieJar, proxy = false): AxiosInstance => {
     if (cookieJar) {
-        if (!cookieInstance) {
-            cookieInstance = wrapper(
-                axios.create({
-                    jar: cookieJar,
-                    withCredentials: true,
-                    validateStatus,
-                })
-            ) as AxiosInstance
-        }
+        const cookieInstance = wrapper(
+            axios.create({
+                jar: cookieJar,
+                withCredentials: true,
+                validateStatus,
+                // When proxy is true, use undefined to allow axios default behavior (reading env vars)
+                // When proxy is false, explicitly disable to prevent proxy usage
+                proxy: proxy ? undefined : false,
+            })
+        ) as AxiosInstance
         return cookieInstance
     }
     return axiosInstance
@@ -50,8 +53,9 @@ class HttpApiClient {
     public followRedirect: boolean
     public response: AxiosResponse | undefined
     public responseCookies: Record<string, Cookie>
+    public proxy: boolean
 
-    constructor() {
+    constructor(proxy = false) {
         this.body = undefined
         this.bodyType = BODY_TYPE_JSON
         this.headers = {}
@@ -61,6 +65,7 @@ class HttpApiClient {
         this.followRedirect = true
         this.response = undefined
         this.responseCookies = {}
+        this.proxy = proxy
     }
 
     /**
@@ -271,7 +276,7 @@ class HttpApiClient {
                     }
                 }
             }
-            const client = getClient(this.cookieJar)
+            const client = getClient(this.cookieJar, this.proxy)
             this.response = await client.request(options)
 
             if (this.cookieJar) {
@@ -299,8 +304,8 @@ class HttpApiClient {
 /**
  * Create a new isolated http api client
  */
-export default function (...args: HttpApiClientArgs): HttpApiClient {
-    return new HttpApiClient(...args)
+export default function (proxy = false): HttpApiClient {
+    return new HttpApiClient(proxy)
 }
 
 /**
