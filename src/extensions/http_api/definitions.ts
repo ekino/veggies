@@ -349,7 +349,7 @@ export const install = ({ baseUrl = '' } = {}): void => {
             const data = response?.data
 
             // We check the response has json content-type
-            assert.ok(response?.headers['content-type'].includes('application/json'))
+            assert.ok(String(response?.headers['content-type']).includes('application/json'))
 
             // First we populate spec values if it contains some placeholder
             const specifications = table.hashes().map((fieldSpec) => {
