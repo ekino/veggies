@@ -1,4 +1,3 @@
-import pathModule from 'node:path'
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios'
 import { wrapper } from 'axios-cookiejar-support'
 import FormData from 'form-data'
@@ -229,7 +228,7 @@ class HttpApiClient {
                 baseUrl = url.origin
             }
 
-            const fullUrl = pathModule.join(baseUrl, path)
+            const fullUrl = new URL(path, baseUrl).toString()
             const options: RequestOptions = {
                 method,
                 url: fullUrl,
