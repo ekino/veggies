@@ -1,5 +1,34 @@
 # What's changed
 
+## [2.1.0](https://github.com/ekino/veggies/compare/v2.0.2..v2.1.0) - 2026-06-26
+
+### Features
+
+- Remove support nodejs 18 and add test for node 24 on CI - ([44b03ee](https://github.com/ekino/veggies/commit/44b03ee61da2311d3bb66ce6dc3ee2138b7afc86))
+
+### Bug Fixes
+
+- Use URL constructor instead of path.join to prevent malformed URLs - ([0ae7220](https://github.com/ekino/veggies/commit/0ae722059ec87d8eb20d3c21ade4f5d54f185fe4))
+
+### Testing
+
+- Remove deprecated syntax for toThrowError - ([ab6a618](https://github.com/ekino/veggies/commit/ab6a618a34c4ebe4e40aee93c168192d3c888f50))
+- Fix cookie tests for Wikipedia API - ([e813ce0](https://github.com/ekino/veggies/commit/e813ce020bd6ff6581c60f59de6b37c7fd1939e8))
+
+### Miscellaneous Tasks
+
+- *(release)* V2.1.0 - ([e3f81a6](https://github.com/ekino/veggies/commit/e3f81a688919cc248e303db7507e384048d45405))
+- Remove incorrect syntax, enforce strict users for npm release - ([de34315](https://github.com/ekino/veggies/commit/de3431525ca99d78683b4cda0630a017111a7ac9))
+- Restore coverage to only report files imported by unit tests - ([973c4d2](https://github.com/ekino/veggies/commit/973c4d2378fcbca9cec2bd83f474ce500463e74d))
+- Simplify changelog - ([ba58125](https://github.com/ekino/veggies/commit/ba5812525aa11a594c6e9a576fef5dfc89637272))
+- Use new trust publiser npm system to publish package - ([f54623b](https://github.com/ekino/veggies/commit/f54623bdcbbce84a7c52e9c8ab15067897e44160))
+- Setup tsconfig for Typescript 6.x - ([1031609](https://github.com/ekino/veggies/commit/103160923024bf489c69bbf6bc7f5f0688a50f87))
+- Update dependencies - ([31b0cdd](https://github.com/ekino/veggies/commit/31b0cdd129807c3b2a4526d1fdd3a1f93096c7eb))
+- Rename postinstall to hook script - ([4db61dc](https://github.com/ekino/veggies/commit/4db61dc24fb91c3e9b522441a5b44cf74b5f6615))
+- Allow Olivier to make npm release - ([5ed1017](https://github.com/ekino/veggies/commit/5ed10179775bc5345f8ddf22b1ba462448eb6c04))
+
+# What's changed
+
 ## [2.0.2](https://github.com/ekino/veggies/compare/v2.0.1..v2.0.2) - 2025-05-13
 
 ### 🐛 Bug Fixes
