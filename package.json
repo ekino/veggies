@@ -67,7 +67,7 @@
         "commitlint": "21.0.2",
         "nock": "14.0.15",
         "typescript": "6.0.3",
-        "vitest": "4.1.9"
+        "vitest": "4.1.11"
     },
     "peerDependencies": {
         "@cucumber/cucumber": ">=11.x"
