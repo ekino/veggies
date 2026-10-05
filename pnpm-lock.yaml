@@ -10,10 +10,10 @@ importers:
     dependencies:
       axios:
         specifier: 1.x
-        version: 1.18.1(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
+        version: 1.20.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
       axios-cookiejar-support:
         specifier: 6.x
-        version: 6.0.5(axios@1.18.1(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2))(tough-cookie@6.0.1)
+        version: 6.0.5(axios@1.20.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2))(tough-cookie@6.0.1)
       fast-glob:
         specifier: 3.x
         version: 3.3.3
@@ -600,8 +600,8 @@ packages:
       axios: '>=0.20.0'
       tough-cookie: '>=4.0.0'
 
-  axios@1.18.1:
-    resolution: {integrity: sha512-3nTvFlvpn9Zu/RkHUqtc7/+al4UpRW5az71ap5zccp6e8RAYEzhMTecX8Dz1wWDYrPpUoB1HAQEGEAEvUr7S9g==}
+  axios@1.20.0:
+    resolution: {integrity: sha512-r8aOh8j9cGKpgQAqpzrUHnSIc6a59Y3Xf/cv8sy1DrHCkZHzQGEuoq1tARk6qSyDdtQGSDgpb9kFlruzPvrgwg==}
 
   braces@3.0.3:
     resolution: {integrity: sha512-yQbXgO/OSZVD2IsiLlro+7Hf6Q18EJrKSEsdoMzKePKXct3gvD8oLcOQdIzGupr5Fj+EDe8gO/lxc1BzfMpxvA==}
@@ -2125,15 +2125,15 @@ snapshots:
 
   asynckit@0.4.0: {}
 
-  axios-cookiejar-support@6.0.5(axios@1.18.1(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2))(tough-cookie@6.0.1):
+  axios-cookiejar-support@6.0.5(axios@1.20.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2))(tough-cookie@6.0.1):
     dependencies:
-      axios: 1.18.1(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
+      axios: 1.20.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
       http-cookie-agent: 7.0.4(tough-cookie@6.0.1)
       tough-cookie: 6.0.1
     transitivePeerDependencies:
       - undici
 
-  axios@1.18.1(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2):
+  axios@1.20.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2):
     dependencies:
       follow-redirects: 1.16.0(debug@4.4.3(supports-color@10.2.2))
       form-data: 4.0.6
